@@ -10,6 +10,8 @@ import java.util.StringTokenizer;
  *
  * Interface du syst�me de gestion d'une biblioth�que
  *
+ * Branche Laurent
+ *
  * Ce programme permet d'appeler les transactions de base d'une
  * biblioth�que.  Il g�re des livres, des membres et des
  * r�servations. Les donn�es sont conserv�es dans une base de
