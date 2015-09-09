@@ -1,88 +1,98 @@
-import java.sql.*;
+import java.sql.SQLException;
 
 /**
- * Gestion des transactions de reliées à la création et
- * suppresion de livres dans une bibliothèque.
+ * Gestion des transactions de reliï¿½es ï¿½ la crï¿½ation et
+ * suppresion de livres dans une bibliothï¿½que.
  *
- * Ce programme permet de gérer les transaction reliées à la 
- * création et suppresion de livres.
+ * Ce programme permet de gï¿½rer les transaction reliï¿½es ï¿½ la 
+ * crï¿½ation et suppresion de livres.
  *
- * Pré-condition
- *   la base de données de la bibliothèque doit exister
+ * Prï¿½-condition
+ *   la base de donnï¿½es de la bibliothï¿½que doit exister
  *
  * Post-condition
- *   le programme effectue les maj associées à chaque
+ *   le programme effectue les maj associï¿½es ï¿½ chaque
  *   transaction
  * </pre>
  */
 public class GestionLivre {
 
-private Livre livre;
-private Reservation reservation;
-private Connexion cx;
+    private Livre livre;
 
-/**
-  * Creation d'une instance
-  */
-public GestionLivre(Livre livre, Reservation reservation)
-{
-this.cx = livre.getConnexion();
-this.livre = livre;
-this.reservation = reservation;
-}
+    private Reservation reservation;
 
-/**
-  * Ajout d'un nouveau livre dans la base de données.
-  * S'il existe deja, une exception est levée.
-  */
-public void acquerir(int idLivre, String titre, String auteur, String dateAcquisition)
-  throws SQLException, BiblioException, Exception
-{
-try {
-    /* Vérifie si le livre existe déja */
-    if (livre.existe(idLivre))
-        throw new BiblioException("Livre existe deja: " + idLivre);
+    private Connexion cx;
 
-    /* Ajout du livre dans la table des livres */
-    livre.acquerir(idLivre, titre, auteur, dateAcquisition);
-    cx.commit();
+    /**
+      * Creation d'une instance
+      */
+    public GestionLivre(Livre livre,
+        Reservation reservation) {
+        this.cx = livre.getConnexion();
+        this.livre = livre;
+        this.reservation = reservation;
     }
-catch (Exception e)
-    {
-//        System.out.println(e);
-    cx.rollback();
-    throw e;
-    }
-}
 
-/**
-  * Vente d'un livre.
-  */
-public void vendre(int idLivre)
-  throws SQLException, BiblioException, Exception
-{
-try {
-    TupleLivre tupleLivre = livre.getLivre(idLivre);
-    if (tupleLivre == null)
-        throw new BiblioException("Livre inexistant: " + idLivre);
-    if (tupleLivre.idMembre != 0)
-        throw new BiblioException
-            ("Livre " + idLivre + " prete a " + tupleLivre.idMembre);
-    if (reservation.getReservationLivre(idLivre) !=null)
-        throw new BiblioException
-        ("Livre " + idLivre + " réservé ");
-    
-    /* Suppression du livre. */
-    int nb = livre.vendre(idLivre);
-    if (nb == 0)
-        throw new BiblioException
-        ("Livre " + idLivre + " inexistant");
-    cx.commit();
+    /**
+      * Ajout d'un nouveau livre dans la base de donnï¿½es.
+      * S'il existe deja, une exception est levï¿½e.
+      */
+    public void acquerir(int idLivre,
+        String titre,
+        String auteur,
+        String dateAcquisition) throws SQLException,
+        BiblioException,
+        Exception {
+        try {
+            /* Vï¿½rifie si le livre existe dï¿½ja */
+            if(livre.existe(idLivre))
+                throw new BiblioException("Livre existe deja: "
+                    + idLivre);
+
+            /* Ajout du livre dans la table des livres */
+            livre.acquerir(idLivre,
+                titre,
+                auteur,
+                dateAcquisition);
+            cx.commit();
+        } catch(Exception e) {
+            //        System.out.println(e);
+            cx.rollback();
+            throw e;
+        }
     }
-catch (Exception e)
-    {
-    cx.rollback();
-    throw e;
+
+    /**
+      * Vente d'un livre.
+      */
+    public void vendre(int idLivre) throws SQLException,
+        BiblioException,
+        Exception {
+        try {
+            TupleLivre tupleLivre = livre.getLivre(idLivre);
+            if(tupleLivre == null)
+                throw new BiblioException("Livre inexistant: "
+                    + idLivre);
+            if(tupleLivre.idMembre != 0)
+                throw new BiblioException("Livre "
+                    + idLivre
+                    + " prete a "
+                    + tupleLivre.idMembre);
+            if(reservation.getReservationLivre(idLivre) != null)
+                throw new BiblioException("Livre "
+                    + idLivre
+                    + " rï¿½servï¿½ ");
+
+            /* Suppression du livre. */
+            int nb = livre.vendre(idLivre);
+            if(nb == 0)
+                throw new BiblioException("Livre "
+                    + idLivre
+                    + " inexistant");
+            cx.commit();
+        } catch(Exception e) {
+            cx.rollback();
+            throw e;
+        }
     }
-}
 }

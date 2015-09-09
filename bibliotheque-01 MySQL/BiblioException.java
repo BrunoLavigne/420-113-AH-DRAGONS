@@ -1,13 +1,10 @@
-
 /**
- * L'exception BiblioException est levée lorsqu'une transaction est inadéquate.
+ * L'exception BiblioException est levï¿½e lorsqu'une transaction est inadï¿½quate.
  * Par exemple -- livre inexistant
  */
 
-public final class BiblioException extends Exception
-{
-public BiblioException(String message)
-{
-super(message);
-}
+public final class BiblioException extends Exception {
+    public BiblioException(String message) {
+        super(message);
+    }
 }

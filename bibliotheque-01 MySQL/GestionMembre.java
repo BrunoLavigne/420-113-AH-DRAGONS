@@ -1,89 +1,99 @@
-import java.sql.*;
+import java.sql.SQLException;
 
 /**
- * Gestion des transactions de reliées à la création et
- * suppresion de membres dans une bibliothèque.
+ * Gestion des transactions de reliï¿½es ï¿½ la crï¿½ation et
+ * suppresion de membres dans une bibliothï¿½que.
  *
- * Ce programme permet de gérer les transaction reliées à la 
- * création et suppresion de membres.
+ * Ce programme permet de gï¿½rer les transaction reliï¿½es ï¿½ la 
+ * crï¿½ation et suppresion de membres.
  *
- * Pré-condition
- *   la base de données de la bibliothèque doit exister
+ * Prï¿½-condition
+ *   la base de donnï¿½es de la bibliothï¿½que doit exister
  *
  * Post-condition
- *   le programme effectue les maj associées à chaque
+ *   le programme effectue les maj associï¿½es ï¿½ chaque
  *   transaction
  * </pre>
  */
 
 public class GestionMembre {
 
-private Connexion cx;
-private Membre membre;
-private Reservation reservation;
+    private Connexion cx;
 
-/**
-  * Creation d'une instance
-  */
-public GestionMembre(Membre membre, Reservation reservation) {
+    private Membre membre;
 
-this.cx = membre.getConnexion();
-this.membre = membre;
-this.reservation = reservation;
-}
+    private Reservation reservation;
 
-/**
-  * Ajout d'un nouveau membre dans la base de donnees.
-  * S'il existe deja, une exception est levee.
-  */
-public void inscrire(int idMembre, String nom, long telephone, int limitePret)
-  throws SQLException, BiblioException, Exception
-{
-try {
-    /* Vérifie si le membre existe déja */
-    if (membre.existe(idMembre))
-        throw new BiblioException("Membre existe deja: " + idMembre);
+    /**
+      * Creation d'une instance
+      */
+    public GestionMembre(Membre membre,
+        Reservation reservation) {
 
-    /* Ajout du membre. */
-    membre.inscrire(idMembre, nom, telephone, limitePret);
-    cx.commit();
+        this.cx = membre.getConnexion();
+        this.membre = membre;
+        this.reservation = reservation;
     }
-catch (Exception e)
-    {
-    cx.rollback();
-    throw e;
-    }
-}
 
-/**
-  * Suppression d'un membre de la base de donnees.
-  */
-public void desinscrire(int idMembre)
-  throws SQLException, BiblioException, Exception
-{
-try {
-    /* Vérifie si le membre existe et son nombre de pret en cours */
-    TupleMembre tupleMembre = membre.getMembre(idMembre);
-    if (tupleMembre == null)
-        throw new BiblioException("Membre inexistant: " + idMembre);
-    if (tupleMembre.nbPret > 0)
-        throw new BiblioException
-            ("Le membre " + idMembre + " a encore des prets.");
-    if (reservation.getReservationMembre(idMembre) !=null)
-        throw new BiblioException
-        ("Membre " + idMembre + " a des réservations");
+    /**
+      * Ajout d'un nouveau membre dans la base de donnees.
+      * S'il existe deja, une exception est levee.
+      */
+    public void inscrire(int idMembre,
+        String nom,
+        long telephone,
+        int limitePret) throws SQLException,
+        BiblioException,
+        Exception {
+        try {
+            /* Vï¿½rifie si le membre existe dï¿½ja */
+            if(membre.existe(idMembre))
+                throw new BiblioException("Membre existe deja: "
+                    + idMembre);
 
-    /* Suppression du membre */
-    int nb = membre.desinscrire(idMembre);
-    if (nb == 0)
-        throw new BiblioException
-        ("Membre " + idMembre + " inexistant");
-    cx.commit();
+            /* Ajout du membre. */
+            membre.inscrire(idMembre,
+                nom,
+                telephone,
+                limitePret);
+            cx.commit();
+        } catch(Exception e) {
+            cx.rollback();
+            throw e;
+        }
     }
-catch (Exception e)
-    {
-    cx.rollback();
-    throw e;
+
+    /**
+      * Suppression d'un membre de la base de donnees.
+      */
+    public void desinscrire(int idMembre) throws SQLException,
+        BiblioException,
+        Exception {
+        try {
+            /* Vï¿½rifie si le membre existe et son nombre de pret en cours */
+            TupleMembre tupleMembre = membre.getMembre(idMembre);
+            if(tupleMembre == null)
+                throw new BiblioException("Membre inexistant: "
+                    + idMembre);
+            if(tupleMembre.nbPret > 0)
+                throw new BiblioException("Le membre "
+                    + idMembre
+                    + " a encore des prets.");
+            if(reservation.getReservationMembre(idMembre) != null)
+                throw new BiblioException("Membre "
+                    + idMembre
+                    + " a des rï¿½servations");
+
+            /* Suppression du membre */
+            int nb = membre.desinscrire(idMembre);
+            if(nb == 0)
+                throw new BiblioException("Membre "
+                    + idMembre
+                    + " inexistant");
+            cx.commit();
+        } catch(Exception e) {
+            cx.rollback();
+            throw e;
+        }
     }
-}
 }//class

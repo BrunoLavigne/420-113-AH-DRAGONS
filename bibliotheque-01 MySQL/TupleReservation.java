@@ -1,14 +1,17 @@
-import java.sql.*;
+import java.sql.Date;
 
 /**
- * Permet de représenter un tuple de la table membre.
+ * Permet de reprï¿½senter un tuple de la table membre.
  * 
  */
 
 public class TupleReservation {
 
-  public int    idReservation;
-  public int    idLivre;
-  public int    idMembre;
-  public Date   dateReservation;
+    public int idReservation;
+
+    public int idLivre;
+
+    public int idMembre;
+
+    public Date dateReservation;
 }
