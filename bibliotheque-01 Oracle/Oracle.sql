@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS reservation CASCADE;
 DROP TABLE IF EXISTS livre CASCADE;
 DROP TABLE IF EXISTS membre CASCADE;
 
@@ -20,13 +19,3 @@ idMembre        INTEGER(3),
 datePret        DATE,
 CONSTRAINT cleLivre PRIMARY KEY (idLivre),
 CONSTRAINT refPretMembre FOREIGN KEY (idMembre) REFERENCES membre (idMembre));
-
-CREATE TABLE reservation (
-idReservation   INTEGER(3),
-idMembre        INTEGER(3),
-idLivre         INTEGER(3),
-dateReservation DATE,
-CONSTRAINT cleReservation PRIMARY KEY (idReservation),
-CONSTRAINT cleCandidateReservation UNIQUE (idMembre,idLivre),
-CONSTRAINT refReservationMembre FOREIGN KEY (idMembre) REFERENCES membre (idMembre) ON DELETE CASCADE,
-CONSTRAINT refReservationLivre FOREIGN KEY (idLivre) REFERENCES livre (idLivre) ON DELETE CASCADE);
