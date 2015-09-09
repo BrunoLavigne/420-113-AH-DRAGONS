@@ -7,6 +7,8 @@ import java.text.ParseException;
 import java.util.StringTokenizer;
 
 /**
+ * Dragons vicieux repo
+ *
  * Interface du syst�me de gestion d'une biblioth�que
  *
  * Ce programme permet d'appeler les transactions de base d'une
@@ -75,8 +77,8 @@ public class Biblio {
     }
 
     /**
-      * Traitement des transactions de la biblioth�que
-      */
+     * Traitement des transactions de la biblioth�que
+     */
     static void traiterTransactions(BufferedReader reader) throws Exception {
         afficherAide();
         String transaction = lireTransaction(reader);
@@ -93,8 +95,8 @@ public class Biblio {
     }
 
     /**
-      * Lecture d'une transaction
-      */
+     * Lecture d'une transaction
+     */
     static String lireTransaction(BufferedReader reader) throws IOException {
         System.out.print("> ");
         String transaction = reader.readLine();
@@ -106,8 +108,8 @@ public class Biblio {
     }
 
     /**
-      * D�codage et traitement d'une transaction
-      */
+     * D�codage et traitement d'une transaction
+     */
     static void executerTransaction(StringTokenizer tokenizer) throws Exception {
         try {
             String command = tokenizer.nextToken();
@@ -235,8 +237,8 @@ public class Biblio {
     }
 
     /**
-      * lecture d'un int java de la transaction entr�e � l'�cran
-      */
+     * lecture d'un int java de la transaction entr�e � l'�cran
+     */
     static int readInt(StringTokenizer tokenizer) throws BiblioException {
         if(tokenizer.hasMoreElements()) {
             String token = tokenizer.nextToken();
@@ -253,8 +255,8 @@ public class Biblio {
     }
 
     /**
-      * lecture d'un long java de la transaction entr�e � l'�cran
-      */
+     * lecture d'un long java de la transaction entr�e � l'�cran
+     */
     static long readLong(StringTokenizer tokenizer) throws BiblioException {
         if(tokenizer.hasMoreElements()) {
             String token = tokenizer.nextToken();
@@ -271,8 +273,8 @@ public class Biblio {
     }
 
     /**
-      * lecture d'une date en format YYYY-MM-DD
-      */
+     * lecture d'une date en format YYYY-MM-DD
+     */
 
     // TODO DEVRAIT RETOURNER UNE DATE ET NON UN STRING
 
