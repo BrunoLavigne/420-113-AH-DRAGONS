@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.util.StringTokenizer;
 
 /**
- * Dragons vicieux repo test test!
  *
  * Interface du syst�me de gestion d'une biblioth�que
  *
