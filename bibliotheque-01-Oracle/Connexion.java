@@ -46,7 +46,7 @@ public class Connexion {
             if(serveur.equals("distant")) {
                 d = (Driver) Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();
                 DriverManager.registerDriver(d);
-                this.conn = DriverManager.getConnection("jdbc:oracle:thin:@collegeahuntsic.info:1521:"
+                this.conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:"
                     + bd,
                     user,
                     pass);
@@ -124,8 +124,8 @@ public class Connexion {
     }
 
     /**
-      * Retourne la liste des serveurs support�s par ce gestionnaire de connexions
-      */
+     * Retourne la liste des serveurs support�s par ce gestionnaire de connexions
+     */
     public static String serveursSupportes() {
         return "local : MySQL install� localement\n"
             + "distant : Oracle install� au D�partement d'Informatique du Coll�ge Ahuntsic\n"

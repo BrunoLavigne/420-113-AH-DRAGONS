@@ -40,7 +40,7 @@ public class Reservation {
         this.stmtExisteMembre = cx.getConnection().prepareStatement("select idReservation, idLivre, idMembre, dateReservation "
             + "from reservation where idMembre = ? ");
         this.stmtInsert = cx.getConnection().prepareStatement("insert into reservation (idReservation, idlivre, idMembre, dateReservation) "
-            + "values (?,?,?,?)");
+            + "values (?,?,?,str_to_date(?, '%Y-%m-%d'))");
         this.stmtDelete = cx.getConnection().prepareStatement("delete from reservation where idReservation = ?");
     }
 

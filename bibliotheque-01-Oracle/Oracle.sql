@@ -1,14 +1,14 @@
-DROP TABLE reservation CASCADE CONSTRAINTS;
-DROP TABLE livre CASCADE CONSTRAINTS;
-DROP TABLE membre CASCADE CONSTRAINTS;
+DROP TABLE reservation CASCADE CONSTRAINTS PURGE;
+DROP TABLE livre CASCADE CONSTRAINTS PURGE;
+DROP TABLE membre CASCADE CONSTRAINTS PURGE;
 
 CREATE TABLE membre (
-idMembre        number(3) check(idMembre > 0),
+idMembre        number(3) CHECK(idMembre > 0),
 nom             varchar(10) NOT NULL,
 telephone       number(10),
-limitePret      number(2) check(limitePret > 0 and limitePret <= 10),
-nbpret          number(2) default 0 check(nbpret >= 0),
-CONSTRAINT cleMembre PRIMARY KEY (idMembre),
+limitePret      number(2) CHECK(limitePret > 0 and limitePret <= 10),
+nbpret          number(2) default 0 CHECK(nbpret >= 0),
+PRIMARY KEY (idMembre),
 CONSTRAINT limiteNbPret check(nbpret <= limitePret)
 );
 
