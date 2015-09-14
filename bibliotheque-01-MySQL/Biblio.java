@@ -102,7 +102,8 @@ public class Biblio {
         System.out.print("> ");
         String transaction = reader.readLine();
         /* echo si lecture dans un fichier */
-        if(!lectureAuClavier) {
+        if(!lectureAuClavier
+            && transaction != null) {
             System.out.println(transaction);
         }
         return transaction;
