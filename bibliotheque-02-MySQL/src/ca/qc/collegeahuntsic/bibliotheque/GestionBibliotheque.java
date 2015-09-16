@@ -77,6 +77,9 @@ public class GestionBibliotheque {
         this.gestionInterrogation = new GestionInterrogation(this.cx);
     }
 
+    /**
+     * @throws SQLException
+     */
     public void fermer() throws SQLException {
         // fermeture de la connexion
         this.cx.fermer();

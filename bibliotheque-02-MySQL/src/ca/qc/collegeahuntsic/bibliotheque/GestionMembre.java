@@ -20,7 +20,6 @@ import java.sql.SQLException;
  *   le programme effectue les majuscules associées à chaque transaction
  * </post>
  */
-
 public class GestionMembre {
 
     private Connexion cx;
@@ -31,6 +30,9 @@ public class GestionMembre {
 
     /**
      * Creation d'une instance
+     *
+     * @param membre
+     * @param reservation
      */
     public GestionMembre(Membre membre,
         Reservation reservation) {
@@ -43,6 +45,14 @@ public class GestionMembre {
     /**
      * Ajout d'un nouveau membre dans la base de données.
      * Si elle existe déjà, une exception est levée.
+     *
+     * @param idMembre
+     * @param nom
+     * @param telephone
+     * @param limitePret
+     * @throws SQLException
+     * @throws BiblioException
+     * @throws Exception
      */
     public void inscrire(int idMembre,
         String nom,
@@ -71,6 +81,11 @@ public class GestionMembre {
 
     /**
      * Suppression d'un membre dans la base de données.
+     *
+     * @param idMembre
+     * @throws SQLException
+     * @throws BiblioException
+     * @throws Exception
      */
     public void desinscrire(int idMembre) throws SQLException,
         BiblioException,

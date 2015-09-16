@@ -30,6 +30,10 @@ public class GestionInterrogation {
     private Connexion cx;
 
     // Creation d'une instance
+    /**
+     * @param cx
+     * @throws SQLException
+     */
     public GestionInterrogation(Connexion cx) throws SQLException {
 
         this.cx = cx;
@@ -42,6 +46,10 @@ public class GestionInterrogation {
     }
 
     // Affiche les livres contenant un mot dans le titre
+    /**
+     * @param mot
+     * @throws SQLException
+     */
     public void listerLivresTitre(String mot) throws SQLException {
 
         this.stmtLivresTitreMot.setString(1,
@@ -71,6 +79,9 @@ public class GestionInterrogation {
     }
 
     // Affiche tous les livres de la BD
+    /**
+     * @throws SQLException
+     */
     public void listerLivres() throws SQLException {
 
         ResultSet rset = this.stmtListeTousLivres.executeQuery();
