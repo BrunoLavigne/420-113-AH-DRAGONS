@@ -4,19 +4,23 @@ package ca.qc.collegeahuntsic.bibliotheque;
 import java.sql.SQLException;
 
 /**
- * Gestion des transactions de reli�es � la cr�ation et
- * suppresion de livres dans une biblioth�que.
+ * Gestion des transactions de reliées à la création et
+ * suppresion de livres dans une bibliothèque.
  *
- * Ce programme permet de g�rer les transaction reli�es � la
- * cr�ation et suppresion de livres.
+ * Ce programme permet de gérer les transaction reliées à la
+ * création et suppresion de livres.
  *
- * Pr�-condition
- *   la base de donn�es de la biblioth�que doit exister
+ *<pre>
+ * Pré-condition:
+ *   la base de donn�es de la bibliothèque doit exister
+ *</pre>
  *
- * Post-condition
- *   le programme effectue les maj associ�es � chaque
+ *<post>
+ * Post-condition:
+ *   le programme effectue les maj associées à chaque
  *   transaction
- * </pre>
+ * </post>
+ *
  */
 public class GestionLivre {
 
@@ -26,9 +30,7 @@ public class GestionLivre {
 
     private Connexion cx;
 
-    /**
-     * Creation d'une instance
-     */
+    //Creation d'une instance
     public GestionLivre(Livre livre,
         Reservation reservation) {
         this.cx = livre.getConnexion();
@@ -37,8 +39,8 @@ public class GestionLivre {
     }
 
     /**
-     * Ajout d'un nouveau livre dans la base de donn�es.
-     * S'il existe deja, une exception est lev�e.
+     * Ajout d'un nouveau livre dans la base de données.
+     * S'il existe déjà, une exception est levée.
      */
     public void acquerir(int idLivre,
         String titre,
@@ -47,20 +49,20 @@ public class GestionLivre {
         BiblioException,
         Exception {
         try {
-            /* V�rifie si le livre existe d�ja */
+            //Vérifie si le livre existe  déjà
             if(this.livre.existe(idLivre)) {
-                throw new BiblioException("Livre existe deja: "
+                throw new BiblioException("Le livre existe déjà: "
                     + idLivre);
             }
 
-            /* Ajout du livre dans la table des livres */
+            //Ajout du livre dans la table livre
             this.livre.acquerir(idLivre,
                 titre,
                 auteur,
                 dateAcquisition);
             this.cx.commit();
         } catch(Exception e) {
-            //        System.out.println(e);
+            //System.out.println(e);
             this.cx.rollback();
             throw e;
         }
@@ -79,21 +81,21 @@ public class GestionLivre {
                     + idLivre);
             }
             if(tupleLivre.idMembre != 0) {
-                throw new BiblioException("Livre "
+                throw new BiblioException("Le livre est "
                     + idLivre
-                    + " prete a "
+                    + " prêté à "
                     + tupleLivre.idMembre);
             }
             if(this.reservation.getReservationLivre(idLivre) != null) {
-                throw new BiblioException("Livre "
+                throw new BiblioException("Le livre est "
                     + idLivre
-                    + " r�serv� ");
+                    + " réservé ");
             }
 
-            /* Suppression du livre. */
+            // Suppression du livre
             int nb = this.livre.vendre(idLivre);
             if(nb == 0) {
-                throw new BiblioException("Livre "
+                throw new BiblioException("Le livre est "
                     + idLivre
                     + " inexistant");
             }
