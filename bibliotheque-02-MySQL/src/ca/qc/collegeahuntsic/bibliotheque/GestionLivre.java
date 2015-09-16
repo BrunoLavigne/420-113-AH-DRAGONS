@@ -12,16 +12,17 @@ import java.sql.SQLException;
  *
  *<pre>
  * Pré-condition:
- *   la base de donn�es de la bibliothèque doit exister
+ *   la base de données de la bibliothèque doit exister
  *</pre>
  *
  *<post>
  * Post-condition:
- *   le programme effectue les maj associées à chaque
+ *   le programme effectue les majuscules associées à chaque
  *   transaction
  * </post>
  *
  */
+
 public class GestionLivre {
 
     private Livre livre;
@@ -41,6 +42,13 @@ public class GestionLivre {
     /**
      * Ajout d'un nouveau livre dans la base de données.
      * S'il existe déjà, une exception est levée.
+     * @param idLivre
+     * @param titre
+     * @param auteur
+     * @param dateAcquisition
+     * @throws SQLException
+     * @throws BiblioException
+     * @throws Exception
      */
     public void acquerir(int idLivre,
         String titre,
@@ -69,11 +77,15 @@ public class GestionLivre {
     }
 
     /**
-     * Vente d'un livre.
+     * Vente d'un livre
+     * @param idLivre
+     * @throws SQLException
+     * @throws BiblioException
+     * @throws Exception
      */
     public void vendre(int idLivre) throws SQLException,
-    BiblioException,
-    Exception {
+        BiblioException,
+        Exception {
         try {
             TupleLivre tupleLivre = this.livre.getLivre(idLivre);
             if(tupleLivre == null) {
