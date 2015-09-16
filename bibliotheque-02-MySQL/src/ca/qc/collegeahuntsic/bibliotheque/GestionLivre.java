@@ -84,8 +84,8 @@ public class GestionLivre {
      * @throws Exception
      */
     public void vendre(int idLivre) throws SQLException,
-        BiblioException,
-        Exception {
+    BiblioException,
+    Exception {
         try {
             TupleLivre tupleLivre = this.livre.getLivre(idLivre);
             if(tupleLivre == null) {
