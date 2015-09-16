@@ -6,22 +6,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Gestion des transactions d'interrogation dans une biblioth�que.
+ *Gestion des transactions d'interrogation dans une bibliothèque.*
  *
- * <pre>
+ *Ce programme permet de faire diverses interrogations sur l'état de la bibliothèque.
  *
- *   Ce programme permet de faire diverses interrogations
- *   sur l'�tat de la biblioth�que.
+ *<pre>
+ *Pré-condition:
+ *la base de données de la bibliothèque doit exister
+ *</pre>
  *
- *   Pr�-condition
- *     la base de donn�es de la biblioth�que doit exister
- *
- *   Post-condition
- *     le programme effectue les maj associ�es � chaque
- *     transaction
- *
- *
- * </pre>
+ *<post>
+ *Post-condition:
+ *le programme effectue les majuscules associées à chaque transaction
+ *</post>
  */
 
 public class GestionInterrogation {
@@ -32,9 +29,7 @@ public class GestionInterrogation {
 
     private Connexion cx;
 
-    /**
-     * Creation d'une instance
-     */
+    // Creation d'une instance
     public GestionInterrogation(Connexion cx) throws SQLException {
 
         this.cx = cx;
@@ -46,9 +41,7 @@ public class GestionInterrogation {
             + "from livre t1");
     }
 
-    /**
-     * Affiche les livres contenu un mot dans le titre
-     */
+    // Affiche les livres contenant un mot dans le titre
     public void listerLivresTitre(String mot) throws SQLException {
 
         this.stmtLivresTitreMot.setString(1,
@@ -77,9 +70,7 @@ public class GestionInterrogation {
         this.cx.commit();
     }
 
-    /**
-     * Affiche tous les livres de la BD
-     */
+    // Affiche tous les livres de la BD
     public void listerLivres() throws SQLException {
 
         ResultSet rset = this.stmtListeTousLivres.executeQuery();
