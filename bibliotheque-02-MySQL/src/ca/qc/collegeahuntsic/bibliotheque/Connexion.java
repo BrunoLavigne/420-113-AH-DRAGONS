@@ -11,24 +11,24 @@ import java.sql.SQLException;
  * Gestionnaire d'une connexion avec une BD relationnelle via JDBC.
  *
  * Ce programme ouvrir une connexion avec une BD via JDBC.
- * La m�thode serveursSupportes() indique les serveurs support�s.
+ * La méthode serveursSupportes() indique les serveurs supportés.
  *
- * Pr�-condition
- *   le driver JDBC appropri� doit �tre accessible.
+ * Pré-condition
+ *   le driver JDBC approprié doit être accessible.
  *
  * Post-condition
- *   la connexion est ouverte en mode autocommit false et s�rialisable,
- *   (s'il est support� par le serveur).
- * </pre>
+ *   la connexion est ouverte en mode autocommit false et sérialisable,
+ *   (s'il est supporté par le serveur).
+ *
  */
 public class Connexion {
 
     private Connection conn;
 
     /**
-     * Ouverture d'une connexion en mode autocommit false et s�rialisable (si support�)
+     * Ouverture d'une connexion en mode autocommit false et sérialisable (si supporté)
      * @param serveur serveur SQL de la BD
-     * @bd nom de la base de donn�es
+     * @bd nom de la base de données
      * @user userid sur le serveur SQL
      * @pass mot de passe sur le serveur SQL
      */
@@ -59,12 +59,12 @@ public class Connexion {
             // mettre en mode de commit manuel
             this.conn.setAutoCommit(false);
 
-            // mettre en mode s�rialisable si possible
-            // (plus haut niveau d'integrit� l'acc�s concurrent aux donn�es)
+            // mettre en mode sérialisable si possible
+            // (plus haut niveau d'integrité l'accès concurrent aux données)
             DatabaseMetaData dbmd = this.conn.getMetaData();
             if(dbmd.supportsTransactionIsolationLevel(Connection.TRANSACTION_SERIALIZABLE)) {
                 this.conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-                System.out.println("Ouverture de la connexion en mode s�rialisable :\n"
+                System.out.println("Ouverture de la connexion en mode sérialisable :\n"
                     + "Estampille "
                     + System.currentTimeMillis()
                     + " "
@@ -82,49 +82,61 @@ public class Connexion {
             throw e;
         } catch(Exception e) {
             e.printStackTrace(System.out);
-            throw new SQLException("JDBC Driver non instanci�");
+            throw new SQLException("JDBC Driver non instancié");
         }
     }
 
     /**
-     *fermeture d'une connexion
+     *
+     * Fermeture d'une connexion
+     *
+     * @throws SQLException
      */
     public void fermer() throws SQLException {
         this.conn.rollback();
         this.conn.close();
-        System.out.println("Connexion ferm�e"
+        System.out.println("Connexion fermée"
             + " "
             + this.conn);
     }
 
     /**
-     *commit
+     *
+     * Commit
+     *
+     * @throws SQLException
      */
     public void commit() throws SQLException {
         this.conn.commit();
     }
 
     /**
-     *rollback
+     *
+     * Rollback
+     *
+     * @throws SQLException
      */
     public void rollback() throws SQLException {
         this.conn.rollback();
     }
 
     /**
-     *retourne la Connection jdbc
+     *
+     * Retourne la Connection JDBC
+     *
+     * @return La Connection JDBC
      */
     public Connection getConnection() {
         return this.conn;
     }
 
     /**
-     * Retourne la liste des serveurs support�s par ce gestionnaire de connexions
+     * Retourne la liste des serveurs supportés par ce gestionnaire de connexions
      */
     public static String serveursSupportes() {
-        return "local : MySQL install� localement\n"
-            + "distant : Oracle install� au D�partement d'Informatique du Coll�ge Ahuntsic\n"
-            + "postgres : Postgres install� localement\n"
-            + "access : Microsoft Access install� localement et inscrit dans ODBC";
+        return "local : MySQL installé localement\n"
+            + "distant : Oracle installé au Département d'Informatique du Collège Ahuntsic\n"
+            + "postgres : Postgres installé localement\n"
+            + "access : Microsoft Access installé localement et inscrit dans ODBC";
     }
 }// Classe Connexion
