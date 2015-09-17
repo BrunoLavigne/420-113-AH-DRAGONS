@@ -4,11 +4,11 @@ package ca.qc.collegeahuntsic.bibliotheque;
 import java.sql.SQLException;
 
 /**
- * Gestion des transactions de reliées à la création et
- * suppresion de livres dans une bibliothèque.
+ * Gestion des transactions reliées à la création et
+ * la suppression de livres dans une bibliothèque.
  *
  * Ce programme permet de gérer les transaction reliées à la
- * création et suppresion de livres.
+ * création et à la suppression de livres.
  *
  *<pre>
  * Pré-condition:
@@ -31,7 +31,7 @@ public class GestionLivre {
 
     private Connexion cx;
 
-    //Creation d'une instance
+    //Création d'une instance
     public GestionLivre(Livre livre,
         Reservation reservation) {
         this.cx = livre.getConnexion();

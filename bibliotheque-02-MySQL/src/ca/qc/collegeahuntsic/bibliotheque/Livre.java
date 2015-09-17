@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 /**
- * Permet d'effectuer les acc�s � la table livre.
+ * Permet d'effectuer les accès à la table livre.
  */
 
 public class Livre {
@@ -24,7 +24,11 @@ public class Livre {
     private Connexion cx;
 
     /**
-     * Creation d'une instance. Des �nonc�s SQL pour chaque requ�te sont pr�compil�s.
+     *
+     * Creation d'une instance. Des énoncés SQL pour chaque requête sont précompilés.
+     *
+     * @param cx
+     * @throws SQLException
      */
     public Livre(Connexion cx) throws SQLException {
 
@@ -39,7 +43,10 @@ public class Livre {
     }
 
     /**
-     * Retourner la connexion associ�e.
+     *
+     * Retourner la connexion associée.
+     *
+     * @return
      */
     public Connexion getConnexion() {
 
@@ -47,7 +54,12 @@ public class Livre {
     }
 
     /**
-     * Verifie si un livre existe.
+     *
+     * Vérifie si un livre existe.
+     *
+     * @param idLivre
+     * @return
+     * @throws SQLException
      */
     public boolean existe(int idLivre) throws SQLException {
 
@@ -60,7 +72,12 @@ public class Livre {
     }
 
     /**
-     * Lecture d'un livre.
+     *
+     * Lecture d'un livre
+     *
+     * @param idLivre
+     * @return
+     * @throws SQLException
      */
     public TupleLivre getLivre(int idLivre) throws SQLException {
 
@@ -82,7 +99,14 @@ public class Livre {
     }
 
     /**
-     * Ajout d'un nouveau livre dans la base de donnees.
+     *
+     * Ajout d'un nouveau livre dans la base de données.
+     *
+     * @param idLivre
+     * @param titre
+     * @param auteur
+     * @param dateAcquisition
+     * @throws SQLException
      */
     public void acquerir(int idLivre,
         String titre,
@@ -101,7 +125,14 @@ public class Livre {
     }
 
     /**
+     *
      * Enregistrement de l'emprunteur d'un livre.
+     *
+     * @param idLivre
+     * @param idMembre
+     * @param datePret
+     * @return
+     * @throws SQLException
      */
     public int preter(int idLivre,
         int idMembre,
@@ -117,7 +148,12 @@ public class Livre {
     }
 
     /**
-     * Rendre le livre disponible (non-pr�t�)
+     *
+     * Rendre le livre disponible (non-prêté)
+     *
+     * @param idLivre
+     * @return
+     * @throws SQLException
      */
     public int retourner(int idLivre) throws SQLException {
         /* Enregistrement du pret. */
@@ -131,7 +167,12 @@ public class Livre {
     }
 
     /**
-     * Suppression d'un livre.
+     *
+     * Suppression d'un livre
+     *
+     * @param idLivre
+     * @return
+     * @throws SQLException
      */
     public int vendre(int idLivre) throws SQLException {
         /* Suppression du livre. */

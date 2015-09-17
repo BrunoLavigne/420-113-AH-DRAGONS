@@ -17,7 +17,7 @@ import java.sql.SQLException;
  *
  *<post>
  * Post-condition:
- *   le programme effectue les majuscules associées à chaque transaction
+ *   le programme effectue les *mises à jour* associées à chaque transaction
  * </post>
  */
 public class GestionMembre {
@@ -29,7 +29,7 @@ public class GestionMembre {
     private Reservation reservation;
 
     /**
-     * Creation d'une instance
+     * Création d'une instance
      *
      * @param membre
      * @param reservation
@@ -88,8 +88,8 @@ public class GestionMembre {
      * @throws Exception
      */
     public void desinscrire(int idMembre) throws SQLException,
-        BiblioException,
-        Exception {
+    BiblioException,
+    Exception {
         try {
             // Vérifie si le membre existe et s'il a encore des prêts en cours
             TupleMembre tupleMembre = this.membre.getMembre(idMembre);

@@ -6,10 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Permet d'effectuer les acc�s � la table membre.
- * Cette classe g�re tous les acc�s � la table membre.
- *
- *</pre>
+ * Permet d'effectuer les accès à la table membre.
+ * Cette classe gère tous les accès à la table membre.
  */
 
 public class Membre {
@@ -27,7 +25,11 @@ public class Membre {
     private Connexion cx;
 
     /**
-     * Creation d'une instance. Pr�compilation d'�nonc�s SQL.
+     * 
+     * Création d'une instance. Pré-compilation d'énoncés SQL
+     *
+     * @param cx
+     * @throws SQLException
      */
     public Membre(Connexion cx) throws SQLException {
         this.cx = cx;
@@ -40,7 +42,10 @@ public class Membre {
     }
 
     /**
-     * Retourner la connexion associ�e.
+     * 
+     * Retourner la connexion associée.
+     *
+     * @return
      */
     public Connexion getConnexion() {
 
@@ -48,7 +53,12 @@ public class Membre {
     }
 
     /**
-     * Verifie si un membre existe.
+     * 
+     * Vérifie si un membre existe.
+     *
+     * @param idMembre
+     * @return
+     * @throws SQLException
      */
     public boolean existe(int idMembre) throws SQLException {
         this.stmtExiste.setInt(1,
@@ -58,9 +68,14 @@ public class Membre {
         rset.close();
         return membreExiste;
     }
-
+    
     /**
+     * 
      * Lecture d'un membre.
+     *
+     * @param idMembre
+     * @return
+     * @throws SQLException
      */
     public TupleMembre getMembre(int idMembre) throws SQLException {
         this.stmtExiste.setInt(1,
@@ -78,9 +93,16 @@ public class Membre {
             return null;
         }
     }
-
+    
     /**
+     * 
      * Ajout d'un nouveau membre.
+     *
+     * @param idMembre
+     * @param nom
+     * @param telephone
+     * @param limitePret
+     * @throws SQLException
      */
     public void inscrire(int idMembre,
         String nom,
@@ -97,27 +119,42 @@ public class Membre {
             limitePret);
         this.stmtInsert.executeUpdate();
     }
-
+    
     /**
-     * Incrementer le nb de pret d'un membre.
+     * 
+     * Incrémenter le nombre de prêts d'un membre.
+     *
+     * @param idMembre
+     * @return
+     * @throws SQLException
      */
     public int preter(int idMembre) throws SQLException {
         this.stmtUpdateIncrNbPret.setInt(1,
             idMembre);
         return this.stmtUpdateIncrNbPret.executeUpdate();
     }
-
+    
     /**
-     * Decrementer le nb de pret d'un membre.
+     * 
+     * Décrémenter le nombre de prêts d'un membre.
+     *
+     * @param idMembre
+     * @return
+     * @throws SQLException
      */
     public int retourner(int idMembre) throws SQLException {
         this.stmtUpdateDecNbPret.setInt(1,
             idMembre);
         return this.stmtUpdateDecNbPret.executeUpdate();
     }
-
+    
     /**
+     * 
      * Suppression d'un membre.
+     *
+     * @param idMembre
+     * @return
+     * @throws SQLException
      */
     public int desinscrire(int idMembre) throws SQLException {
         this.stmtDelete.setInt(1,
