@@ -7,10 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Permet d'effectuer les acc�s � la table reservation.
+ * Permet d'effectuer les accès à la table reservation.
  *<pre>
  *
- * Cette classe g�re tous les acc�s � la table reservation.
+ * Cette classegère tous les accès à la table reservation.
  *
  *</pre>
  */
@@ -31,6 +31,9 @@ public class Reservation {
 
     /**
      * Creation d'une instance.
+     *
+     * @param cx
+     * @throws SQLException
      */
     public Reservation(Connexion cx) throws SQLException {
 
@@ -48,7 +51,9 @@ public class Reservation {
     }
 
     /**
-     * Retourner la connexion associ�e.
+     * Retourner la connexion associée.
+     *
+     * @return
      */
     public Connexion getConnexion() {
 
@@ -56,7 +61,12 @@ public class Reservation {
     }
 
     /**
-     * Verifie si une reservation existe.
+     *
+     * Vérifie si une réservation existe.
+     *
+     * @param idReservation
+     * @return
+     * @throws SQLException
      */
     public boolean existe(int idReservation) throws SQLException {
 
@@ -69,7 +79,12 @@ public class Reservation {
     }
 
     /**
-     * Lecture d'une reservation.
+     *
+     * Lecture d'une réservation.
+     *
+     * @param idReservation
+     * @return
+     * @throws SQLException
      */
     public TupleReservation getReservation(int idReservation) throws SQLException {
 
@@ -90,7 +105,12 @@ public class Reservation {
     }
 
     /**
-     * Lecture de la premi�re reservation d'un livre.
+     *
+     * Lecture de la première réservation d'un livre.
+     *
+     * @param idLivre
+     * @return
+     * @throws SQLException
      */
     public TupleReservation getReservationLivre(int idLivre) throws SQLException {
 
@@ -111,7 +131,12 @@ public class Reservation {
     }
 
     /**
-     * Lecture de la premi�re reservation d'un livre.
+     *
+     * Lecture de la première réservation d'un livre.
+     *
+     * @param idMembre
+     * @return
+     * @throws SQLException
      */
     public TupleReservation getReservationMembre(int idMembre) throws SQLException {
 
@@ -132,7 +157,14 @@ public class Reservation {
     }
 
     /**
-     * R�servation d'un livre.
+     *
+     * Réservation d'un livre
+     *
+     * @param idReservation
+     * @param idLivre
+     * @param idMembre
+     * @param dateReservation
+     * @throws SQLException
      */
     public void reserver(int idReservation,
         int idLivre,
@@ -150,7 +182,12 @@ public class Reservation {
     }
 
     /**
-     * Suppression d'une reservation.
+     *
+     * Suppression d'une réservation.
+     *
+     * @param idReservation
+     * @return
+     * @throws SQLException
      */
     public int annulerRes(int idReservation) throws SQLException {
         this.stmtDelete.setInt(1,

@@ -6,19 +6,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *Gestion des transactions d'interrogation dans une bibliothèque.*
+ * Gestion des transactions d'interrogation dans une bibliothèque.*
  *
- *Ce programme permet de faire diverses interrogations sur l'état de la bibliothèque.
+ * Ce programme permet de faire diverses interrogations sur l'état de la bibliothèque.
  *
- *<pre>
- *Pré-condition:
- *la base de données de la bibliothèque doit exister
- *</pre>
+ * <pre>
+ * Pré-condition:
+ * la base de données de la bibliothèque doit exister.
+ * </pre>
  *
- *<post>
- *Post-condition:
- *le programme effectue les majuscules associées à chaque transaction
- *</post>
+ * <post>
+ * Post-condition:
+ * Le programme effectue les majuscules associées à chaque transaction.
+ * </post>
  */
 
 public class GestionInterrogation {
