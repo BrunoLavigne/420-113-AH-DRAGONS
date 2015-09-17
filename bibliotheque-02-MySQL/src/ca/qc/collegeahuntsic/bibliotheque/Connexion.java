@@ -28,9 +28,9 @@ public class Connexion {
     /**
      * Ouverture d'une connexion en mode autocommit false et sérialisable (si supporté)
      * @param serveur serveur SQL de la BD
-     * @bd nom de la base de données
-     * @user userid sur le serveur SQL
-     * @pass mot de passe sur le serveur SQL
+     * @param bd nom de la base de données
+     * @param user userid sur le serveur SQL
+     * @param pass mot de passe sur le serveur SQL
      */
     public Connexion(String serveur,
         String bd,

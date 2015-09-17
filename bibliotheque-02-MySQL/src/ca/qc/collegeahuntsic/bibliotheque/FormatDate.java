@@ -21,7 +21,7 @@ public class FormatDate {
      * Convertit une String du format YYYY-MM-DD en un objet de la classe Date.
      *
      * @param dateString
-     * @return
+     * @return Date convertirDate
      * @throws ParseException
      */
     public static Date convertirDate(String dateString) throws ParseException {

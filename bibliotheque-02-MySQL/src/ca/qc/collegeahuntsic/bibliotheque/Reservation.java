@@ -7,10 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * <pre>
  * Permet d'effectuer les accès à la table reservation.
- *<pre>
  *
- * Cette classegère tous les accès à la table reservation.
+ * Cette classe gère tous les accès à la table reservation.
  *
  *</pre>
  */
@@ -53,7 +53,7 @@ public class Reservation {
     /**
      * Retourner la connexion associée.
      *
-     * @return
+     * @return La connexion
      */
     public Connexion getConnexion() {
 
@@ -65,7 +65,7 @@ public class Reservation {
      * Vérifie si une réservation existe.
      *
      * @param idReservation
-     * @return
+     * @return boolean Si la réservation existe
      * @throws SQLException
      */
     public boolean existe(int idReservation) throws SQLException {
@@ -83,7 +83,7 @@ public class Reservation {
      * Lecture d'une réservation.
      *
      * @param idReservation
-     * @return
+     * @return TupleReservation La réservation
      * @throws SQLException
      */
     public TupleReservation getReservation(int idReservation) throws SQLException {
@@ -109,7 +109,7 @@ public class Reservation {
      * Lecture de la première réservation d'un livre.
      *
      * @param idLivre
-     * @return
+     * @return TupleReservation La réservation du livre
      * @throws SQLException
      */
     public TupleReservation getReservationLivre(int idLivre) throws SQLException {
@@ -135,7 +135,7 @@ public class Reservation {
      * Lecture de la première réservation d'un livre.
      *
      * @param idMembre
-     * @return
+     * @return TupleReservation réservation membre
      * @throws SQLException
      */
     public TupleReservation getReservationMembre(int idMembre) throws SQLException {
@@ -186,7 +186,7 @@ public class Reservation {
      * Suppression d'une réservation.
      *
      * @param idReservation
-     * @return
+     * @return int annulerRes
      * @throws SQLException
      */
     public int annulerRes(int idReservation) throws SQLException {

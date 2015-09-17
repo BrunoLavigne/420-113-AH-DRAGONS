@@ -25,7 +25,7 @@ public class Membre {
     private Connexion cx;
 
     /**
-     * 
+     *
      * Création d'une instance. Pré-compilation d'énoncés SQL
      *
      * @param cx
@@ -42,10 +42,10 @@ public class Membre {
     }
 
     /**
-     * 
+     *
      * Retourner la connexion associée.
      *
-     * @return
+     * @return La connexion
      */
     public Connexion getConnexion() {
 
@@ -53,11 +53,11 @@ public class Membre {
     }
 
     /**
-     * 
+     *
      * Vérifie si un membre existe.
      *
      * @param idMembre
-     * @return
+     * @return boolean existe
      * @throws SQLException
      */
     public boolean existe(int idMembre) throws SQLException {
@@ -68,13 +68,13 @@ public class Membre {
         rset.close();
         return membreExiste;
     }
-    
+
     /**
-     * 
+     *
      * Lecture d'un membre.
      *
      * @param idMembre
-     * @return
+     * @return TupleMembre le membre
      * @throws SQLException
      */
     public TupleMembre getMembre(int idMembre) throws SQLException {
@@ -93,9 +93,9 @@ public class Membre {
             return null;
         }
     }
-    
+
     /**
-     * 
+     *
      * Ajout d'un nouveau membre.
      *
      * @param idMembre
@@ -119,13 +119,13 @@ public class Membre {
             limitePret);
         this.stmtInsert.executeUpdate();
     }
-    
+
     /**
-     * 
+     *
      * Incrémenter le nombre de prêts d'un membre.
      *
      * @param idMembre
-     * @return
+     * @return int preter
      * @throws SQLException
      */
     public int preter(int idMembre) throws SQLException {
@@ -133,13 +133,13 @@ public class Membre {
             idMembre);
         return this.stmtUpdateIncrNbPret.executeUpdate();
     }
-    
+
     /**
-     * 
+     *
      * Décrémenter le nombre de prêts d'un membre.
      *
      * @param idMembre
-     * @return
+     * @return int retourner
      * @throws SQLException
      */
     public int retourner(int idMembre) throws SQLException {
@@ -147,13 +147,13 @@ public class Membre {
             idMembre);
         return this.stmtUpdateDecNbPret.executeUpdate();
     }
-    
+
     /**
-     * 
+     *
      * Suppression d'un membre.
      *
      * @param idMembre
-     * @return
+     * @return int desinscrire
      * @throws SQLException
      */
     public int desinscrire(int idMembre) throws SQLException {

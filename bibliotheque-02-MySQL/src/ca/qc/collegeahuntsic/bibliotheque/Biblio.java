@@ -98,7 +98,7 @@ public class Biblio {
      * Lecture d'une transaction
      *
      * @param reader
-     * @return
+     * @return lireTransactionString
      * @throws IOException
      */
     static String lireTransaction(BufferedReader reader) throws IOException {
@@ -213,7 +213,7 @@ public class Biblio {
      * Vérifie si la fin du traitement des transactions est atteinte.
      *
      * @param transaction
-     * @return
+     * @return boolean finTransaction
      */
     static boolean finTransaction(String transaction) {
         /* fin de fichier atteinte */
@@ -248,7 +248,7 @@ public class Biblio {
      * Lecture d'une chaîne de caractères de la transaction entrée à l'écran
      *
      * @param tokenizer
-     * @return
+     * @return String readString
      * @throws BiblioException
      */
     static String readString(StringTokenizer tokenizer) throws BiblioException {
@@ -264,7 +264,7 @@ public class Biblio {
      * Lecture d'un int java de la transaction entrée à l'écran
      *
      * @param tokenizer
-     * @return
+     * @return int readInt
      * @throws BiblioException
      */
     static int readInt(StringTokenizer tokenizer) throws BiblioException {
@@ -287,7 +287,7 @@ public class Biblio {
      * Lecture d'un long java de la transaction entrée à l'écran
      *
      * @param tokenizer
-     * @return
+     * @return long readLong
      * @throws BiblioException
      */
     static long readLong(StringTokenizer tokenizer) throws BiblioException {
@@ -310,7 +310,7 @@ public class Biblio {
      * Lecture d'une date en format YYYY-MM-DD
      *
      * @param tokenizer
-     * @return
+     * @return String readDate
      * @throws BiblioException
      */
     static String readDate(StringTokenizer tokenizer) throws BiblioException {

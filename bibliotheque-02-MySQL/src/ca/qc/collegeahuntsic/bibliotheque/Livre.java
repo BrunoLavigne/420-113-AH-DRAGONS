@@ -46,7 +46,7 @@ public class Livre {
      *
      * Retourner la connexion associée.
      *
-     * @return
+     * @return la connexion
      */
     public Connexion getConnexion() {
 
@@ -58,7 +58,7 @@ public class Livre {
      * Vérifie si un livre existe.
      *
      * @param idLivre
-     * @return
+     * @return boolean existe
      * @throws SQLException
      */
     public boolean existe(int idLivre) throws SQLException {
@@ -76,7 +76,7 @@ public class Livre {
      * Lecture d'un livre
      *
      * @param idLivre
-     * @return
+     * @return TupleLivre
      * @throws SQLException
      */
     public TupleLivre getLivre(int idLivre) throws SQLException {
@@ -131,7 +131,7 @@ public class Livre {
      * @param idLivre
      * @param idMembre
      * @param datePret
-     * @return
+     * @return int preter
      * @throws SQLException
      */
     public int preter(int idLivre,
@@ -152,7 +152,7 @@ public class Livre {
      * Rendre le livre disponible (non-prêté)
      *
      * @param idLivre
-     * @return
+     * @return int retourner
      * @throws SQLException
      */
     public int retourner(int idLivre) throws SQLException {
@@ -171,7 +171,7 @@ public class Livre {
      * Suppression d'un livre
      *
      * @param idLivre
-     * @return
+     * @return int vendre
      * @throws SQLException
      */
     public int vendre(int idLivre) throws SQLException {
