@@ -1,3 +1,6 @@
+// Fichier BibliothequeCreateur.java
+// Auteur : Dragons Vicieux
+// Date de création : 2015-09-18
 
 package ca.qc.collegeahuntsic.bibliotheque.util;
 
@@ -8,10 +11,10 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BiblioException;
 import ca.qc.collegeahuntsic.bibliotheque.service.GestionInterrogationService;
-import ca.qc.collegeahuntsic.bibliotheque.service.ReservationService;
 import ca.qc.collegeahuntsic.bibliotheque.service.LivreService;
 import ca.qc.collegeahuntsic.bibliotheque.service.MembreService;
 import ca.qc.collegeahuntsic.bibliotheque.service.PretService;
+import ca.qc.collegeahuntsic.bibliotheque.service.ReservationService;
 
 /**
  * Système de gestion d'une bibliothèque

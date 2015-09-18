@@ -1,3 +1,6 @@
+// Fichier ReservationService.java
+// Auteur : Dragons Vicieux
+// Date de création : 2015-09-18
 
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
@@ -220,8 +223,8 @@ public class ReservationService extends Services {
      * @throws Exception
      */
     public void annulerRes(int idReservation) throws SQLException,
-    BiblioException,
-    Exception {
+        BiblioException,
+        Exception {
         try {
 
             // Vérifie que la réservation existe.

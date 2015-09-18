@@ -1,3 +1,6 @@
+// Fichier LivreService.java
+// Auteur : Dragons Vicieux
+// Date de création : 2015-09-18
 
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
@@ -89,8 +92,8 @@ public class LivreService extends Services {
      * @throws Exception
      */
     public void vendre(int idLivre) throws SQLException,
-    BiblioException,
-    Exception {
+        BiblioException,
+        Exception {
         try {
             LivreDTO tupleLivre = this.livre.getLivre(idLivre);
             if(tupleLivre == null) {

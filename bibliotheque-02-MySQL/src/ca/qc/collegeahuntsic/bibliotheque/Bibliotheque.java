@@ -1,3 +1,6 @@
+// Fichier Bibliotheque.java
+// Auteur : Dragons Vicieux
+// Date de création : 2015-09-18
 
 package ca.qc.collegeahuntsic.bibliotheque;
 
@@ -9,8 +12,8 @@ import java.text.ParseException;
 import java.util.StringTokenizer;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BiblioException;
-import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
 import ca.qc.collegeahuntsic.bibliotheque.util.BibliothequeCreateur;
+import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
 
 /**
  *

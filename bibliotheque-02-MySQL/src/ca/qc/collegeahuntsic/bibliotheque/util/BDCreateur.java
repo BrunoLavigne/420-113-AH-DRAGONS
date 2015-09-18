@@ -1,3 +1,6 @@
+// Fichier BDCreateur.java
+// Auteur : Dragons Vicieux
+// Date de création : 2015-09-18
 
 package ca.qc.collegeahuntsic.bibliotheque.util;
 
@@ -14,12 +17,12 @@ import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
  *            1- bd nom de la BD
  *            2- user id pour établir une connexion avec le serveur SQL
  *            3- mot de passe pour le user id
- *</pre>           
+ *</pre>
  */
 class BDCreateur {
     public static void main(String args[]) throws Exception,
-        SQLException,
-        IOException {
+    SQLException,
+    IOException {
 
         if(args.length < 3) {
             System.out.println("Usage: java CreerBD <serveur> <bd> <user> <password>");

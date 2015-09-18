@@ -1,3 +1,6 @@
+// Fichier MembreService.java
+// Auteur : Dragons Vicieux
+// Date de création : 2015-09-18
 
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
@@ -93,8 +96,8 @@ public class MembreService extends Services {
      * @throws Exception
      */
     public void desinscrire(int idMembre) throws SQLException,
-        BiblioException,
-        Exception {
+    BiblioException,
+    Exception {
         try {
             // Vérifie si le membre existe et s'il a encore des prêts en cours
             MembreDTO tupleMembre = this.membre.getMembre(idMembre);
