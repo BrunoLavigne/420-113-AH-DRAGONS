@@ -7,6 +7,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.StringTokenizer;
+import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
+import ca.qc.collegeahuntsic.bibliotheque.exception.BiblioException;
+import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
+import ca.qc.collegeahuntsic.bibliotheque.util.BibliothequeCreateur;
 
 /**
  *
@@ -14,7 +18,7 @@ import java.util.StringTokenizer;
  *
  *
  * Ce programme permet d'appeler les transactions de base d'une
- * bibliothéque.  Il gère des livres, des membres et des
+ * bibliothèque.  Il gère des livres, des membres et des
  * réservations. Les données sont conservées dans une base de
  * données relationnelles accédée avec JDBC. Pour une liste des
  * transactions traitées, voir la méthode afficherAide().
@@ -33,8 +37,8 @@ import java.util.StringTokenizer;
  *   Le programme effectue les mises à jour associées à chaque transaction
  *
  */
-public class Biblio {
-    private static GestionBibliotheque gestionBiblio;
+public class Bibliotheque {
+    private static BibliothequeCreateur gestionBiblio;
 
     private static boolean lectureAuClavier;
 
@@ -52,13 +56,13 @@ public class Biblio {
         }
 
         try(
-            InputStream sourceTransaction = Biblio.class.getResourceAsStream("/"
+            InputStream sourceTransaction = Bibliotheque.class.getResourceAsStream("/"
                 + argv[4])) {
             // ouverture du fichier de transactions
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(sourceTransaction));
 
-            gestionBiblio = new GestionBibliotheque(argv[0],
+            gestionBiblio = new BibliothequeCreateur(argv[0],
                 argv[1],
                 argv[2],
                 argv[3]);
@@ -317,7 +321,7 @@ public class Biblio {
         if(tokenizer.hasMoreElements()) {
             String token = tokenizer.nextToken();
             try {
-                FormatDate.convertirDate(token);
+                FormatteurDate.convertirDate(token);
                 return token;
             } catch(ParseException e) {
                 throw new BiblioException("Date en format YYYY-MM-DD attendue à la place  de \""

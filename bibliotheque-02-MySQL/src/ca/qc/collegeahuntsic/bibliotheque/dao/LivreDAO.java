@@ -1,17 +1,19 @@
 
-package ca.qc.collegeahuntsic.bibliotheque;
+package ca.qc.collegeahuntsic.bibliotheque.dao;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
+import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 
 /**
  * Permet d'effectuer les accès à la table livre.
  */
 
-public class Livre {
+public class LivreDAO extends DAO {
 
     private PreparedStatement stmtExiste;
 
@@ -30,7 +32,7 @@ public class Livre {
      * @param cx
      * @throws SQLException
      */
-    public Livre(Connexion cx) throws SQLException {
+    public LivreDAO(Connexion cx) throws SQLException {
 
         this.cx = cx;
         this.stmtExiste = cx.getConnection()
@@ -79,13 +81,13 @@ public class Livre {
      * @return TupleLivre
      * @throws SQLException
      */
-    public TupleLivre getLivre(int idLivre) throws SQLException {
+    public LivreDTO getLivre(int idLivre) throws SQLException {
 
         this.stmtExiste.setInt(1,
             idLivre);
         ResultSet rset = this.stmtExiste.executeQuery();
         if(rset.next()) {
-            TupleLivre tupleLivre = new TupleLivre();
+            LivreDTO tupleLivre = new LivreDTO();
             tupleLivre.idLivre = idLivre;
             tupleLivre.titre = rset.getString(2);
             tupleLivre.auteur = rset.getString(3);

@@ -1,9 +1,10 @@
 
-package ca.qc.collegeahuntsic.bibliotheque;
+package ca.qc.collegeahuntsic.bibliotheque.service;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 
 /**
  * Gestion des transactions d'interrogation dans une bibliothèque.*
@@ -21,7 +22,7 @@ import java.sql.SQLException;
  * </post>
  */
 
-public class GestionInterrogation {
+public class GestionInterrogationService {
 
     private PreparedStatement stmtLivresTitreMot;
 
@@ -29,12 +30,14 @@ public class GestionInterrogation {
 
     private Connexion cx;
 
-    // Creation d'une instance
     /**
+     *
+     * Creation d'une instance
+     *
      * @param cx
      * @throws SQLException
      */
-    public GestionInterrogation(Connexion cx) throws SQLException {
+    public GestionInterrogationService(Connexion cx) throws SQLException {
 
         this.cx = cx;
         this.stmtLivresTitreMot = cx.getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret + 14 "
@@ -45,8 +48,10 @@ public class GestionInterrogation {
             + "from livre t1");
     }
 
-    // Affiche les livres contenant un mot dans le titre
     /**
+     *
+     * Affiche les livres contenant un mot dans le titre
+     *
      * @param mot
      * @throws SQLException
      */
@@ -78,8 +83,10 @@ public class GestionInterrogation {
         this.cx.commit();
     }
 
-    // Affiche tous les livres de la BD
     /**
+     *
+     * Affiche tous les livres de la BD
+     *
      * @throws SQLException
      */
     public void listerLivres() throws SQLException {

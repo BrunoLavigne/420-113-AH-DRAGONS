@@ -1,5 +1,5 @@
 
-package ca.qc.collegeahuntsic.bibliotheque;
+package ca.qc.collegeahuntsic.bibliotheque.db;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

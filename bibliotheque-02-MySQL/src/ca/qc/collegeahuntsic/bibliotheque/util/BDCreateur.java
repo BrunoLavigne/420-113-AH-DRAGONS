@@ -1,9 +1,10 @@
 
-package ca.qc.collegeahuntsic.bibliotheque;
+package ca.qc.collegeahuntsic.bibliotheque.util;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Statement;
+import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 
 /**
  *<pre>
@@ -15,7 +16,7 @@ import java.sql.Statement;
  *            3- mot de passe pour le user id
  *</pre>           
  */
-class CreerBD {
+class BDCreateur {
     public static void main(String args[]) throws Exception,
         SQLException,
         IOException {
