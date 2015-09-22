@@ -17,6 +17,8 @@ import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 
 public class MembreDAO extends DAO {
 
+    private static final long serialVersionUID = 1L;
+
     private PreparedStatement stmtExiste;
 
     private PreparedStatement stmtInsert;
@@ -68,6 +70,9 @@ public class MembreDAO extends DAO {
     public boolean existe(int idMembre) throws SQLException {
         this.stmtExiste.setInt(1,
             idMembre);
+
+        @SuppressWarnings("resource")
+        // TODO fix warning
         ResultSet rset = this.stmtExiste.executeQuery();
         boolean membreExiste = rset.next();
         rset.close();
@@ -82,6 +87,9 @@ public class MembreDAO extends DAO {
      * @return TupleMembre le membre
      * @throws SQLException
      */
+
+    // TODO fix warning
+    @SuppressWarnings("resource")
     public MembreDTO getMembre(int idMembre) throws SQLException {
         this.stmtExiste.setInt(1,
             idMembre);
@@ -94,9 +102,8 @@ public class MembreDAO extends DAO {
             tupleMembre.limitePret = rset.getInt(4);
             tupleMembre.nbPret = rset.getInt(5);
             return tupleMembre;
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**

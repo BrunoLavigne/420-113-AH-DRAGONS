@@ -64,6 +64,8 @@ public class GestionInterrogationService {
             "%"
                 + mot
                 + "%");
+        @SuppressWarnings("resource")
+        // TODO fix warning
         ResultSet rset = this.stmtLivresTitreMot.executeQuery();
 
         int idMembre;
@@ -94,6 +96,8 @@ public class GestionInterrogationService {
      */
     public void listerLivres() throws SQLException {
 
+        @SuppressWarnings("resource")
+        // TODO fix warning
         ResultSet rset = this.stmtListeTousLivres.executeQuery();
 
         System.out.println("idLivre titre auteur idMembre datePret");

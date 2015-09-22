@@ -18,6 +18,8 @@ import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 
 public class LivreDAO extends DAO {
 
+    private static final long serialVersionUID = 1L;
+
     private PreparedStatement stmtExiste;
 
     private PreparedStatement stmtInsert;
@@ -70,6 +72,9 @@ public class LivreDAO extends DAO {
 
         this.stmtExiste.setInt(1,
             idLivre);
+
+        @SuppressWarnings("resource")
+        // TODO Fix warning
         ResultSet rset = this.stmtExiste.executeQuery();
         boolean livreExiste = rset.next();
         rset.close();
@@ -84,6 +89,7 @@ public class LivreDAO extends DAO {
      * @return TupleLivre
      * @throws SQLException
      */
+    @SuppressWarnings("resource")
     public LivreDTO getLivre(int idLivre) throws SQLException {
 
         this.stmtExiste.setInt(1,
@@ -98,9 +104,8 @@ public class LivreDAO extends DAO {
             tupleLivre.idMembre = rset.getInt(5);
             tupleLivre.datePret = rset.getDate(6);
             return tupleLivre;
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**

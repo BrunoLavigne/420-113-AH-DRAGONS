@@ -20,9 +20,13 @@ import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
  *</pre>
  */
 class BDCreateur {
+
+    /**
+     * @throws IOException
+     */
     public static void main(String args[]) throws Exception,
-    SQLException,
-    IOException {
+        SQLException,
+        IOException {
 
         if(args.length < 3) {
             System.out.println("Usage: java CreerBD <serveur> <bd> <user> <password>");
@@ -34,6 +38,8 @@ class BDCreateur {
             args[2],
             args[3]);
 
+        @SuppressWarnings("resource")
+        // TODO fix warning
         Statement stmt = cx.getConnection().createStatement();
 
         stmt.executeUpdate("DROP TABLE IF EXISTS reservation CASCADE");

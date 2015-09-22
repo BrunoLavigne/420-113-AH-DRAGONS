@@ -10,8 +10,11 @@ package ca.qc.collegeahuntsic.bibliotheque.exception;
  *
  */
 
-public final class BiblioException extends Exception {
-    public BiblioException(String message) {
+public final class BibliothequeException extends Exception {
+
+    private static final long serialVersionUID = 1L;
+
+    public BibliothequeException(String message) {
         super(message);
     }
 }

@@ -4,11 +4,15 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.dao;
 
+import java.io.Serializable;
+
 /**
  * TODO Auto-generated class javadoc
  *
  * @author Dragons Vicieux
  */
-public class DAO {
+public class DAO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
 }

@@ -13,7 +13,7 @@ import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
-import ca.qc.collegeahuntsic.bibliotheque.exception.BiblioException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 
 /**
  * Gestion des transactions reliées aux prêts de livres
@@ -35,6 +35,8 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.BiblioException;
 
 public class PretService extends Services {
 
+    private static final long serialVersionUID = 1L;
+
     private LivreDAO livre;
 
     private MembreDAO membre;
@@ -51,14 +53,14 @@ public class PretService extends Services {
      * @param livre
      * @param membre
      * @param reservation
-     * @throws BiblioException
+     * @throws BibliothequeException
      */
     public PretService(LivreDAO livre,
         MembreDAO membre,
-        ReservationDAO reservation) throws BiblioException {
+        ReservationDAO reservation) throws BibliothequeException {
         if(livre.getConnexion() != membre.getConnexion()
             || reservation.getConnexion() != membre.getConnexion()) {
-            throw new BiblioException("Les instances de livre, de membre et de réservation n'utilisent pas la même connexion au serveur");
+            throw new BibliothequeException("Les instances de livre, de membre et de réservation n'utilisent pas la même connexion au serveur");
         }
         this.cx = livre.getConnexion();
         this.livre = livre;
@@ -75,23 +77,23 @@ public class PretService extends Services {
      * @param idMembre
      * @param datePret
      * @throws SQLException
-     * @throws BiblioException
+     * @throws BibliothequeException
      * @throws Exception
      */
     public void preter(int idLivre,
         int idMembre,
         String datePret) throws SQLException,
-        BiblioException,
+        BibliothequeException,
         Exception {
         try {
             // Vérfie si le livre est disponible
             LivreDTO tupleLivre = this.livre.getLivre(idLivre);
             if(tupleLivre == null) {
-                throw new BiblioException("Livre inexistant: "
+                throw new BibliothequeException("Livre inexistant: "
                     + idLivre);
             }
             if(tupleLivre.idMembre != 0) {
-                throw new BiblioException("Livre "
+                throw new BibliothequeException("Livre "
                     + idLivre
                     + " déjà prêté à "
                     + tupleLivre.idMembre);
@@ -100,11 +102,11 @@ public class PretService extends Services {
             // Vérifie si le membre existe et sa limite de prêt
             MembreDTO tupleMembre = this.membre.getMembre(idMembre);
             if(tupleMembre == null) {
-                throw new BiblioException("Membre inexistant: "
+                throw new BibliothequeException("Membre inexistant: "
                     + idMembre);
             }
             if(tupleMembre.nbPret >= tupleMembre.limitePret) {
-                throw new BiblioException("Limite de prêt du membre "
+                throw new BibliothequeException("Limite de prêt du membre "
                     + idMembre
                     + " atteinte");
             }
@@ -112,7 +114,7 @@ public class PretService extends Services {
             // Vérifie s'il existe une réservation pour le livre.
             ReservationDTO tupleReservation = this.reservation.getReservationLivre(idLivre);
             if(tupleReservation != null) {
-                throw new BiblioException("Livre réservé par : "
+                throw new BibliothequeException("Livre réservé par : "
                     + tupleReservation.idMembre
                     + " idReservation : "
                     + tupleReservation.idReservation);
@@ -123,11 +125,11 @@ public class PretService extends Services {
                 idMembre,
                 datePret);
             if(nb1 == 0) {
-                throw new BiblioException("Livre suprimé par une autre transaction");
+                throw new BibliothequeException("Livre suprimé par une autre transaction");
             }
             int nb2 = this.membre.preter(idMembre);
             if(nb2 == 0) {
-                throw new BiblioException("Membre suprimé par une autre transaction");
+                throw new BibliothequeException("Membre suprimé par une autre transaction");
             }
             this.cx.commit();
         } catch(Exception e) {
@@ -144,35 +146,35 @@ public class PretService extends Services {
      * @param idLivre
      * @param datePret
      * @throws SQLException
-     * @throws BiblioException
+     * @throws BibliothequeException
      * @throws Exception
      */
     public void renouveler(int idLivre,
         String datePret) throws SQLException,
-        BiblioException,
+        BibliothequeException,
         Exception {
         try {
             // Vérifie si le livre est prêté
             LivreDTO tupleLivre = this.livre.getLivre(idLivre);
             if(tupleLivre == null) {
-                throw new BiblioException("Livre inexistant: "
+                throw new BibliothequeException("Livre inexistant: "
                     + idLivre);
             }
             if(tupleLivre.idMembre == 0) {
-                throw new BiblioException("Livre "
+                throw new BibliothequeException("Livre "
                     + idLivre
                     + " n'est pas prêté");
             }
 
             // Vérifie si date renouvellement >= datePret
             if(Date.valueOf(datePret).before(tupleLivre.datePret)) {
-                throw new BiblioException("Date de renouvellement inférieure à la date de prêt");
+                throw new BibliothequeException("Date de renouvellement inférieure à la date de prêt");
             }
 
             // Vérifie s'il existe une réservation pour le livre.
             ReservationDTO tupleReservation = this.reservation.getReservationLivre(idLivre);
             if(tupleReservation != null) {
-                throw new BiblioException("Livre réservé par : "
+                throw new BibliothequeException("Livre réservé par : "
                     + tupleReservation.idMembre
                     + " idReservation : "
                     + tupleReservation.idReservation);
@@ -183,7 +185,7 @@ public class PretService extends Services {
                 tupleLivre.idMembre,
                 datePret);
             if(nb1 == 0) {
-                throw new BiblioException("Livre suprimé par une autre transaction");
+                throw new BibliothequeException("Livre suprimé par une autre transaction");
             }
             this.cx.commit();
         } catch(Exception e) {
@@ -199,40 +201,40 @@ public class PretService extends Services {
      * @param idLivre
      * @param dateRetour
      * @throws SQLException
-     * @throws BiblioException
+     * @throws BibliothequeException
      * @throws Exception
      */
     public void retourner(int idLivre,
         String dateRetour) throws SQLException,
-        BiblioException,
+        BibliothequeException,
         Exception {
         try {
             // Vérifie si le livre est prêté
             LivreDTO tupleLivre = this.livre.getLivre(idLivre);
             if(tupleLivre == null) {
-                throw new BiblioException("Livre inexistant: "
+                throw new BibliothequeException("Livre inexistant: "
                     + idLivre);
             }
             if(tupleLivre.idMembre == 0) {
-                throw new BiblioException("Livre "
+                throw new BibliothequeException("Livre "
                     + idLivre
                     + " n'est pas prêté ");
             }
 
             // Vérifie si date retour >= datePret
             if(Date.valueOf(dateRetour).before(tupleLivre.datePret)) {
-                throw new BiblioException("Date de retour inférieure à la date de prêt");
+                throw new BibliothequeException("Date de retour inférieure à la date de prêt");
             }
 
             // Retour du prêt
             int nb1 = this.livre.retourner(idLivre);
             if(nb1 == 0) {
-                throw new BiblioException("Livre suprimé par une autre transaction");
+                throw new BibliothequeException("Livre suprimé par une autre transaction");
             }
 
             int nb2 = this.membre.retourner(tupleLivre.idMembre);
             if(nb2 == 0) {
-                throw new BiblioException("Livre suprimé par une autre transaction");
+                throw new BibliothequeException("Livre suprimé par une autre transaction");
             }
             this.cx.commit();
         } catch(Exception e) {

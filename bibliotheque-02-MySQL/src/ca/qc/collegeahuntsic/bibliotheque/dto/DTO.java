@@ -4,11 +4,15 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.dto;
 
+import java.io.Serializable;
+
 /**
  * TODO Auto-generated class javadoc
  *
  * @author Dragons Vicieux
  */
-public class DTO {
+public class DTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
 }

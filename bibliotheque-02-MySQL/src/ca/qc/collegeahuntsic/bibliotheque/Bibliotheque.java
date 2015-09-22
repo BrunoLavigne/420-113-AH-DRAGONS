@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.StringTokenizer;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
-import ca.qc.collegeahuntsic.bibliotheque.exception.BiblioException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 import ca.qc.collegeahuntsic.bibliotheque.util.BibliothequeCreateur;
 import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
 
@@ -41,6 +41,7 @@ import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
  *
  */
 public class Bibliotheque {
+
     private static BibliothequeCreateur gestionBiblio;
 
     private static boolean lectureAuClavier;
@@ -51,7 +52,7 @@ public class Bibliotheque {
      * fermeture de la BD.
      */
     public static void main(String argv[]) throws Exception {
-        // validation du nombre de param�tres
+        // validation du nombre de paramètres
         if(argv.length < 5) {
             System.out.println("Usage: java Biblio <serveur> <bd> <user> <password> <fichier-transactions>");
             System.out.println(Connexion.serveursSupportes());
@@ -63,18 +64,20 @@ public class Bibliotheque {
                 + argv[4])) {
             // ouverture du fichier de transactions
 
+            // TODO corriger ce warning
+            @SuppressWarnings("resource")
             BufferedReader reader = new BufferedReader(new InputStreamReader(sourceTransaction));
 
-            gestionBiblio = new BibliothequeCreateur(argv[0],
+            setGestionBiblio(new BibliothequeCreateur(argv[0],
                 argv[1],
                 argv[2],
-                argv[3]);
+                argv[3]));
             traiterTransactions(reader);
         } catch(Exception e) {
             // TODO changer ça. Dirty way de géré les erreurs
             e.printStackTrace(System.out);
         } finally {
-            gestionBiblio.fermer();
+            getGestionBiblio().fermer();
         }
     }
 
@@ -112,7 +115,7 @@ public class Bibliotheque {
         System.out.print("> ");
         String transaction = reader.readLine();
         /* echo si lecture dans un fichier */
-        if(!lectureAuClavier
+        if(!isLectureAuClavier()
             && transaction != null) {
             System.out.println(transaction);
         }
@@ -136,51 +139,52 @@ public class Bibliotheque {
             if("aide".startsWith(command)) {
                 afficherAide();
             } else if("acquerir".startsWith(command)) {
-                gestionBiblio.gestionLivre.acquerir(readInt(tokenizer) /* idLivre */,
+                getGestionBiblio().getGestionLivre().acquerir(readInt(tokenizer) /* idLivre */,
                     readString(tokenizer) /* titre */,
                     readString(tokenizer) /* auteur */,
                     readDate(tokenizer) /* dateAcquisition */);
             } else if("vendre".startsWith(command)) {
-                gestionBiblio.gestionLivre.vendre(readInt(tokenizer) /* idLivre */);
+                getGestionBiblio().getGestionLivre().vendre(readInt(tokenizer) /* idLivre */);
             } else if("preter".startsWith(command)) {
-                gestionBiblio.gestionPret.preter(readInt(tokenizer) /* idLivre */,
+                getGestionBiblio().getGestionPret().preter(readInt(tokenizer) /* idLivre */,
                     readInt(tokenizer) /* idMembre */,
                     readDate(tokenizer) /* dateEmprunt */);
             } else if("renouveler".startsWith(command)) {
-                gestionBiblio.gestionPret.renouveler(readInt(tokenizer) /* idLivre */,
+                getGestionBiblio().getGestionPret().renouveler(readInt(tokenizer) /* idLivre */,
                     readDate(tokenizer) /* dateRenouvellement */);
             } else if("retourner".startsWith(command)) {
-                gestionBiblio.gestionPret.retourner(readInt(tokenizer) /* idLivre */,
+                getGestionBiblio().getGestionPret().retourner(readInt(tokenizer) /* idLivre */,
                     readDate(tokenizer) /* dateRetour */);
             } else if("inscrire".startsWith(command)) {
-                gestionBiblio.gestionMembre.inscrire(readInt(tokenizer) /* idMembre */,
+                getGestionBiblio().getGestionMembre().inscrire(readInt(tokenizer) /* idMembre */,
                     readString(tokenizer) /* nom */,
                     readLong(tokenizer) /* tel */,
                     readInt(tokenizer) /* limitePret */);
             } else if("desinscrire".startsWith(command)) {
-                gestionBiblio.gestionMembre.desinscrire(readInt(tokenizer) /* idMembre */);
+                getGestionBiblio().getGestionMembre().desinscrire(readInt(tokenizer) /* idMembre */);
             } else if("reserver".startsWith(command)) {
-                gestionBiblio.gestionReservation.reserver(readInt(tokenizer) /* idReservation */,
+                getGestionBiblio().getGestionReservation().reserver(readInt(tokenizer) /* idReservation */,
                     readInt(tokenizer) /* idLivre */,
                     readInt(tokenizer) /* idMembre */,
                     readDate(tokenizer) /* dateReservation */);
             } else if("prendreRes".startsWith(command)) {
-                gestionBiblio.gestionReservation.prendreRes(readInt(tokenizer) /* idReservation */,
+                getGestionBiblio().getGestionReservation().prendreRes(readInt(tokenizer) /* idReservation */,
                     readDate(tokenizer) /* dateReservation */);
             } else if("annulerRes".startsWith(command)) {
-                gestionBiblio.gestionReservation.annulerRes(readInt(tokenizer) /* idReservation */);
+                getGestionBiblio().getGestionReservation().annulerRes(readInt(tokenizer) /* idReservation */);
             } else if("listerLivres".startsWith(command)) {
-                gestionBiblio.gestionInterrogation.listerLivres();
+                getGestionBiblio().getGestionInterrogation().listerLivres();
             } else if("listerLivresTitre".startsWith(command)) {
-                gestionBiblio.gestionInterrogation.listerLivresTitre(readString(tokenizer) /* mot */);
+                getGestionBiblio().getGestionInterrogation().listerLivresTitre(readString(tokenizer) /* mot */);
             } else if("--".startsWith(command)) {
+                // TODO empty block
             }// ne rien faire; c'est un commentaire
             /* ***********************   */
             /* TRANSACTION NON RECONNUEE */
             /* ***********************   */else {
                 System.out.println("  Transactions non reconnue.  Essayer \"aide\"");
             }
-        } catch(BiblioException e) {
+        } catch(BibliothequeException e) {
             System.out.println("** "
                 + e.toString());
         }
@@ -245,9 +249,8 @@ public class Bibliotheque {
 
         if(commande.equals("exit")) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -256,14 +259,13 @@ public class Bibliotheque {
      *
      * @param tokenizer
      * @return String readString
-     * @throws BiblioException
+     * @throws BibliothequeException
      */
-    static String readString(StringTokenizer tokenizer) throws BiblioException {
+    static String readString(StringTokenizer tokenizer) throws BibliothequeException {
         if(tokenizer.hasMoreElements()) {
             return tokenizer.nextToken();
-        } else {
-            throw new BiblioException("autre paramètre attendu");
         }
+        throw new BibliothequeException("autre paramètre attendu");
     }
 
     /**
@@ -272,21 +274,20 @@ public class Bibliotheque {
      *
      * @param tokenizer
      * @return int readInt
-     * @throws BiblioException
+     * @throws BibliothequeException
      */
-    static int readInt(StringTokenizer tokenizer) throws BiblioException {
+    static int readInt(StringTokenizer tokenizer) throws BibliothequeException {
         if(tokenizer.hasMoreElements()) {
             String token = tokenizer.nextToken();
             try {
                 return Integer.valueOf(token).intValue();
             } catch(NumberFormatException e) {
-                throw new BiblioException("Nombre attendu à la place de \""
+                throw new BibliothequeException("Nombre attendu à la place de \""
                     + token
                     + "\"");
             }
-        } else {
-            throw new BiblioException("autre paramètre attendu");
         }
+        throw new BibliothequeException("autre paramètre attendu");
     }
 
     /**
@@ -295,21 +296,20 @@ public class Bibliotheque {
      *
      * @param tokenizer
      * @return long readLong
-     * @throws BiblioException
+     * @throws BibliothequeException
      */
-    static long readLong(StringTokenizer tokenizer) throws BiblioException {
+    static long readLong(StringTokenizer tokenizer) throws BibliothequeException {
         if(tokenizer.hasMoreElements()) {
             String token = tokenizer.nextToken();
             try {
                 return Long.valueOf(token).longValue();
             } catch(NumberFormatException e) {
-                throw new BiblioException("Nombre attendu à la place de \""
+                throw new BibliothequeException("Nombre attendu à la place de \""
                     + token
                     + "\"");
             }
-        } else {
-            throw new BiblioException("autre paramètre attendu");
         }
+        throw new BibliothequeException("autre paramètre attendu");
     }
 
     /**
@@ -318,21 +318,33 @@ public class Bibliotheque {
      *
      * @param tokenizer
      * @return String readDate
-     * @throws BiblioException
+     * @throws BibliothequeException
      */
-    static String readDate(StringTokenizer tokenizer) throws BiblioException {
+    static String readDate(StringTokenizer tokenizer) throws BibliothequeException {
         if(tokenizer.hasMoreElements()) {
             String token = tokenizer.nextToken();
             try {
                 FormatteurDate.convertirDate(token);
                 return token;
             } catch(ParseException e) {
-                throw new BiblioException("Date en format YYYY-MM-DD attendue à la place  de \""
+                throw new BibliothequeException("Date en format YYYY-MM-DD attendue à la place  de \""
                     + token
                     + "\"");
             }
-        } else {
-            throw new BiblioException("autre paramètre attendu");
         }
+        throw new BibliothequeException("autre paramètre attendu");
     }
+
+    private static BibliothequeCreateur getGestionBiblio() {
+        return gestionBiblio;
+    }
+
+    private static void setGestionBiblio(BibliothequeCreateur gestionBiblio) {
+        Bibliotheque.gestionBiblio = gestionBiblio;
+    }
+
+    private static boolean isLectureAuClavier() {
+        return lectureAuClavier;
+    }
+
 }//class

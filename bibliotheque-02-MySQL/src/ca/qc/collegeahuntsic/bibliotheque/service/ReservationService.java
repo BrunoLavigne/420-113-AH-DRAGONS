@@ -13,7 +13,7 @@ import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
-import ca.qc.collegeahuntsic.bibliotheque.exception.BiblioException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 
 /**
  * Gestion des transactions de reliées aux réservations de livres
@@ -35,6 +35,8 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.BiblioException;
 
 public class ReservationService extends Services {
 
+    private static final long serialVersionUID = 1L;
+
     private LivreDAO livre;
 
     private MembreDAO membre;
@@ -51,14 +53,14 @@ public class ReservationService extends Services {
      * @param livre
      * @param membre
      * @param reservation
-     * @throws BiblioException
+     * @throws BibliothequeException
      */
     public ReservationService(LivreDAO livre,
         MembreDAO membre,
-        ReservationDAO reservation) throws BiblioException {
+        ReservationDAO reservation) throws BibliothequeException {
         if(livre.getConnexion() != membre.getConnexion()
             || reservation.getConnexion() != membre.getConnexion()) {
-            throw new BiblioException("Les instances de livre, de membre et de réservation n'utilisent pas la même connexion au serveur");
+            throw new BibliothequeException("Les instances de livre, de membre et de réservation n'utilisent pas la même connexion au serveur");
         }
         this.cx = livre.getConnexion();
         this.livre = livre;
@@ -75,29 +77,29 @@ public class ReservationService extends Services {
      * @param idMembre
      * @param dateReservation
      * @throws SQLException
-     * @throws BiblioException
+     * @throws BibliothequeException
      * @throws Exception
      */
     public void reserver(int idReservation,
         int idLivre,
         int idMembre,
         String dateReservation) throws SQLException,
-        BiblioException,
+        BibliothequeException,
         Exception {
         try {
             // Vérifie que le livre est prêté
             LivreDTO tupleLivre = this.livre.getLivre(idLivre);
             if(tupleLivre == null) {
-                throw new BiblioException("Livre inexistant: "
+                throw new BibliothequeException("Livre inexistant: "
                     + idLivre);
             }
             if(tupleLivre.idMembre == 0) {
-                throw new BiblioException("Livre "
+                throw new BibliothequeException("Livre "
                     + idLivre
                     + " n'est pas prêté");
             }
             if(tupleLivre.idMembre == idMembre) {
-                throw new BiblioException("Livre "
+                throw new BibliothequeException("Livre "
                     + idLivre
                     + " déjà prêté à ce membre");
             }
@@ -105,18 +107,18 @@ public class ReservationService extends Services {
             // Vérifie que le membre existe
             MembreDTO tupleMembre = this.membre.getMembre(idMembre);
             if(tupleMembre == null) {
-                throw new BiblioException("Membre inexistant: "
+                throw new BibliothequeException("Membre inexistant: "
                     + idMembre);
             }
 
             // Vérifie si date reservation >= datePret
             if(Date.valueOf(dateReservation).before(tupleLivre.datePret)) {
-                throw new BiblioException("Date de réservation inférieure à la date de prêt");
+                throw new BibliothequeException("Date de réservation inférieure à la date de prêt");
             }
 
             // Vérifie que la réservation n'existe pas
             if(this.reservation.existe(idReservation)) {
-                throw new BiblioException("Réservation "
+                throw new BibliothequeException("Réservation "
                     + idReservation
                     + " existe déjà");
             }
@@ -142,25 +144,25 @@ public class ReservationService extends Services {
      * @param idReservation
      * @param datePret
      * @throws SQLException
-     * @throws BiblioException
+     * @throws BibliothequeException
      * @throws Exception
      */
     public void prendreRes(int idReservation,
         String datePret) throws SQLException,
-        BiblioException,
+        BibliothequeException,
         Exception {
         try {
             // Vérifie s'il y existe déjà une réservation pour le livre
             ReservationDTO tupleReservation = this.reservation.getReservation(idReservation);
             if(tupleReservation == null) {
-                throw new BiblioException("Réservation inexistante : "
+                throw new BibliothequeException("Réservation inexistante : "
                     + idReservation);
             }
 
             // Vérifie que c'est la première réservation pour le livre
             ReservationDTO tupleReservationPremiere = this.reservation.getReservationLivre(tupleReservation.idLivre);
             if(tupleReservation.idReservation != tupleReservationPremiere.idReservation) {
-                throw new BiblioException("La réservation n'est pas la première de la liste "
+                throw new BibliothequeException("La réservation n'est pas la première de la liste "
                     + "pour ce livre; la première est "
                     + tupleReservationPremiere.idReservation);
             }
@@ -168,11 +170,11 @@ public class ReservationService extends Services {
             // Vérifie si le livre est disponible
             LivreDTO tupleLivre = this.livre.getLivre(tupleReservation.idLivre);
             if(tupleLivre == null) {
-                throw new BiblioException("Livre inexistant: "
+                throw new BibliothequeException("Livre inexistant: "
                     + tupleReservation.idLivre);
             }
             if(tupleLivre.idMembre != 0) {
-                throw new BiblioException("Livre "
+                throw new BibliothequeException("Livre "
                     + tupleLivre.idLivre
                     + " déjà prêté à "
                     + tupleLivre.idMembre);
@@ -181,28 +183,28 @@ public class ReservationService extends Services {
             // Vérifie si le membre existe et sa limite de prêt
             MembreDTO tupleMembre = this.membre.getMembre(tupleReservation.idMembre);
             if(tupleMembre == null) {
-                throw new BiblioException("Membre inexistant: "
+                throw new BibliothequeException("Membre inexistant: "
                     + tupleReservation.idMembre);
             }
             if(tupleMembre.nbPret >= tupleMembre.limitePret) {
-                throw new BiblioException("Limite de prêt du membre "
+                throw new BibliothequeException("Limite de prêt du membre "
                     + tupleReservation.idMembre
                     + " atteinte");
             }
 
             // Vérifie si datePret >= tupleReservation.dateReservation
             if(Date.valueOf(datePret).before(tupleReservation.dateReservation)) {
-                throw new BiblioException("Date de prêt inférieure à la date de réservation");
+                throw new BibliothequeException("Date de prêt inférieure à la date de réservation");
             }
 
             // Enregistrement du prêt.
             if(this.livre.preter(tupleReservation.idLivre,
                 tupleReservation.idMembre,
                 datePret) == 0) {
-                throw new BiblioException("Livre suprimé par une autre transaction");
+                throw new BibliothequeException("Livre suprimé par une autre transaction");
             }
             if(this.membre.preter(tupleReservation.idMembre) == 0) {
-                throw new BiblioException("Membre suprimé par une autre transaction");
+                throw new BibliothequeException("Membre suprimé par une autre transaction");
             }
             // Éliminer la réservation.
             this.reservation.annulerRes(idReservation);
@@ -219,17 +221,17 @@ public class ReservationService extends Services {
      *
      * @param idReservation
      * @throws SQLException
-     * @throws BiblioException
+     * @throws BibliothequeException
      * @throws Exception
      */
     public void annulerRes(int idReservation) throws SQLException,
-        BiblioException,
-        Exception {
+    BibliothequeException,
+    Exception {
         try {
 
             // Vérifie que la réservation existe.
             if(this.reservation.annulerRes(idReservation) == 0) {
-                throw new BiblioException("Réservation "
+                throw new BibliothequeException("Réservation "
                     + idReservation
                     + " n'existe pas");
             }

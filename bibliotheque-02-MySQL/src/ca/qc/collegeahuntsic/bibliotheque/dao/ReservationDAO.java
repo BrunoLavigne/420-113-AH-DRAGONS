@@ -22,6 +22,8 @@ import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 
 public class ReservationDAO extends DAO {
 
+    private static final long serialVersionUID = 1L;
+
     private PreparedStatement stmtExiste;
 
     private PreparedStatement stmtExisteLivre;
@@ -77,6 +79,9 @@ public class ReservationDAO extends DAO {
 
         this.stmtExiste.setInt(1,
             idReservation);
+
+        @SuppressWarnings("resource")
+        // TODO fix warning
         ResultSet rset = this.stmtExiste.executeQuery();
         boolean reservationExiste = rset.next();
         rset.close();
@@ -91,6 +96,8 @@ public class ReservationDAO extends DAO {
      * @return TupleReservation La réservation
      * @throws SQLException
      */
+    @SuppressWarnings("resource")
+    // TODO fix warning
     public ReservationDTO getReservation(int idReservation) throws SQLException {
 
         this.stmtExiste.setInt(1,
@@ -100,13 +107,12 @@ public class ReservationDAO extends DAO {
             ReservationDTO tupleReservation = new ReservationDTO();
             tupleReservation.idReservation = rset.getInt(1);
             tupleReservation.idLivre = rset.getInt(2);
-            ;
+
             tupleReservation.idMembre = rset.getInt(3);
             tupleReservation.dateReservation = rset.getDate(4);
             return tupleReservation;
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -117,6 +123,8 @@ public class ReservationDAO extends DAO {
      * @return TupleReservation La réservation du livre
      * @throws SQLException
      */
+    @SuppressWarnings("resource")
+    // TODO fix warning
     public ReservationDTO getReservationLivre(int idLivre) throws SQLException {
 
         this.stmtExisteLivre.setInt(1,
@@ -126,13 +134,12 @@ public class ReservationDAO extends DAO {
             ReservationDTO tupleReservation = new ReservationDTO();
             tupleReservation.idReservation = rset.getInt(1);
             tupleReservation.idLivre = rset.getInt(2);
-            ;
+
             tupleReservation.idMembre = rset.getInt(3);
             tupleReservation.dateReservation = rset.getDate(4);
             return tupleReservation;
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -143,6 +150,8 @@ public class ReservationDAO extends DAO {
      * @return TupleReservation réservation membre
      * @throws SQLException
      */
+    @SuppressWarnings("resource")
+    // TODO fix warning
     public ReservationDTO getReservationMembre(int idMembre) throws SQLException {
 
         this.stmtExisteMembre.setInt(1,
@@ -152,13 +161,12 @@ public class ReservationDAO extends DAO {
             ReservationDTO tupleReservation = new ReservationDTO();
             tupleReservation.idReservation = rset.getInt(1);
             tupleReservation.idLivre = rset.getInt(2);
-            ;
+
             tupleReservation.idMembre = rset.getInt(3);
             tupleReservation.dateReservation = rset.getDate(4);
             return tupleReservation;
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**

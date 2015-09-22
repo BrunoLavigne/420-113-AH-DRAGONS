@@ -44,40 +44,40 @@ public class Connexion {
             if(serveur.equals("local")) {
                 d = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
                 DriverManager.registerDriver(d);
-                this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/"
+                setConn(DriverManager.getConnection("jdbc:mysql://localhost:3306/"
                     + bd,
                     user,
-                    pass);
+                    pass));
             } else if(serveur.equals("distant")) {
                 d = (Driver) Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();
                 DriverManager.registerDriver(d);
-                this.conn = DriverManager.getConnection("jdbc:oracle:thin:@collegeahuntsic.info:1521:"
+                setConn(DriverManager.getConnection("jdbc:oracle:thin:@collegeahuntsic.info:1521:"
                     + bd,
                     user,
-                    pass);
+                    pass));
             } else {
                 System.out.println("Erreur de driver");
             }
 
             // mettre en mode de commit manuel
-            this.conn.setAutoCommit(false);
+            getConn().setAutoCommit(false);
 
             // mettre en mode sérialisable si possible
             // (plus haut niveau d'integrité l'accès concurrent aux données)
             DatabaseMetaData dbmd = this.conn.getMetaData();
             if(dbmd.supportsTransactionIsolationLevel(Connection.TRANSACTION_SERIALIZABLE)) {
-                this.conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+                getConn().setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
                 System.out.println("Ouverture de la connexion en mode sérialisable :\n"
                     + "Estampille "
                     + System.currentTimeMillis()
                     + " "
-                    + this.conn);
+                    + getConn());
             } else {
                 System.out.println("Ouverture de la connexion en mode read committed (default) :\n"
                     + "Heure "
                     + System.currentTimeMillis()
                     + " "
-                    + this.conn);
+                    + getConn());
             }
         }// try
 
@@ -96,11 +96,11 @@ public class Connexion {
      * @throws SQLException
      */
     public void fermer() throws SQLException {
-        this.conn.rollback();
-        this.conn.close();
+        getConn().rollback();
+        getConn().close();
         System.out.println("Connexion fermée"
             + " "
-            + this.conn);
+            + getConn());
     }
 
     /**
@@ -110,7 +110,7 @@ public class Connexion {
      * @throws SQLException
      */
     public void commit() throws SQLException {
-        this.conn.commit();
+        getConn().commit();
     }
 
     /**
@@ -120,7 +120,7 @@ public class Connexion {
      * @throws SQLException
      */
     public void rollback() throws SQLException {
-        this.conn.rollback();
+        getConn().rollback();
     }
 
     /**
@@ -130,7 +130,7 @@ public class Connexion {
      * @return La Connection JDBC
      */
     public Connection getConnection() {
-        return this.conn;
+        return getConn();
     }
 
     /**
@@ -142,4 +142,13 @@ public class Connexion {
             + "postgres : Postgres installé localement\n"
             + "access : Microsoft Access installé localement et inscrit dans ODBC";
     }
+
+    private Connection getConn() {
+        return this.conn;
+    }
+
+    private void setConn(Connection conn) {
+        this.conn = conn;
+    }
+
 }// Classe Connexion

@@ -9,7 +9,7 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.exception.BiblioException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 
 /**
  * Gestion des transactions reliées à la création et
@@ -33,6 +33,8 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.BiblioException;
 
 public class LivreService extends Services {
 
+    private static final long serialVersionUID = 1L;
+
     private LivreDAO livre;
 
     private ReservationDAO reservation;
@@ -55,19 +57,19 @@ public class LivreService extends Services {
      * @param auteur
      * @param dateAcquisition
      * @throws SQLException
-     * @throws BiblioException
+     * @throws BibliothequeException
      * @throws Exception
      */
     public void acquerir(int idLivre,
         String titre,
         String auteur,
         String dateAcquisition) throws SQLException,
-        BiblioException,
+        BibliothequeException,
         Exception {
         try {
             //Vérifie si le livre existe  déjà
             if(this.livre.existe(idLivre)) {
-                throw new BiblioException("Le livre existe déjà: "
+                throw new BibliothequeException("Le livre existe déjà: "
                     + idLivre);
             }
 
@@ -88,26 +90,26 @@ public class LivreService extends Services {
      * Vente d'un livre
      * @param idLivre
      * @throws SQLException
-     * @throws BiblioException
+     * @throws BibliothequeException
      * @throws Exception
      */
     public void vendre(int idLivre) throws SQLException,
-        BiblioException,
-        Exception {
+    BibliothequeException,
+    Exception {
         try {
             LivreDTO tupleLivre = this.livre.getLivre(idLivre);
             if(tupleLivre == null) {
-                throw new BiblioException("Livre inexistant: "
+                throw new BibliothequeException("Livre inexistant: "
                     + idLivre);
             }
             if(tupleLivre.idMembre != 0) {
-                throw new BiblioException("Le livre est "
+                throw new BibliothequeException("Le livre est "
                     + idLivre
                     + " prêté à "
                     + tupleLivre.idMembre);
             }
             if(this.reservation.getReservationLivre(idLivre) != null) {
-                throw new BiblioException("Le livre est "
+                throw new BibliothequeException("Le livre est "
                     + idLivre
                     + " réservé ");
             }
@@ -115,7 +117,7 @@ public class LivreService extends Services {
             // Suppression du livre
             int nb = this.livre.vendre(idLivre);
             if(nb == 0) {
-                throw new BiblioException("Le livre est "
+                throw new BibliothequeException("Le livre est "
                     + idLivre
                     + " inexistant");
             }
