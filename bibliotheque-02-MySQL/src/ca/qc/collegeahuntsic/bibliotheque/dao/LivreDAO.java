@@ -39,14 +39,14 @@ public class LivreDAO extends DAO {
      */
     public LivreDAO(Connexion cx) throws SQLException {
 
-        this.cx = cx;
-        this.stmtExiste = cx.getConnection()
-            .prepareStatement("select idlivre, titre, auteur, dateAcquisition, idMembre, datePret from livre where idlivre = ?");
-        this.stmtInsert = cx.getConnection().prepareStatement("insert into livre (idLivre, titre, auteur, dateAcquisition, idMembre, datePret) "
-            + "values (?,?,?,?,null,null)");
-        this.stmtUpdate = cx.getConnection().prepareStatement("update livre set idMembre = ?, datePret = ? "
-            + "where idLivre = ?");
-        this.stmtDelete = cx.getConnection().prepareStatement("delete from livre where idlivre = ?");
+        setCx(cx);
+        setStmtExiste(getCx().getConnection()
+            .prepareStatement("select idlivre, titre, auteur, dateAcquisition, idMembre, datePret from livre where idlivre = ?"));
+        setStmtInsert(getCx().getConnection().prepareStatement("insert into livre (idLivre, titre, auteur, dateAcquisition, idMembre, datePret) "
+            + "values (?,?,?,?,null,null)"));
+        setStmtUpdate(getCx().getConnection().prepareStatement("update livre set idMembre = ?, datePret = ? "
+            + "where idLivre = ?"));
+        setStmtDelete(getCx().getConnection().prepareStatement("delete from livre where idlivre = ?"));
     }
 
     /**
@@ -70,12 +70,12 @@ public class LivreDAO extends DAO {
      */
     public boolean existe(int idLivre) throws SQLException {
 
-        this.stmtExiste.setInt(1,
+        getStmtExiste().setInt(1,
             idLivre);
 
         @SuppressWarnings("resource")
         // TODO Fix warning
-        ResultSet rset = this.stmtExiste.executeQuery();
+        ResultSet rset = getStmtExiste().executeQuery();
         boolean livreExiste = rset.next();
         rset.close();
         return livreExiste;
@@ -92,9 +92,9 @@ public class LivreDAO extends DAO {
     @SuppressWarnings("resource")
     public LivreDTO getLivre(int idLivre) throws SQLException {
 
-        this.stmtExiste.setInt(1,
+        getStmtExiste().setInt(1,
             idLivre);
-        ResultSet rset = this.stmtExiste.executeQuery();
+        ResultSet rset = getStmtExiste().executeQuery();
         if(rset.next()) {
             LivreDTO tupleLivre = new LivreDTO();
             tupleLivre.setIdLivre(idLivre);
@@ -123,15 +123,15 @@ public class LivreDAO extends DAO {
         String auteur,
         String dateAcquisition) throws SQLException {
         /* Ajout du livre. */
-        this.stmtInsert.setInt(1,
+        getStmtInsert().setInt(1,
             idLivre);
-        this.stmtInsert.setString(2,
+        getStmtInsert().setString(2,
             titre);
-        this.stmtInsert.setString(3,
+        getStmtInsert().setString(3,
             auteur);
-        this.stmtInsert.setDate(4,
+        getStmtInsert().setDate(4,
             Date.valueOf(dateAcquisition));
-        this.stmtInsert.executeUpdate();
+        getStmtInsert().executeUpdate();
     }
 
     /**
@@ -148,13 +148,13 @@ public class LivreDAO extends DAO {
         int idMembre,
         String datePret) throws SQLException {
         /* Enregistrement du pret. */
-        this.stmtUpdate.setInt(1,
+        getStmtUpdate().setInt(1,
             idMembre);
-        this.stmtUpdate.setDate(2,
+        getStmtUpdate().setDate(2,
             Date.valueOf(datePret));
-        this.stmtUpdate.setInt(3,
+        getStmtUpdate().setInt(3,
             idLivre);
-        return this.stmtUpdate.executeUpdate();
+        return getStmtUpdate().executeUpdate();
     }
 
     /**
@@ -167,13 +167,13 @@ public class LivreDAO extends DAO {
      */
     public int retourner(int idLivre) throws SQLException {
         /* Enregistrement du pret. */
-        this.stmtUpdate.setNull(1,
+        getStmtUpdate().setNull(1,
             Types.INTEGER);
-        this.stmtUpdate.setNull(2,
+        getStmtUpdate().setNull(2,
             Types.DATE);
-        this.stmtUpdate.setInt(3,
+        getStmtUpdate().setInt(3,
             idLivre);
-        return this.stmtUpdate.executeUpdate();
+        return getStmtUpdate().executeUpdate();
     }
 
     /**
@@ -186,8 +186,100 @@ public class LivreDAO extends DAO {
      */
     public int vendre(int idLivre) throws SQLException {
         /* Suppression du livre. */
-        this.stmtDelete.setInt(1,
+        getStmtDelete().setInt(1,
             idLivre);
-        return this.stmtDelete.executeUpdate();
+        return getStmtDelete().executeUpdate();
+    }
+
+    //Getter et Setter
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtExiste</code>.
+     *
+     * @return La variable d'instance <code>this.stmtExiste</code>
+     */
+    private PreparedStatement getStmtExiste() {
+        return this.stmtExiste;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtExiste</code>.
+     *
+     * @param stmtExiste La valeur à utiliser pour la variable d'instance <code>this.stmtExiste</code>
+     */
+    private void setStmtExiste(PreparedStatement stmtExiste) {
+        this.stmtExiste = stmtExiste;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtInsert</code>.
+     *
+     * @return La variable d'instance <code>this.stmtInsert</code>
+     */
+    private PreparedStatement getStmtInsert() {
+        return this.stmtInsert;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtInsert</code>.
+     *
+     * @param stmtInsert La valeur à utiliser pour la variable d'instance <code>this.stmtInsert</code>
+     */
+    private void setStmtInsert(PreparedStatement stmtInsert) {
+        this.stmtInsert = stmtInsert;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtUpdate</code>.
+     *
+     * @return La variable d'instance <code>this.stmtUpdate</code>
+     */
+    private PreparedStatement getStmtUpdate() {
+        return this.stmtUpdate;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtUpdate</code>.
+     *
+     * @param stmtUpdate La valeur à utiliser pour la variable d'instance <code>this.stmtUpdate</code>
+     */
+    private void setStmtUpdate(PreparedStatement stmtUpdate) {
+        this.stmtUpdate = stmtUpdate;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtDelete</code>.
+     *
+     * @return La variable d'instance <code>this.stmtDelete</code>
+     */
+    private PreparedStatement getStmtDelete() {
+        return this.stmtDelete;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtDelete</code>.
+     *
+     * @param stmtDelete La valeur à utiliser pour la variable d'instance <code>this.stmtDelete</code>
+     */
+    private void setStmtDelete(PreparedStatement stmtDelete) {
+        this.stmtDelete = stmtDelete;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.cx</code>.
+     *
+     * @return La variable d'instance <code>this.cx</code>
+     */
+    private Connexion getCx() {
+        return this.cx;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.cx</code>.
+     *
+     * @param cx La valeur à utiliser pour la variable d'instance <code>this.cx</code>
+     */
+    private void setCx(Connexion cx) {
+        this.cx = cx;
     }
 }
