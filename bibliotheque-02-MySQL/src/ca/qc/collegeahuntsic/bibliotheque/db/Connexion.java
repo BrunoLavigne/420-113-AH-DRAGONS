@@ -35,11 +35,16 @@ public class Connexion {
      * @param bd nom de la base de données
      * @param user userid sur le serveur SQL
      * @param pass mot de passe sur le serveur SQL
+     * @throws ConnexionException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      */
     public Connexion(String serveur,
         String bd,
         String user,
-        String pass) throws SQLException {
+        String pass) throws ConnexionException,
+        InstantiationException,
+        IllegalAccessException {
         Driver d;
         try {
             if(serveur.equals("local")) {
