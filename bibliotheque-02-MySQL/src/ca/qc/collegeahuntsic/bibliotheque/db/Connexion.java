@@ -9,6 +9,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 
 /**
  * Gestionnaire d'une connexion avec une BD relationnelle via JDBC.
@@ -79,13 +80,12 @@ public class Connexion {
                     + " "
                     + getConn());
             }
-        }// try
-
-        catch(SQLException e) {
-            throw e;
-        } catch(Exception e) {
-            e.printStackTrace(System.out);
-            throw new SQLException("JDBC Driver non instancié");
+        } catch(ClassNotFoundException classNotFoundException) {
+            throw new ConnexionException(classNotFoundException);
+        } catch(SQLException sqlException) {
+            throw new ConnexionException(sqlException);
+        } catch(IllegalArgumentException illegalArgumentException) {
+            throw new ConnexionException(illegalArgumentException);
         }
     }
 
