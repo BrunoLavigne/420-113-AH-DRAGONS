@@ -98,34 +98,49 @@ public class Connexion {
      *
      * Fermeture d'une connexion
      *
-     * @throws SQLException
+     * @throws ConnexionException
      */
-    public void fermer() throws SQLException {
-        getConn().rollback();
-        getConn().close();
-        System.out.println("Connexion fermée"
-            + " "
-            + getConn());
+    public void fermer() throws ConnexionException {
+
+        try {
+            getConn().rollback();
+            getConn().close();
+            System.out.println("Connexion fermée"
+                + " "
+                + getConn());
+        } catch(SQLException sqlException) {
+            throw new ConnexionException(sqlException);
+        }
     }
 
     /**
      *
      * Commit
      *
-     * @throws SQLException
+     * @throws ConnexionException
      */
-    public void commit() throws SQLException {
-        getConn().commit();
+    public void commit() throws ConnexionException {
+
+        try {
+            getConn().commit();
+        } catch(SQLException sqlException) {
+            throw new ConnexionException(sqlException);
+        }
     }
 
     /**
      *
      * Rollback
      *
-     * @throws SQLException
+     * @throws ConnexionException
      */
-    public void rollback() throws SQLException {
-        getConn().rollback();
+    public void rollback() throws ConnexionException {
+
+        try {
+            getConn().rollback();
+        } catch(SQLException sqlException) {
+            throw new ConnexionException(sqlException);
+        }
     }
 
     /**
