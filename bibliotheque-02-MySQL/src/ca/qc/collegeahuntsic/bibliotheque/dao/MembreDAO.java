@@ -39,13 +39,13 @@ public class MembreDAO extends DAO {
      * @throws SQLException
      */
     public MembreDAO(Connexion cx) throws SQLException {
-        this.cx = cx;
-        this.stmtExiste = cx.getConnection().prepareStatement("select idMembre, nom, telephone, limitePret, nbpret from membre where idmembre = ?");
-        this.stmtInsert = cx.getConnection().prepareStatement("insert into membre (idmembre, nom, telephone, limitepret, nbpret) "
-            + "values (?,?,?,?,0)");
-        this.stmtUpdateIncrNbPret = cx.getConnection().prepareStatement("update membre set nbpret = nbPret + 1 where idMembre = ?");
-        this.stmtUpdateDecNbPret = cx.getConnection().prepareStatement("update membre set nbpret = nbPret - 1 where idMembre = ?");
-        this.stmtDelete = cx.getConnection().prepareStatement("delete from membre where idmembre = ?");
+        setCx(cx);
+        setStmtExiste(getCx().getConnection().prepareStatement("select idMembre, nom, telephone, limitePret, nbpret from membre where idmembre = ?"));
+        setStmtInsert(getCx().getConnection().prepareStatement("insert into membre (idmembre, nom, telephone, limitepret, nbpret) "
+            + "values (?,?,?,?,0)"));
+        setStmtUpdateIncrNbPret(getCx().getConnection().prepareStatement("update membre set nbpret = nbPret + 1 where idMembre = ?"));
+        setStmtUpdateDecNbPret(getCx().getConnection().prepareStatement("update membre set nbpret = nbPret - 1 where idMembre = ?"));
+        setStmtDelete(getCx().getConnection().prepareStatement("delete from membre where idmembre = ?"));
     }
 
     /**
@@ -55,7 +55,6 @@ public class MembreDAO extends DAO {
      * @return La connexion
      */
     public Connexion getConnexion() {
-
         return this.cx;
     }
 
@@ -68,12 +67,12 @@ public class MembreDAO extends DAO {
      * @throws SQLException
      */
     public boolean existe(int idMembre) throws SQLException {
-        this.stmtExiste.setInt(1,
+        getStmtExiste().setInt(1,
             idMembre);
 
         @SuppressWarnings("resource")
         // TODO fix warning
-        ResultSet rset = this.stmtExiste.executeQuery();
+        ResultSet rset = getStmtExiste().executeQuery();
         boolean membreExiste = rset.next();
         rset.close();
         return membreExiste;
@@ -96,11 +95,11 @@ public class MembreDAO extends DAO {
         ResultSet rset = this.stmtExiste.executeQuery();
         if(rset.next()) {
             MembreDTO tupleMembre = new MembreDTO();
-            tupleMembre.idMembre = idMembre;
-            tupleMembre.nom = rset.getString(2);
-            tupleMembre.telephone = rset.getLong(3);
-            tupleMembre.limitePret = rset.getInt(4);
-            tupleMembre.nbPret = rset.getInt(5);
+            tupleMembre.setIdMembre(idMembre);
+            tupleMembre.setNom(rset.getString(2));
+            tupleMembre.setTelephone(rset.getLong(3));
+            tupleMembre.setLimitePret(rset.getInt(4));
+            tupleMembre.setNbPret(rset.getInt(5));
             return tupleMembre;
         }
         return null;
@@ -121,15 +120,15 @@ public class MembreDAO extends DAO {
         long telephone,
         int limitePret) throws SQLException {
         /* Ajout du membre. */
-        this.stmtInsert.setInt(1,
+        getStmtInsert().setInt(1,
             idMembre);
-        this.stmtInsert.setString(2,
+        getStmtInsert().setString(2,
             nom);
-        this.stmtInsert.setLong(3,
+        getStmtInsert().setLong(3,
             telephone);
-        this.stmtInsert.setInt(4,
+        getStmtInsert().setInt(4,
             limitePret);
-        this.stmtInsert.executeUpdate();
+        getStmtInsert().executeUpdate();
     }
 
     /**
@@ -141,9 +140,9 @@ public class MembreDAO extends DAO {
      * @throws SQLException
      */
     public int preter(int idMembre) throws SQLException {
-        this.stmtUpdateIncrNbPret.setInt(1,
+        getStmtUpdateIncrNbPret().setInt(1,
             idMembre);
-        return this.stmtUpdateIncrNbPret.executeUpdate();
+        return getStmtUpdateIncrNbPret().executeUpdate();
     }
 
     /**
@@ -155,9 +154,9 @@ public class MembreDAO extends DAO {
      * @throws SQLException
      */
     public int retourner(int idMembre) throws SQLException {
-        this.stmtUpdateDecNbPret.setInt(1,
+        getStmtUpdateDecNbPret().setInt(1,
             idMembre);
-        return this.stmtUpdateDecNbPret.executeUpdate();
+        return getStmtUpdateDecNbPret().executeUpdate();
     }
 
     /**
@@ -169,8 +168,117 @@ public class MembreDAO extends DAO {
      * @throws SQLException
      */
     public int desinscrire(int idMembre) throws SQLException {
-        this.stmtDelete.setInt(1,
+        getStmtDelete().setInt(1,
             idMembre);
-        return this.stmtDelete.executeUpdate();
+        return getStmtDelete().executeUpdate();
     }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtExiste</code>.
+     *
+     * @return La variable d'instance <code>this.stmtExiste</code>
+     */
+    private PreparedStatement getStmtExiste() {
+        return this.stmtExiste;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtExiste</code>.
+     *
+     * @param stmtExiste La valeur à utiliser pour la variable d'instance <code>this.stmtExiste</code>
+     */
+    private void setStmtExiste(PreparedStatement stmtExiste) {
+        this.stmtExiste = stmtExiste;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtInsert</code>.
+     *
+     * @return La variable d'instance <code>this.stmtInsert</code>
+     */
+    private PreparedStatement getStmtInsert() {
+        return this.stmtInsert;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtInsert</code>.
+     *
+     * @param stmtInsert La valeur à utiliser pour la variable d'instance <code>this.stmtInsert</code>
+     */
+    private void setStmtInsert(PreparedStatement stmtInsert) {
+        this.stmtInsert = stmtInsert;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtUpdateIncrNbPret</code>.
+     *
+     * @return La variable d'instance <code>this.stmtUpdateIncrNbPret</code>
+     */
+    private PreparedStatement getStmtUpdateIncrNbPret() {
+        return this.stmtUpdateIncrNbPret;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtUpdateIncrNbPret</code>.
+     *
+     * @param stmtUpdateIncrNbPret La valeur à utiliser pour la variable d'instance <code>this.stmtUpdateIncrNbPret</code>
+     */
+    private void setStmtUpdateIncrNbPret(PreparedStatement stmtUpdateIncrNbPret) {
+        this.stmtUpdateIncrNbPret = stmtUpdateIncrNbPret;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtUpdateDecNbPret</code>.
+     *
+     * @return La variable d'instance <code>this.stmtUpdateDecNbPret</code>
+     */
+    private PreparedStatement getStmtUpdateDecNbPret() {
+        return this.stmtUpdateDecNbPret;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtUpdateDecNbPret</code>.
+     *
+     * @param stmtUpdateDecNbPret La valeur à utiliser pour la variable d'instance <code>this.stmtUpdateDecNbPret</code>
+     */
+    private void setStmtUpdateDecNbPret(PreparedStatement stmtUpdateDecNbPret) {
+        this.stmtUpdateDecNbPret = stmtUpdateDecNbPret;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtDelete</code>.
+     *
+     * @return La variable d'instance <code>this.stmtDelete</code>
+     */
+    private PreparedStatement getStmtDelete() {
+        return this.stmtDelete;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtDelete</code>.
+     *
+     * @param stmtDelete La valeur à utiliser pour la variable d'instance <code>this.stmtDelete</code>
+     */
+    private void setStmtDelete(PreparedStatement stmtDelete) {
+        this.stmtDelete = stmtDelete;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.cx</code>.
+     *
+     * @return La variable d'instance <code>this.cx</code>
+     */
+    private Connexion getCx() {
+        return this.cx;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.cx</code>.
+     *
+     * @param cx La valeur à utiliser pour la variable d'instance <code>this.cx</code>
+     */
+    private void setCx(Connexion cx) {
+        this.cx = cx;
+    }
+
 }

@@ -36,15 +36,11 @@ public class Connexion {
      * @param user userid sur le serveur SQL
      * @param pass mot de passe sur le serveur SQL
      * @throws ConnexionException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
     public Connexion(String serveur,
         String bd,
         String user,
-        String pass) throws ConnexionException,
-        InstantiationException,
-        IllegalAccessException {
+        String pass) throws ConnexionException {
         Driver d;
         try {
             if(serveur.equals("local")) {
@@ -91,6 +87,10 @@ public class Connexion {
             throw new ConnexionException(sqlException);
         } catch(IllegalArgumentException illegalArgumentException) {
             throw new ConnexionException(illegalArgumentException);
+        } catch(IllegalAccessException illegalAccessException) {
+            throw new ConnexionException(illegalAccessException);
+        } catch(InstantiationException instantiationException) {
+            throw new ConnexionException(instantiationException);
         }
     }
 
@@ -98,34 +98,49 @@ public class Connexion {
      *
      * Fermeture d'une connexion
      *
-     * @throws SQLException
+     * @throws ConnexionException
      */
-    public void fermer() throws SQLException {
-        getConn().rollback();
-        getConn().close();
-        System.out.println("Connexion fermée"
-            + " "
-            + getConn());
+    public void fermer() throws ConnexionException {
+
+        try {
+            getConn().rollback();
+            getConn().close();
+            System.out.println("Connexion fermée"
+                + " "
+                + getConn());
+        } catch(SQLException sqlException) {
+            throw new ConnexionException(sqlException);
+        }
     }
 
     /**
      *
      * Commit
      *
-     * @throws SQLException
+     * @throws ConnexionException
      */
-    public void commit() throws SQLException {
-        getConn().commit();
+    public void commit() throws ConnexionException {
+
+        try {
+            getConn().commit();
+        } catch(SQLException sqlException) {
+            throw new ConnexionException(sqlException);
+        }
     }
 
     /**
      *
      * Rollback
      *
-     * @throws SQLException
+     * @throws ConnexionException
      */
-    public void rollback() throws SQLException {
-        getConn().rollback();
+    public void rollback() throws ConnexionException {
+
+        try {
+            getConn().rollback();
+        } catch(SQLException sqlException) {
+            throw new ConnexionException(sqlException);
+        }
     }
 
     /**
