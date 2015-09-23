@@ -93,12 +93,12 @@ public class ReservationService extends Services {
                 throw new BibliothequeException("Livre inexistant: "
                     + idLivre);
             }
-            if(tupleLivre.idMembre == 0) {
+            if(tupleLivre.getIdMembre() == 0) {
                 throw new BibliothequeException("Livre "
                     + idLivre
                     + " n'est pas prêté");
             }
-            if(tupleLivre.idMembre == idMembre) {
+            if(tupleLivre.getIdMembre() == idMembre) {
                 throw new BibliothequeException("Livre "
                     + idLivre
                     + " déjà prêté à ce membre");
@@ -112,7 +112,7 @@ public class ReservationService extends Services {
             }
 
             // Vérifie si date reservation >= datePret
-            if(Date.valueOf(dateReservation).before(tupleLivre.datePret)) {
+            if(Date.valueOf(dateReservation).before(tupleLivre.getDatePret())) {
                 throw new BibliothequeException("Date de réservation inférieure à la date de prêt");
             }
 
@@ -173,11 +173,11 @@ public class ReservationService extends Services {
                 throw new BibliothequeException("Livre inexistant: "
                     + tupleReservation.idLivre);
             }
-            if(tupleLivre.idMembre != 0) {
+            if(tupleLivre.getIdMembre() != 0) {
                 throw new BibliothequeException("Livre "
-                    + tupleLivre.idLivre
+                    + tupleLivre.getIdLivre()
                     + " déjà prêté à "
-                    + tupleLivre.idMembre);
+                    + tupleLivre.getIdMembre());
             }
 
             // Vérifie si le membre existe et sa limite de prêt
@@ -225,8 +225,8 @@ public class ReservationService extends Services {
      * @throws Exception
      */
     public void annulerRes(int idReservation) throws SQLException,
-    BibliothequeException,
-    Exception {
+        BibliothequeException,
+        Exception {
         try {
 
             // Vérifie que la réservation existe.

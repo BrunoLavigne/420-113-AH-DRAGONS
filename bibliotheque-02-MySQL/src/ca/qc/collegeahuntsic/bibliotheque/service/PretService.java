@@ -92,11 +92,11 @@ public class PretService extends Services {
                 throw new BibliothequeException("Livre inexistant: "
                     + idLivre);
             }
-            if(tupleLivre.idMembre != 0) {
+            if(tupleLivre.getIdMembre() != 0) {
                 throw new BibliothequeException("Livre "
                     + idLivre
                     + " déjà prêté à "
-                    + tupleLivre.idMembre);
+                    + tupleLivre.getIdMembre());
             }
 
             // Vérifie si le membre existe et sa limite de prêt
@@ -160,14 +160,14 @@ public class PretService extends Services {
                 throw new BibliothequeException("Livre inexistant: "
                     + idLivre);
             }
-            if(tupleLivre.idMembre == 0) {
+            if(tupleLivre.getIdMembre() == 0) {
                 throw new BibliothequeException("Livre "
                     + idLivre
                     + " n'est pas prêté");
             }
 
             // Vérifie si date renouvellement >= datePret
-            if(Date.valueOf(datePret).before(tupleLivre.datePret)) {
+            if(Date.valueOf(datePret).before(tupleLivre.getDatePret())) {
                 throw new BibliothequeException("Date de renouvellement inférieure à la date de prêt");
             }
 
@@ -182,7 +182,7 @@ public class PretService extends Services {
 
             // Enregistrement du prêt.
             int nb1 = this.livre.preter(idLivre,
-                tupleLivre.idMembre,
+                tupleLivre.getIdMembre(),
                 datePret);
             if(nb1 == 0) {
                 throw new BibliothequeException("Livre suprimé par une autre transaction");
@@ -215,14 +215,14 @@ public class PretService extends Services {
                 throw new BibliothequeException("Livre inexistant: "
                     + idLivre);
             }
-            if(tupleLivre.idMembre == 0) {
+            if(tupleLivre.getIdMembre() == 0) {
                 throw new BibliothequeException("Livre "
                     + idLivre
                     + " n'est pas prêté ");
             }
 
             // Vérifie si date retour >= datePret
-            if(Date.valueOf(dateRetour).before(tupleLivre.datePret)) {
+            if(Date.valueOf(dateRetour).before(tupleLivre.getDatePret())) {
                 throw new BibliothequeException("Date de retour inférieure à la date de prêt");
             }
 
@@ -232,7 +232,7 @@ public class PretService extends Services {
                 throw new BibliothequeException("Livre suprimé par une autre transaction");
             }
 
-            int nb2 = this.membre.retourner(tupleLivre.idMembre);
+            int nb2 = this.membre.retourner(tupleLivre.getIdMembre());
             if(nb2 == 0) {
                 throw new BibliothequeException("Livre suprimé par une autre transaction");
             }

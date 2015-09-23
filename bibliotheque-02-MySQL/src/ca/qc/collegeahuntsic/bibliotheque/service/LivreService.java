@@ -94,19 +94,19 @@ public class LivreService extends Services {
      * @throws Exception
      */
     public void vendre(int idLivre) throws SQLException,
-    BibliothequeException,
-    Exception {
+        BibliothequeException,
+        Exception {
         try {
             LivreDTO tupleLivre = this.livre.getLivre(idLivre);
             if(tupleLivre == null) {
                 throw new BibliothequeException("Livre inexistant: "
                     + idLivre);
             }
-            if(tupleLivre.idMembre != 0) {
+            if(tupleLivre.getIdMembre() != 0) {
                 throw new BibliothequeException("Le livre est "
                     + idLivre
                     + " prêté à "
-                    + tupleLivre.idMembre);
+                    + tupleLivre.getIdMembre());
             }
             if(this.reservation.getReservationLivre(idLivre) != null) {
                 throw new BibliothequeException("Le livre est "

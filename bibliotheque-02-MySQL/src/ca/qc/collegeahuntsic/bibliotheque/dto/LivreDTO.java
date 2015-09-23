@@ -15,15 +15,59 @@ public class LivreDTO extends DTO {
 
     private static final long serialVersionUID = 1L;
 
-    public int idLivre;
+    private int idLivre;
 
-    public String titre;
+    private String titre;
 
-    public String auteur;
+    private String auteur;
 
-    public Date dateAcquisition;
+    private Date dateAcquisition;
 
-    public int idMembre;
+    private int idMembre;
 
-    public Date datePret;
+    private Date datePret;
+
+    public int getIdLivre() {
+        return this.idLivre;
+    }
+
+    public String getTitre() {
+        return this.titre;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
+
+    public String getAuteur() {
+        return this.auteur;
+    }
+
+    public void setAuteur(String auteur) {
+        this.auteur = auteur;
+    }
+
+    public Date getDateAcquisition() {
+        return this.dateAcquisition;
+    }
+
+    public void setDateAcquisition(Date dateAcquisition) {
+        this.dateAcquisition = dateAcquisition;
+    }
+
+    public int getIdMembre() {
+        return this.idMembre;
+    }
+
+    public void setIdMembre(int idMembre) {
+        this.idMembre = idMembre;
+    }
+
+    public Date getDatePret() {
+        return this.datePret;
+    }
+
+    public void setDatePret(Date datePret) {
+        this.datePret = datePret;
+    }
 }
