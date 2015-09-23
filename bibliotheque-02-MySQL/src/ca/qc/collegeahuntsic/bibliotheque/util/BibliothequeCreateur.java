@@ -10,6 +10,8 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.service.GestionInterrogationService;
 import ca.qc.collegeahuntsic.bibliotheque.service.LivreService;
 import ca.qc.collegeahuntsic.bibliotheque.service.MembreService;
@@ -61,40 +63,60 @@ public class BibliothequeCreateur {
      * @param bd nom de la base de données
      * @param user id pour établir une connexion avec le serveur SQL
      * @param password mot de passe pour le user id
+     * @throws BibliothequeException
      *
      */
     public BibliothequeCreateur(String serveur,
         String bd,
         String user,
-        String password) throws BibliothequeException,
-        SQLException {
+        String password) throws BibliothequeException {
         // allocation des objets pour le traitement des transactions
-        setCx(new Connexion(serveur,
-            bd,
-            user,
-            password));
-        setLivre(new LivreDAO(getCx()));
-        setMembre(new MembreDAO(getCx()));
-        setReservation(new ReservationDAO(getCx()));
-        setGestionLivre(new LivreService(getLivre(),
-            getReservation()));
-        setGestionMembre(new MembreService(getMembre(),
-            getReservation()));
-        setGestionPret(new PretService(getLivre(),
-            getMembre(),
-            getReservation()));
-        setGestionReservation(new ReservationService(getLivre(),
-            getMembre(),
-            getReservation()));
-        setGestionInterrogation(new GestionInterrogationService(getCx()));
+
+        try {
+            setCx(new Connexion(serveur,
+                bd,
+                user,
+                password));
+            setLivre(new LivreDAO(getCx()));
+            setMembre(new MembreDAO(getCx()));
+            setReservation(new ReservationDAO(getCx()));
+            setGestionLivre(new LivreService(getLivre(),
+                getReservation()));
+            setGestionMembre(new MembreService(getMembre(),
+                getReservation()));
+            setGestionPret(new PretService(getLivre(),
+                getMembre(),
+                getReservation()));
+            setGestionReservation(new ReservationService(getLivre(),
+                getMembre(),
+                getReservation()));
+            setGestionInterrogation(new GestionInterrogationService(getCx()));
+
+        } catch(BibliothequeException bibliothequeException) {
+            throw new BibliothequeException(bibliothequeException);
+
+        } catch(SQLException sqlException) {
+            throw new BibliothequeException(sqlException);
+
+        } catch(ConnexionException connexionException) {
+            throw new BibliothequeException(connexionException);
+
+        } catch(DAOException daoException) {
+            throw new BibliothequeException(daoException);
+        }
+
     }
 
     /**
-     * @throws SQLException
+     * @throws ConnexionException
      */
-    public void fermer() throws SQLException {
+    public void fermer() throws ConnexionException {
         // fermeture de la connexion
-        this.cx.fermer();
+        try {
+            this.cx.fermer();
+        } catch(ConnexionException connexionException) {
+            throw new ConnexionException(connexionException);
+        }
     }
 
     /**
@@ -259,5 +281,5 @@ public class BibliothequeCreateur {
     private void setGestionInterrogation(GestionInterrogationService gestionInterrogation) {
         this.gestionInterrogation = gestionInterrogation;
     }
-    
+
 }
