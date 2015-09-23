@@ -42,13 +42,12 @@ public class GestionInterrogationService {
      */
     public GestionInterrogationService(Connexion cx) throws SQLException {
 
-        this.cx = cx;
-        this.stmtLivresTitreMot = cx.getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret + 14 "
+        getCx().equals(cx);
+        getStmtLivresTitreMot().equals(cx.getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret + 14 "
             + "from livre t1 "
-            + "where lower(titre) like ?");
-
-        this.stmtListeTousLivres = cx.getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret "
-            + "from livre t1");
+            + "where lower(titre) like ?"));
+        getStmtListeTousLivres().equals(cx.getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret "
+            + "from livre t1"));
     }
 
     /**
@@ -60,13 +59,13 @@ public class GestionInterrogationService {
      */
     public void listerLivresTitre(String mot) throws SQLException {
 
-        this.stmtLivresTitreMot.setString(1,
+        getStmtLivresTitreMot().setString(1,
             "%"
                 + mot
                 + "%");
         @SuppressWarnings("resource")
         // TODO fix warning
-        ResultSet rset = this.stmtLivresTitreMot.executeQuery();
+        ResultSet rset = getStmtLivresTitreMot().executeQuery();
 
         int idMembre;
         System.out.println("idLivre titre auteur idMembre dateRetour");
@@ -85,7 +84,7 @@ public class GestionInterrogationService {
             }
             System.out.println();
         }
-        this.cx.commit();
+        getCx().commit();
     }
 
     /**
@@ -98,7 +97,7 @@ public class GestionInterrogationService {
 
         @SuppressWarnings("resource")
         // TODO fix warning
-        ResultSet rset = this.stmtListeTousLivres.executeQuery();
+        ResultSet rset = getStmtListeTousLivres().executeQuery();
 
         System.out.println("idLivre titre auteur idMembre datePret");
         int idMembre;
@@ -117,6 +116,34 @@ public class GestionInterrogationService {
             }
             System.out.println();
         }
-        this.cx.commit();
+        getCx().commit();
     }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtLivresTitreMot</code>.
+     *
+     * @return La variable d'instance <code>this.stmtLivresTitreMot</code>
+     */
+    public PreparedStatement getStmtLivresTitreMot() {
+        return this.stmtLivresTitreMot;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtListeTousLivres</code>.
+     *
+     * @return La variable d'instance <code>this.stmtListeTousLivres</code>
+     */
+    public PreparedStatement getStmtListeTousLivres() {
+        return this.stmtListeTousLivres;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.cx</code>.
+     *
+     * @return La variable d'instance <code>this.cx</code>
+     */
+    public Connexion getCx() {
+        return this.cx;
+    }
+
 }

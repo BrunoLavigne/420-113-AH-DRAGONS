@@ -44,9 +44,9 @@ public class LivreService extends Services {
     //Création d'une instance
     public LivreService(LivreDAO livre,
         ReservationDAO reservation) {
-        this.cx = livre.getConnexion();
-        this.livre = livre;
-        this.reservation = reservation;
+        setCx(livre.getConnexion());
+        setLivre(livre);
+        setReservation(reservation);
     }
 
     /**
@@ -68,20 +68,20 @@ public class LivreService extends Services {
         Exception {
         try {
             //Vérifie si le livre existe  déjà
-            if(this.livre.existe(idLivre)) {
+            if(getLivre().existe(idLivre)) {
                 throw new BibliothequeException("Le livre existe déjà: "
                     + idLivre);
             }
 
             //Ajout du livre dans la table livre
-            this.livre.acquerir(idLivre,
+            getLivre().acquerir(idLivre,
                 titre,
                 auteur,
                 dateAcquisition);
-            this.cx.commit();
+            getCx().commit();
         } catch(Exception e) {
             //System.out.println(e);
-            this.cx.rollback();
+            getCx().rollback();
             throw e;
         }
     }
@@ -94,10 +94,10 @@ public class LivreService extends Services {
      * @throws Exception
      */
     public void vendre(int idLivre) throws SQLException,
-    BibliothequeException,
-    Exception {
+        BibliothequeException,
+        Exception {
         try {
-            LivreDTO tupleLivre = this.livre.getLivre(idLivre);
+            LivreDTO tupleLivre = getLivre().getLivre(idLivre);
             if(tupleLivre == null) {
                 throw new BibliothequeException("Livre inexistant: "
                     + idLivre);
@@ -108,23 +108,78 @@ public class LivreService extends Services {
                     + " prêté à "
                     + tupleLivre.idMembre);
             }
-            if(this.reservation.getReservationLivre(idLivre) != null) {
+            if(getReservation().getReservationLivre(idLivre) != null) {
                 throw new BibliothequeException("Le livre est "
                     + idLivre
                     + " réservé ");
             }
 
             // Suppression du livre
-            int nb = this.livre.vendre(idLivre);
+            int nb = getLivre().vendre(idLivre);
             if(nb == 0) {
                 throw new BibliothequeException("Le livre est "
                     + idLivre
                     + " inexistant");
             }
-            this.cx.commit();
+            getCx().commit();
         } catch(Exception e) {
-            this.cx.rollback();
+            getCx().rollback();
             throw e;
         }
+
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.livre</code>.
+     *
+     * @return La variable d'instance <code>this.livre</code>
+     */
+    public LivreDAO getLivre() {
+        return this.livre;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.livre</code>.
+     *
+     * @param livre La valeur à utiliser pour la variable d'instance <code>this.livre</code>
+     */
+    private void setLivre(LivreDAO livre) {
+        this.livre = livre;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.reservation</code>.
+     *
+     * @return La variable d'instance <code>this.reservation</code>
+     */
+    public ReservationDAO getReservation() {
+        return this.reservation;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.reservation</code>.
+     *
+     * @param reservation La valeur à utiliser pour la variable d'instance <code>this.reservation</code>
+     */
+    private void setReservation(ReservationDAO reservation) {
+        this.reservation = reservation;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.cx</code>.
+     *
+     * @return La variable d'instance <code>this.cx</code>
+     */
+    public Connexion getCx() {
+        return this.cx;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.cx</code>.
+     *
+     * @param cx La valeur à utiliser pour la variable d'instance <code>this.cx</code>
+     */
+    private void setCx(Connexion cx) {
+        this.cx = cx;
     }
 }

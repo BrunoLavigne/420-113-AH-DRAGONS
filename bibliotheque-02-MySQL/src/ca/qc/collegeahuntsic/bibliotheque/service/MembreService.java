@@ -47,9 +47,9 @@ public class MembreService extends Services {
     public MembreService(MembreDAO membre,
         ReservationDAO reservation) {
 
-        this.cx = membre.getConnexion();
-        this.membre = membre;
-        this.reservation = reservation;
+        setCx(membre.getConnexion());
+        setMembre(membre);
+        setReservation(reservation);
     }
 
     /**
@@ -72,19 +72,19 @@ public class MembreService extends Services {
         Exception {
         try {
             // Vérifie si le membre existe déjà
-            if(this.membre.existe(idMembre)) {
+            if(getMembre().existe(idMembre)) {
                 throw new BibliothequeException("Membre existe deja: "
                     + idMembre);
             }
 
             // Ajout du membre
-            this.membre.inscrire(idMembre,
+            getMembre().inscrire(idMembre,
                 nom,
                 telephone,
                 limitePret);
-            this.cx.commit();
+            getCx().commit();
         } catch(Exception e) {
-            this.cx.rollback();
+            getCx().rollback();
             throw e;
         }
     }
@@ -102,7 +102,7 @@ public class MembreService extends Services {
         Exception {
         try {
             // Vérifie si le membre existe et s'il a encore des prêts en cours
-            MembreDTO tupleMembre = this.membre.getMembre(idMembre);
+            MembreDTO tupleMembre = getMembre().getMembre(idMembre);
             if(tupleMembre == null) {
                 throw new BibliothequeException("Membre inexistant: "
                     + idMembre);
@@ -112,23 +112,79 @@ public class MembreService extends Services {
                     + idMembre
                     + " a encore des prêts.");
             }
-            if(this.reservation.getReservationMembre(idMembre) != null) {
+            if(getReservation().getReservationMembre(idMembre) != null) {
                 throw new BibliothequeException("Membre "
                     + idMembre
                     + " a des réservations");
             }
 
             /* Suppression du membre */
-            int nb = this.membre.desinscrire(idMembre);
+            int nb = getMembre().desinscrire(idMembre);
             if(nb == 0) {
                 throw new BibliothequeException("Membre "
                     + idMembre
                     + " inexistant");
             }
-            this.cx.commit();
+            getCx().commit();
         } catch(Exception e) {
-            this.cx.rollback();
+            getCx().rollback();
             throw e;
         }
+
     }
+
+    /**
+     * Getter de la variable d'instance <code>this.membre</code>.
+     *
+     * @return La variable d'instance <code>this.membre</code>
+     */
+    public MembreDAO getMembre() {
+        return this.membre;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.membre</code>.
+     *
+     * @param membre La valeur à utiliser pour la variable d'instance <code>this.membre</code>
+     */
+    private void setMembre(MembreDAO membre) {
+        this.membre = membre;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.reservation</code>.
+     *
+     * @return La variable d'instance <code>this.reservation</code>
+     */
+    public ReservationDAO getReservation() {
+        return this.reservation;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.reservation</code>.
+     *
+     * @param reservation La valeur à utiliser pour la variable d'instance <code>this.reservation</code>
+     */
+    private void setReservation(ReservationDAO reservation) {
+        this.reservation = reservation;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.cx</code>.
+     *
+     * @return La variable d'instance <code>this.cx</code>
+     */
+    public Connexion getCx() {
+        return this.cx;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.cx</code>.
+     *
+     * @param cx La valeur à utiliser pour la variable d'instance <code>this.cx</code>
+     */
+    private void setCx(Connexion cx) {
+        this.cx = cx;
+    }
+
 }

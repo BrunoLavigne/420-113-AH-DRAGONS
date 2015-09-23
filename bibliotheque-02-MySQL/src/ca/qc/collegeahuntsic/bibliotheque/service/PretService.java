@@ -62,10 +62,10 @@ public class PretService extends Services {
             || reservation.getConnexion() != membre.getConnexion()) {
             throw new BibliothequeException("Les instances de livre, de membre et de réservation n'utilisent pas la même connexion au serveur");
         }
-        this.cx = livre.getConnexion();
-        this.livre = livre;
-        this.membre = membre;
-        this.reservation = reservation;
+        setCx(livre.getConnexion());
+        setLivre(livre);
+        setMembre(membre);
+        setReservation(reservation);
     }
 
     /**
@@ -87,7 +87,7 @@ public class PretService extends Services {
         Exception {
         try {
             // Vérfie si le livre est disponible
-            LivreDTO tupleLivre = this.livre.getLivre(idLivre);
+            LivreDTO tupleLivre = getLivre().getLivre(idLivre);
             if(tupleLivre == null) {
                 throw new BibliothequeException("Livre inexistant: "
                     + idLivre);
@@ -100,7 +100,7 @@ public class PretService extends Services {
             }
 
             // Vérifie si le membre existe et sa limite de prêt
-            MembreDTO tupleMembre = this.membre.getMembre(idMembre);
+            MembreDTO tupleMembre = getMembre().getMembre(idMembre);
             if(tupleMembre == null) {
                 throw new BibliothequeException("Membre inexistant: "
                     + idMembre);
@@ -112,7 +112,7 @@ public class PretService extends Services {
             }
 
             // Vérifie s'il existe une réservation pour le livre.
-            ReservationDTO tupleReservation = this.reservation.getReservationLivre(idLivre);
+            ReservationDTO tupleReservation = getReservation().getReservationLivre(idLivre);
             if(tupleReservation != null) {
                 throw new BibliothequeException("Livre réservé par : "
                     + tupleReservation.idMembre
@@ -121,19 +121,19 @@ public class PretService extends Services {
             }
 
             // Enregistrement du prêt.
-            int nb1 = this.livre.preter(idLivre,
+            int nb1 = getLivre().preter(idLivre,
                 idMembre,
                 datePret);
             if(nb1 == 0) {
                 throw new BibliothequeException("Livre suprimé par une autre transaction");
             }
-            int nb2 = this.membre.preter(idMembre);
+            int nb2 = getMembre().preter(idMembre);
             if(nb2 == 0) {
                 throw new BibliothequeException("Membre suprimé par une autre transaction");
             }
-            this.cx.commit();
+            getCx().commit();
         } catch(Exception e) {
-            this.cx.rollback();
+            getCx().rollback();
             throw e;
         }
     }
@@ -155,7 +155,7 @@ public class PretService extends Services {
         Exception {
         try {
             // Vérifie si le livre est prêté
-            LivreDTO tupleLivre = this.livre.getLivre(idLivre);
+            LivreDTO tupleLivre = getLivre().getLivre(idLivre);
             if(tupleLivre == null) {
                 throw new BibliothequeException("Livre inexistant: "
                     + idLivre);
@@ -172,7 +172,7 @@ public class PretService extends Services {
             }
 
             // Vérifie s'il existe une réservation pour le livre.
-            ReservationDTO tupleReservation = this.reservation.getReservationLivre(idLivre);
+            ReservationDTO tupleReservation = getReservation().getReservationLivre(idLivre);
             if(tupleReservation != null) {
                 throw new BibliothequeException("Livre réservé par : "
                     + tupleReservation.idMembre
@@ -181,15 +181,15 @@ public class PretService extends Services {
             }
 
             // Enregistrement du prêt.
-            int nb1 = this.livre.preter(idLivre,
+            int nb1 = getLivre().preter(idLivre,
                 tupleLivre.idMembre,
                 datePret);
             if(nb1 == 0) {
                 throw new BibliothequeException("Livre suprimé par une autre transaction");
             }
-            this.cx.commit();
+            getCx().commit();
         } catch(Exception e) {
-            this.cx.rollback();
+            getCx().rollback();
             throw e;
         }
     }
@@ -210,7 +210,7 @@ public class PretService extends Services {
         Exception {
         try {
             // Vérifie si le livre est prêté
-            LivreDTO tupleLivre = this.livre.getLivre(idLivre);
+            LivreDTO tupleLivre = getLivre().getLivre(idLivre);
             if(tupleLivre == null) {
                 throw new BibliothequeException("Livre inexistant: "
                     + idLivre);
@@ -227,19 +227,92 @@ public class PretService extends Services {
             }
 
             // Retour du prêt
-            int nb1 = this.livre.retourner(idLivre);
+            int nb1 = getLivre().retourner(idLivre);
             if(nb1 == 0) {
                 throw new BibliothequeException("Livre suprimé par une autre transaction");
             }
 
-            int nb2 = this.membre.retourner(tupleLivre.idMembre);
+            int nb2 = getMembre().retourner(tupleLivre.idMembre);
             if(nb2 == 0) {
                 throw new BibliothequeException("Livre suprimé par une autre transaction");
             }
-            this.cx.commit();
+            getCx().commit();
         } catch(Exception e) {
-            this.cx.rollback();
+            getCx().rollback();
             throw e;
         }
+
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.livre</code>.
+     *
+     * @return La variable d'instance <code>this.livre</code>
+     */
+    public LivreDAO getLivre() {
+        return this.livre;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.livre</code>.
+     *
+     * @param livre La valeur à utiliser pour la variable d'instance <code>this.livre</code>
+     */
+    private void setLivre(LivreDAO livre) {
+        this.livre = livre;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.membre</code>.
+     *
+     * @return La variable d'instance <code>this.membre</code>
+     */
+    public MembreDAO getMembre() {
+        return this.membre;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.membre</code>.
+     *
+     * @param membre La valeur à utiliser pour la variable d'instance <code>this.membre</code>
+     */
+    private void setMembre(MembreDAO membre) {
+        this.membre = membre;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.reservation</code>.
+     *
+     * @return La variable d'instance <code>this.reservation</code>
+     */
+    public ReservationDAO getReservation() {
+        return this.reservation;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.reservation</code>.
+     *
+     * @param reservation La valeur à utiliser pour la variable d'instance <code>this.reservation</code>
+     */
+    private void setReservation(ReservationDAO reservation) {
+        this.reservation = reservation;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.cx</code>.
+     *
+     * @return La variable d'instance <code>this.cx</code>
+     */
+    public Connexion getCx() {
+        return this.cx;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.cx</code>.
+     *
+     * @param cx La valeur à utiliser pour la variable d'instance <code>this.cx</code>
+     */
+    private void setCx(Connexion cx) {
+        this.cx = cx;
     }
 }
