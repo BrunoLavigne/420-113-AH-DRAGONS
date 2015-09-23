@@ -36,15 +36,11 @@ public class Connexion {
      * @param user userid sur le serveur SQL
      * @param pass mot de passe sur le serveur SQL
      * @throws ConnexionException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
     public Connexion(String serveur,
         String bd,
         String user,
-        String pass) throws ConnexionException,
-        InstantiationException,
-        IllegalAccessException {
+        String pass) throws ConnexionException {
         Driver d;
         try {
             if(serveur.equals("local")) {
@@ -91,6 +87,10 @@ public class Connexion {
             throw new ConnexionException(sqlException);
         } catch(IllegalArgumentException illegalArgumentException) {
             throw new ConnexionException(illegalArgumentException);
+        } catch(IllegalAccessException illegalAccessException) {
+            throw new ConnexionException(illegalAccessException);
+        } catch(InstantiationException instantiationException) {
+            throw new ConnexionException(instantiationException);
         }
     }
 
