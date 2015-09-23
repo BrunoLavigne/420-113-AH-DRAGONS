@@ -44,17 +44,17 @@ public class ReservationDAO extends DAO {
      */
     public ReservationDAO(Connexion cx) throws SQLException {
 
-        this.cx = cx;
-        this.stmtExiste = cx.getConnection().prepareStatement("select idReservation, idLivre, idMembre, dateReservation "
-            + "from reservation where idReservation = ?");
-        this.stmtExisteLivre = cx.getConnection().prepareStatement("select idReservation, idLivre, idMembre, dateReservation "
+        setCx(cx);
+        setStmtExiste(getCx().getConnection().prepareStatement("select idReservation, idLivre, idMembre, dateReservation "
+            + "from reservation where idReservation = ?"));
+        setStmtExisteLivre(getCx().getConnection().prepareStatement("select idReservation, idLivre, idMembre, dateReservation "
             + "from reservation where idLivre = ? "
-            + "order by dateReservation");
-        this.stmtExisteMembre = cx.getConnection().prepareStatement("select idReservation, idLivre, idMembre, dateReservation "
-            + "from reservation where idMembre = ? ");
-        this.stmtInsert = cx.getConnection().prepareStatement("insert into reservation (idReservation, idlivre, idMembre, dateReservation) "
-            + "values (?,?,?,str_to_date(?, '%Y-%m-%d'))");
-        this.stmtDelete = cx.getConnection().prepareStatement("delete from reservation where idReservation = ?");
+            + "order by dateReservation"));
+        setStmtExisteMembre(getCx().getConnection().prepareStatement("select idReservation, idLivre, idMembre, dateReservation "
+            + "from reservation where idMembre = ? "));
+        setStmtInsert(getCx().getConnection().prepareStatement("insert into reservation (idReservation, idlivre, idMembre, dateReservation) "
+            + "values (?,?,?,str_to_date(?, '%Y-%m-%d'))"));
+        setStmtDelete(getCx().getConnection().prepareStatement("delete from reservation where idReservation = ?"));
     }
 
     /**
@@ -77,12 +77,12 @@ public class ReservationDAO extends DAO {
      */
     public boolean existe(int idReservation) throws SQLException {
 
-        this.stmtExiste.setInt(1,
+        getStmtExiste().setInt(1,
             idReservation);
 
         @SuppressWarnings("resource")
         // TODO fix warning
-        ResultSet rset = this.stmtExiste.executeQuery();
+        ResultSet rset = getStmtExiste().executeQuery();
         boolean reservationExiste = rset.next();
         rset.close();
         return reservationExiste;
@@ -100,16 +100,16 @@ public class ReservationDAO extends DAO {
     // TODO fix warning
     public ReservationDTO getReservation(int idReservation) throws SQLException {
 
-        this.stmtExiste.setInt(1,
+        getStmtExiste().setInt(1,
             idReservation);
-        ResultSet rset = this.stmtExiste.executeQuery();
+        ResultSet rset = getStmtExiste().executeQuery();
         if(rset.next()) {
             ReservationDTO tupleReservation = new ReservationDTO();
-            tupleReservation.idReservation = rset.getInt(1);
-            tupleReservation.idLivre = rset.getInt(2);
+            tupleReservation.setIdReservation(rset.getInt(1));
+            tupleReservation.setIdLivre(rset.getInt(2));
 
-            tupleReservation.idMembre = rset.getInt(3);
-            tupleReservation.dateReservation = rset.getDate(4);
+            tupleReservation.setIdMembre(rset.getInt(3));
+            tupleReservation.setDateReservation(rset.getDate(4));
             return tupleReservation;
         }
         return null;
@@ -127,16 +127,16 @@ public class ReservationDAO extends DAO {
     // TODO fix warning
     public ReservationDTO getReservationLivre(int idLivre) throws SQLException {
 
-        this.stmtExisteLivre.setInt(1,
+        getStmtExisteLivre().setInt(1,
             idLivre);
-        ResultSet rset = this.stmtExisteLivre.executeQuery();
+        ResultSet rset = getStmtExisteLivre().executeQuery();
         if(rset.next()) {
             ReservationDTO tupleReservation = new ReservationDTO();
-            tupleReservation.idReservation = rset.getInt(1);
-            tupleReservation.idLivre = rset.getInt(2);
+            tupleReservation.setIdReservation(rset.getInt(1));
+            tupleReservation.setIdLivre(rset.getInt(2));
 
-            tupleReservation.idMembre = rset.getInt(3);
-            tupleReservation.dateReservation = rset.getDate(4);
+            tupleReservation.setIdMembre(rset.getInt(3));
+            tupleReservation.setDateReservation(rset.getDate(4));
             return tupleReservation;
         }
         return null;
@@ -154,16 +154,16 @@ public class ReservationDAO extends DAO {
     // TODO fix warning
     public ReservationDTO getReservationMembre(int idMembre) throws SQLException {
 
-        this.stmtExisteMembre.setInt(1,
+        getStmtExisteMembre().setInt(1,
             idMembre);
-        ResultSet rset = this.stmtExisteMembre.executeQuery();
+        ResultSet rset = getStmtExisteMembre().executeQuery();
         if(rset.next()) {
             ReservationDTO tupleReservation = new ReservationDTO();
-            tupleReservation.idReservation = rset.getInt(1);
-            tupleReservation.idLivre = rset.getInt(2);
+            tupleReservation.setIdReservation(rset.getInt(1));
+            tupleReservation.setIdLivre(rset.getInt(2));
 
-            tupleReservation.idMembre = rset.getInt(3);
-            tupleReservation.dateReservation = rset.getDate(4);
+            tupleReservation.setIdMembre(rset.getInt(3));
+            tupleReservation.setDateReservation(rset.getDate(4));
             return tupleReservation;
         }
         return null;
@@ -183,15 +183,15 @@ public class ReservationDAO extends DAO {
         int idLivre,
         int idMembre,
         String dateReservation) throws SQLException {
-        this.stmtInsert.setInt(1,
+        getStmtInsert().setInt(1,
             idReservation);
-        this.stmtInsert.setInt(2,
+        getStmtInsert().setInt(2,
             idLivre);
-        this.stmtInsert.setInt(3,
+        getStmtInsert().setInt(3,
             idMembre);
-        this.stmtInsert.setDate(4,
+        getStmtInsert().setDate(4,
             Date.valueOf(dateReservation));
-        this.stmtInsert.executeUpdate();
+        getStmtInsert().executeUpdate();
     }
 
     /**
@@ -203,8 +203,119 @@ public class ReservationDAO extends DAO {
      * @throws SQLException
      */
     public int annulerRes(int idReservation) throws SQLException {
-        this.stmtDelete.setInt(1,
+        getStmtDelete().setInt(1,
             idReservation);
-        return this.stmtDelete.executeUpdate();
+        return getStmtDelete().executeUpdate();
     }
+
+    // GETTER ET SETTER
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtExiste</code>.
+     *
+     * @return La variable d'instance <code>this.stmtExiste</code>
+     */
+    private PreparedStatement getStmtExiste() {
+        return this.stmtExiste;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtExiste</code>.
+     *
+     * @param stmtExiste La valeur à utiliser pour la variable d'instance <code>this.stmtExiste</code>
+     */
+    private void setStmtExiste(PreparedStatement stmtExiste) {
+        this.stmtExiste = stmtExiste;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtExisteLivre</code>.
+     *
+     * @return La variable d'instance <code>this.stmtExisteLivre</code>
+     */
+    private PreparedStatement getStmtExisteLivre() {
+        return this.stmtExisteLivre;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtExisteLivre</code>.
+     *
+     * @param stmtExisteLivre La valeur à utiliser pour la variable d'instance <code>this.stmtExisteLivre</code>
+     */
+    private void setStmtExisteLivre(PreparedStatement stmtExisteLivre) {
+        this.stmtExisteLivre = stmtExisteLivre;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtExisteMembre</code>.
+     *
+     * @return La variable d'instance <code>this.stmtExisteMembre</code>
+     */
+    private PreparedStatement getStmtExisteMembre() {
+        return this.stmtExisteMembre;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtExisteMembre</code>.
+     *
+     * @param stmtExisteMembre La valeur à utiliser pour la variable d'instance <code>this.stmtExisteMembre</code>
+     */
+    private void setStmtExisteMembre(PreparedStatement stmtExisteMembre) {
+        this.stmtExisteMembre = stmtExisteMembre;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtInsert</code>.
+     *
+     * @return La variable d'instance <code>this.stmtInsert</code>
+     */
+    private PreparedStatement getStmtInsert() {
+        return this.stmtInsert;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtInsert</code>.
+     *
+     * @param stmtInsert La valeur à utiliser pour la variable d'instance <code>this.stmtInsert</code>
+     */
+    private void setStmtInsert(PreparedStatement stmtInsert) {
+        this.stmtInsert = stmtInsert;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtDelete</code>.
+     *
+     * @return La variable d'instance <code>this.stmtDelete</code>
+     */
+    private PreparedStatement getStmtDelete() {
+        return this.stmtDelete;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtDelete</code>.
+     *
+     * @param stmtDelete La valeur à utiliser pour la variable d'instance <code>this.stmtDelete</code>
+     */
+    private void setStmtDelete(PreparedStatement stmtDelete) {
+        this.stmtDelete = stmtDelete;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.cx</code>.
+     *
+     * @return La variable d'instance <code>this.cx</code>
+     */
+    private Connexion getCx() {
+        return this.cx;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.cx</code>.
+     *
+     * @param cx La valeur à utiliser pour la variable d'instance <code>this.cx</code>
+     */
+    private void setCx(Connexion cx) {
+        this.cx = cx;
+    }
+
 }
