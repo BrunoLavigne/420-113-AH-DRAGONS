@@ -4,12 +4,11 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
-import java.sql.SQLException;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
 /**
  * Gestion des transactions reliées à la création et
@@ -60,20 +59,16 @@ public class MembreService extends Services {
      * @param nom
      * @param telephone
      * @param limitePret
-     * @throws SQLException
-     * @throws BibliothequeException
-     * @throws Exception
+     * @throws ServiceException
      */
     public void inscrire(int idMembre,
         String nom,
         long telephone,
-        int limitePret) throws SQLException,
-        BibliothequeException,
-        Exception {
+        int limitePret) throws ServiceException {
         try {
             // Vérifie si le membre existe déjà
             if(getMembre().existe(idMembre)) {
-                throw new BibliothequeException("Membre existe deja: "
+                throw new ServiceException("Membre existe deja: "
                     + idMembre);
             }
 
@@ -83,9 +78,9 @@ public class MembreService extends Services {
                 telephone,
                 limitePret);
             getCx().commit();
-        } catch(Exception e) {
             getCx().rollback();
-            throw e;
+        } catch(Exception exception) {
+            throw new ServiceException(exception);
         }
     }
 
@@ -93,27 +88,23 @@ public class MembreService extends Services {
      * Suppression d'un membre dans la base de données.
      *
      * @param idMembre
-     * @throws SQLException
-     * @throws BibliothequeException
-     * @throws Exception
+     * @throws ServiceException
      */
-    public void desinscrire(int idMembre) throws SQLException,
-    BibliothequeException,
-    Exception {
+    public void desinscrire(int idMembre) throws ServiceException {
         try {
             // Vérifie si le membre existe et s'il a encore des prêts en cours
             MembreDTO tupleMembre = getMembre().getMembre(idMembre);
             if(tupleMembre == null) {
-                throw new BibliothequeException("Membre inexistant: "
+                throw new ServiceException("Membre inexistant: "
                     + idMembre);
             }
             if(tupleMembre.getNbPret() > 0) {
-                throw new BibliothequeException("Le membre "
+                throw new ServiceException("Le membre "
                     + idMembre
                     + " a encore des prêts.");
             }
             if(getReservation().getReservationMembre(idMembre) != null) {
-                throw new BibliothequeException("Membre "
+                throw new ServiceException("Membre "
                     + idMembre
                     + " a des réservations");
             }
@@ -121,14 +112,14 @@ public class MembreService extends Services {
             /* Suppression du membre */
             int nb = getMembre().desinscrire(idMembre);
             if(nb == 0) {
-                throw new BibliothequeException("Membre "
+                throw new ServiceException("Membre "
                     + idMembre
                     + " inexistant");
             }
             getCx().commit();
-        } catch(Exception e) {
             getCx().rollback();
-            throw e;
+        } catch(Exception exception) {
+            throw new ServiceException(exception);
         }
 
     }

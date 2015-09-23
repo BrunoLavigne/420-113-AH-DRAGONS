@@ -9,7 +9,8 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
 /**
  * Gestion des transactions reliées à la création et
@@ -56,60 +57,56 @@ public class LivreService extends Services {
      * @param titre
      * @param auteur
      * @param dateAcquisition
-     * @throws SQLException
-     * @throws BibliothequeException
-     * @throws Exception
+     * @throws ServiceException
      */
     public void acquerir(int idLivre,
         String titre,
         String auteur,
-        String dateAcquisition) throws SQLException,
-        BibliothequeException,
-        Exception {
+        String dateAcquisition) throws ServiceException {
+
         try {
             //Vérifie si le livre existe  déjà
             if(getLivre().existe(idLivre)) {
-                throw new BibliothequeException("Le livre existe déjà: "
+                throw new ServiceException("Le livre existe déjà: "
                     + idLivre);
             }
 
             //Ajout du livre dans la table livre
+
             getLivre().acquerir(idLivre,
                 titre,
                 auteur,
                 dateAcquisition);
+
             getCx().commit();
-        } catch(Exception e) {
-            //System.out.println(e);
-            getCx().rollback();
-            throw e;
+        } catch(ConnexionException connexionException) {
+            throw new ServiceException(connexionException);
+        } catch(SQLException sqlException) {
+            throw new ServiceException(sqlException);
         }
+
     }
 
     /**
      * Vente d'un livre
      * @param idLivre
-     * @throws SQLException
-     * @throws BibliothequeException
-     * @throws Exception
+     * @throws ServiceException
      */
-    public void vendre(int idLivre) throws SQLException,
-        BibliothequeException,
-        Exception {
+    public void vendre(int idLivre) throws ServiceException {
         try {
             LivreDTO tupleLivre = getLivre().getLivre(idLivre);
             if(tupleLivre == null) {
-                throw new BibliothequeException("Livre inexistant: "
+                throw new ServiceException("Livre inexistant: "
                     + idLivre);
             }
             if(tupleLivre.getIdMembre() != 0) {
-                throw new BibliothequeException("Le livre est "
+                throw new ServiceException("Le livre est "
                     + idLivre
                     + " prêté à "
                     + tupleLivre.getIdMembre());
             }
             if(getReservation().getReservationLivre(idLivre) != null) {
-                throw new BibliothequeException("Le livre est "
+                throw new ServiceException("Le livre est "
                     + idLivre
                     + " réservé ");
             }
@@ -117,14 +114,17 @@ public class LivreService extends Services {
             // Suppression du livre
             int nb = getLivre().vendre(idLivre);
             if(nb == 0) {
-                throw new BibliothequeException("Le livre est "
+                throw new ServiceException("Le livre est "
                     + idLivre
                     + " inexistant");
             }
             getCx().commit();
-        } catch(Exception e) {
+
             getCx().rollback();
-            throw e;
+        } catch(ConnexionException connexionException) {
+            throw new ServiceException(connexionException);
+        } catch(Exception exception) {
+            throw new ServiceException(exception);
         }
 
     }

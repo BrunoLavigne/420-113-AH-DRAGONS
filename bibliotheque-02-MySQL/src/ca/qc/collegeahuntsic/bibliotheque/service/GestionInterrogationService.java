@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
 /**
  * Gestion des transactions d'interrogation dans une bibliothèque.*
@@ -38,16 +40,21 @@ public class GestionInterrogationService {
      * Creation d'une instance
      *
      * @param cx
-     * @throws SQLException
+     * @throws ServiceException
      */
-    public GestionInterrogationService(Connexion cx) throws SQLException {
+    public GestionInterrogationService(Connexion cx) throws ServiceException {
+        try {
+            getCx().equals(cx);
 
-        getCx().equals(cx);
-        getStmtLivresTitreMot().equals(cx.getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret + 14 "
-            + "from livre t1 "
-            + "where lower(titre) like ?"));
-        getStmtListeTousLivres().equals(cx.getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret "
-            + "from livre t1"));
+            getStmtLivresTitreMot().equals(cx.getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret + 14 "
+                + "from livre t1 "
+                + "where lower(titre) like ?"));
+
+            getStmtListeTousLivres().equals(cx.getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret "
+                + "from livre t1"));
+        } catch(SQLException sqlException) {
+            throw new ServiceException(sqlException);
+        }
     }
 
     /**
@@ -55,68 +62,82 @@ public class GestionInterrogationService {
      * Affiche les livres contenant un mot dans le titre
      *
      * @param mot
-     * @throws SQLException
+     * @throws ServiceException
      */
-    public void listerLivresTitre(String mot) throws SQLException {
+    public void listerLivresTitre(String mot) throws ServiceException {
 
-        getStmtLivresTitreMot().setString(1,
-            "%"
-                + mot
-                + "%");
-        @SuppressWarnings("resource")
-        // TODO fix warning
-        ResultSet rset = getStmtLivresTitreMot().executeQuery();
+        try {
+            getStmtLivresTitreMot().setString(1,
+                "%"
+                    + mot
+                    + "%");
 
-        int idMembre;
-        System.out.println("idLivre titre auteur idMembre dateRetour");
-        while(rset.next()) {
-            System.out.print(rset.getInt(1)
-                + " "
-                + rset.getString(2)
-                + " "
-                + rset.getString(3));
-            idMembre = rset.getInt(4);
-            if(!rset.wasNull()) {
-                System.out.print(" "
-                    + idMembre
+            @SuppressWarnings("resource")
+            // TODO fix warning
+            ResultSet rset = getStmtLivresTitreMot().executeQuery();
+
+            int idMembre;
+            System.out.println("idLivre titre auteur idMembre dateRetour");
+            while(rset.next()) {
+                System.out.print(rset.getInt(1)
                     + " "
-                    + rset.getDate(5));
+                    + rset.getString(2)
+                    + " "
+                    + rset.getString(3));
+                idMembre = rset.getInt(4);
+                if(!rset.wasNull()) {
+                    System.out.print(" "
+                        + idMembre
+                        + " "
+                        + rset.getDate(5));
+                }
+                System.out.println();
             }
-            System.out.println();
+            getCx().commit();
+        } catch(ConnexionException connexionException) {
+            throw new ServiceException(connexionException);
+        } catch(SQLException sqlException) {
+            throw new ServiceException(sqlException);
         }
-        getCx().commit();
     }
 
     /**
      *
      * Affiche tous les livres de la BD
      *
-     * @throws SQLException
+     * @throws ServiceException
      */
-    public void listerLivres() throws SQLException {
+    @SuppressWarnings("resource")
+    public void listerLivres() throws ServiceException {
 
-        @SuppressWarnings("resource")
-        // TODO fix warning
-        ResultSet rset = getStmtListeTousLivres().executeQuery();
+        try {
+            ResultSet rset;
+            rset = getStmtListeTousLivres().executeQuery();
 
-        System.out.println("idLivre titre auteur idMembre datePret");
-        int idMembre;
-        while(rset.next()) {
-            System.out.print(rset.getInt("idLivre")
-                + " "
-                + rset.getString("titre")
-                + " "
-                + rset.getString("auteur"));
-            idMembre = rset.getInt("idMembre");
-            if(!rset.wasNull()) {
-                System.out.print(" "
-                    + idMembre
+            System.out.println("idLivre titre auteur idMembre datePret");
+            int idMembre;
+            while(rset.next()) {
+                System.out.print(rset.getInt("idLivre")
                     + " "
-                    + rset.getDate("datePret"));
+                    + rset.getString("titre")
+                    + " "
+                    + rset.getString("auteur"));
+                idMembre = rset.getInt("idMembre");
+                if(!rset.wasNull()) {
+                    System.out.print(" "
+                        + idMembre
+                        + " "
+                        + rset.getDate("datePret"));
+                }
+                System.out.println();
             }
-            System.out.println();
+
+            getCx().commit();
+        } catch(ConnexionException connexionException) {
+            throw new ServiceException(connexionException);
+        } catch(SQLException sqlException) {
+            throw new ServiceException(sqlException);
         }
-        getCx().commit();
     }
 
     /**
