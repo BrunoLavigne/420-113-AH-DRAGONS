@@ -31,6 +31,10 @@ public class LivreDTO extends DTO {
         return this.idLivre;
     }
 
+    public void setIdLivre(int idLivre) {
+        this.idLivre = idLivre;
+    }
+
     public String getTitre() {
         return this.titre;
     }
