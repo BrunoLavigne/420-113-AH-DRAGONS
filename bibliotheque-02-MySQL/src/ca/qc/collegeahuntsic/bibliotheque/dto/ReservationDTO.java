@@ -15,11 +15,43 @@ public class ReservationDTO extends DTO {
 
     private static final long serialVersionUID = 1L;
 
-    public int idReservation;
+    private int idReservation;
 
-    public int idLivre;
+    private int idLivre;
 
-    public int idMembre;
+    private int idMembre;
 
-    public Date dateReservation;
+    private Date dateReservation;
+
+    public int getIdReservation() {
+        return this.idReservation;
+    }
+
+    public void setIdReservation(int idReservation) {
+        this.idReservation = idReservation;
+    }
+
+    public int getIdLivre() {
+        return this.idLivre;
+    }
+
+    public void setIdLivre(int idLivre) {
+        this.idLivre = idLivre;
+    }
+
+    public int getIdMembre() {
+        return this.idMembre;
+    }
+
+    public void setIdMembre(int idMembre) {
+        this.idMembre = idMembre;
+    }
+
+    public Date getDateReservation() {
+        return this.dateReservation;
+    }
+
+    public void setDateReservation(Date dateReservation) {
+        this.dateReservation = dateReservation;
+    }
 }

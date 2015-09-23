@@ -160,18 +160,18 @@ public class ReservationService extends Services {
             }
 
             // Vérifie que c'est la première réservation pour le livre
-            ReservationDTO tupleReservationPremiere = this.reservation.getReservationLivre(tupleReservation.idLivre);
-            if(tupleReservation.idReservation != tupleReservationPremiere.idReservation) {
+            ReservationDTO tupleReservationPremiere = this.reservation.getReservationLivre(tupleReservation.getIdLivre());
+            if(tupleReservation.getIdReservation() != tupleReservationPremiere.getIdReservation()) {
                 throw new BibliothequeException("La réservation n'est pas la première de la liste "
                     + "pour ce livre; la première est "
-                    + tupleReservationPremiere.idReservation);
+                    + tupleReservationPremiere.getIdReservation());
             }
 
             // Vérifie si le livre est disponible
-            LivreDTO tupleLivre = this.livre.getLivre(tupleReservation.idLivre);
+            LivreDTO tupleLivre = this.livre.getLivre(tupleReservation.getIdLivre());
             if(tupleLivre == null) {
                 throw new BibliothequeException("Livre inexistant: "
-                    + tupleReservation.idLivre);
+                    + tupleReservation.getIdLivre());
             }
             if(tupleLivre.getIdMembre() != 0) {
                 throw new BibliothequeException("Livre "
@@ -181,29 +181,29 @@ public class ReservationService extends Services {
             }
 
             // Vérifie si le membre existe et sa limite de prêt
-            MembreDTO tupleMembre = this.membre.getMembre(tupleReservation.idMembre);
+            MembreDTO tupleMembre = this.membre.getMembre(tupleReservation.getIdMembre());
             if(tupleMembre == null) {
                 throw new BibliothequeException("Membre inexistant: "
-                    + tupleReservation.idMembre);
+                    + tupleReservation.getIdMembre());
             }
-            if(tupleMembre.nbPret >= tupleMembre.limitePret) {
+            if(tupleMembre.getNbPret() >= tupleMembre.getLimitePret()) {
                 throw new BibliothequeException("Limite de prêt du membre "
-                    + tupleReservation.idMembre
+                    + tupleReservation.getIdMembre()
                     + " atteinte");
             }
 
             // Vérifie si datePret >= tupleReservation.dateReservation
-            if(Date.valueOf(datePret).before(tupleReservation.dateReservation)) {
+            if(Date.valueOf(datePret).before(tupleReservation.getDateReservation())) {
                 throw new BibliothequeException("Date de prêt inférieure à la date de réservation");
             }
 
             // Enregistrement du prêt.
-            if(this.livre.preter(tupleReservation.idLivre,
-                tupleReservation.idMembre,
+            if(this.livre.preter(tupleReservation.getIdLivre(),
+                tupleReservation.getIdMembre(),
                 datePret) == 0) {
                 throw new BibliothequeException("Livre suprimé par une autre transaction");
             }
-            if(this.membre.preter(tupleReservation.idMembre) == 0) {
+            if(this.membre.preter(tupleReservation.getIdMembre()) == 0) {
                 throw new BibliothequeException("Membre suprimé par une autre transaction");
             }
             // Éliminer la réservation.
@@ -225,8 +225,8 @@ public class ReservationService extends Services {
      * @throws Exception
      */
     public void annulerRes(int idReservation) throws SQLException,
-        BibliothequeException,
-        Exception {
+    BibliothequeException,
+    Exception {
         try {
 
             // Vérifie que la réservation existe.
@@ -241,5 +241,37 @@ public class ReservationService extends Services {
             this.cx.rollback();
             throw e;
         }
+    }
+
+    public LivreDAO getLivre() {
+        return this.livre;
+    }
+
+    public void setLivre(LivreDAO livre) {
+        this.livre = livre;
+    }
+
+    public MembreDAO getMembre() {
+        return this.membre;
+    }
+
+    public void setMembre(MembreDAO membre) {
+        this.membre = membre;
+    }
+
+    public ReservationDAO getReservation() {
+        return this.reservation;
+    }
+
+    public void setReservation(ReservationDAO reservation) {
+        this.reservation = reservation;
+    }
+
+    public Connexion getCx() {
+        return this.cx;
+    }
+
+    public void setCx(Connexion cx) {
+        this.cx = cx;
     }
 }

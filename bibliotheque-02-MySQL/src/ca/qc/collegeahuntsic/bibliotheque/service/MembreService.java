@@ -98,8 +98,8 @@ public class MembreService extends Services {
      * @throws Exception
      */
     public void desinscrire(int idMembre) throws SQLException,
-        BibliothequeException,
-        Exception {
+    BibliothequeException,
+    Exception {
         try {
             // Vérifie si le membre existe et s'il a encore des prêts en cours
             MembreDTO tupleMembre = getMembre().getMembre(idMembre);
@@ -107,7 +107,7 @@ public class MembreService extends Services {
                 throw new BibliothequeException("Membre inexistant: "
                     + idMembre);
             }
-            if(tupleMembre.nbPret > 0) {
+            if(tupleMembre.getNbPret() > 0) {
                 throw new BibliothequeException("Le membre "
                     + idMembre
                     + " a encore des prêts.");

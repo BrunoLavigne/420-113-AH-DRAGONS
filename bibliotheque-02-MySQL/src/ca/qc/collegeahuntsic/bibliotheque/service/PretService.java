@@ -105,7 +105,7 @@ public class PretService extends Services {
                 throw new BibliothequeException("Membre inexistant: "
                     + idMembre);
             }
-            if(tupleMembre.nbPret >= tupleMembre.limitePret) {
+            if(tupleMembre.getNbPret() >= tupleMembre.getLimitePret()) {
                 throw new BibliothequeException("Limite de prêt du membre "
                     + idMembre
                     + " atteinte");
@@ -115,9 +115,9 @@ public class PretService extends Services {
             ReservationDTO tupleReservation = getReservation().getReservationLivre(idLivre);
             if(tupleReservation != null) {
                 throw new BibliothequeException("Livre réservé par : "
-                    + tupleReservation.idMembre
+                    + tupleReservation.getIdMembre()
                     + " idReservation : "
-                    + tupleReservation.idReservation);
+                    + tupleReservation.getIdReservation());
             }
 
             // Enregistrement du prêt.
@@ -175,9 +175,9 @@ public class PretService extends Services {
             ReservationDTO tupleReservation = getReservation().getReservationLivre(idLivre);
             if(tupleReservation != null) {
                 throw new BibliothequeException("Livre réservé par : "
-                    + tupleReservation.idMembre
+                    + tupleReservation.getIdMembre()
                     + " idReservation : "
-                    + tupleReservation.idReservation);
+                    + tupleReservation.getIdReservation());
             }
 
             // Enregistrement du prêt.

@@ -13,13 +13,53 @@ public class MembreDTO extends DTO {
 
     private static final long serialVersionUID = 1L;
 
-    public int idMembre;
+    private int idMembre;
 
-    public String nom;
+    private String nom;
 
-    public long telephone;
+    private long telephone;
 
-    public int limitePret;
+    private int limitePret;
 
-    public int nbPret;
+    private int nbPret;
+
+    public int getIdMembre() {
+        return this.idMembre;
+    }
+
+    public void setIdMembre(int idMembre) {
+        this.idMembre = idMembre;
+    }
+
+    public String getNom() {
+        return this.nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public long getTelephone() {
+        return this.telephone;
+    }
+
+    public void setTelephone(long telephone) {
+        this.telephone = telephone;
+    }
+
+    public int getLimitePret() {
+        return this.limitePret;
+    }
+
+    public void setLimitePret(int limitePret) {
+        this.limitePret = limitePret;
+    }
+
+    public int getNbPret() {
+        return this.nbPret;
+    }
+
+    public void setNbPret(int nbPret) {
+        this.nbPret = nbPret;
+    }
 }
