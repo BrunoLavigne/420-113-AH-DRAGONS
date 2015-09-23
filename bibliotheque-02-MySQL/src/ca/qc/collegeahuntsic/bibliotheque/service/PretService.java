@@ -1,6 +1,3 @@
-// Fichier PretService.java
-// Auteur : Dragons Vicieux
-// Date de création : 2015-09-18
 
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
@@ -13,7 +10,8 @@ import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
-import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
 /**
  * Gestion des transactions reliées aux prêts de livres
@@ -53,14 +51,14 @@ public class PretService extends Services {
      * @param livre
      * @param membre
      * @param reservation
-     * @throws BibliothequeException
+     * @throws ServiceException
      */
     public PretService(LivreDAO livre,
         MembreDAO membre,
-        ReservationDAO reservation) throws BibliothequeException {
+        ReservationDAO reservation) throws ServiceException {
         if(livre.getConnexion() != membre.getConnexion()
             || reservation.getConnexion() != membre.getConnexion()) {
-            throw new BibliothequeException("Les instances de livre, de membre et de réservation n'utilisent pas la même connexion au serveur");
+            throw new ServiceException("Les instances de livre, de membre et de réservation n'utilisent pas la même connexion au serveur");
         }
         setCx(livre.getConnexion());
         setLivre(livre);
@@ -71,29 +69,25 @@ public class PretService extends Services {
     /**
      * Prêt d'un livre à un membre.
      * Le livre ne doit pas être prêté.
-     * Le membre ne doit pas avoir dépassé sa limite de prêt.
+     * Le membre ne doit pas avoir dépasser sa limite de prêt.
      *
      * @param idLivre
      * @param idMembre
      * @param datePret
-     * @throws SQLException
-     * @throws BibliothequeException
-     * @throws Exception
+     * @throws ServiceException
      */
     public void preter(int idLivre,
         int idMembre,
-        String datePret) throws SQLException,
-        BibliothequeException,
-        Exception {
+        String datePret) throws ServiceException {
         try {
             // Vérfie si le livre est disponible
             LivreDTO tupleLivre = getLivre().getLivre(idLivre);
             if(tupleLivre == null) {
-                throw new BibliothequeException("Livre inexistant: "
+                throw new ServiceException("Livre inexistant: "
                     + idLivre);
             }
             if(tupleLivre.getIdMembre() != 0) {
-                throw new BibliothequeException("Livre "
+                throw new ServiceException("Livre "
                     + idLivre
                     + " déjà prêté à "
                     + tupleLivre.getIdMembre());
@@ -102,11 +96,11 @@ public class PretService extends Services {
             // Vérifie si le membre existe et sa limite de prêt
             MembreDTO tupleMembre = getMembre().getMembre(idMembre);
             if(tupleMembre == null) {
-                throw new BibliothequeException("Membre inexistant: "
+                throw new ServiceException("Membre inexistant: "
                     + idMembre);
             }
             if(tupleMembre.getNbPret() >= tupleMembre.getLimitePret()) {
-                throw new BibliothequeException("Limite de prêt du membre "
+                throw new ServiceException("Limite de prêt du membre "
                     + idMembre
                     + " atteinte");
             }
@@ -114,7 +108,7 @@ public class PretService extends Services {
             // Vérifie s'il existe une réservation pour le livre.
             ReservationDTO tupleReservation = getReservation().getReservationLivre(idLivre);
             if(tupleReservation != null) {
-                throw new BibliothequeException("Livre réservé par : "
+                throw new ServiceException("Livre réservé par : "
                     + tupleReservation.getIdMembre()
                     + " idReservation : "
                     + tupleReservation.getIdReservation());
@@ -125,16 +119,17 @@ public class PretService extends Services {
                 idMembre,
                 datePret);
             if(nb1 == 0) {
-                throw new BibliothequeException("Livre suprimé par une autre transaction");
+                throw new ServiceException("Livre suprimé par une autre transaction");
             }
             int nb2 = getMembre().preter(idMembre);
             if(nb2 == 0) {
-                throw new BibliothequeException("Membre suprimé par une autre transaction");
+                throw new ServiceException("Membre suprimé par une autre transaction");
             }
             getCx().commit();
-        } catch(Exception e) {
             getCx().rollback();
-            throw e;
+        } catch(Exception exception) {
+
+            throw new ServiceException(exception);
         }
     }
 
@@ -145,36 +140,35 @@ public class PretService extends Services {
      *
      * @param idLivre
      * @param datePret
-     * @throws SQLException
-     * @throws BibliothequeException
-     * @throws Exception
+     * @throws ServiceException
      */
     public void renouveler(int idLivre,
-        String datePret) throws SQLException,
-        BibliothequeException,
-        Exception {
+        String datePret) throws ServiceException {
         try {
             // Vérifie si le livre est prêté
-            LivreDTO tupleLivre = getLivre().getLivre(idLivre);
+            LivreDTO tupleLivre;
+
+            tupleLivre = getLivre().getLivre(idLivre);
+
             if(tupleLivre == null) {
-                throw new BibliothequeException("Livre inexistant: "
+                throw new ServiceException("Livre inexistant: "
                     + idLivre);
             }
             if(tupleLivre.getIdMembre() == 0) {
-                throw new BibliothequeException("Livre "
+                throw new ServiceException("Livre "
                     + idLivre
                     + " n'est pas prêté");
             }
 
             // Vérifie si date renouvellement >= datePret
             if(Date.valueOf(datePret).before(tupleLivre.getDatePret())) {
-                throw new BibliothequeException("Date de renouvellement inférieure à la date de prêt");
+                throw new ServiceException("Date de renouvellement inférieure à la date de prêt");
             }
 
             // Vérifie s'il existe une réservation pour le livre.
             ReservationDTO tupleReservation = getReservation().getReservationLivre(idLivre);
             if(tupleReservation != null) {
-                throw new BibliothequeException("Livre réservé par : "
+                throw new ServiceException("Livre réservé par : "
                     + tupleReservation.getIdMembre()
                     + " idReservation : "
                     + tupleReservation.getIdReservation());
@@ -185,13 +179,17 @@ public class PretService extends Services {
                 tupleLivre.getIdMembre(),
                 datePret);
             if(nb1 == 0) {
-                throw new BibliothequeException("Livre suprimé par une autre transaction");
+                throw new ServiceException("Livre suprimé par une autre transaction");
             }
             getCx().commit();
-        } catch(Exception e) {
             getCx().rollback();
-            throw e;
+
+        } catch(SQLException sqlException) {
+            throw new ServiceException(sqlException);
+        } catch(ConnexionException connectionException) {
+            throw new ServiceException(connectionException);
         }
+
     }
 
     /**
@@ -200,46 +198,44 @@ public class PretService extends Services {
      *
      * @param idLivre
      * @param dateRetour
-     * @throws SQLException
-     * @throws BibliothequeException
-     * @throws Exception
+     * @throws ServiceException
      */
     public void retourner(int idLivre,
-        String dateRetour) throws SQLException,
-        BibliothequeException,
-        Exception {
+        String dateRetour) throws ServiceException {
         try {
             // Vérifie si le livre est prêté
             LivreDTO tupleLivre = getLivre().getLivre(idLivre);
             if(tupleLivre == null) {
-                throw new BibliothequeException("Livre inexistant: "
+                throw new ServiceException("Livre inexistant: "
                     + idLivre);
             }
             if(tupleLivre.getIdMembre() == 0) {
-                throw new BibliothequeException("Livre "
+                throw new ServiceException("Livre "
                     + idLivre
                     + " n'est pas prêté ");
             }
 
             // Vérifie si date retour >= datePret
             if(Date.valueOf(dateRetour).before(tupleLivre.getDatePret())) {
-                throw new BibliothequeException("Date de retour inférieure à la date de prêt");
+                throw new ServiceException("Date de retour inférieure à la date de prêt");
             }
 
             // Retour du prêt
             int nb1 = getLivre().retourner(idLivre);
             if(nb1 == 0) {
-                throw new BibliothequeException("Livre suprimé par une autre transaction");
+                throw new ServiceException("Livre suprimé par une autre transaction");
             }
 
             int nb2 = this.membre.retourner(tupleLivre.getIdMembre());
             if(nb2 == 0) {
-                throw new BibliothequeException("Livre suprimé par une autre transaction");
+                throw new ServiceException("Livre suprimé par une autre transaction");
             }
             getCx().commit();
-        } catch(Exception e) {
             getCx().rollback();
-            throw e;
+
+        } catch(Exception exception) {
+
+            throw new ServiceException(exception);
         }
 
     }
