@@ -58,11 +58,13 @@ public class LivreService extends Services {
      * @param auteur
      * @param dateAcquisition
      * @throws ServiceException
+     * @throws ConnexionException
      */
     public void acquerir(int idLivre,
         String titre,
         String auteur,
-        String dateAcquisition) throws ServiceException {
+        String dateAcquisition) throws ServiceException,
+        ConnexionException {
 
         try {
             //Vérifie si le livre existe  déjà
@@ -79,9 +81,12 @@ public class LivreService extends Services {
                 dateAcquisition);
 
             getCx().commit();
+
         } catch(ConnexionException connexionException) {
+            getCx().rollback();
             throw new ServiceException(connexionException);
         } catch(SQLException sqlException) {
+            getCx().rollback();
             throw new ServiceException(sqlException);
         }
 
@@ -91,8 +96,10 @@ public class LivreService extends Services {
      * Vente d'un livre
      * @param idLivre
      * @throws ServiceException
+     * @throws ConnexionException
      */
-    public void vendre(int idLivre) throws ServiceException {
+    public void vendre(int idLivre) throws ServiceException,
+        ConnexionException {
         try {
             LivreDTO tupleLivre = getLivre().getLivre(idLivre);
             if(tupleLivre == null) {
@@ -120,10 +127,11 @@ public class LivreService extends Services {
             }
             getCx().commit();
 
-            getCx().rollback();
         } catch(ConnexionException connexionException) {
+            getCx().rollback();
             throw new ServiceException(connexionException);
         } catch(Exception exception) {
+            getCx().rollback();
             throw new ServiceException(exception);
         }
 

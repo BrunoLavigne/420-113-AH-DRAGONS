@@ -44,13 +44,13 @@ public class GestionInterrogationService {
      */
     public GestionInterrogationService(Connexion cx) throws ServiceException {
         try {
-            getCx().equals(cx);
+            setCx(cx);
 
-            getStmtLivresTitreMot().equals(cx.getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret + 14 "
+            setStmtLivresTitreMot(getCx().getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret + 14 "
                 + "from livre t1 "
                 + "where lower(titre) like ?"));
 
-            getStmtListeTousLivres().equals(cx.getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret "
+            setStmtListeTousLivres(getCx().getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret "
                 + "from livre t1"));
         } catch(SQLException sqlException) {
             throw new ServiceException(sqlException);
@@ -165,6 +165,33 @@ public class GestionInterrogationService {
      */
     public Connexion getCx() {
         return this.cx;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.cx</code>.
+     *
+     * @param cx La valeur à utiliser pour la variable d'instance <code>this.cx</code>
+     */
+    private void setCx(Connexion cx) {
+        this.cx = cx;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtLivresTitreMot</code>.
+     *
+     * @param stmtLivresTitreMot La valeur à utiliser pour la variable d'instance <code>this.stmtLivresTitreMot</code>
+     */
+    private void setStmtLivresTitreMot(PreparedStatement stmtLivresTitreMot) {
+        this.stmtLivresTitreMot = stmtLivresTitreMot;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtListeTousLivres</code>.
+     *
+     * @param stmtListeTousLivres La valeur à utiliser pour la variable d'instance <code>this.stmtListeTousLivres</code>
+     */
+    private void setStmtListeTousLivres(PreparedStatement stmtListeTousLivres) {
+        this.stmtListeTousLivres = stmtListeTousLivres;
     }
 
 }

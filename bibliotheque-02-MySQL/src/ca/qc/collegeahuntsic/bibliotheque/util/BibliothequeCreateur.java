@@ -12,6 +12,7 @@ import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 import ca.qc.collegeahuntsic.bibliotheque.service.GestionInterrogationService;
 import ca.qc.collegeahuntsic.bibliotheque.service.LivreService;
 import ca.qc.collegeahuntsic.bibliotheque.service.MembreService;
@@ -64,6 +65,7 @@ public class BibliothequeCreateur {
      * @param user id pour établir une connexion avec le serveur SQL
      * @param password mot de passe pour le user id
      * @throws BibliothequeException
+     * @throws ServiceException
      *
      */
     public BibliothequeCreateur(String serveur,
@@ -92,8 +94,8 @@ public class BibliothequeCreateur {
                 getReservation()));
             setGestionInterrogation(new GestionInterrogationService(getCx()));
 
-        } catch(BibliothequeException bibliothequeException) {
-            throw new BibliothequeException(bibliothequeException);
+        } catch(ServiceException serviceException) {
+            throw new BibliothequeException(serviceException);
 
         } catch(SQLException sqlException) {
             throw new BibliothequeException(sqlException);
@@ -110,12 +112,12 @@ public class BibliothequeCreateur {
     /**
      * @throws ConnexionException
      */
-    public void fermer() throws ConnexionException {
+    public void fermer() throws BibliothequeException {
         // fermeture de la connexion
         try {
             this.cx.fermer();
         } catch(ConnexionException connexionException) {
-            throw new ConnexionException(connexionException);
+            throw new BibliothequeException(connexionException);
         }
     }
 
