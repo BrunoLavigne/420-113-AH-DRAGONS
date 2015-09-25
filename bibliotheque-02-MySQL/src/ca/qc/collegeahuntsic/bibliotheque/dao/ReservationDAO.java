@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
+import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 
 /**
  * <pre>
@@ -59,16 +60,21 @@ public class ReservationDAO extends DAO {
      * Creation d'une instance.
      *
      * @param cx
-     * @throws SQLException
+     * @throws DAOException
      */
-    public ReservationDAO(Connexion cx) throws SQLException {
+    public ReservationDAO(Connexion cx) throws DAOException {
 
         setCx(cx);
-        setStmtExiste(getCx().getConnection().prepareStatement(READ_REQUEST));
-        setStmtExisteLivre(getCx().getConnection().prepareStatement(FIND_BY_LIVRE));
-        setStmtExisteMembre(getCx().getConnection().prepareStatement(FIND_BY_MEMBRE));
-        setStmtInsert(getCx().getConnection().prepareStatement(ADD_REQUEST));
-        setStmtDelete(getCx().getConnection().prepareStatement(DELETE_REQUEST));
+
+        try {
+            setStmtExiste(getCx().getConnection().prepareStatement(READ_REQUEST));
+            setStmtExisteLivre(getCx().getConnection().prepareStatement(FIND_BY_LIVRE));
+            setStmtExisteMembre(getCx().getConnection().prepareStatement(FIND_BY_MEMBRE));
+            setStmtInsert(getCx().getConnection().prepareStatement(ADD_REQUEST));
+            setStmtDelete(getCx().getConnection().prepareStatement(DELETE_REQUEST));
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
     }
 
     /**
@@ -87,19 +93,24 @@ public class ReservationDAO extends DAO {
      *
      * @param idReservation
      * @return boolean Si la réservation existe
-     * @throws SQLException
+     * @throws DAOException
      */
-    public boolean existe(int idReservation) throws SQLException {
+    public boolean existe(int idReservation) throws DAOException {
 
-        getStmtExiste().setInt(1,
-            idReservation);
+        try {
+            getStmtExiste().setInt(1,
+                idReservation);
+            try(
+                ResultSet rset = getStmtExiste().executeQuery()) {
+                boolean reservationExiste = rset.next();
+                rset.close();
+                return reservationExiste;
+            }
 
-        @SuppressWarnings("resource")
-        // TODO fix warning
-        ResultSet rset = getStmtExiste().executeQuery();
-        boolean reservationExiste = rset.next();
-        rset.close();
-        return reservationExiste;
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
+
     }
 
     /**
@@ -108,25 +119,34 @@ public class ReservationDAO extends DAO {
      *
      * @param idReservation
      * @return TupleReservation La réservation
-     * @throws SQLException
+     * @throws DAOException
      */
-    @SuppressWarnings("resource")
+
     // TODO fix warning
-    public ReservationDTO getReservation(int idReservation) throws SQLException {
+    public ReservationDTO getReservation(int idReservation) throws DAOException {
 
-        getStmtExiste().setInt(1,
-            idReservation);
-        ResultSet rset = getStmtExiste().executeQuery();
-        if(rset.next()) {
-            ReservationDTO tupleReservation = new ReservationDTO();
-            tupleReservation.setIdReservation(rset.getInt(1));
-            tupleReservation.setIdLivre(rset.getInt(2));
+        try {
+            getStmtExiste().setInt(1,
 
-            tupleReservation.setIdMembre(rset.getInt(3));
-            tupleReservation.setDateReservation(rset.getDate(4));
-            return tupleReservation;
+                idReservation);
+            try(
+                ResultSet rset = getStmtExiste().executeQuery()) {
+                if(rset.next()) {
+                    ReservationDTO tupleReservation = new ReservationDTO();
+                    tupleReservation.setIdReservation(rset.getInt(1));
+                    tupleReservation.setIdLivre(rset.getInt(2));
+
+                    tupleReservation.setIdMembre(rset.getInt(3));
+                    tupleReservation.setDateReservation(rset.getDate(4));
+                    return tupleReservation;
+                }
+            }
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
         }
+
         return null;
+
     }
 
     /**
@@ -135,23 +155,30 @@ public class ReservationDAO extends DAO {
      *
      * @param idLivre
      * @return TupleReservation La réservation du livre
-     * @throws SQLException
+     * @throws DAOException
      */
-    @SuppressWarnings("resource")
+
     // TODO fix warning
-    public ReservationDTO getReservationLivre(int idLivre) throws SQLException {
+    public ReservationDTO getReservationLivre(int idLivre) throws DAOException {
 
-        getStmtExisteLivre().setInt(1,
-            idLivre);
-        ResultSet rset = getStmtExisteLivre().executeQuery();
-        if(rset.next()) {
-            ReservationDTO tupleReservation = new ReservationDTO();
-            tupleReservation.setIdReservation(rset.getInt(1));
-            tupleReservation.setIdLivre(rset.getInt(2));
+        try {
+            getStmtExisteLivre().setInt(1,
+                idLivre);
+            try(
+                ResultSet rset = getStmtExisteLivre().executeQuery()) {
+                if(rset.next()) {
+                    ReservationDTO tupleReservation = new ReservationDTO();
+                    tupleReservation.setIdReservation(rset.getInt(1));
+                    tupleReservation.setIdLivre(rset.getInt(2));
 
-            tupleReservation.setIdMembre(rset.getInt(3));
-            tupleReservation.setDateReservation(rset.getDate(4));
-            return tupleReservation;
+                    tupleReservation.setIdMembre(rset.getInt(3));
+                    tupleReservation.setDateReservation(rset.getDate(4));
+                    return tupleReservation;
+                }
+            }
+
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
         }
         return null;
     }
@@ -162,23 +189,29 @@ public class ReservationDAO extends DAO {
      *
      * @param idMembre
      * @return TupleReservation réservation membre
-     * @throws SQLException
+     * @throws DAOException
      */
-    @SuppressWarnings("resource")
+
     // TODO fix warning
-    public ReservationDTO getReservationMembre(int idMembre) throws SQLException {
+    public ReservationDTO getReservationMembre(int idMembre) throws DAOException {
 
-        getStmtExisteMembre().setInt(1,
-            idMembre);
-        ResultSet rset = getStmtExisteMembre().executeQuery();
-        if(rset.next()) {
-            ReservationDTO tupleReservation = new ReservationDTO();
-            tupleReservation.setIdReservation(rset.getInt(1));
-            tupleReservation.setIdLivre(rset.getInt(2));
+        try {
+            getStmtExisteMembre().setInt(1,
+                idMembre);
+            try(
+                ResultSet rset = getStmtExisteMembre().executeQuery()) {
+                if(rset.next()) {
+                    ReservationDTO tupleReservation = new ReservationDTO();
+                    tupleReservation.setIdReservation(rset.getInt(1));
+                    tupleReservation.setIdLivre(rset.getInt(2));
 
-            tupleReservation.setIdMembre(rset.getInt(3));
-            tupleReservation.setDateReservation(rset.getDate(4));
-            return tupleReservation;
+                    tupleReservation.setIdMembre(rset.getInt(3));
+                    tupleReservation.setDateReservation(rset.getDate(4));
+                    return tupleReservation;
+                }
+            }
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
         }
         return null;
     }
@@ -191,21 +224,25 @@ public class ReservationDAO extends DAO {
      * @param idLivre
      * @param idMembre
      * @param dateReservation
-     * @throws SQLException
+     * @throws DAOException
      */
     public void reserver(int idReservation,
         int idLivre,
         int idMembre,
-        String dateReservation) throws SQLException {
-        getStmtInsert().setInt(1,
-            idReservation);
-        getStmtInsert().setInt(2,
-            idLivre);
-        getStmtInsert().setInt(3,
-            idMembre);
-        getStmtInsert().setDate(4,
-            Date.valueOf(dateReservation));
-        getStmtInsert().executeUpdate();
+        String dateReservation) throws DAOException {
+        try {
+            getStmtInsert().setInt(1,
+                idReservation);
+            getStmtInsert().setInt(2,
+                idLivre);
+            getStmtInsert().setInt(3,
+                idMembre);
+            getStmtInsert().setDate(4,
+                Date.valueOf(dateReservation));
+            getStmtInsert().executeUpdate();
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
     }
 
     /**
@@ -214,12 +251,16 @@ public class ReservationDAO extends DAO {
      *
      * @param idReservation
      * @return int annulerRes
-     * @throws SQLException
+     * @throws DAOException
      */
-    public int annulerRes(int idReservation) throws SQLException {
-        getStmtDelete().setInt(1,
-            idReservation);
-        return getStmtDelete().executeUpdate();
+    public int annulerRes(int idReservation) throws DAOException {
+        try {
+            getStmtDelete().setInt(1,
+                idReservation);
+            return getStmtDelete().executeUpdate();
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
     }
 
     // GETTER ET SETTER

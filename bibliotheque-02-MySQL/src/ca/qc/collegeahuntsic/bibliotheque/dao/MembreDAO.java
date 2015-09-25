@@ -112,10 +112,10 @@ public class MembreDAO extends DAO {
     public MembreDTO getMembre(int idMembre) throws DAOException {
 
         try {
-            this.stmtExiste.setInt(1,
+            getStmtExiste().setInt(1,
                 idMembre);
             try(
-                ResultSet rset = this.stmtExiste.executeQuery()) {
+                ResultSet rset = getStmtExiste().executeQuery()) {
                 if(rset.next()) {
                     MembreDTO tupleMembre = new MembreDTO();
                     tupleMembre.setIdMembre(idMembre);
