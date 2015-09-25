@@ -11,6 +11,7 @@ import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
 /**
@@ -199,6 +200,8 @@ public class PretService extends Services {
             } catch(ConnexionException connexionException) {
                 throw new ServiceException(connexionException);
             }
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
         }
 
     }
