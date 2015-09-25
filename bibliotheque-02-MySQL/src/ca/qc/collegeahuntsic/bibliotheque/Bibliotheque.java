@@ -67,17 +67,18 @@ public class Bibliotheque {
                 + argv[4])) {
             // ouverture du fichier de transactions
 
-            // TODO REMOVE WARNING
-            @SuppressWarnings("resource")
-            BufferedReader reader = new BufferedReader(new InputStreamReader(sourceTransaction));
-
-            setGestionBiblio(new BibliothequeCreateur(argv[0],
-                argv[1],
-                argv[2],
-                argv[3]));
-            traiterTransactions(reader);
+            try(
+                BufferedReader reader = new BufferedReader(new InputStreamReader(sourceTransaction))) {
+                setGestionBiblio(new BibliothequeCreateur(argv[0],
+                    argv[1],
+                    argv[2],
+                    argv[3]));
+                traiterTransactions(reader);
+                reader.close();
+            }
         } catch(Exception exception) {
-            //throw new BibliothequeException(exception);
+            // CHECK & TEST runtime error.
+            throw new BibliothequeException(exception);
         } finally {
             getGestionBiblio().fermer();
         }
@@ -105,6 +106,15 @@ public class Bibliotheque {
                 if(tokenizer.hasMoreTokens()) {
                     executerTransaction(tokenizer);
                 }
+                /*
+                 * TODO Big time, changer le tokenizer pour un split va prendre du temps;
+                 * il faut modifier aussi la methodeexecuterTransaction...
+                 *
+                String[] parts = transaction.split(" ");
+                for (int i=0; i<parts.length; i++){
+                    executerTransaction(parts[i]);
+                }
+                 */
                 transaction = lireTransaction(reader);
             }
         } catch(Exception exceptions) {
