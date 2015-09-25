@@ -39,17 +39,26 @@ public class ReservationDAO extends DAO {
     private final static String SELECT_REQUEST = "select idReservation, idLivre, idMembre, dateReservation "
         + "from reservation where idReservation = ?";
 
-    private final static String SECOND_SELECT_REQUEST = "select idReservation, idLivre, idMembre, dateReservation "
-        + "from reservation where idLivre = ? "
-        + "order by dateReservation";
-
-    private final static String THIRD_SELECT_REQUEST = "select idReservation, idLivre, idMembre, dateReservation "
-        + "from reservation where idMembre = ? ";
-
-    private final static String INSERT_REQUEST = "insert into reservation (idReservation, idlivre, idMembre, dateReservation) "
+    private final static String INSERT_REQUEST = "INSERT INTO reservation (idReservation, idlivre, idMembre, dateReservation) "
         + "values (?,?,?,str_to_date(?, '%Y-%m-%d'))";
 
-    private final static String DELETE_REQUEST = "delete from reservation where idReservation = ?";
+    private final static String DELETE_REQUEST = "DELETE FROM reservation WHERE idReservation = ?";
+    
+    @SuppressWarnings("unused")
+    private final static String GET_ALL_RESERVATIONS = "SELECT idReservation, idLivre, idMembre, dateReservation "
+                                                     + "FROM reservation";
+    
+    private final static String FIND_BY_MEMBRE = "SELECT idReservation, idLivre, idMembre, dateReservation "
+                                               + "FROM reservation where idMembre = ?";
+    
+    private final static String FIND_BY_LIVRE = "SELECT idReservation, idLivre, idMembre, dateReservation "
+                                              + "FROM reservation where idLivre = ? "
+                                              + "ORDER BY dateReservation";
+    
+   @SuppressWarnings("unused")
+private final static String FIND_BY_RESERVATION = "SELECT idReservation, idLivre, idMembre, dateReservation "
+                                                   + "FROM reservation "
+                                                   + "WHERE idReservation = ?";
 
     /**
      * Creation d'une instance.
@@ -61,8 +70,8 @@ public class ReservationDAO extends DAO {
 
         setCx(cx);
         setStmtExiste(getCx().getConnection().prepareStatement(SELECT_REQUEST));
-        setStmtExisteLivre(getCx().getConnection().prepareStatement(SECOND_SELECT_REQUEST));
-        setStmtExisteMembre(getCx().getConnection().prepareStatement(THIRD_SELECT_REQUEST));
+        setStmtExisteLivre(getCx().getConnection().prepareStatement(FIND_BY_LIVRE));
+        setStmtExisteMembre(getCx().getConnection().prepareStatement(FIND_BY_MEMBRE));
         setStmtInsert(getCx().getConnection().prepareStatement(INSERT_REQUEST));
         setStmtDelete(getCx().getConnection().prepareStatement(DELETE_REQUEST));
     }

@@ -11,6 +11,9 @@ import java.sql.SQLException;
 import java.sql.Types;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
 /**
  * Permet d'effectuer les accès à la table livre.
@@ -28,6 +31,10 @@ public class LivreDAO extends DAO {
 
     private PreparedStatement stmtDelete;
 
+    private PreparedStatement stmtLivresTitreMot;
+
+    private PreparedStatement stmtListeTousLivres;
+
     private final static String SELECT_REQUEST = "select idlivre, titre, auteur, dateAcquisition, idMembre, datePret from livre where idlivre = ?";
 
     private final static String INSERT_REQUEST = "insert into livre (idLivre, titre, auteur, dateAcquisition, idMembre, datePret) "
@@ -38,6 +45,18 @@ public class LivreDAO extends DAO {
 
     private final static String DELETE_REQUEST = "delete from livre where idlivre = ?";
 
+    private final static String GET_ALL_REQUESTS = "select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret "
+        + "from livre t1";
+
+    private final static String FIND_BY_TITRE = "SELECT t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret + 14 "
+        + "FROM LIVRE t1 "
+        + "WHERE LOWER(titre) LIKE %?%";
+
+    private final static String FIND_BY_MEMBRE = "select idMembre, nom, telephone, limitePret, nbpret from membre where idmembre = ?";
+
+    private final static String SECOND_SELECT_REQUEST = "select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret "
+        + "from livre t1";
+
     private Connexion cx;
 
     /**
@@ -45,15 +64,26 @@ public class LivreDAO extends DAO {
      * Creation d'une instance. Des énoncés SQL pour chaque requête sont précompilés.
      *
      * @param cx
-     * @throws SQLException
+     * @throws DAOException
      */
-    public LivreDAO(Connexion cx) throws SQLException {
+    public LivreDAO(Connexion cx) throws DAOException {
 
         setCx(cx);
-        setStmtExiste(getCx().getConnection().prepareStatement(SELECT_REQUEST));
-        setStmtInsert(getCx().getConnection().prepareStatement(INSERT_REQUEST));
-        setStmtUpdate(getCx().getConnection().prepareStatement(UPDATE_REQUEST));
-        setStmtDelete(getCx().getConnection().prepareStatement(DELETE_REQUEST));
+
+        try {
+            setStmtExiste(getCx().getConnection().prepareStatement(SELECT_REQUEST));
+
+            setStmtInsert(getCx().getConnection().prepareStatement(INSERT_REQUEST));
+            setStmtUpdate(getCx().getConnection().prepareStatement(UPDATE_REQUEST));
+            setStmtDelete(getCx().getConnection().prepareStatement(DELETE_REQUEST));
+
+            // MERGE
+            setStmtLivresTitreMot(getCx().getConnection().prepareStatement(FIND_BY_TITRE));
+            setStmtListeTousLivres(getCx().getConnection().prepareStatement(SECOND_SELECT_REQUEST));
+
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
     }
 
     /**
@@ -63,7 +93,6 @@ public class LivreDAO extends DAO {
      * @return la connexion
      */
     public Connexion getConnexion() {
-
         return this.cx;
     }
 
@@ -198,6 +227,94 @@ public class LivreDAO extends DAO {
         return getStmtDelete().executeUpdate();
     }
 
+    // MERGE GESTION INTERROGATION SERVICE
+
+    /**
+     *
+     * Affiche les livres contenant un mot dans le titre
+     *
+     * @param mot
+     * @throws ServiceException
+     */
+    public void listerLivresTitre(String mot) throws ServiceException {
+
+        try {
+            getStmtLivresTitreMot().setString(1,
+                mot);
+
+            @SuppressWarnings("resource")
+            // TODO fix warning
+            ResultSet rset = getStmtLivresTitreMot().executeQuery();
+
+            int idMembre;
+            System.out.println("idLivre titre auteur idMembre dateRetour");
+            while(rset.next()) {
+                System.out.print(rset.getInt(1)
+                    + " "
+                    + rset.getString(2)
+                    + " "
+                    + rset.getString(3));
+                idMembre = rset.getInt(4);
+                if(!rset.wasNull()) {
+                    System.out.print(" "
+                        + idMembre
+                        + " "
+                        + rset.getDate(5));
+                }
+                System.out.println();
+            }
+            getCx().commit();
+        } catch(ConnexionException connexionException) {
+            throw new ServiceException(connexionException);
+        } catch(SQLException sqlException) {
+            throw new ServiceException(sqlException);
+        }
+    }
+
+    /**
+    *
+    * Affiche tous les livres de la BD
+    *
+    * @throws ServiceException
+    */
+    @SuppressWarnings("resource")
+    public void listerLivres() throws ServiceException {
+
+        try {
+            ResultSet rset;
+            rset = getStmtListeTousLivres().executeQuery();
+
+            System.out.println("idLivre titre auteur idMembre datePret");
+            int idMembre;
+            while(rset.next()) {
+                System.out.print(rset.getInt("idLivre")
+                    + " "
+                    + rset.getString("titre")
+                    + " "
+                    + rset.getString("auteur"));
+                idMembre = rset.getInt("idMembre");
+                if(!rset.wasNull()) {
+                    System.out.print(" "
+                        + idMembre
+                        + " "
+                        + rset.getDate("datePret"));
+                }
+                System.out.println();
+            }
+
+            // TODO REMOVE THIS
+            System.out.println(GET_ALL_REQUESTS
+                + " "
+                + FIND_BY_MEMBRE);
+
+            getCx().commit();
+        } catch(ConnexionException connexionException) {
+            throw new ServiceException(connexionException);
+        } catch(SQLException sqlException) {
+            throw new ServiceException(sqlException);
+        }
+    }
+
     //Getter et Setter
 
     /**
@@ -288,5 +405,41 @@ public class LivreDAO extends DAO {
      */
     private void setCx(Connexion cx) {
         this.cx = cx;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtLivresTitreMot</code>.
+     *
+     * @return La variable d'instance <code>this.stmtLivresTitreMot</code>
+     */
+    public PreparedStatement getStmtLivresTitreMot() {
+        return this.stmtLivresTitreMot;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.stmtListeTousLivres</code>.
+     *
+     * @return La variable d'instance <code>this.stmtListeTousLivres</code>
+     */
+    public PreparedStatement getStmtListeTousLivres() {
+        return this.stmtListeTousLivres;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtLivresTitreMot</code>.
+     *
+     * @param stmtLivresTitreMot La valeur à utiliser pour la variable d'instance <code>this.stmtLivresTitreMot</code>
+     */
+    private void setStmtLivresTitreMot(PreparedStatement stmtLivresTitreMot) {
+        this.stmtLivresTitreMot = stmtLivresTitreMot;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.stmtListeTousLivres</code>.
+     *
+     * @param stmtListeTousLivres La valeur à utiliser pour la variable d'instance <code>this.stmtListeTousLivres</code>
+     */
+    private void setStmtListeTousLivres(PreparedStatement stmtListeTousLivres) {
+        this.stmtListeTousLivres = stmtListeTousLivres;
     }
 }

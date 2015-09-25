@@ -186,9 +186,9 @@ public class Bibliotheque {
             } else if("annulerRes".startsWith(command)) {
                 getGestionBiblio().getGestionReservation().annulerRes(readInt(tokenizer) /* idReservation */);
             } else if("listerLivres".startsWith(command)) {
-                getGestionBiblio().getGestionInterrogation().listerLivres();
+                getGestionBiblio().getLivre().listerLivres();
             } else if("listerLivresTitre".startsWith(command)) {
-                getGestionBiblio().getGestionInterrogation().listerLivresTitre(readString(tokenizer) /* mot */);
+                getGestionBiblio().getLivre().listerLivresTitre(readString(tokenizer) /* mot */);
             } else if("--".startsWith(command)) {
                 // TODO empty block
             }// ne rien faire; c'est un commentaire
