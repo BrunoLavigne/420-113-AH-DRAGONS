@@ -35,15 +35,11 @@ public class MembreDAO extends DAO {
     private final static String INSERT_REQUEST = "insert into membre (idmembre, nom, telephone, limitepret, nbpret) "
         + "values (?,?,?,?,0)";
 
-    private final static String UPDATE_REQUEST = "update membre set nbpret = nbPret + 1 where idMembre = ?";
+    private final static String UPDATE_REQUEST_ADD_PRET = "update membre set nbpret = nbPret + 1 where idMembre = ?";
 
-    private final static String SECOND_UPDATE_REQUEST = "update membre set nbpret = nbPret - 1 where idMembre = ?";
+    private final static String UPDATE_REQUEST_REMOVE_PRET = "update membre set nbpret = nbPret - 1 where idMembre = ?";
 
     private final static String DELETE_REQUEST = "delete from membre where idmembre = ?";
-    
-    // TODO FIX THIS
-    @SuppressWarnings("unused")
-    private final static String GET_ALL_REQUESTS = "select idMembre, nom, telephone, limitePret, nbpret from membre";
 
     private Connexion cx;
 
@@ -61,8 +57,8 @@ public class MembreDAO extends DAO {
             setCx(cx);
             setStmtExiste(getCx().getConnection().prepareStatement(SELECT_REQUEST));
             setStmtInsert(getCx().getConnection().prepareStatement(INSERT_REQUEST));
-            setStmtUpdateIncrNbPret(getCx().getConnection().prepareStatement(UPDATE_REQUEST));
-            setStmtUpdateDecNbPret(getCx().getConnection().prepareStatement(SECOND_UPDATE_REQUEST));
+            setStmtUpdateIncrNbPret(getCx().getConnection().prepareStatement(UPDATE_REQUEST_ADD_PRET));
+            setStmtUpdateDecNbPret(getCx().getConnection().prepareStatement(UPDATE_REQUEST_REMOVE_PRET));
             setStmtDelete(getCx().getConnection().prepareStatement(DELETE_REQUEST));
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
