@@ -36,6 +36,21 @@ public class ReservationDAO extends DAO {
 
     private Connexion cx;
 
+    private final static String SELECT_REQUEST = "select idReservation, idLivre, idMembre, dateReservation "
+        + "from reservation where idReservation = ?";
+
+    private final static String SECOND_SELECT_REQUEST = "select idReservation, idLivre, idMembre, dateReservation "
+        + "from reservation where idLivre = ? "
+        + "order by dateReservation";
+
+    private final static String THIRD_SELECT_REQUEST = "select idReservation, idLivre, idMembre, dateReservation "
+        + "from reservation where idMembre = ? ";
+
+    private final static String INSERT_REQUEST = "insert into reservation (idReservation, idlivre, idMembre, dateReservation) "
+        + "values (?,?,?,str_to_date(?, '%Y-%m-%d'))";
+
+    private final static String DELETE_REQUEST = "delete from reservation where idReservation = ?";
+
     /**
      * Creation d'une instance.
      *
@@ -45,16 +60,11 @@ public class ReservationDAO extends DAO {
     public ReservationDAO(Connexion cx) throws SQLException {
 
         setCx(cx);
-        setStmtExiste(getCx().getConnection().prepareStatement("select idReservation, idLivre, idMembre, dateReservation "
-            + "from reservation where idReservation = ?"));
-        setStmtExisteLivre(getCx().getConnection().prepareStatement("select idReservation, idLivre, idMembre, dateReservation "
-            + "from reservation where idLivre = ? "
-            + "order by dateReservation"));
-        setStmtExisteMembre(getCx().getConnection().prepareStatement("select idReservation, idLivre, idMembre, dateReservation "
-            + "from reservation where idMembre = ? "));
-        setStmtInsert(getCx().getConnection().prepareStatement("insert into reservation (idReservation, idlivre, idMembre, dateReservation) "
-            + "values (?,?,?,str_to_date(?, '%Y-%m-%d'))"));
-        setStmtDelete(getCx().getConnection().prepareStatement("delete from reservation where idReservation = ?"));
+        setStmtExiste(getCx().getConnection().prepareStatement(SELECT_REQUEST));
+        setStmtExisteLivre(getCx().getConnection().prepareStatement(SECOND_SELECT_REQUEST));
+        setStmtExisteMembre(getCx().getConnection().prepareStatement(THIRD_SELECT_REQUEST));
+        setStmtInsert(getCx().getConnection().prepareStatement(INSERT_REQUEST));
+        setStmtDelete(getCx().getConnection().prepareStatement(DELETE_REQUEST));
     }
 
     /**

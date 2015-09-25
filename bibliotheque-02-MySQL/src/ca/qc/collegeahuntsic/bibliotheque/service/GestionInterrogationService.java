@@ -33,6 +33,13 @@ public class GestionInterrogationService {
 
     private PreparedStatement stmtListeTousLivres;
 
+    private final static String SELECT_REQUEST = "select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret + 14 "
+        + "from livre t1 "
+        + "where lower(titre) like ?";
+
+    private final static String SECOND_SELECT_REQUEST = "select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret "
+        + "from livre t1";
+
     private Connexion cx;
 
     /**
@@ -46,12 +53,9 @@ public class GestionInterrogationService {
         try {
             setCx(cx);
 
-            setStmtLivresTitreMot(getCx().getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret + 14 "
-                + "from livre t1 "
-                + "where lower(titre) like ?"));
+            setStmtLivresTitreMot(getCx().getConnection().prepareStatement(SELECT_REQUEST));
 
-            setStmtListeTousLivres(getCx().getConnection().prepareStatement("select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret "
-                + "from livre t1"));
+            setStmtListeTousLivres(getCx().getConnection().prepareStatement(SECOND_SELECT_REQUEST));
         } catch(SQLException sqlException) {
             throw new ServiceException(sqlException);
         }

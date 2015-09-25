@@ -30,6 +30,17 @@ public class MembreDAO extends DAO {
 
     private PreparedStatement stmtDelete;
 
+    private final static String SELECT_REQUEST = "select idMembre, nom, telephone, limitePret, nbpret from membre where idmembre = ?";
+
+    private final static String INSERT_REQUEST = "insert into membre (idmembre, nom, telephone, limitepret, nbpret) "
+        + "values (?,?,?,?,0)";
+
+    private final static String UPDATE_REQUEST = "update membre set nbpret = nbPret + 1 where idMembre = ?";
+
+    private final static String SECOND_UPDATE_REQUEST = "update membre set nbpret = nbPret - 1 where idMembre = ?";
+
+    private final static String DELETE_REQUEST = "delete from membre where idmembre = ?";
+
     private Connexion cx;
 
     /**
@@ -44,12 +55,11 @@ public class MembreDAO extends DAO {
         try {
 
             setCx(cx);
-            setStmtExiste(getCx().getConnection().prepareStatement("select idMembre, nom, telephone, limitePret, nbpret from membre where idmembre = ?"));
-            setStmtInsert(getCx().getConnection().prepareStatement("insert into membre (idmembre, nom, telephone, limitepret, nbpret) "
-                + "values (?,?,?,?,0)"));
-            setStmtUpdateIncrNbPret(getCx().getConnection().prepareStatement("update membre set nbpret = nbPret + 1 where idMembre = ?"));
-            setStmtUpdateDecNbPret(getCx().getConnection().prepareStatement("update membre set nbpret = nbPret - 1 where idMembre = ?"));
-            setStmtDelete(getCx().getConnection().prepareStatement("delete from membre where idmembre = ?"));
+            setStmtExiste(getCx().getConnection().prepareStatement(SELECT_REQUEST));
+            setStmtInsert(getCx().getConnection().prepareStatement(INSERT_REQUEST));
+            setStmtUpdateIncrNbPret(getCx().getConnection().prepareStatement(UPDATE_REQUEST));
+            setStmtUpdateDecNbPret(getCx().getConnection().prepareStatement(SECOND_UPDATE_REQUEST));
+            setStmtDelete(getCx().getConnection().prepareStatement(DELETE_REQUEST));
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
