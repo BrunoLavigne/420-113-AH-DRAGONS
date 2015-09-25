@@ -90,8 +90,6 @@ public class MembreDAO extends DAO {
             getStmtExiste().setInt(1,
                 idMembre);
 
-            @SuppressWarnings("resource")
-            // TODO fix warning
             ResultSet rset = getStmtExiste().executeQuery();
             boolean membreExiste = rset.next();
             rset.close();
