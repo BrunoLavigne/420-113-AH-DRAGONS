@@ -4,7 +4,6 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.util;
 
-import java.sql.SQLException;
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
@@ -92,9 +91,6 @@ public class BibliothequeCreateur {
 
         } catch(ServiceException serviceException) {
             throw new BibliothequeException(serviceException);
-
-        } catch(SQLException sqlException) {
-            throw new BibliothequeException(sqlException);
 
         } catch(ConnexionException connexionException) {
             throw new BibliothequeException(connexionException);
