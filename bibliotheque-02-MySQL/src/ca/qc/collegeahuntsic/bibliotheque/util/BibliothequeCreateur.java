@@ -13,7 +13,6 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
-import ca.qc.collegeahuntsic.bibliotheque.service.GestionInterrogationService;
 import ca.qc.collegeahuntsic.bibliotheque.service.LivreService;
 import ca.qc.collegeahuntsic.bibliotheque.service.MembreService;
 import ca.qc.collegeahuntsic.bibliotheque.service.PretService;
@@ -54,8 +53,6 @@ public class BibliothequeCreateur {
 
     private ReservationService gestionReservation;
 
-    private GestionInterrogationService gestionInterrogation;
-
     /**
      * Ouvre une connexion avec la BD relationnelle et
      * alloue les gestionnaires de transactions et des tables.
@@ -92,7 +89,6 @@ public class BibliothequeCreateur {
             setGestionReservation(new ReservationService(getLivre(),
                 getMembre(),
                 getReservation()));
-            setGestionInterrogation(new GestionInterrogationService(getCx()));
 
         } catch(ServiceException serviceException) {
             throw new BibliothequeException(serviceException);
@@ -144,7 +140,7 @@ public class BibliothequeCreateur {
      *
      * @return La variable d'instance <code>this.livre</code>
      */
-    private LivreDAO getLivre() {
+    public LivreDAO getLivre() {
         return this.livre;
     }
 
@@ -264,24 +260,6 @@ public class BibliothequeCreateur {
      */
     private void setGestionReservation(ReservationService gestionReservation) {
         this.gestionReservation = gestionReservation;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.gestionInterrogation</code>.
-     *
-     * @return La variable d'instance <code>this.gestionInterrogation</code>
-     */
-    public GestionInterrogationService getGestionInterrogation() {
-        return this.gestionInterrogation;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.gestionInterrogation</code>.
-     *
-     * @param gestionInterrogation La valeur à utiliser pour la variable d'instance <code>this.gestionInterrogation</code>
-     */
-    private void setGestionInterrogation(GestionInterrogationService gestionInterrogation) {
-        this.gestionInterrogation = gestionInterrogation;
     }
 
 }

@@ -40,6 +40,10 @@ public class MembreDAO extends DAO {
     private final static String SECOND_UPDATE_REQUEST = "update membre set nbpret = nbPret - 1 where idMembre = ?";
 
     private final static String DELETE_REQUEST = "delete from membre where idmembre = ?";
+    
+    // TODO FIX THIS
+    @SuppressWarnings("unused")
+    private final static String GET_ALL_REQUESTS = "select idMembre, nom, telephone, limitePret, nbpret from membre";
 
     private Connexion cx;
 
