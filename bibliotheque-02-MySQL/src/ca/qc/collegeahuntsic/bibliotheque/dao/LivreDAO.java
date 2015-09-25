@@ -101,17 +101,21 @@ public class LivreDAO extends DAO {
      * @return boolean existe
      * @throws SQLException
      */
-    public boolean existe(int idLivre) throws SQLException {
+    public boolean existe(int idLivre) throws DAOException {
 
-        getStmtExiste().setInt(1,
-            idLivre);
+        try {
+            getStmtExiste().setInt(1,
+                idLivre);
 
-        @SuppressWarnings("resource")
-        // TODO Fix warning
-        ResultSet rset = getStmtExiste().executeQuery();
-        boolean livreExiste = rset.next();
-        rset.close();
-        return livreExiste;
+            try(
+                ResultSet rset = getStmtExiste().executeQuery()) {
+                boolean livreExiste = rset.next();
+                rset.close();
+                return livreExiste;
+            }
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
     }
 
     /**
