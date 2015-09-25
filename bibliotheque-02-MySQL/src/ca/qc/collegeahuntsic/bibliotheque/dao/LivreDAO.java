@@ -13,7 +13,6 @@ import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
 /**
  * Permet d'effectuer les accès à la table livre.
@@ -99,7 +98,7 @@ public class LivreDAO extends DAO {
      *
      * @param idLivre
      * @return boolean existe
-     * @throws SQLException
+     * @throws DAOException
      */
     public boolean existe(int idLivre) throws DAOException {
 
@@ -124,7 +123,7 @@ public class LivreDAO extends DAO {
      *
      * @param idLivre
      * @return TupleLivre
-     * @throws SQLException
+     * @throws DAOException
      */
     public LivreDTO getLivre(int idLivre) throws DAOException {
 
@@ -159,22 +158,27 @@ public class LivreDAO extends DAO {
      * @param titre
      * @param auteur
      * @param dateAcquisition
-     * @throws SQLException
+     * @throws DAOException
      */
     public void acquerir(int idLivre,
         String titre,
         String auteur,
-        String dateAcquisition) throws SQLException {
+        String dateAcquisition) throws DAOException {
         /* Ajout du livre. */
-        getStmtInsert().setInt(1,
-            idLivre);
-        getStmtInsert().setString(2,
-            titre);
-        getStmtInsert().setString(3,
-            auteur);
-        getStmtInsert().setDate(4,
-            Date.valueOf(dateAcquisition));
-        getStmtInsert().executeUpdate();
+        try {
+            getStmtInsert().setInt(1,
+                idLivre);
+            getStmtInsert().setString(2,
+                titre);
+            getStmtInsert().setString(3,
+                auteur);
+            getStmtInsert().setDate(4,
+                Date.valueOf(dateAcquisition));
+            getStmtInsert().executeUpdate();
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
+
     }
 
     /**
@@ -185,19 +189,23 @@ public class LivreDAO extends DAO {
      * @param idMembre
      * @param datePret
      * @return int preter
-     * @throws SQLException
+     * @throws DAOException
      */
     public int preter(int idLivre,
         int idMembre,
-        String datePret) throws SQLException {
+        String datePret) throws DAOException {
         /* Enregistrement du pret. */
-        getStmtUpdate().setInt(1,
-            idMembre);
-        getStmtUpdate().setDate(2,
-            Date.valueOf(datePret));
-        getStmtUpdate().setInt(3,
-            idLivre);
-        return getStmtUpdate().executeUpdate();
+        try {
+            getStmtUpdate().setInt(1,
+                idMembre);
+            getStmtUpdate().setDate(2,
+                Date.valueOf(datePret));
+            getStmtUpdate().setInt(3,
+                idLivre);
+            return getStmtUpdate().executeUpdate();
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
     }
 
     /**
@@ -206,17 +214,21 @@ public class LivreDAO extends DAO {
      *
      * @param idLivre
      * @return int retourner
-     * @throws SQLException
+     * @throws DAOException
      */
-    public int retourner(int idLivre) throws SQLException {
+    public int retourner(int idLivre) throws DAOException {
         /* Enregistrement du pret. */
-        getStmtUpdate().setNull(1,
-            Types.INTEGER);
-        getStmtUpdate().setNull(2,
-            Types.DATE);
-        getStmtUpdate().setInt(3,
-            idLivre);
-        return getStmtUpdate().executeUpdate();
+        try {
+            getStmtUpdate().setNull(1,
+                Types.INTEGER);
+            getStmtUpdate().setNull(2,
+                Types.DATE);
+            getStmtUpdate().setInt(3,
+                idLivre);
+            return getStmtUpdate().executeUpdate();
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
     }
 
     /**
@@ -225,13 +237,17 @@ public class LivreDAO extends DAO {
      *
      * @param idLivre
      * @return int vendre
-     * @throws SQLException
+     * @throws DAOException
      */
-    public int vendre(int idLivre) throws SQLException {
+    public int vendre(int idLivre) throws DAOException {
         /* Suppression du livre. */
-        getStmtDelete().setInt(1,
-            idLivre);
-        return getStmtDelete().executeUpdate();
+        try {
+            getStmtDelete().setInt(1,
+                idLivre);
+            return getStmtDelete().executeUpdate();
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
     }
 
     // MERGE GESTION INTERROGATION SERVICE
@@ -241,40 +257,40 @@ public class LivreDAO extends DAO {
      * Affiche les livres contenant un mot dans le titre
      *
      * @param mot
-     * @throws ServiceException
+     * @throws DAOException
      */
-    public void listerLivresTitre(String mot) throws ServiceException {
+    public void listerLivresTitre(String mot) throws DAOException {
 
         try {
             getStmtLivresTitreMot().setString(1,
                 mot);
 
-            @SuppressWarnings("resource")
             // TODO fix warning
-            ResultSet rset = getStmtLivresTitreMot().executeQuery();
-
-            int idMembre;
-            System.out.println("idLivre titre auteur idMembre dateRetour");
-            while(rset.next()) {
-                System.out.print(rset.getInt(1)
-                    + " "
-                    + rset.getString(2)
-                    + " "
-                    + rset.getString(3));
-                idMembre = rset.getInt(4);
-                if(!rset.wasNull()) {
-                    System.out.print(" "
-                        + idMembre
+            try(
+                ResultSet rset = getStmtLivresTitreMot().executeQuery()) {
+                int idMembre;
+                System.out.println("idLivre titre auteur idMembre dateRetour");
+                while(rset.next()) {
+                    System.out.print(rset.getInt(1)
                         + " "
-                        + rset.getDate(5));
+                        + rset.getString(2)
+                        + " "
+                        + rset.getString(3));
+                    idMembre = rset.getInt(4);
+                    if(!rset.wasNull()) {
+                        System.out.print(" "
+                            + idMembre
+                            + " "
+                            + rset.getDate(5));
+                    }
+                    System.out.println();
                 }
-                System.out.println();
+                getCx().commit();
             }
-            getCx().commit();
         } catch(ConnexionException connexionException) {
-            throw new ServiceException(connexionException);
+            throw new DAOException(connexionException);
         } catch(SQLException sqlException) {
-            throw new ServiceException(sqlException);
+            throw new DAOException(sqlException);
         }
     }
 
@@ -282,43 +298,42 @@ public class LivreDAO extends DAO {
      *
      * Affiche tous les livres de la BD
      *
-     * @throws ServiceException
+     * @throws DAOException
      */
-    @SuppressWarnings("resource")
-    public void listerLivres() throws ServiceException {
+    public void listerLivres() throws DAOException {
 
         try {
-            ResultSet rset;
-            rset = getStmtListeTousLivres().executeQuery();
-
-            System.out.println("idLivre titre auteur idMembre datePret");
-            int idMembre;
-            while(rset.next()) {
-                System.out.print(rset.getInt("idLivre")
-                    + " "
-                    + rset.getString("titre")
-                    + " "
-                    + rset.getString("auteur"));
-                idMembre = rset.getInt("idMembre");
-                if(!rset.wasNull()) {
-                    System.out.print(" "
-                        + idMembre
+            try(
+                ResultSet rset = getStmtListeTousLivres().executeQuery()) {
+                System.out.println("idLivre titre auteur idMembre datePret");
+                int idMembre;
+                while(rset.next()) {
+                    System.out.print(rset.getInt("idLivre")
                         + " "
-                        + rset.getDate("datePret"));
+                        + rset.getString("titre")
+                        + " "
+                        + rset.getString("auteur"));
+                    idMembre = rset.getInt("idMembre");
+                    if(!rset.wasNull()) {
+                        System.out.print(" "
+                            + idMembre
+                            + " "
+                            + rset.getDate("datePret"));
+                    }
+                    System.out.println();
                 }
-                System.out.println();
+
+                // TODO REMOVE THIS
+                System.out.println(GET_ALL_REQUESTS
+                    + " "
+                    + FIND_BY_MEMBRE);
+
+                getCx().commit();
             }
-
-            // TODO REMOVE THIS
-            System.out.println(GET_ALL_REQUESTS
-                + " "
-                + FIND_BY_MEMBRE);
-
-            getCx().commit();
         } catch(ConnexionException connexionException) {
-            throw new ServiceException(connexionException);
+            throw new DAOException(connexionException);
         } catch(SQLException sqlException) {
-            throw new ServiceException(sqlException);
+            throw new DAOException(sqlException);
         }
     }
 
