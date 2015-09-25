@@ -56,11 +56,11 @@ public class ReservationDAO extends DAO {
         + "ORDER BY dateReservation";
 
     /**
-      * Creation d'une instance.
-      *
-      * @param cx
-      * @throws SQLException
-      */
+     * Creation d'une instance.
+     *
+     * @param cx
+     * @throws SQLException
+     */
     public ReservationDAO(Connexion cx) throws SQLException {
 
         setCx(cx);
@@ -331,9 +331,4 @@ public class ReservationDAO extends DAO {
     private void setCx(Connexion cx) {
         this.cx = cx;
     }
-
-    public String laPatate() {
-        return "LaPatate";
-    }
-
 }
