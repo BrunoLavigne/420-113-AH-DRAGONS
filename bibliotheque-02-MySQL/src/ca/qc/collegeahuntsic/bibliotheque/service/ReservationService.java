@@ -256,7 +256,7 @@ public class ReservationService extends Services {
     /**
      * Setter de la variable d'instance <code>this.livre</code>.
      *
-     * @param idLivre La valeur à utiliser pour la variable d'instance <code>this.livre</code>
+     * @param livre La valeur à utiliser pour la variable d'instance <code>this.livre</code>
      */
     public void setLivre(LivreDAO livre) {
         this.livre = livre;
@@ -274,7 +274,7 @@ public class ReservationService extends Services {
     /**
      * Setter de la variable d'instance <code>this.membre</code>.
      *
-     * @param idLivre La valeur à utiliser pour la variable d'instance <code>this.membre</code>
+     * @param membre La valeur à utiliser pour la variable d'instance <code>this.membre</code>
      */
     public void setMembre(MembreDAO membre) {
         this.membre = membre;
@@ -292,7 +292,7 @@ public class ReservationService extends Services {
     /**
      * Setter de la variable d'instance <code>this.reservation</code>.
      *
-     * @param idLivre La valeur à utiliser pour la variable d'instance <code>this.reservation</code>
+     * @param reservation La valeur à utiliser pour la variable d'instance <code>this.reservation</code>
      */
     public void setReservation(ReservationDAO reservation) {
         this.reservation = reservation;
@@ -310,7 +310,7 @@ public class ReservationService extends Services {
     /**
      * Setter de la variable d'instance <code>this.cx</code>.
      *
-     * @param idLivre La valeur à utiliser pour la variable d'instance <code>this.cx</code>
+     * @param cx La valeur à utiliser pour la variable d'instance <code>this.cx</code>
      */
     public void setCx(Connexion cx) {
         this.cx = cx;
