@@ -36,43 +36,38 @@ public class ReservationDAO extends DAO {
 
     private Connexion cx;
 
-    private final static String SELECT_REQUEST = "select idReservation, idLivre, idMembre, dateReservation "
-        + "from reservation where idReservation = ?";
+    private static final String READ_REQUEST = "SELECT idReservation, idLivre, idMembre, dateReservation "
+        + "FROM reservation "
+        + "WHERE idReservation = ?";
 
-    private final static String INSERT_REQUEST = "INSERT INTO reservation (idReservation, idlivre, idMembre, dateReservation) "
+    private final static String ADD_REQUEST = "INSERT INTO reservation (idReservation, idlivre, idMembre, dateReservation) "
         + "values (?,?,?,str_to_date(?, '%Y-%m-%d'))";
 
-    private final static String DELETE_REQUEST = "DELETE FROM reservation WHERE idReservation = ?";
-    
-    @SuppressWarnings("unused")
-    private final static String GET_ALL_RESERVATIONS = "SELECT idReservation, idLivre, idMembre, dateReservation "
-                                                     + "FROM reservation";
-    
+    private static final String DELETE_REQUEST = "DELETE FROM reservation "
+        + "WHERE idReservation = ?";
+
     private final static String FIND_BY_MEMBRE = "SELECT idReservation, idLivre, idMembre, dateReservation "
-                                               + "FROM reservation where idMembre = ?";
-    
+        + "FROM reservation "
+        + "WHERE idMembre = ? ";
+
     private final static String FIND_BY_LIVRE = "SELECT idReservation, idLivre, idMembre, dateReservation "
-                                              + "FROM reservation where idLivre = ? "
-                                              + "ORDER BY dateReservation";
-    
-   @SuppressWarnings("unused")
-private final static String FIND_BY_RESERVATION = "SELECT idReservation, idLivre, idMembre, dateReservation "
-                                                   + "FROM reservation "
-                                                   + "WHERE idReservation = ?";
+        + "FROM reservation "
+        + "WHERE idLivre = ? "
+        + "ORDER BY dateReservation";
 
     /**
-     * Creation d'une instance.
-     *
-     * @param cx
-     * @throws SQLException
-     */
+      * Creation d'une instance.
+      *
+      * @param cx
+      * @throws SQLException
+      */
     public ReservationDAO(Connexion cx) throws SQLException {
 
         setCx(cx);
-        setStmtExiste(getCx().getConnection().prepareStatement(SELECT_REQUEST));
+        setStmtExiste(getCx().getConnection().prepareStatement(READ_REQUEST));
         setStmtExisteLivre(getCx().getConnection().prepareStatement(FIND_BY_LIVRE));
         setStmtExisteMembre(getCx().getConnection().prepareStatement(FIND_BY_MEMBRE));
-        setStmtInsert(getCx().getConnection().prepareStatement(INSERT_REQUEST));
+        setStmtInsert(getCx().getConnection().prepareStatement(ADD_REQUEST));
         setStmtDelete(getCx().getConnection().prepareStatement(DELETE_REQUEST));
     }
 

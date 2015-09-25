@@ -35,9 +35,9 @@ public class LivreDAO extends DAO {
 
     private PreparedStatement stmtListeTousLivres;
 
-    private final static String SELECT_REQUEST = "select idlivre, titre, auteur, dateAcquisition, idMembre, datePret from livre where idlivre = ?";
+    private final static String READ_REQUEST = "select idlivre, titre, auteur, dateAcquisition, idMembre, datePret from livre where idlivre = ?";
 
-    private final static String INSERT_REQUEST = "insert into livre (idLivre, titre, auteur, dateAcquisition, idMembre, datePret) "
+    private final static String ADD_REQUEST = "insert into livre (idLivre, titre, auteur, dateAcquisition, idMembre, datePret) "
         + "values (?,?,?,?,null,null)";
 
     private final static String UPDATE_REQUEST = "update livre set idMembre = ?, datePret = ? "
@@ -54,9 +54,6 @@ public class LivreDAO extends DAO {
 
     private final static String FIND_BY_MEMBRE = "select idMembre, nom, telephone, limitePret, nbpret from membre where idmembre = ?";
 
-    private final static String SECOND_SELECT_REQUEST = "select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret "
-        + "from livre t1";
-
     private Connexion cx;
 
     /**
@@ -71,15 +68,15 @@ public class LivreDAO extends DAO {
         setCx(cx);
 
         try {
-            setStmtExiste(getCx().getConnection().prepareStatement(SELECT_REQUEST));
+            setStmtExiste(getCx().getConnection().prepareStatement(READ_REQUEST));
 
-            setStmtInsert(getCx().getConnection().prepareStatement(INSERT_REQUEST));
+            setStmtInsert(getCx().getConnection().prepareStatement(ADD_REQUEST));
             setStmtUpdate(getCx().getConnection().prepareStatement(UPDATE_REQUEST));
             setStmtDelete(getCx().getConnection().prepareStatement(DELETE_REQUEST));
 
             // MERGE
             setStmtLivresTitreMot(getCx().getConnection().prepareStatement(FIND_BY_TITRE));
-            setStmtListeTousLivres(getCx().getConnection().prepareStatement(SECOND_SELECT_REQUEST));
+            setStmtListeTousLivres(getCx().getConnection().prepareStatement(GET_ALL_REQUESTS));
 
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
@@ -272,11 +269,11 @@ public class LivreDAO extends DAO {
     }
 
     /**
-    *
-    * Affiche tous les livres de la BD
-    *
-    * @throws ServiceException
-    */
+     *
+     * Affiche tous les livres de la BD
+     *
+     * @throws ServiceException
+     */
     @SuppressWarnings("resource")
     public void listerLivres() throws ServiceException {
 
