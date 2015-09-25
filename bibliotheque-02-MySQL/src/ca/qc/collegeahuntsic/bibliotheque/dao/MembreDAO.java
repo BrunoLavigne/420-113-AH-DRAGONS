@@ -53,7 +53,6 @@ public class MembreDAO extends DAO {
     public MembreDAO(Connexion cx) throws DAOException {
 
         try {
-
             setCx(cx);
             setStmtExiste(getCx().getConnection().prepareStatement(SELECT_REQUEST));
             setStmtInsert(getCx().getConnection().prepareStatement(INSERT_REQUEST));
@@ -110,22 +109,23 @@ public class MembreDAO extends DAO {
      * @throws DAOException
      */
 
-    // TODO fix warning
-    @SuppressWarnings("resource")
     public MembreDTO getMembre(int idMembre) throws DAOException {
 
         try {
             this.stmtExiste.setInt(1,
                 idMembre);
-            ResultSet rset = this.stmtExiste.executeQuery();
-            if(rset.next()) {
-                MembreDTO tupleMembre = new MembreDTO();
-                tupleMembre.setIdMembre(idMembre);
-                tupleMembre.setNom(rset.getString(2));
-                tupleMembre.setTelephone(rset.getLong(3));
-                tupleMembre.setLimitePret(rset.getInt(4));
-                tupleMembre.setNbPret(rset.getInt(5));
-                return tupleMembre;
+            try(
+                ResultSet rset = this.stmtExiste.executeQuery()) {
+                if(rset.next()) {
+                    MembreDTO tupleMembre = new MembreDTO();
+                    tupleMembre.setIdMembre(idMembre);
+                    tupleMembre.setNom(rset.getString(2));
+                    tupleMembre.setTelephone(rset.getLong(3));
+                    tupleMembre.setLimitePret(rset.getInt(4));
+                    tupleMembre.setNbPret(rset.getInt(5));
+                    rset.close();
+                    return tupleMembre;
+                }
             }
             return null;
         } catch(SQLException sqlException) {
