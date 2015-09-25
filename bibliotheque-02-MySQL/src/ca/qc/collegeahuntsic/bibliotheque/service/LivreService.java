@@ -10,6 +10,7 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
 /**
@@ -63,11 +64,10 @@ public class LivreService extends Services {
     public void acquerir(int idLivre,
         String titre,
         String auteur,
-        String dateAcquisition) throws ServiceException,
-        ConnexionException {
+        String dateAcquisition) throws ServiceException {
 
+        //Vérifie si le livre existe  déjà
         try {
-            //Vérifie si le livre existe  déjà
             if(getLivre().existe(idLivre)) {
                 throw new ServiceException("Le livre existe déjà: "
                     + idLivre);
@@ -81,13 +81,14 @@ public class LivreService extends Services {
                 dateAcquisition);
 
             getCx().commit();
+            getCx().rollback();
 
-        } catch(ConnexionException connexionException) {
-            getCx().rollback();
-            throw new ServiceException(connexionException);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
         } catch(SQLException sqlException) {
-            getCx().rollback();
             throw new ServiceException(sqlException);
+        } catch(ConnexionException connexionException) {
+            throw new ServiceException(connexionException);
         }
 
     }
@@ -99,7 +100,7 @@ public class LivreService extends Services {
      * @throws ConnexionException
      */
     public void vendre(int idLivre) throws ServiceException,
-        ConnexionException {
+    ConnexionException {
         try {
             LivreDTO tupleLivre = getLivre().getLivre(idLivre);
             if(tupleLivre == null) {
