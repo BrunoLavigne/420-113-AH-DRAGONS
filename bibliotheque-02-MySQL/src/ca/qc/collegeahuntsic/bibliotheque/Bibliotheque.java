@@ -12,6 +12,8 @@ import java.text.ParseException;
 import java.util.StringTokenizer;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 import ca.qc.collegeahuntsic.bibliotheque.util.BibliothequeCreateur;
 import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
 
@@ -50,8 +52,9 @@ public class Bibliotheque {
      * Ouverture de la BD,
      * traitement des transactions et
      * fermeture de la BD.
+     * @throws BibliothequeException
      */
-    public static void main(String argv[]) throws Exception {
+    public static void main(String argv[]) throws BibliothequeException {
         // validation du nombre de paramètres
         if(argv.length < 5) {
             System.out.println("Usage: java Biblio <serveur> <bd> <user> <password> <fichier-transactions>");
@@ -64,7 +67,7 @@ public class Bibliotheque {
                 + argv[4])) {
             // ouverture du fichier de transactions
 
-            // TODO corriger ce warning
+            // TODO REMOVE WARNING
             @SuppressWarnings("resource")
             BufferedReader reader = new BufferedReader(new InputStreamReader(sourceTransaction));
 
@@ -73,9 +76,8 @@ public class Bibliotheque {
                 argv[2],
                 argv[3]));
             traiterTransactions(reader);
-        } catch(Exception e) {
-            // TODO changer ça. Dirty way de géré les erreurs
-            e.printStackTrace(System.out);
+        } catch(Exception exception) {
+            //throw new BibliothequeException(exception);
         } finally {
             getGestionBiblio().fermer();
         }
@@ -86,20 +88,27 @@ public class Bibliotheque {
      * Traitement des transactions de la bibliothèque
      *
      * @param reader
-     * @throws Exception
+     * @throws BibliothequeException
      */
-    static void traiterTransactions(BufferedReader reader) throws Exception {
+    static void traiterTransactions(BufferedReader reader) throws BibliothequeException {
         afficherAide();
-        String transaction = lireTransaction(reader);
-        while(!finTransaction(transaction)) {
-            /* découpage de la transaction en mots*/
-            // TODO Remplacer par un SPLIT. StringTokenizer est déprécier
-            StringTokenizer tokenizer = new StringTokenizer(transaction,
-                " ");
-            if(tokenizer.hasMoreTokens()) {
-                executerTransaction(tokenizer);
-            }
+        String transaction;
+
+        try {
             transaction = lireTransaction(reader);
+
+            while(!finTransaction(transaction)) {
+                /* découpage de la transaction en mots*/
+                // TODO Remplacer par un SPLIT. StringTokenizer est déprécier
+                StringTokenizer tokenizer = new StringTokenizer(transaction,
+                    " ");
+                if(tokenizer.hasMoreTokens()) {
+                    executerTransaction(tokenizer);
+                }
+                transaction = lireTransaction(reader);
+            }
+        } catch(Exception exceptions) {
+            throw new BibliothequeException(exceptions);
         }
     }
 
@@ -109,17 +118,21 @@ public class Bibliotheque {
      *
      * @param reader
      * @return lireTransactionString
-     * @throws IOException
+     * @throws BibliothequeException
      */
-    static String lireTransaction(BufferedReader reader) throws IOException {
-        System.out.print("> ");
-        String transaction = reader.readLine();
-        /* echo si lecture dans un fichier */
-        if(!isLectureAuClavier()
-            && transaction != null) {
-            System.out.println(transaction);
+    static String lireTransaction(BufferedReader reader) throws BibliothequeException {
+        try {
+            System.out.print("> ");
+            String transaction = reader.readLine();
+            /* echo si lecture dans un fichier */
+            if(!isLectureAuClavier()
+                && transaction != null) {
+                System.out.println(transaction);
+            }
+            return transaction;
+        } catch(IOException ioException) {
+            throw new BibliothequeException(ioException);
         }
-        return transaction;
     }
 
     /**
@@ -127,9 +140,9 @@ public class Bibliotheque {
      * Décodage et traitement d'une transaction
      *
      * @param tokenizer
-     * @throws Exception
+     * @throws BibliothequeException
      */
-    static void executerTransaction(StringTokenizer tokenizer) throws Exception {
+    static void executerTransaction(StringTokenizer tokenizer) throws BibliothequeException {
         try {
             String command = tokenizer.nextToken();
 
@@ -184,9 +197,13 @@ public class Bibliotheque {
             /* ***********************   */else {
                 System.out.println("  Transactions non reconnue.  Essayer \"aide\"");
             }
-        } catch(BibliothequeException e) {
-            System.out.println("** "
-                + e.toString());
+        } catch(BibliothequeException bibliothequeException) {
+            throw new BibliothequeException("** "
+                + bibliothequeException.toString());
+        } catch(ServiceException serviceException) {
+            throw new BibliothequeException(serviceException);
+        } catch(ConnexionException connexionException) {
+            throw new BibliothequeException(connexionException);
         }
     }
 
@@ -335,14 +352,30 @@ public class Bibliotheque {
         throw new BibliothequeException("autre paramètre attendu");
     }
 
+    /**
+     * Getter de la variable d'instance <code>gestionBiblio</code>.
+     *
+     * @return La variable d'instance <code>gestionBiblio</code>
+     */
     private static BibliothequeCreateur getGestionBiblio() {
         return gestionBiblio;
     }
 
+    /**
+     * Setter de la variable d'instance <code>Bibliotheque.gestionBiblio</code>.
+     *
+     * @param BibliothequeCreateur La valeur à utiliser pour la variable d'instance <code>Bibliotheque.gestionBiblio</code>
+     */
     private static void setGestionBiblio(BibliothequeCreateur gestionBiblio) {
         Bibliotheque.gestionBiblio = gestionBiblio;
     }
 
+    /**
+     *
+     * Boolean de la variable lectureAuClavier
+     *
+     * @return <code>lectureAuClavier</code>
+     */
     private static boolean isLectureAuClavier() {
         return lectureAuClavier;
     }

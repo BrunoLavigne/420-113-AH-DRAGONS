@@ -29,6 +29,18 @@ public class Connexion {
 
     private Connection conn;
 
+    private final static String CONNEXIONMYSQL = "local";
+
+    private final static String CONNEXIONORACLE = "distant";
+
+    private final static String NOM_DRIVER_MYSQL = "com.mysql.jdbc.Driver";
+
+    private final static String NOM_DRIVER_ORACLE = "oracle.jdbc.driver.OracleDriver";
+
+    private final static String URL_MYSQL = "jdbc:mysql://localhost:3306/";
+
+    private final static String URL_ORACLE = "jdbc:oracle:thin:@collegeahuntsic.info:1521:";
+
     /**
      * Ouverture d'une connexion en mode autocommit false et sérialisable (si supporté)
      * @param serveur serveur SQL de la BD
@@ -43,17 +55,17 @@ public class Connexion {
         String pass) throws ConnexionException {
         Driver d;
         try {
-            if(serveur.equals("local")) {
-                d = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
+            if(serveur.equals(CONNEXIONMYSQL)) {
+                d = (Driver) Class.forName(NOM_DRIVER_MYSQL).newInstance();
                 DriverManager.registerDriver(d);
-                setConn(DriverManager.getConnection("jdbc:mysql://localhost:3306/"
+                setConn(DriverManager.getConnection(URL_MYSQL
                     + bd,
                     user,
                     pass));
-            } else if(serveur.equals("distant")) {
-                d = (Driver) Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();
+            } else if(serveur.equals(CONNEXIONORACLE)) {
+                d = (Driver) Class.forName(NOM_DRIVER_ORACLE).newInstance();
                 DriverManager.registerDriver(d);
-                setConn(DriverManager.getConnection("jdbc:oracle:thin:@collegeahuntsic.info:1521:"
+                setConn(DriverManager.getConnection(URL_ORACLE
                     + bd,
                     user,
                     pass));

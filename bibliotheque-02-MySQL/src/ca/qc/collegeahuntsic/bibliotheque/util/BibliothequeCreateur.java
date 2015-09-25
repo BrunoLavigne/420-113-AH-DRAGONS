@@ -115,7 +115,7 @@ public class BibliothequeCreateur {
     public void fermer() throws BibliothequeException {
         // fermeture de la connexion
         try {
-            this.cx.fermer();
+            getCx().fermer();
         } catch(ConnexionException connexionException) {
             throw new BibliothequeException(connexionException);
         }

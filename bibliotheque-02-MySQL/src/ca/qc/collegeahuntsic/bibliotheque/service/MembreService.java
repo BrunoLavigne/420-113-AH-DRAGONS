@@ -8,6 +8,7 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
 /**
@@ -60,6 +61,7 @@ public class MembreService extends Services {
      * @param telephone
      * @param limitePret
      * @throws ServiceException
+     * @throws ConnexionException
      */
     public void inscrire(int idMembre,
         String nom,
@@ -78,8 +80,13 @@ public class MembreService extends Services {
                 telephone,
                 limitePret);
             getCx().commit();
-            getCx().rollback();
+
         } catch(Exception exception) {
+            try {
+                getCx().rollback();
+            } catch(ConnexionException connexionException) {
+                throw new ServiceException(connexionException);
+            }
             throw new ServiceException(exception);
         }
     }
@@ -117,8 +124,13 @@ public class MembreService extends Services {
                     + " inexistant");
             }
             getCx().commit();
-            getCx().rollback();
+
         } catch(Exception exception) {
+            try {
+                getCx().rollback();
+            } catch(ConnexionException connexionException) {
+                throw new ServiceException(connexionException);
+            }
             throw new ServiceException(exception);
         }
 

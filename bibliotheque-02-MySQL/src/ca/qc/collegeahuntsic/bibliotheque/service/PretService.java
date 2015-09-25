@@ -22,7 +22,7 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
  *
  * <pre>
  * Pré-condition
- *   la base de données de la bibliothèque doit exister
+ *   la base ded données de la bibliothèque doit exister
  * </pre>
  * <pos>
  * Post-condition
@@ -126,9 +126,13 @@ public class PretService extends Services {
                 throw new ServiceException("Membre suprimé par une autre transaction");
             }
             getCx().commit();
-            getCx().rollback();
-        } catch(Exception exception) {
 
+        } catch(Exception exception) {
+            try {
+                getCx().rollback();
+            } catch(ConnexionException connexionException) {
+                throw new ServiceException(connexionException);
+            }
             throw new ServiceException(exception);
         }
     }
@@ -182,12 +186,19 @@ public class PretService extends Services {
                 throw new ServiceException("Livre suprimé par une autre transaction");
             }
             getCx().commit();
-            getCx().rollback();
 
         } catch(SQLException sqlException) {
-            throw new ServiceException(sqlException);
+            try {
+                getCx().rollback();
+            } catch(ConnexionException connexionException) {
+                throw new ServiceException(connexionException);
+            }
         } catch(ConnexionException connectionException) {
-            throw new ServiceException(connectionException);
+            try {
+                getCx().rollback();
+            } catch(ConnexionException connexionException) {
+                throw new ServiceException(connexionException);
+            }
         }
 
     }
@@ -226,15 +237,18 @@ public class PretService extends Services {
                 throw new ServiceException("Livre suprimé par une autre transaction");
             }
 
-            int nb2 = this.membre.retourner(tupleLivre.getIdMembre());
+            int nb2 = getMembre().retourner(tupleLivre.getIdMembre());
             if(nb2 == 0) {
                 throw new ServiceException("Livre suprimé par une autre transaction");
             }
             getCx().commit();
-            getCx().rollback();
 
         } catch(Exception exception) {
-
+            try {
+                getCx().rollback();
+            } catch(ConnexionException connexionException) {
+                throw new ServiceException(connexionException);
+            }
             throw new ServiceException(exception);
         }
 
