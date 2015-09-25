@@ -61,7 +61,6 @@ public class BibliothequeCreateur {
      * @param user id pour établir une connexion avec le serveur SQL
      * @param password mot de passe pour le user id
      * @throws BibliothequeException
-     * @throws ServiceException
      *
      */
     public BibliothequeCreateur(String serveur,
@@ -102,7 +101,7 @@ public class BibliothequeCreateur {
     }
 
     /**
-     * @throws ConnexionException
+     * @throws BibliothequeException
      */
     public void fermer() throws BibliothequeException {
         // fermeture de la connexion
