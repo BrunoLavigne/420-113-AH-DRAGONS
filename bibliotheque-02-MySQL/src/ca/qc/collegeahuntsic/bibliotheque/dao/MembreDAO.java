@@ -90,10 +90,12 @@ public class MembreDAO extends DAO {
             getStmtExiste().setInt(1,
                 idMembre);
 
-            ResultSet rset = getStmtExiste().executeQuery();
-            boolean membreExiste = rset.next();
-            rset.close();
-            return membreExiste;
+            try(
+                ResultSet rset = getStmtExiste().executeQuery()) {
+                boolean membreExiste = rset.next();
+                rset.close();
+                return membreExiste;
+            }
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
