@@ -39,8 +39,6 @@ class BDCreateur {
                 args[2],
                 args[3]);
 
-            // TODO REMOVE WARNING
-            @SuppressWarnings("resource")
             Statement stmt = cx.getConnection().createStatement();
 
             stmt.executeUpdate("DROP TABLE IF EXISTS reservation CASCADE");
