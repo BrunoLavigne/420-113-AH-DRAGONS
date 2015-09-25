@@ -332,4 +332,8 @@ public class ReservationDAO extends DAO {
         this.cx = cx;
     }
 
+    public String laPatate() {
+        return "LaPatate";
+    }
+
 }

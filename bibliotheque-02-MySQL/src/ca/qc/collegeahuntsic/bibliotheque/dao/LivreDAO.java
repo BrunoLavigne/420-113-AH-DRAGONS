@@ -122,21 +122,27 @@ public class LivreDAO extends DAO {
      * @return TupleLivre
      * @throws SQLException
      */
-    @SuppressWarnings("resource")
-    public LivreDTO getLivre(int idLivre) throws SQLException {
+    public LivreDTO getLivre(int idLivre) throws DAOException {
 
-        getStmtExiste().setInt(1,
-            idLivre);
-        ResultSet rset = getStmtExiste().executeQuery();
-        if(rset.next()) {
-            LivreDTO tupleLivre = new LivreDTO();
-            tupleLivre.setIdLivre(idLivre);
-            tupleLivre.setTitre(rset.getString(2));
-            tupleLivre.setAuteur(rset.getString(3));
-            tupleLivre.setDateAcquisition(rset.getDate(4));
-            tupleLivre.setIdMembre(rset.getInt(5));
-            tupleLivre.setDatePret(rset.getDate(6));
-            return tupleLivre;
+        try {
+            getStmtExiste().setInt(1,
+                idLivre);
+            try(
+                ResultSet rset = getStmtExiste().executeQuery()) {
+                if(rset.next()) {
+                    LivreDTO tupleLivre = new LivreDTO();
+                    tupleLivre.setIdLivre(idLivre);
+                    tupleLivre.setTitre(rset.getString(2));
+                    tupleLivre.setAuteur(rset.getString(3));
+                    tupleLivre.setDateAcquisition(rset.getDate(4));
+                    tupleLivre.setIdMembre(rset.getInt(5));
+                    tupleLivre.setDatePret(rset.getDate(6));
+                    rset.close();
+                    return tupleLivre;
+                }
+            }
+        } catch(SQLException e) {
+            throw new DAOException();
         }
         return null;
     }
