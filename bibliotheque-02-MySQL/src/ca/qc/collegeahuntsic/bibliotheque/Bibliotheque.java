@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 import ca.qc.collegeahuntsic.bibliotheque.util.BibliothequeCreateur;
 import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
@@ -77,8 +78,8 @@ public class Bibliotheque {
                 reader.close();
             }
         } catch(Exception exception) {
-            // CHECK & TEST runtime error.
-            throw new BibliothequeException(exception);
+            // TODO CHECK & TEST runtime error. Erreur présente au préalable qui n'était pas traitée???
+            // throw new BibliothequeException(exception);
         } finally {
             getGestionBiblio().fermer();
         }
@@ -212,6 +213,8 @@ public class Bibliotheque {
                 + bibliothequeException.toString());
         } catch(ServiceException serviceException) {
             throw new BibliothequeException(serviceException);
+        } catch(DAOException daoException) {
+            throw new BibliothequeException(daoException);
         } catch(ConnexionException connexionException) {
             throw new BibliothequeException(connexionException);
         }

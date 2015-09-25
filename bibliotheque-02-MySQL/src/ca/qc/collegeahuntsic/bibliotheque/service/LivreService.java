@@ -4,7 +4,6 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
-import java.sql.SQLException;
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
@@ -81,12 +80,14 @@ public class LivreService extends Services {
                 dateAcquisition);
 
             getCx().commit();
-            getCx().rollback();
 
         } catch(DAOException daoException) {
+            try {
+                getCx().rollback();
+            } catch(ConnexionException connexionException) {
+                throw new ServiceException(connexionException);
+            }
             throw new ServiceException(daoException);
-        } catch(SQLException sqlException) {
-            throw new ServiceException(sqlException);
         } catch(ConnexionException connexionException) {
             throw new ServiceException(connexionException);
         }

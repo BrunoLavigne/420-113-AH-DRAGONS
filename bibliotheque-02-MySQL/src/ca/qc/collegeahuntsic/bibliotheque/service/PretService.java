@@ -2,7 +2,6 @@
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
 import java.sql.Date;
-import java.sql.SQLException;
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
@@ -188,20 +187,15 @@ public class PretService extends Services {
             }
             getCx().commit();
 
-        } catch(SQLException sqlException) {
-            try {
-                getCx().rollback();
-            } catch(ConnexionException connexionException) {
-                throw new ServiceException(connexionException);
-            }
         } catch(ConnexionException connectionException) {
+            throw new ServiceException(connectionException);
+        } catch(DAOException daoException) {
             try {
                 getCx().rollback();
             } catch(ConnexionException connexionException) {
                 throw new ServiceException(connexionException);
             }
-        } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            // TODO handle after-rollback plz.
         }
 
     }
