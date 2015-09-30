@@ -26,7 +26,7 @@ public class MembreDAO extends DAO {
 
     //private static final String UDPATE_REQUEST = "UPDATE membre";
 
-    //private static final String DELETE_REQUEST = "DELETE membre";
+    private static final String DELETE_REQUEST = "DELETE FROM membre WHERE idMembre = ?";
 
     // private final static String UPDATE_REQUEST_ADD_PRET = "update membre set nbpret = nbPret + 1 where idMembre = ?";
 
@@ -191,7 +191,7 @@ public class MembreDAO extends DAO {
 
     /**
      *
-     * TODO Ajoute un membre à la base de données
+     * Ajoute un membre à la table membre
      *
      * @param membreDTO
      * @throws DAOException S'il y a un problème avec la base de données
@@ -215,4 +215,23 @@ public class MembreDAO extends DAO {
             throw new DAOException(sqlException);
         }
     }
+
+    /**
+     *
+     * Supprime un membre de la table membre
+     *
+     * @param idMembre
+     * @throws DAOException S'il y a un problème avec la base de données
+     */
+    public void delete(int idMembre) throws DAOException {
+
+        try(
+            PreparedStatement deletePreparedStatement = getConnection().prepareStatement(DELETE_REQUEST)) {
+            deletePreparedStatement.setInt(1,
+                idMembre);
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
+    }
+
 }
