@@ -46,31 +46,6 @@ public class MembreDAO extends DAO {
 
     /**
      *
-     * Vérifie si un membre existe.
-     *
-     * @param idMembre
-     * @return boolean existe
-     * @throws DAOException
-     */
-    /*public boolean existe(int idMembre) throws DAOException {
-
-        try {
-            getStmtExiste().setInt(1,
-                idMembre);
-
-            try(
-                ResultSet rset = getStmtExiste().executeQuery()) {
-                boolean membreExiste = rset.next();
-                rset.close();
-                return membreExiste;
-            }
-        } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
-        }
-    }*/
-
-    /**
-     *
      * Lecture d'un membre.
      *
      * @param idMembre
@@ -101,37 +76,6 @@ public class MembreDAO extends DAO {
             throw new DAOException(sqlException);
         }
 
-    }*/
-
-    /**
-     *
-     * Ajout d'un nouveau membre.
-     *
-     * @param idMembre
-     * @param nom
-     * @param telephone
-     * @param limitePret
-     * @throws DAOException
-     */
-    /*public void inscrire(int idMembre,
-        String nom,
-        long telephone,
-        int limitePret) throws DAOException {
-
-        try {
-
-            getStmtInsert().setInt(1,
-                idMembre);
-            getStmtInsert().setString(2,
-                nom);
-            getStmtInsert().setLong(3,
-                telephone);
-            getStmtInsert().setInt(4,
-                limitePret);
-            getStmtInsert().executeUpdate();
-        } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
-        }
     }*/
 
     /**

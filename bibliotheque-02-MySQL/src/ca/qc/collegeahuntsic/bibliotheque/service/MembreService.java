@@ -4,11 +4,13 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
+import java.sql.SQLException;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
 /**
@@ -32,8 +34,6 @@ public class MembreService extends Services {
 
     private static final long serialVersionUID = 1L;
 
-    private Connexion cx;
-
     private MembreDAO membre;
 
     private ReservationDAO reservation;
@@ -50,6 +50,47 @@ public class MembreService extends Services {
         setCx(membre.getConnexion());
         setMembre(membre);
         setReservation(reservation);
+    }
+
+    /**
+     *
+     * Vérifie si un membre existe
+     *
+     * @param idMembre
+     * @return
+     * @throws ServiceException
+     */
+    public boolean existe(int idMembre) throws ServiceException {
+
+        return(getMembre().read(idMembre) != null);
+
+    }
+
+    public void inscrire(int idMembre,
+        String nom,
+        long telephone,
+        int limitePret) throws ServiceException {
+
+        if(!existe(idMembre)) {
+            MembreDAO nouveauMembre = new MembreDAO(getMembre());
+        }
+
+        getMembre().add(nouveauMembre);
+
+        try {
+
+            getStmtInsert().setInt(1,
+                idMembre);
+            getStmtInsert().setString(2,
+                nom);
+            getStmtInsert().setLong(3,
+                telephone);
+            getStmtInsert().setInt(4,
+                limitePret);
+            getStmtInsert().executeUpdate();
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
     }
 
     /**
