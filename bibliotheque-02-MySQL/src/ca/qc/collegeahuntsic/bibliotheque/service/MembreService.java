@@ -93,6 +93,10 @@ public class MembreService extends Services {
         }
     }
 
+    public void emprunter(MembreDTO unLivreDTO) {
+
+    }
+
     /**
      * Ajout d'un nouveau membre dans la base de données.
      * Si elle existe déjà, une exception est levée.
