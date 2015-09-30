@@ -5,6 +5,7 @@
 package ca.qc.collegeahuntsic.bibliotheque.dao;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 //import java.sql.ResultSet;
 import java.sql.SQLException;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
@@ -22,7 +23,7 @@ public class MembreDAO extends DAO {
 
     private static final String INSERT_REQUEST = "INSERT INTO membre (idMembre, nom, telephone, limitePret, nbPret) VALUES (?, ?, ?, ?, ?)";
 
-    //private static final String READ_REQUEST = "SELECT idMembre, nom, telephone, limitePret, nbPret FROM membre WHERE idMembre = ?";
+    private static final String READ_REQUEST = "SELECT idMembre, nom, telephone, limitePret, nbPret FROM membre WHERE idMembre = ?";
 
     private static final String UPDATE_REQUEST = "UPDATE membre SET idMembre = ?, nom = ?, telephone = ?, limitePret = ?, nbPret = ? WHERE idMembre = ?";
 
@@ -216,6 +217,30 @@ public class MembreDAO extends DAO {
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
+    }
+
+    public MembreDTO read(int idMembre) throws DAOException {
+        MembreDTO membreDTO = null;
+        try(
+            PreparedStatement readPreparedStatement = getConnection().prepareStatement(MembreDAO.READ_REQUEST)) {
+            readPreparedStatement.setInt(1,
+                idMembre);
+            try(
+                ResultSet resultSet = readPreparedStatement.executeQuery()) {
+                if(resultSet.next()) {
+                    membreDTO = new MembreDTO();
+                    membreDTO.setIdMembre(resultSet.getInt(1));
+                    membreDTO.setNom(resultSet.getString(2));
+                    membreDTO.setTelephone(resultSet.getLong(3));
+                    membreDTO.setLimitePret(resultSet.getInt(4));
+                    membreDTO.setNbPret(resultSet.getInt(6));
+
+                }
+            }
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
+        return membreDTO;
     }
 
     /**
