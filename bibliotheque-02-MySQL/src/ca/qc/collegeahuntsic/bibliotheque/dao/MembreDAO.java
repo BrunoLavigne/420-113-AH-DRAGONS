@@ -5,7 +5,7 @@
 package ca.qc.collegeahuntsic.bibliotheque.dao;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+//import java.sql.ResultSet;
 import java.sql.SQLException;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
@@ -20,59 +20,25 @@ public class MembreDAO extends DAO {
 
     private static final long serialVersionUID = 1L;
 
-    private PreparedStatement stmtExiste;
+    private static final String ADD_REQUEST = "INSERT INTO membre (idMembre, nom, telephone, limitePret, nbPret) VALUES (?, ?, ?, ?, ?)";
 
-    private PreparedStatement stmtInsert;
+    //private static final String READ_REQUEST = "SELECT idMembre, nom, telephone, limitePret, nbPret FROM membre WHERE idMembre = ?";
 
-    private PreparedStatement stmtUpdateIncrNbPret;
+    //private static final String UDPATE_REQUEST = "UPDATE membre";
 
-    private PreparedStatement stmtUpdateDecNbPret;
+    //private static final String DELETE_REQUEST = "DELETE membre";
 
-    private PreparedStatement stmtDelete;
-
-    private final static String SELECT_REQUEST = "select idMembre, nom, telephone, limitePret, nbpret from membre where idmembre = ?";
-
-    private final static String INSERT_REQUEST = "insert into membre (idmembre, nom, telephone, limitepret, nbpret) "
-        + "values (?,?,?,?,0)";
-
-    private final static String UPDATE_REQUEST_ADD_PRET = "update membre set nbpret = nbPret + 1 where idMembre = ?";
-
-    private final static String UPDATE_REQUEST_REMOVE_PRET = "update membre set nbpret = nbPret - 1 where idMembre = ?";
-
-    private final static String DELETE_REQUEST = "delete from membre where idmembre = ?";
-
-    private Connexion cx;
+    // private final static String UPDATE_REQUEST_ADD_PRET = "update membre set nbpret = nbPret + 1 where idMembre = ?";
 
     /**
      *
      * Création d'une instance. Pré-compilation d'énoncés SQL
      *
-     * @param cx
-     * @throws DAOException
+     * @param connexion
+     * @throws DAOException s'il y a une erreur avec la base de données
      */
-    public MembreDAO(Connexion cx) throws DAOException {
-
-        try {
-            setCx(cx);
-            setStmtExiste(getCx().getConnection().prepareStatement(SELECT_REQUEST));
-            setStmtInsert(getCx().getConnection().prepareStatement(INSERT_REQUEST));
-            setStmtUpdateIncrNbPret(getCx().getConnection().prepareStatement(UPDATE_REQUEST_ADD_PRET));
-            setStmtUpdateDecNbPret(getCx().getConnection().prepareStatement(UPDATE_REQUEST_REMOVE_PRET));
-            setStmtDelete(getCx().getConnection().prepareStatement(DELETE_REQUEST));
-        } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
-        }
-
-    }
-
-    /**
-     *
-     * Retourner la connexion associée.
-     *
-     * @return La connexion
-     */
-    public Connexion getConnexion() {
-        return this.cx;
+    public MembreDAO(Connexion connexion) throws DAOException {
+        super(connexion);
     }
 
     /**
@@ -83,7 +49,7 @@ public class MembreDAO extends DAO {
      * @return boolean existe
      * @throws DAOException
      */
-    public boolean existe(int idMembre) throws DAOException {
+    /*public boolean existe(int idMembre) throws DAOException {
 
         try {
             getStmtExiste().setInt(1,
@@ -98,7 +64,7 @@ public class MembreDAO extends DAO {
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
-    }
+    }*/
 
     /**
      *
@@ -109,7 +75,7 @@ public class MembreDAO extends DAO {
      * @throws DAOException
      */
 
-    public MembreDTO getMembre(int idMembre) throws DAOException {
+    /*public MembreDTO getMembre(int idMembre) throws DAOException {
 
         try {
             getStmtExiste().setInt(1,
@@ -132,7 +98,7 @@ public class MembreDAO extends DAO {
             throw new DAOException(sqlException);
         }
 
-    }
+    }*/
 
     /**
      *
@@ -144,13 +110,13 @@ public class MembreDAO extends DAO {
      * @param limitePret
      * @throws DAOException
      */
-    public void inscrire(int idMembre,
+    /*public void inscrire(int idMembre,
         String nom,
         long telephone,
         int limitePret) throws DAOException {
 
         try {
-            /* Ajout du membre. */
+
             getStmtInsert().setInt(1,
                 idMembre);
             getStmtInsert().setString(2,
@@ -163,7 +129,7 @@ public class MembreDAO extends DAO {
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
-    }
+    }*/
 
     /**
      *
@@ -173,7 +139,7 @@ public class MembreDAO extends DAO {
      * @return int preter
      * @throws DAOException
      */
-    public int preter(int idMembre) throws DAOException {
+    /*public int preter(int idMembre) throws DAOException {
 
         try {
             getStmtUpdateIncrNbPret().setInt(1,
@@ -182,7 +148,7 @@ public class MembreDAO extends DAO {
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
-    }
+    }*/
 
     /**
      *
@@ -192,7 +158,7 @@ public class MembreDAO extends DAO {
      * @return int retourner
      * @throws DAOException
      */
-    public int retourner(int idMembre) throws DAOException {
+    /*public int retourner(int idMembre) throws DAOException {
 
         try {
             getStmtUpdateDecNbPret().setInt(1,
@@ -202,7 +168,7 @@ public class MembreDAO extends DAO {
             throw new DAOException(sqlException);
         }
 
-    }
+    }*/
 
     /**
      *
@@ -212,7 +178,7 @@ public class MembreDAO extends DAO {
      * @return int desinscrire
      * @throws DAOException
      */
-    public int desinscrire(int idMembre) throws DAOException {
+    /*public int desinscrire(int idMembre) throws DAOException {
 
         try {
             getStmtDelete().setInt(1,
@@ -221,114 +187,32 @@ public class MembreDAO extends DAO {
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
-    }
+    }*/
 
     /**
-     * Getter de la variable d'instance <code>this.stmtExiste</code>.
      *
-     * @return La variable d'instance <code>this.stmtExiste</code>
-     */
-    private PreparedStatement getStmtExiste() {
-        return this.stmtExiste;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.stmtExiste</code>.
+     * TODO Ajoute un membre à la base de données
      *
-     * @param stmtExiste La valeur à utiliser pour la variable d'instance <code>this.stmtExiste</code>
+     * @param membreDTO
+     * @throws DAOException S'il y a un problème avec la base de données
      */
-    private void setStmtExiste(PreparedStatement stmtExiste) {
-        this.stmtExiste = stmtExiste;
-    }
+    public void add(MembreDTO membreDTO) throws DAOException {
 
-    /**
-     * Getter de la variable d'instance <code>this.stmtInsert</code>.
-     *
-     * @return La variable d'instance <code>this.stmtInsert</code>
-     */
-    private PreparedStatement getStmtInsert() {
-        return this.stmtInsert;
+        try(
+            PreparedStatement addPreparedStatement = getConnection().prepareStatement(ADD_REQUEST)) {
+            addPreparedStatement.setInt(1,
+                membreDTO.getIdMembre());
+            addPreparedStatement.setString(2,
+                membreDTO.getNom());
+            addPreparedStatement.setLong(3,
+                membreDTO.getTelephone());
+            addPreparedStatement.setInt(4,
+                membreDTO.getLimitePret());
+            addPreparedStatement.setInt(5,
+                membreDTO.getNbPret());
+            addPreparedStatement.execute();
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
     }
-
-    /**
-     * Setter de la variable d'instance <code>this.stmtInsert</code>.
-     *
-     * @param stmtInsert La valeur à utiliser pour la variable d'instance <code>this.stmtInsert</code>
-     */
-    private void setStmtInsert(PreparedStatement stmtInsert) {
-        this.stmtInsert = stmtInsert;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.stmtUpdateIncrNbPret</code>.
-     *
-     * @return La variable d'instance <code>this.stmtUpdateIncrNbPret</code>
-     */
-    private PreparedStatement getStmtUpdateIncrNbPret() {
-        return this.stmtUpdateIncrNbPret;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.stmtUpdateIncrNbPret</code>.
-     *
-     * @param stmtUpdateIncrNbPret La valeur à utiliser pour la variable d'instance <code>this.stmtUpdateIncrNbPret</code>
-     */
-    private void setStmtUpdateIncrNbPret(PreparedStatement stmtUpdateIncrNbPret) {
-        this.stmtUpdateIncrNbPret = stmtUpdateIncrNbPret;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.stmtUpdateDecNbPret</code>.
-     *
-     * @return La variable d'instance <code>this.stmtUpdateDecNbPret</code>
-     */
-    private PreparedStatement getStmtUpdateDecNbPret() {
-        return this.stmtUpdateDecNbPret;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.stmtUpdateDecNbPret</code>.
-     *
-     * @param stmtUpdateDecNbPret La valeur à utiliser pour la variable d'instance <code>this.stmtUpdateDecNbPret</code>
-     */
-    private void setStmtUpdateDecNbPret(PreparedStatement stmtUpdateDecNbPret) {
-        this.stmtUpdateDecNbPret = stmtUpdateDecNbPret;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.stmtDelete</code>.
-     *
-     * @return La variable d'instance <code>this.stmtDelete</code>
-     */
-    private PreparedStatement getStmtDelete() {
-        return this.stmtDelete;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.stmtDelete</code>.
-     *
-     * @param stmtDelete La valeur à utiliser pour la variable d'instance <code>this.stmtDelete</code>
-     */
-    private void setStmtDelete(PreparedStatement stmtDelete) {
-        this.stmtDelete = stmtDelete;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.cx</code>.
-     *
-     * @return La variable d'instance <code>this.cx</code>
-     */
-    private Connexion getCx() {
-        return this.cx;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.cx</code>.
-     *
-     * @param cx La valeur à utiliser pour la variable d'instance <code>this.cx</code>
-     */
-    private void setCx(Connexion cx) {
-        this.cx = cx;
-    }
-
 }
