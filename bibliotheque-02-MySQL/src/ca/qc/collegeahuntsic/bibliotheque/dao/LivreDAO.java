@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.sql.Types;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 
 /**
@@ -34,9 +33,9 @@ public class LivreDAO extends DAO {
 
     private PreparedStatement stmtListeTousLivres;
 
-    private final static String SELECT_REQUEST = "select idlivre, titre, auteur, dateAcquisition, idMembre, datePret from livre where idlivre = ?";
+    private final static String READ_REQUEST = "select idlivre, titre, auteur, dateAcquisition, idMembre, datePret from livre where idlivre = ?";
 
-    private final static String INSERT_REQUEST = "insert into livre (idLivre, titre, auteur, dateAcquisition, idMembre, datePret) "
+    private final static String ADD_REQUEST = "insert into livre (idLivre, titre, auteur, dateAcquisition, idMembre, datePret) "
         + "values (?,?,?,?,null,null)";
 
     private final static String UPDATE_REQUEST = "update livre set idMembre = ?, datePret = ? "
@@ -53,8 +52,6 @@ public class LivreDAO extends DAO {
 
     private final static String FIND_BY_MEMBRE = "select idMembre, nom, telephone, limitePret, nbpret from membre where idmembre = ?";
 
-    private Connexion cx;
-
     /**
      *
      * Creation d'une instance. Des énoncés SQL pour chaque requête sont précompilés.
@@ -62,20 +59,19 @@ public class LivreDAO extends DAO {
      * @param cx
      * @throws DAOException
      */
-    public LivreDAO(Connexion cx) throws DAOException {
-
-        setCx(cx);
+    public LivreDAO(Connexion connexion) throws DAOException {
+        super(connexion);
 
         try {
-            setStmtExiste(getCx().getConnection().prepareStatement(SELECT_REQUEST));
+            setStmtExiste(getConnection().prepareStatement(READ_REQUEST));
 
-            setStmtInsert(getCx().getConnection().prepareStatement(INSERT_REQUEST));
-            setStmtUpdate(getCx().getConnection().prepareStatement(UPDATE_REQUEST));
-            setStmtDelete(getCx().getConnection().prepareStatement(DELETE_REQUEST));
+            setStmtInsert(getConnection().prepareStatement(ADD_REQUEST));
+            setStmtUpdate(getConnection().prepareStatement(UPDATE_REQUEST));
+            setStmtDelete(getConnection().prepareStatement(DELETE_REQUEST));
 
             // MERGE
-            setStmtLivresTitreMot(getCx().getConnection().prepareStatement(FIND_BY_TITRE));
-            setStmtListeTousLivres(getCx().getConnection().prepareStatement(GET_ALL_REQUESTS));
+            setStmtLivresTitreMot(getConnection().prepareStatement(FIND_BY_TITRE));
+            setStmtListeTousLivres(getConnection().prepareStatement(GET_ALL_REQUESTS));
 
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
@@ -84,12 +80,43 @@ public class LivreDAO extends DAO {
 
     /**
      *
-     * Retourner la connexion associée.
+     * Met à jour un livre.
      *
-     * @return la connexion
+     * @param livreDTO
+     * @throws DAOException
+     * @return livreDTO
      */
-    public Connexion getConnexion() {
-        return this.cx;
+    public void update(LivreDTO livreDTO) throws DAOException {
+        try(
+            PreparedStatement updatePreparedStatement = getConnection().prepareStatement(UPDATE_REQUEST)) {
+
+            updatePreparedStatement.setInt(1,
+                livreDTO.getIdMembre());
+            updatePreparedStatement.setDate(2,
+                livreDTO.getDatePret());
+            updatePreparedStatement.execute();
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
+    }
+
+    /**
+     *
+     * Lit un livre.
+     *
+     * @param livreDTO
+     * @throws DAOException
+     */
+    public LivreDTO read(LivreDTO livreDTO) throws DAOException {
+        try(
+            PreparedStatement readPreparedStatement = getConnection().prepareStatement(READ_REQUEST)) {
+            readPreparedStatement.setInt(1,
+                livreDTO.getIdLivre());
+            readPreparedStatement.execute();
+            return livreDTO;
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
     }
 
     /**
@@ -285,10 +312,8 @@ public class LivreDAO extends DAO {
                     }
                     System.out.println();
                 }
-                getCx().commit();
+                getConnection().commit();
             }
-        } catch(ConnexionException connexionException) {
-            throw new DAOException(connexionException);
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
@@ -328,10 +353,8 @@ public class LivreDAO extends DAO {
                     + " "
                     + FIND_BY_MEMBRE);
 
-                getCx().commit();
+                getConnection().commit();
             }
-        } catch(ConnexionException connexionException) {
-            throw new DAOException(connexionException);
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
@@ -409,24 +432,6 @@ public class LivreDAO extends DAO {
      */
     private void setStmtDelete(PreparedStatement stmtDelete) {
         this.stmtDelete = stmtDelete;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.cx</code>.
-     *
-     * @return La variable d'instance <code>this.cx</code>
-     */
-    private Connexion getCx() {
-        return this.cx;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.cx</code>.
-     *
-     * @param cx La valeur à utiliser pour la variable d'instance <code>this.cx</code>
-     */
-    private void setCx(Connexion cx) {
-        this.cx = cx;
     }
 
     /**
