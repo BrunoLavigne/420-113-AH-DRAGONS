@@ -4,11 +4,12 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.dao;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
@@ -20,14 +21,6 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 public class LivreDAO extends DAO {
 
     private static final long serialVersionUID = 1L;
-
-    private PreparedStatement stmtExiste;
-
-    private PreparedStatement stmtInsert;
-
-    private PreparedStatement stmtUpdate;
-
-    private PreparedStatement stmtDelete;
 
     private PreparedStatement stmtLivresTitreMot;
 
@@ -43,11 +36,11 @@ public class LivreDAO extends DAO {
 
     private final static String DELETE_REQUEST = "delete from livre where idlivre = ?";
 
-    private final static String GET_ALL_REQUESTS = "select t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret "
-        + "from livre t1";
+    private final static String GET_ALL_REQUEST = "select idLivre, titre, auteur, idmembre, datePret "
+        + "from livre";
 
-    private final static String FIND_BY_TITRE = "SELECT t1.idLivre, t1.titre, t1.auteur, t1.idmembre, t1.datePret + 14 "
-        + "FROM LIVRE t1 "
+    private final static String FIND_BY_TITRE = "SELECT idLivre, titre, auteur, idmembre, datePret + 14 "
+        + "FROM LIVRE "
         + "WHERE LOWER(titre) LIKE %?%";
 
     private final static String FIND_BY_MEMBRE = "select idMembre, nom, telephone, limitePret, nbpret from membre where idmembre = ?";
@@ -63,15 +56,9 @@ public class LivreDAO extends DAO {
         super(connexion);
 
         try {
-            setStmtExiste(getConnection().prepareStatement(READ_REQUEST));
-
-            setStmtInsert(getConnection().prepareStatement(ADD_REQUEST));
-            setStmtUpdate(getConnection().prepareStatement(UPDATE_REQUEST));
-            setStmtDelete(getConnection().prepareStatement(DELETE_REQUEST));
 
             // MERGE
             setStmtLivresTitreMot(getConnection().prepareStatement(FIND_BY_TITRE));
-            setStmtListeTousLivres(getConnection().prepareStatement(GET_ALL_REQUESTS));
 
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
@@ -114,6 +101,81 @@ public class LivreDAO extends DAO {
                 livreDTO.getIdLivre());
             readPreparedStatement.execute();
             return livreDTO;
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
+    }
+
+    /**
+     *
+     * Méthode permettant d'ajouter un livre à la base de données.
+     *
+     * @param livreDTO Le livre à ajouter
+     * @throws DAOException en cas d'erreur de connexion ou d'objet <code>LivreDTO</code> incomplet.
+     */
+    public void add(LivreDTO livreDTO) throws DAOException {
+        try(
+            PreparedStatement stmtAdd = (getConnection().prepareStatement(LivreDAO.ADD_REQUEST))) {
+            stmtAdd.setInt(1,
+                livreDTO.getIdLivre());
+            stmtAdd.setString(2,
+                livreDTO.getTitre());
+            stmtAdd.setString(3,
+                livreDTO.getAuteur());
+            stmtAdd.setDate(4,
+                livreDTO.getDateAcquisition());
+            stmtAdd.executeUpdate();
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
+    }
+
+    /**
+     *
+     * Méthode permettant de retirer un livre de la base de données.
+     *
+     * @param livreDTO le livre à effacer
+     * @throws DAOException en cas d'erreur de connexion ou d'objet <code>LivreDTO</code> incomplet.
+     */
+    public void delete(LivreDTO livreDTO) throws DAOException {
+        try(
+            PreparedStatement stmtDelete = (getConnection().prepareStatement(LivreDAO.DELETE_REQUEST))) {
+            stmtDelete.setInt(1,
+                livreDTO.getIdLivre());
+            stmtDelete.executeUpdate();
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
+    }
+
+    /**
+     * 
+     * Méthode retournant une chaîne de caractères formatée comprenant les informations 
+     * de base de tous les livres contenus dans la base de données.
+     *
+     * @return outputText un <code>String</code> contenant les informations sur les livres 
+     * de la base de données organisées en colonnes.
+     * @throws DAOException en cas d'erreur de connexion.
+     */
+    public String listerTousLesLivres() throws DAOException {
+        String outputText = "";
+        try(
+            PreparedStatement stmtGetAllLivres = (getConnection().prepareStatement(LivreDAO.GET_ALL_REQUEST));
+            ResultSet results = stmtGetAllLivres.executeQuery()) {
+            ResultSetMetaData rsMeta = results.getMetaData();
+            for(int i = 0 ; i < rsMeta.getColumnCount() ; i++) {
+                outputText += rsMeta.getColumnName(i + 1)
+                    + "\t";
+            }
+            outputText += "\n";
+            while(results.next()) {
+                for(int i = 0 ; i < rsMeta.getColumnCount() ; i++) {
+                    outputText += results.getString(i + 1)
+                        + "\t";
+                }
+                outputText += "\n";
+            }
+            return outputText;
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
@@ -179,6 +241,38 @@ public class LivreDAO extends DAO {
 
     /**
      *
+     * Affiche les livres contenant un mot dans le titre
+     *
+     * @param motTitre la chaîne de caractères à rechercher dans les
+     * titres des livres enregistrés dans la base de données
+     * @throws DAOException en cas d'erreur de connexion ou de format d'objets ou d'enregistrements incompatibles.
+     */
+    public List<Object> listerLivresParTitre(String motTitre) throws DAOException {
+        try(
+            PreparedStatement stmtGetLivresByTitre = (getConnection().prepareStatement(LivreDAO.FIND_BY_TITRE));) {
+            stmtGetLivresByTitre.setString(1,
+                motTitre);
+            try(
+                ResultSet rset = getStmtLivresTitreMot().executeQuery()) {
+                List<Object> liste = new ArrayList<>();
+                while(rset.next()) {
+                    LivreDTO tempLivre = new LivreDTO();
+                    tempLivre.setIdLivre(rset.getInt(1));
+                    tempLivre.setTitre(rset.getString(2));
+                    tempLivre.setAuteur(rset.getString(3));
+                    tempLivre.setIdMembre(rset.getInt(4));
+                    tempLivre.setDatePret(rset.getDate(5));
+                    liste.add(tempLivre);
+                }
+                return liste;
+            }
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
+    }
+
+    /**
+     *
      * Ajout d'un nouveau livre dans la base de données.
      *
      * @param idLivre
@@ -187,11 +281,11 @@ public class LivreDAO extends DAO {
      * @param dateAcquisition
      * @throws DAOException
      */
+    /*
     public void acquerir(int idLivre,
         String titre,
         String auteur,
         String dateAcquisition) throws DAOException {
-        /* Ajout du livre. */
         try {
             getStmtInsert().setInt(1,
                 idLivre);
@@ -205,8 +299,8 @@ public class LivreDAO extends DAO {
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
-
     }
+     */
 
     /**
      *
@@ -218,10 +312,10 @@ public class LivreDAO extends DAO {
      * @return int preter
      * @throws DAOException
      */
+    /*
     public int preter(int idLivre,
         int idMembre,
         String datePret) throws DAOException {
-        /* Enregistrement du pret. */
         try {
             getStmtUpdate().setInt(1,
                 idMembre);
@@ -234,6 +328,7 @@ public class LivreDAO extends DAO {
             throw new DAOException(sqlException);
         }
     }
+     */
 
     /**
      *
@@ -243,8 +338,8 @@ public class LivreDAO extends DAO {
      * @return int retourner
      * @throws DAOException
      */
+    /*
     public int retourner(int idLivre) throws DAOException {
-        /* Enregistrement du pret. */
         try {
             getStmtUpdate().setNull(1,
                 Types.INTEGER);
@@ -257,6 +352,7 @@ public class LivreDAO extends DAO {
             throw new DAOException(sqlException);
         }
     }
+     */
 
     /**
      *
@@ -266,8 +362,8 @@ public class LivreDAO extends DAO {
      * @return int vendre
      * @throws DAOException
      */
+    /*
     public int vendre(int idLivre) throws DAOException {
-        /* Suppression du livre. */
         try {
             getStmtDelete().setInt(1,
                 idLivre);
@@ -276,49 +372,9 @@ public class LivreDAO extends DAO {
             throw new DAOException(sqlException);
         }
     }
+     */
 
     // MERGE GESTION INTERROGATION SERVICE
-
-    /**
-     *
-     * Affiche les livres contenant un mot dans le titre
-     *
-     * @param mot
-     * @throws DAOException
-     */
-    public void listerLivresTitre(String mot) throws DAOException {
-
-        try {
-            getStmtLivresTitreMot().setString(1,
-                mot);
-
-            // TODO fix warning
-            try(
-                ResultSet rset = getStmtLivresTitreMot().executeQuery()) {
-                int idMembre;
-                System.out.println("idLivre titre auteur idMembre dateRetour");
-                while(rset.next()) {
-                    System.out.print(rset.getInt(1)
-                        + " "
-                        + rset.getString(2)
-                        + " "
-                        + rset.getString(3));
-                    idMembre = rset.getInt(4);
-                    if(!rset.wasNull()) {
-                        System.out.print(" "
-                            + idMembre
-                            + " "
-                            + rset.getDate(5));
-                    }
-                    System.out.println();
-                }
-                getConnection().commit();
-            }
-        } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
-        }
-    }
-
     /**
      *
      * Affiche tous les livres de la BD
@@ -363,78 +419,6 @@ public class LivreDAO extends DAO {
     //Getter et Setter
 
     /**
-     * Getter de la variable d'instance <code>this.stmtExiste</code>.
-     *
-     * @return La variable d'instance <code>this.stmtExiste</code>
-     */
-    private PreparedStatement getStmtExiste() {
-        return this.stmtExiste;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.stmtExiste</code>.
-     *
-     * @param stmtExiste La valeur à utiliser pour la variable d'instance <code>this.stmtExiste</code>
-     */
-    private void setStmtExiste(PreparedStatement stmtExiste) {
-        this.stmtExiste = stmtExiste;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.stmtInsert</code>.
-     *
-     * @return La variable d'instance <code>this.stmtInsert</code>
-     */
-    private PreparedStatement getStmtInsert() {
-        return this.stmtInsert;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.stmtInsert</code>.
-     *
-     * @param stmtInsert La valeur à utiliser pour la variable d'instance <code>this.stmtInsert</code>
-     */
-    private void setStmtInsert(PreparedStatement stmtInsert) {
-        this.stmtInsert = stmtInsert;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.stmtUpdate</code>.
-     *
-     * @return La variable d'instance <code>this.stmtUpdate</code>
-     */
-    private PreparedStatement getStmtUpdate() {
-        return this.stmtUpdate;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.stmtUpdate</code>.
-     *
-     * @param stmtUpdate La valeur à utiliser pour la variable d'instance <code>this.stmtUpdate</code>
-     */
-    private void setStmtUpdate(PreparedStatement stmtUpdate) {
-        this.stmtUpdate = stmtUpdate;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.stmtDelete</code>.
-     *
-     * @return La variable d'instance <code>this.stmtDelete</code>
-     */
-    private PreparedStatement getStmtDelete() {
-        return this.stmtDelete;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.stmtDelete</code>.
-     *
-     * @param stmtDelete La valeur à utiliser pour la variable d'instance <code>this.stmtDelete</code>
-     */
-    private void setStmtDelete(PreparedStatement stmtDelete) {
-        this.stmtDelete = stmtDelete;
-    }
-
-    /**
      * Getter de la variable d'instance <code>this.stmtLivresTitreMot</code>.
      *
      * @return La variable d'instance <code>this.stmtLivresTitreMot</code>
@@ -459,14 +443,5 @@ public class LivreDAO extends DAO {
      */
     private void setStmtLivresTitreMot(PreparedStatement stmtLivresTitreMot) {
         this.stmtLivresTitreMot = stmtLivresTitreMot;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.stmtListeTousLivres</code>.
-     *
-     * @param stmtListeTousLivres La valeur à utiliser pour la variable d'instance <code>this.stmtListeTousLivres</code>
-     */
-    private void setStmtListeTousLivres(PreparedStatement stmtListeTousLivres) {
-        this.stmtListeTousLivres = stmtListeTousLivres;
     }
 }
