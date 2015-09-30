@@ -219,6 +219,14 @@ public class MembreDAO extends DAO {
         }
     }
 
+    /**
+     *
+     * Lit et renvoie un membre de la table membre
+     *
+     * @param idMembre
+     * @return MembreDTO Le membre dont L'ID est spécifié
+     * @throws DAOException S'il y a une erreur avec la base de données
+     */
     public MembreDTO read(int idMembre) throws DAOException {
         MembreDTO membreDTO = null;
         try(
