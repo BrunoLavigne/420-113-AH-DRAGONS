@@ -34,9 +34,9 @@ public class LivreDAO extends DAO {
 
     private PreparedStatement stmtListeTousLivres;
 
-    private final static String SELECT_REQUEST = "select idlivre, titre, auteur, dateAcquisition, idMembre, datePret from livre where idlivre = ?";
+    private final static String READ_REQUEST = "select idlivre, titre, auteur, dateAcquisition, idMembre, datePret from livre where idlivre = ?";
 
-    private final static String INSERT_REQUEST = "insert into livre (idLivre, titre, auteur, dateAcquisition, idMembre, datePret) "
+    private final static String ADD_REQUEST = "insert into livre (idLivre, titre, auteur, dateAcquisition, idMembre, datePret) "
         + "values (?,?,?,?,null,null)";
 
     private final static String UPDATE_REQUEST = "update livre set idMembre = ?, datePret = ? "
@@ -53,8 +53,6 @@ public class LivreDAO extends DAO {
 
     private final static String FIND_BY_MEMBRE = "select idMembre, nom, telephone, limitePret, nbpret from membre where idmembre = ?";
 
-    private Connexion cx;
-
     /**
      *
      * Creation d'une instance. Des énoncés SQL pour chaque requête sont précompilés.
@@ -62,14 +60,13 @@ public class LivreDAO extends DAO {
      * @param cx
      * @throws DAOException
      */
-    public LivreDAO(Connexion cx) throws DAOException {
-
-        setCx(cx);
+    public LivreDAO(Connexion connexion) throws DAOException {
+        super(connexion);
 
         try {
-            setStmtExiste(getCx().getConnection().prepareStatement(SELECT_REQUEST));
+            setStmtExiste(getCx().getConnection().prepareStatement(READ_REQUEST));
 
-            setStmtInsert(getCx().getConnection().prepareStatement(INSERT_REQUEST));
+            setStmtInsert(getCx().getConnection().prepareStatement(ADD_REQUEST));
             setStmtUpdate(getCx().getConnection().prepareStatement(UPDATE_REQUEST));
             setStmtDelete(getCx().getConnection().prepareStatement(DELETE_REQUEST));
 
@@ -84,12 +81,43 @@ public class LivreDAO extends DAO {
 
     /**
      *
-     * Retourner la connexion associée.
+     * Met à jour un livre.
      *
-     * @return la connexion
+     * @param livreDTO
+     * @throws DAOException
+     * @return livreDTO
      */
-    public Connexion getConnexion() {
-        return this.cx;
+    public void update(LivreDTO livreDTO) throws DAOException {
+        try(
+            PreparedStatement updatePreparedStatement = getConnection().prepareStatement(UPDATE_REQUEST)) {
+
+            updatePreparedStatement.setInt(1,
+                livreDTO.getIdMembre());
+            updatePreparedStatement.setDate(2,
+                livreDTO.getDatePret());
+            updatePreparedStatement.execute();
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
+    }
+
+    /**
+     *
+     * Lit un livre.
+     *
+     * @param livreDTO
+     * @throws DAOException
+     */
+    public LivreDTO read(LivreDTO livreDTO) throws DAOException {
+        try(
+            PreparedStatement readPreparedStatement = getConnection().prepareStatement(READ_REQUEST)) {
+            readPreparedStatement.setInt(1,
+                livreDTO.getIdLivre());
+            readPreparedStatement.execute();
+            return livreDTO;
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
     }
 
     /**
