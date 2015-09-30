@@ -6,7 +6,6 @@ package ca.qc.collegeahuntsic.bibliotheque.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,11 +93,12 @@ public class LivreDAO extends DAO {
      * @param livreDTO
      * @throws DAOException
      */
-    public LivreDTO read(LivreDTO livreDTO) throws DAOException {
+    public LivreDTO read(String idLivre) throws DAOException {
+        LivreDTO livreDTO = null;
         try(
-            PreparedStatement readPreparedStatement = getConnection().prepareStatement(READ_REQUEST)) {
-            readPreparedStatement.setInt(1,
-                livreDTO.getIdLivre());
+            PreparedStatement readPreparedStatement = getConnection().prepareStatement(LivreDAO.READ_REQUEST)) {
+            readPreparedStatement.setString(1,
+                idLivre);
             readPreparedStatement.execute();
             return livreDTO;
         } catch(SQLException sqlException) {
@@ -149,33 +149,33 @@ public class LivreDAO extends DAO {
     }
 
     /**
-     * 
-     * Méthode retournant une chaîne de caractères formatée comprenant les informations 
-     * de base de tous les livres contenus dans la base de données.
      *
-     * @return outputText un <code>String</code> contenant les informations sur les livres 
-     * de la base de données organisées en colonnes.
-     * @throws DAOException en cas d'erreur de connexion.
+     * Méthode retournant une liste de type <code>List</code> contenant des objets <code>LivreDTO</code>.
+     * La liste contient tous les livres enregistrés dans la base de données.
+     *
+     * @return liste une liste d'objets de type <code>LivreDTO</code> représentant
+     * les livres enregistrés dans la base de données
+     *
+     * @throws DAOException en cas d'erreur de connexion ou d'erreur SQL.
      */
-    public String listerTousLesLivres() throws DAOException {
-        String outputText = "";
+    public List<Object> listerTousLesLivres() throws DAOException {
+        List<Object> liste = new ArrayList<>();
         try(
             PreparedStatement stmtGetAllLivres = (getConnection().prepareStatement(LivreDAO.GET_ALL_REQUEST));
             ResultSet results = stmtGetAllLivres.executeQuery()) {
-            ResultSetMetaData rsMeta = results.getMetaData();
-            for(int i = 0 ; i < rsMeta.getColumnCount() ; i++) {
-                outputText += rsMeta.getColumnName(i + 1)
-                    + "\t";
-            }
-            outputText += "\n";
-            while(results.next()) {
-                for(int i = 0 ; i < rsMeta.getColumnCount() ; i++) {
-                    outputText += results.getString(i + 1)
-                        + "\t";
+            try(
+                ResultSet resultSet = stmtGetAllLivres.executeQuery()) {
+                while(resultSet.next()) {
+                    LivreDTO tempLivre = new LivreDTO();
+                    tempLivre.setIdLivre(resultSet.getInt(1));
+                    tempLivre.setTitre(resultSet.getString(2));
+                    tempLivre.setAuteur(resultSet.getString(3));
+                    tempLivre.setIdMembre(resultSet.getInt(4));
+                    tempLivre.setDatePret(resultSet.getDate(5));
+                    liste.add(tempLivre);
                 }
-                outputText += "\n";
             }
-            return outputText;
+            return liste;
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
@@ -405,7 +405,7 @@ public class LivreDAO extends DAO {
                 }
 
                 // TODO REMOVE THIS
-                System.out.println(GET_ALL_REQUESTS
+                System.out.println(LivreDAO.GET_ALL_REQUEST
                     + " "
                     + FIND_BY_MEMBRE);
 
