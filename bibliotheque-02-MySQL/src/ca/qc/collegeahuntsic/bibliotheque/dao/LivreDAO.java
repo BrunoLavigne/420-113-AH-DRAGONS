@@ -107,16 +107,28 @@ public class LivreDAO extends DAO {
      * @param livreDTO
      * @throws DAOException
      */
-    public LivreDTO read(LivreDTO livreDTO) throws DAOException {
+    public LivreDTO read(String idLivre) throws DAOException {
+        LivreDTO livreDTO = null;
         try(
             PreparedStatement readPreparedStatement = getConnection().prepareStatement(READ_REQUEST)) {
-            readPreparedStatement.setInt(1,
-                livreDTO.getIdLivre());
-            readPreparedStatement.execute();
-            return livreDTO;
+            readPreparedStatement.setString(1,
+                idLivre);
+            try(
+                ResultSet resultSet = readPreparedStatement.executeQuery()) {
+                if(resultSet.next()) {
+                    livreDTO = new LivreDTO();
+                    livreDTO.setIdLivre(resultSet.getInt(1));
+                    livreDTO.setTitre(resultSet.getString(2));
+                    livreDTO.setAuteur(resultSet.getString(3));
+                    livreDTO.setDateAcquisition(resultSet.getDate(4));
+                    livreDTO.setIdMembre(resultSet.getInt(5));
+                    livreDTO.setDatePret(resultSet.getDate(6));
+                }
+            }
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
+        return livreDTO;
     }
 
     /**
