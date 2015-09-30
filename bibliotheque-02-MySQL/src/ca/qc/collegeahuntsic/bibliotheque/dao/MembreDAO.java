@@ -20,13 +20,15 @@ public class MembreDAO extends DAO {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ADD_REQUEST = "INSERT INTO membre (idMembre, nom, telephone, limitePret, nbPret) VALUES (?, ?, ?, ?, ?)";
+    private static final String INSERT_REQUEST = "INSERT INTO membre (idMembre, nom, telephone, limitePret, nbPret) VALUES (?, ?, ?, ?, ?)";
 
     //private static final String READ_REQUEST = "SELECT idMembre, nom, telephone, limitePret, nbPret FROM membre WHERE idMembre = ?";
 
-    //private static final String UDPATE_REQUEST = "UPDATE membre";
+    private static final String UPDATE_REQUEST = "UPDATE membre SET idMembre = ?, nom = ?, telephone = ?, limitePret = ?, nbPret = ? WHERE idMembre = ?";
 
     private static final String DELETE_REQUEST = "DELETE FROM membre WHERE idMembre = ?";
+
+    //private final static String SELECT_REQUEST = "select idlivre, titre, auteur, dateAcquisition, idMembre, datePret from livre where idlivre = ?";
 
     // private final static String UPDATE_REQUEST_ADD_PRET = "update membre set nbpret = nbPret + 1 where idMembre = ?";
 
@@ -199,7 +201,7 @@ public class MembreDAO extends DAO {
     public void add(MembreDTO membreDTO) throws DAOException {
 
         try(
-            PreparedStatement addPreparedStatement = getConnection().prepareStatement(ADD_REQUEST)) {
+            PreparedStatement addPreparedStatement = getConnection().prepareStatement(INSERT_REQUEST)) {
             addPreparedStatement.setInt(1,
                 membreDTO.getIdMembre());
             addPreparedStatement.setString(2,
@@ -211,6 +213,35 @@ public class MembreDAO extends DAO {
             addPreparedStatement.setInt(5,
                 membreDTO.getNbPret());
             addPreparedStatement.execute();
+        } catch(SQLException sqlException) {
+            throw new DAOException(sqlException);
+        }
+    }
+
+    /**
+     *
+     * Met les informations d'un membre à jour
+     *
+     * @param membreDTO
+     * @throws DAOException S'il y a un problème avec la base de données
+     */
+    public void update(MembreDTO membreDTO) throws DAOException {
+
+        try(
+            PreparedStatement updatePreparedStatement = getConnection().prepareStatement(UPDATE_REQUEST)) {
+            updatePreparedStatement.setInt(1,
+                membreDTO.getIdMembre());
+            updatePreparedStatement.setString(2,
+                membreDTO.getNom());
+            updatePreparedStatement.setLong(3,
+                membreDTO.getTelephone());
+            updatePreparedStatement.setInt(4,
+                membreDTO.getLimitePret());
+            updatePreparedStatement.setInt(5,
+                membreDTO.getNbPret());
+            updatePreparedStatement.setInt(6,
+                membreDTO.getIdMembre());
+            updatePreparedStatement.execute();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
