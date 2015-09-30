@@ -8,6 +8,7 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
@@ -45,7 +46,7 @@ public class LivreService extends Services {
     //Création d'une instance
     public LivreService(LivreDAO livre,
         ReservationDAO reservation) {
-        setCx(livre.getConnexion());
+        // setCx(livre.getConnexion());
         setLivre(livre);
         setReservation(reservation);
     }
@@ -101,7 +102,7 @@ public class LivreService extends Services {
      * @throws ConnexionException
      */
     public void vendre(int idLivre) throws ServiceException,
-    ConnexionException {
+        ConnexionException {
         try {
             LivreDTO tupleLivre = getLivre().getLivre(idLivre);
             if(tupleLivre == null) {
@@ -185,11 +186,19 @@ public class LivreService extends Services {
     }
 
     /**
-     * Setter de la variable d'instance <code>this.cx</code>.
      *
-     * @param cx La valeur à utiliser pour la variable d'instance <code>this.cx</code>
+     * TODO Auto-generated method javadoc
+     *
+     * @param livreDTO
+     * @throws ServiceException
      */
-    private void setCx(Connexion cx) {
-        this.cx = cx;
+    public void acquerir(LivreDTO livreDTO) throws ServiceException {
+        /*if(read(livreDTO.getIdLivre()) != null)) {
+            throw new ServiceException("Le livre " + livreDTO.getTitre() + " existe déjà.");
+        }*/
+    }
+
+    public void emprunter(MembreDTO membreDTO,
+        LivreDTO livreDTO) throws ServiceException {
     }
 }
