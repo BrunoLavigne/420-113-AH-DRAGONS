@@ -66,6 +66,9 @@ public class MembreService extends Services {
 
     }
 
+    /**
+     * @TODO [test comment]
+     */
     public void inscrire(int idMembre,
         String nom,
         long telephone,
