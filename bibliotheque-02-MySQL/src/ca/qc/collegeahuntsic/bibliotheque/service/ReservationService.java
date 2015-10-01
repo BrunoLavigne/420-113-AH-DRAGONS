@@ -76,54 +76,51 @@ public class ReservationService extends Services {
      * @param idLivre
      * @param idMembre
      * @param dateReservation
+     * @param reservationDTO
      * @throws ServiceException
      */
     public void reserver(int idReservation,
         int idLivre,
         int idMembre,
-        String dateReservation) throws ServiceException {
+        String dateReservation,
+        ReservationDTO reservationDTO) throws ServiceException {
         try {
             // Vérifie que le livre est prêté
-            LivreDTO tupleLivre = getLivre().getLivre(idLivre);
-            if(tupleLivre == null) {
+            if(getLivre().read(idLivre) == null) {
                 throw new ServiceException("Livre inexistant: "
                     + idLivre);
             }
-            if(tupleLivre.getIdMembre() == 0) {
+            if(getMembre().read(idMembre).getIdMembre() == 0) {
                 throw new ServiceException("Livre "
                     + idLivre
                     + " n'est pas prêté");
             }
-            if(tupleLivre.getIdMembre() == idMembre) {
+            if(getMembre().read(idMembre).getIdMembre() == idMembre) {
                 throw new ServiceException("Livre "
                     + idLivre
                     + " déjà prêté à ce membre");
             }
 
             // Vérifie que le membre existe
-            MembreDTO tupleMembre = getMembre().getMembre(idMembre);
-            if(tupleMembre == null) {
+            if(getMembre().read(idMembre) == null) {
                 throw new ServiceException("Membre inexistant: "
                     + idMembre);
             }
 
             // Vérifie si date reservation >= datePret
-            if(Date.valueOf(dateReservation).before(tupleLivre.getDatePret())) {
+            if(Date.valueOf(dateReservation).before(getLivre().read(idLivre).getDatePret())) {
                 throw new ServiceException("Date de réservation inférieure à la date de prêt");
             }
 
             // Vérifie que la réservation n'existe pas
-            if(this.reservation.existe(idReservation)) {
+            if(getReservation().read(idReservation).getIdReservation() == idReservation) {
                 throw new ServiceException("Réservation "
                     + idReservation
                     + " existe déjà");
             }
 
-            //Création de la réservation
-            getReservation().reserver(idReservation,
-                idLivre,
-                idMembre,
-                dateReservation);
+            //Création de la réservation/
+            getReservation().add(reservationDTO);
             getCx().commit();
 
         } catch(Exception exception) {
