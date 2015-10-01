@@ -59,8 +59,8 @@ public class ReservationService extends Services {
      * Réservation d'un livre par un membre.
      * Le livre doit être prêté.
      *
-     * @param idReservation
-     * @param idLivre
+     * @param idReservation.
+     * @param idLivre.
      * @param idMembre
      * @param dateReservation
      * @param reservationDTO

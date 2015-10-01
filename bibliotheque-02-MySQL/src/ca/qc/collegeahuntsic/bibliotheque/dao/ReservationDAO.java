@@ -75,7 +75,7 @@ public class ReservationDAO extends DAO {
 
     /**
      *
-     * Lecture de la reservation
+     * Lecture de la reéervation
      *
      * @param idReservation
      * @return
