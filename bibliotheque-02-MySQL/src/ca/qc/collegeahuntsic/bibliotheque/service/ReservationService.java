@@ -9,8 +9,6 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
-import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
@@ -141,14 +139,17 @@ public class ReservationService extends Services {
      *
      * @param idReservation
      * @param datePret
+     * @param idLivre
+     * @param idMembre
      * @throws ServiceException
      */
     public void prendreRes(int idReservation,
-        String datePret) throws ServiceException {
+        String datePret,
+        int idLivre,
+        int idMembre) throws ServiceException {
         try {
             // Vérifie s'il y existe déjà une réservation pour le livre
-            ReservationDTO tupleReservation = getReservation().getReservation(idReservation);
-            if(tupleReservation == null) {
+            if(getReservation().read(idReservation) == null) {
                 throw new ServiceException("Réservation inexistante : "
                     + idReservation);
             }
@@ -162,42 +163,40 @@ public class ReservationService extends Services {
             }
 
             // Vérifie si le livre est disponible
-            LivreDTO tupleLivre = getLivre().getLivre(tupleReservation.getIdLivre());
-            if(tupleLivre == null) {
+            if(getReservation().read(idReservation).getIdLivre() == 0) {
                 throw new ServiceException("Livre inexistant: "
-                    + tupleReservation.getIdLivre());
+                    + getReservation().read(idReservation).getIdLivre());
             }
-            if(tupleLivre.getIdMembre() != 0) {
+            if(getReservation().read(idReservation).getIdLivre() != 0) {
                 throw new ServiceException("Livre "
-                    + tupleLivre.getIdLivre()
+                    + getReservation().read(idReservation).getIdLivre()
                     + " déjà prêté à "
-                    + tupleLivre.getIdMembre());
+                    + getReservation().read(idReservation).getIdMembre());
             }
 
             // Vérifie si le membre existe et sa limite de prêt
-            MembreDTO tupleMembre = getMembre().getMembre(tupleReservation.getIdMembre());
-            if(tupleMembre == null) {
+            if(getMembre().read(idMembre).getIdMembre() == 0) {
                 throw new ServiceException("Membre inexistant: "
-                    + tupleReservation.getIdMembre());
+                    + getReservation().read(idReservation).getIdMembre());
             }
-            if(tupleMembre.getNbPret() >= tupleMembre.getLimitePret()) {
+            if(getMembre().read(idMembre).getNbPret() >= getMembre().read(idMembre).getLimitePret()) {
                 throw new ServiceException("Limite de prêt du membre "
-                    + tupleReservation.getIdMembre()
+                    + getReservation().read(idReservation).getIdMembre()
                     + " atteinte");
             }
 
             // Vérifie si datePret >= tupleReservation.dateReservation
-            if(Date.valueOf(datePret).before(tupleReservation.getDateReservation())) {
+            if(Date.valueOf(datePret).before(getReservation().read(idReservation).getDateReservation())) {
                 throw new ServiceException("Date de prêt inférieure à la date de réservation");
             }
 
             // Enregistrement du prêt.
-            if(getLivre().preter(tupleReservation.getIdLivre(),
-                tupleReservation.getIdMembre(),
+            if(getLivre().preter(getReservation().read(idReservation).getIdLivre(),
+                getReservation().read(idReservation).getIdMembre(),
                 datePret) == 0) {
                 throw new ServiceException("Livre suprimé par une autre transaction");
             }
-            if(getMembre().preter(tupleReservation.getIdMembre()) == 0) {
+            if(getMembre().preter(getReservation().read(idReservation).getIdMembre()) == 0) {
                 throw new ServiceException("Membre suprimé par une autre transaction");
             }
             // Éliminer la réservation.
