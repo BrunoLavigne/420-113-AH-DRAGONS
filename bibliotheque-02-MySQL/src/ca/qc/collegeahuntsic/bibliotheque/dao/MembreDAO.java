@@ -208,7 +208,7 @@ public class MembreDAO extends DAO {
             updatePreparedStatement.setInt(5,
                 membreDTO.getNbPret());
             updatePreparedStatement.setInt(6,
-                membreDTO.getIdMembre()); //test
+                membreDTO.getIdMembre());
             updatePreparedStatement.execute();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
