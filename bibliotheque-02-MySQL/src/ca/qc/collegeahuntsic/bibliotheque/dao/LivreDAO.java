@@ -64,17 +64,27 @@ public class LivreDAO extends DAO {
      * Met à jour un livre.
      *
      * @param livreDTO
-     * @throws DAOException S'il y a une erreur avec la base de donnée
+     * @throws DAOException
      * @return livreDTO
      */
     public void update(LivreDTO livreDTO) throws DAOException {
         try(
             PreparedStatement updatePreparedStatement = getConnection().prepareStatement(LivreDAO.UPDATE_REQUEST)) {
+
             updatePreparedStatement.setInt(1,
+                livreDTO.getIdLivre());
+            updatePreparedStatement.setString(2,
+                livreDTO.getTitre());
+            updatePreparedStatement.setString(3,
+                livreDTO.getAuteur());
+            updatePreparedStatement.setDate(4,
+                livreDTO.getDateAcquisition());
+            updatePreparedStatement.setInt(5,
                 livreDTO.getIdMembre());
-            updatePreparedStatement.setDate(2,
+            updatePreparedStatement.setDate(6,
                 livreDTO.getDatePret());
-            updatePreparedStatement.execute();
+
+            updatePreparedStatement.executeUpdate();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
