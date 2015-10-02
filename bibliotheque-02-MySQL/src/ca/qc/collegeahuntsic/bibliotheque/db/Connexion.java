@@ -44,13 +44,13 @@ public class Connexion {
     /**
      * Ouverture d'une connexion en mode autocommit false et sérialisable (si supporté)
      * @param serveur serveur SQL de la BD
-     * @param bd nom de la base de données
+     * @param schema schéma de la BD
      * @param user userid sur le serveur SQL
      * @param pass mot de passe sur le serveur SQL
      * @throws ConnexionException
      */
     public Connexion(String serveur,
-        String bd,
+        String schema,
         String user,
         String pass) throws ConnexionException {
         Driver d;
@@ -59,14 +59,14 @@ public class Connexion {
                 d = (Driver) Class.forName(NOM_DRIVER_MYSQL).newInstance();
                 DriverManager.registerDriver(d);
                 setConn(DriverManager.getConnection(URL_MYSQL
-                    + bd,
+                    + schema,
                     user,
                     pass));
             } else if(serveur.equals(CONNEXIONORACLE)) {
                 d = (Driver) Class.forName(NOM_DRIVER_ORACLE).newInstance();
                 DriverManager.registerDriver(d);
                 setConn(DriverManager.getConnection(URL_ORACLE
-                    + bd,
+                    + schema,
                     user,
                     pass));
             } else {

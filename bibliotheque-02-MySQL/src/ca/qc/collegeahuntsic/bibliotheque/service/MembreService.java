@@ -66,7 +66,7 @@ public class MembreService extends Services {
 
     /**
      *
-     * Appel la méthode READ de le membreDAO
+     * Appelle la méthode READ de le membreDAO
      *
      * @param idMembre Le ID du membre pour lequel nous désirons avoir des informations
      * @return MembreDTO Le membre dont L'ID est spécifié
@@ -124,7 +124,7 @@ public class MembreService extends Services {
      * @return liste une liste d'objets de type <code>MembreDTO</code>
      *         représentant les membres enregistrés dans la base de données
      *
-     * @throws ServiceException
+     * @throws ServiceException En cas d'erreur d'appel au DAO, une exception est levée.
      */
     public List<MembreDTO> getAll() throws ServiceException {
 
@@ -143,7 +143,7 @@ public class MembreService extends Services {
      *
      * @param idMembre
      * @return
-     * @throws ServiceException
+     * @throws ServiceException En cas d'erreur d'appel au DAO, une exception est levée
      */
     public boolean existe(int idMembre) throws ServiceException {
 
@@ -234,10 +234,10 @@ public class MembreService extends Services {
              *
              * Vérifier si le membre a encore des réservations
              *
-             * if (getReservation().getReservationMembre(idMembre) != null) {
-             * throw new ServiceException("Membre " + idMembre +
-             * " a des réservations"); }
-             */
+             if (getReservationDAO() != null) {
+                 throw new ServiceException("Membre " + idMembre +
+                     " a des réservations");
+             } */
 
             /* Suppression du membre */
             getMembreDAO().delete(idMembre);
