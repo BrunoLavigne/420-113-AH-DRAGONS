@@ -4,13 +4,11 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
@@ -44,8 +42,6 @@ public class MembreService extends Services {
 	 * @param reservation
 	 */
 	public MembreService(MembreDAO membre, ReservationDAO reservation) {
-
-		setCx(membre.getConnexion());
 		setMembre(membre);
 		setReservation(reservation);
 	}
@@ -82,7 +78,7 @@ public class MembreService extends Services {
 
 		try {
 
-			if (!existe(idMembre)) {
+			if (getMembre().read(idMembre) != null) {
 
 				MembreDTO nouveauMembre = new MembreDTO();
 				nouveauMembre.setIdMembre(idMembre);
@@ -90,7 +86,9 @@ public class MembreService extends Services {
 				nouveauMembre.setTelephone(telephone);
 				nouveauMembre.setLimitePret(limitePret);
 
-				getMembre().add(nouveauMembre);
+				add(nouveauMembre);
+			} else {
+				throw new ServiceException("Un membre avec l'id " + idMembre + " existe déjà");
 			}
 		} catch (DAOException daoException) {
 			throw new ServiceException(daoException);
@@ -98,9 +96,17 @@ public class MembreService extends Services {
 
 	}
 
-	public void emprunter(MembreDTO unLivreDTO) {
-		if()
-	}
+	/*
+	 *
+	 * !!! À compléter !!!
+	 *
+	 * public void emprunter(MembreDTO membreDTO) {
+	 *
+	 * // Voir si le membre existe réellement
+	 * if(getMembre().read(membreDTO.getIdMembre()) != null) {
+	 *
+	 * } }
+	 */
 
 	/**
 	 * Suppression d'un membre dans la base de données.
@@ -110,34 +116,36 @@ public class MembreService extends Services {
 	 */
 	public void desinscrire(int idMembre) throws ServiceException {
 		try {
-			// Vérifie si le membre existe et s'il a encore des prêts en cours
-			MembreDTO tupleMembre = getMembre().getMembre(idMembre);
+
+			// Instance du membre
+			MembreDTO tupleMembre = getMembre().read(idMembre);
+
+			// Vérifie si le membre existe
 			if (tupleMembre == null) {
 				throw new ServiceException("Membre inexistant: " + idMembre);
 			}
+
+			// Vérifier si le membre a encore des prêts en cours
 			if (tupleMembre.getNbPret() > 0) {
 				throw new ServiceException("Le membre " + idMembre + " a encore des prêts.");
 			}
-			if (getReservation().getReservationMembre(idMembre) != null) {
-				throw new ServiceException("Membre " + idMembre + " a des réservations");
-			}
+
+			/*
+			 * !!! À compléter !!!
+			 *
+			 * Vérifier si le membre a encore des réservations
+			 *
+			 * if (getReservation().getReservationMembre(idMembre) != null) {
+			 * throw new ServiceException("Membre " + idMembre +
+			 * " a des réservations"); }
+			 */
 
 			/* Suppression du membre */
-			int nb = getMembre().desinscrire(idMembre);
-			if (nb == 0) {
-				throw new ServiceException("Membre " + idMembre + " inexistant");
-			}
-			getCx().commit();
+			getMembre().delete(idMembre);
 
-		} catch (Exception exception) {
-			try {
-				getCx().rollback();
-			} catch (ConnexionException connexionException) {
-				throw new ServiceException(connexionException);
-			}
-			throw new ServiceException(exception);
+		} catch (DAOException daoException) {
+			throw new ServiceException(daoException);
 		}
-
 	}
 
 	/**
