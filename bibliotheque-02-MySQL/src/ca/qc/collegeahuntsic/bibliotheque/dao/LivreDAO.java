@@ -44,7 +44,7 @@ public class LivreDAO extends DAO {
      *
      * Creation d'une instance. Des énoncés SQL pour chaque requête sont précompilés.
      *
-     * @param cx
+     * @param connexion
      * @throws DAOException
      */
     public LivreDAO(Connexion connexion) throws DAOException {
