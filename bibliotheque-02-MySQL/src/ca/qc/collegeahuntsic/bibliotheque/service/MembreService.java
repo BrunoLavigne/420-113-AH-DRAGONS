@@ -237,5 +237,43 @@ public class MembreService extends Services {
     private void setCx(Connexion cx) {
         this.cx = cx;
     }
+    
+    /**
+     * [Générer commentaires]
+     */
+    private void add (MembreDTO membreDTO) throws ServiceException {
+    	
+    	if(true) {
+    		
+    	} else {
+    		
+    	}
+        try {
+            getMembreDAO().add(membreDTO);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
+    
+    /**
+     * [Générer commentaires]
+     */
+    private MembreDTO read(int idMembre) throws SericeException {
+    	
+    }
+    
+    /**
+     * [Générer commentaires]
+     */
+    private void update (MembreDTO membreDTO) throws ServiceException {
+    	
+    }
+    
+    /**
+     * [Générer commentaires]
+     */
+    private void delete (MembreDTO membreDTO) throws ServiceException {
+    	
+    }
 
 }
