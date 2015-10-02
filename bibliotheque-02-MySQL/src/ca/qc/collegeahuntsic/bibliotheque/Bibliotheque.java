@@ -47,9 +47,7 @@ import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
  */
 public class Bibliotheque {
 
-    private static BibliothequeCreateur gestionBiblio;
-
-    private static boolean lectureAuClavier;
+    private static BibliothequeCreateur gestionBibliotheque;
 
     /**
      * Ouverture de la BD,
@@ -138,10 +136,7 @@ public class Bibliotheque {
             System.out.print("> ");
             String transaction = reader.readLine();
             /* echo si lecture dans un fichier */
-            if(!isLectureAuClavier()
-                && transaction != null) {
-                System.out.println(transaction);
-            }
+
             return transaction;
         } catch(IOException ioException) {
             throw new BibliothequeException(ioException);
@@ -388,7 +383,7 @@ public class Bibliotheque {
      * @return La variable d'instance <code>gestionBiblio</code>
      */
     private static BibliothequeCreateur getGestionBiblio() {
-        return gestionBiblio;
+        return gestionBibliotheque;
     }
 
     /**
@@ -396,8 +391,8 @@ public class Bibliotheque {
      *
      * @param BibliothequeCreateur La valeur à utiliser pour la variable d'instance <code>Bibliotheque.gestionBiblio</code>
      */
-    private static void setGestionBiblio(BibliothequeCreateur gestionBiblio) {
-        Bibliotheque.gestionBiblio = gestionBiblio;
+    private static void setGestionBiblio(BibliothequeCreateur gestionBibliotheque) {
+        Bibliotheque.gestionBibliotheque = gestionBibliotheque;
     }
 
     /**
@@ -406,8 +401,5 @@ public class Bibliotheque {
      *
      * @return <code>lectureAuClavier</code>
      */
-    private static boolean isLectureAuClavier() {
-        return lectureAuClavier;
-    }
 
 }//class
