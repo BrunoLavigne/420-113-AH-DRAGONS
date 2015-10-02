@@ -2,6 +2,8 @@
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
@@ -35,11 +37,11 @@ public class PretService extends Services {
 
     private static final long serialVersionUID = 1L;
 
-    private LivreDAO livre;
+    private LivreDAO livreDAO;
 
-    private MembreDAO membre;
+    private MembreDAO membreDAO;
 
-    private ReservationDAO reservation;
+    private ReservationDAO reservationDAO;
 
     private Connexion cx;
 
@@ -48,22 +50,29 @@ public class PretService extends Services {
      * La connection de l'instance de livre et de membre doit être la même que cx,
      * afin d'assurer l'intégrité des transactions.
      *
-     * @param livre
-     * @param membre
-     * @param reservation
+     * @param livreDAO
+     * @param membreDAO
+     * @param reservationDAO
      * @throws ServiceException
      */
-    public PretService(LivreDAO livre,
-        MembreDAO membre,
-        ReservationDAO reservation) throws ServiceException {
-        if(livre.getConnexion() != membre.getConnexion()
-            || reservation.getConnexion() != membre.getConnexion()) {
+    public PretService(LivreDAO livreDAO,
+        MembreDAO membreDAO,
+        ReservationDAO reservationDAO) throws ServiceException {
+
+        // This whole shit is useless since we now have a dedicated class for a single connection used by
+        // all DAOs...
+
+        /*
+        if(livreDAO.getConnexion() != membreDAO.getConnexion()
+            || reservationDAO.getConnexion() != membreDAO.getConnexion()) {
             throw new ServiceException("Les instances de livre, de membre et de réservation n'utilisent pas la même connexion au serveur");
         }
-        setCx(livre.getConnexion());
-        setLivre(livre);
-        setMembre(membre);
-        setReservation(reservation);
+        setCx(livreDAO.getConnexion());
+         */
+
+        setLivreDAO(livreDAO);
+        setMembreDAO(membreDAO);
+        setReservationDAO(reservationDAO);
     }
 
     /**
@@ -81,7 +90,7 @@ public class PretService extends Services {
         String datePret) throws ServiceException {
         try {
             // Vérfie si le livre est disponible
-            LivreDTO tupleLivre = getLivre().getLivre(idLivre);
+            LivreDTO tupleLivre = getLivreDAO().read(idLivre);
             if(tupleLivre == null) {
                 throw new ServiceException("Livre inexistant: "
                     + idLivre);
@@ -94,7 +103,7 @@ public class PretService extends Services {
             }
 
             // Vérifie si le membre existe et sa limite de prêt
-            MembreDTO tupleMembre = getMembre().getMembre(idMembre);
+            MembreDTO tupleMembre = getMembreDAO().read(idMembre);
             if(tupleMembre == null) {
                 throw new ServiceException("Membre inexistant: "
                     + idMembre);
@@ -106,7 +115,7 @@ public class PretService extends Services {
             }
 
             // Vérifie s'il existe une réservation pour le livre.
-            ReservationDTO tupleReservation = getReservation().getReservationLivre(idLivre);
+            ReservationDTO tupleReservation = getReservationDAO().read(idLivre);
             if(tupleReservation != null) {
                 throw new ServiceException("Livre réservé par : "
                     + tupleReservation.getIdMembre()
@@ -115,17 +124,30 @@ public class PretService extends Services {
             }
 
             // Enregistrement du prêt.
-            int nb1 = getLivre().preter(idLivre,
-                idMembre,
-                datePret);
+            LivreDTO livre = new LivreDTO();
+            livre.setIdLivre(idLivre);
+            SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
+            Date date;
+            try {
+                date = new Date(format.parse(datePret).getTime());
+            } catch(ParseException exception) {
+                // TODO Auto-generated catch block
+                exception.printStackTrace();
+                throw new ServiceException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
+            }
+            livre.setDatePret(date);
+            livre.setIdMembre(idMembre);
+            getLivreDAO().emprunter(livre);
+            /*
             if(nb1 == 0) {
                 throw new ServiceException("Livre suprimé par une autre transaction");
             }
-            int nb2 = getMembre().preter(idMembre);
+            int nb2 = getMembreDAO().preter(idMembre);
             if(nb2 == 0) {
                 throw new ServiceException("Membre suprimé par une autre transaction");
             }
             getCx().commit();
+             */
 
         } catch(Exception exception) {
             try {
@@ -151,9 +173,7 @@ public class PretService extends Services {
         try {
             // Vérifie si le livre est prêté
             LivreDTO tupleLivre;
-
-            tupleLivre = getLivre().getLivre(idLivre);
-
+            tupleLivre = getLivreDAO().read(idLivre);
             if(tupleLivre == null) {
                 throw new ServiceException("Livre inexistant: "
                     + idLivre);
@@ -170,7 +190,7 @@ public class PretService extends Services {
             }
 
             // Vérifie s'il existe une réservation pour le livre.
-            ReservationDTO tupleReservation = getReservation().getReservationLivre(idLivre);
+            ReservationDTO tupleReservation = getReservationDAO().read(idLivre);
             if(tupleReservation != null) {
                 throw new ServiceException("Livre réservé par : "
                     + tupleReservation.getIdMembre()
@@ -179,16 +199,30 @@ public class PretService extends Services {
             }
 
             // Enregistrement du prêt.
-            int nb1 = getLivre().preter(idLivre,
+            LivreDTO livre = new LivreDTO();
+            livre.setIdLivre(idLivre);
+            SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
+            Date date;
+            try {
+                date = new Date(format.parse(datePret).getTime());
+            } catch(ParseException exception) {
+                // TODO Auto-generated catch block
+                exception.printStackTrace();
+                throw new ServiceException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
+            }
+            livre.setDatePret(date);
+            livre.setIdMembre(tupleLivre.getIdMembre());
+            getLivreDAO().emprunter(livre);
+            /*
+            int nb1 = getLivreDAO().preter(idLivre,
                 tupleLivre.getIdMembre(),
                 datePret);
             if(nb1 == 0) {
                 throw new ServiceException("Livre suprimé par une autre transaction");
             }
             getCx().commit();
+             */
 
-        } catch(ConnexionException connectionException) {
-            throw new ServiceException(connectionException);
         } catch(DAOException daoException) {
             try {
                 getCx().rollback();
@@ -212,7 +246,7 @@ public class PretService extends Services {
         String dateRetour) throws ServiceException {
         try {
             // Vérifie si le livre est prêté
-            LivreDTO tupleLivre = getLivre().getLivre(idLivre);
+            LivreDTO tupleLivre = getLivreDAO().read(idLivre);
             if(tupleLivre == null) {
                 throw new ServiceException("Livre inexistant: "
                     + idLivre);
@@ -229,17 +263,32 @@ public class PretService extends Services {
             }
 
             // Retour du prêt
-            int nb1 = getLivre().retourner(idLivre);
+            LivreDTO livre = new LivreDTO();
+            livre.setIdLivre(idLivre);
+            SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
+            Date date;
+            try {
+                date = new Date(format.parse(dateRetour).getTime());
+            } catch(ParseException exception) {
+                // TODO Auto-generated catch block
+                exception.printStackTrace();
+                throw new ServiceException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
+            }
+            livre.setDatePret(date);
+            livre.setIdMembre(tupleLivre.getIdMembre());
+            getLivreDAO().emprunter(livre);
+            /*
+            int nb1 = getLivreDAO().retourner(idLivre);
             if(nb1 == 0) {
                 throw new ServiceException("Livre suprimé par une autre transaction");
             }
 
-            int nb2 = getMembre().retourner(tupleLivre.getIdMembre());
+            int nb2 = getMembreDAO().retourner(tupleLivre.getIdMembre());
             if(nb2 == 0) {
                 throw new ServiceException("Livre suprimé par une autre transaction");
             }
             getCx().commit();
-
+             */
         } catch(Exception exception) {
             try {
                 getCx().rollback();
@@ -252,57 +301,57 @@ public class PretService extends Services {
     }
 
     /**
-     * Getter de la variable d'instance <code>this.livre</code>.
+     * Getter de la variable d'instance <code>this.livreDAO</code>.
      *
-     * @return La variable d'instance <code>this.livre</code>
+     * @return La variable d'instance <code>this.livreDAO</code>
      */
-    public LivreDAO getLivre() {
-        return this.livre;
+    public LivreDAO getLivreDAO() {
+        return this.livreDAO;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.livre</code>.
+     * Setter de la variable d'instance <code>this.livreDAO</code>.
      *
-     * @param livre La valeur à utiliser pour la variable d'instance <code>this.livre</code>
+     * @param livre La valeur à utiliser pour la variable d'instance <code>this.livreDAO</code>
      */
-    private void setLivre(LivreDAO livre) {
-        this.livre = livre;
+    private void setLivreDAO(LivreDAO livre) {
+        this.livreDAO = livre;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.membre</code>.
+     * Getter de la variable d'instance <code>this.membreDAO</code>.
      *
-     * @return La variable d'instance <code>this.membre</code>
+     * @return La variable d'instance <code>this.membreDAO</code>
      */
-    public MembreDAO getMembre() {
-        return this.membre;
+    public MembreDAO getMembreDAO() {
+        return this.membreDAO;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.membre</code>.
+     * Setter de la variable d'instance <code>this.membreDAO</code>.
      *
-     * @param membre La valeur à utiliser pour la variable d'instance <code>this.membre</code>
+     * @param membre La valeur à utiliser pour la variable d'instance <code>this.membreDAO</code>
      */
-    private void setMembre(MembreDAO membre) {
-        this.membre = membre;
+    private void setMembreDAO(MembreDAO membre) {
+        this.membreDAO = membre;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.reservation</code>.
+     * Getter de la variable d'instance <code>this.reservationDAO</code>.
      *
-     * @return La variable d'instance <code>this.reservation</code>
+     * @return La variable d'instance <code>this.reservationDAO</code>
      */
-    public ReservationDAO getReservation() {
-        return this.reservation;
+    public ReservationDAO getReservationDAO() {
+        return this.reservationDAO;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.reservation</code>.
+     * Setter de la variable d'instance <code>this.reservationDAO</code>.
      *
-     * @param reservation La valeur à utiliser pour la variable d'instance <code>this.reservation</code>
+     * @param reservation La valeur à utiliser pour la variable d'instance <code>this.reservationDAO</code>
      */
-    private void setReservation(ReservationDAO reservation) {
-        this.reservation = reservation;
+    private void setReservationDAO(ReservationDAO reservation) {
+        this.reservationDAO = reservation;
     }
 
     /**
@@ -312,14 +361,5 @@ public class PretService extends Services {
      */
     public Connexion getCx() {
         return this.cx;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.cx</code>.
-     *
-     * @param cx La valeur à utiliser pour la variable d'instance <code>this.cx</code>
-     */
-    private void setCx(Connexion cx) {
-        this.cx = cx;
     }
 }
