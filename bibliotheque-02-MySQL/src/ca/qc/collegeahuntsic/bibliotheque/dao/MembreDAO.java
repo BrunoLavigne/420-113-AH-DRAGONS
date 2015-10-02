@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 //import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
@@ -29,6 +31,8 @@ public class MembreDAO extends DAO {
 	private static final String UPDATE_REQUEST = "UPDATE membre SET idMembre = ?, nom = ?, telephone = ?, limitePret = ?, nbPret = ? WHERE idMembre = ?";
 
 	private static final String DELETE_REQUEST = "DELETE FROM membre WHERE idMembre = ?";
+
+	private final static String GET_ALL_REQUEST = "select idMembre, nom, telephone, limitePret, nbPret " + "from livre";
 
 	// private final static String SELECT_REQUEST = "select idlivre, titre,
 	// auteur, dateAcquisition, idMembre, datePret from livre where idlivre =
@@ -217,4 +221,37 @@ public class MembreDAO extends DAO {
 		}
 	}
 
+	/**
+	 *
+	 * Méthode retournant une liste de type <code>List</code> contenant des
+	 * objets <code>MembreDTO</code>. La liste contient tous les membres
+	 * enregistrés dans la base de données.
+	 *
+	 * @return liste une liste d'objets de type <code>MembreDTO</code>
+	 *         représentant les membres enregistrés dans la base de données
+	 *
+	 * @throws DAOException
+	 *             en cas d'erreur de connexion ou d'erreur SQL.
+	 */
+	public List<MembreDTO> getAll() throws DAOException {
+
+		List<MembreDTO> liste = new ArrayList<>();
+		try (PreparedStatement stmtGetAllMembres = (getConnection().prepareStatement(MembreDAO.GET_ALL_REQUEST));
+				ResultSet results = stmtGetAllMembres.executeQuery()) {
+			try (ResultSet resultSet = stmtGetAllMembres.executeQuery()) {
+				while (resultSet.next()) {
+					MembreDTO tempMembre = new MembreDTO();
+					tempMembre.setIdMembre(resultSet.getInt(1));
+					tempMembre.setNom(resultSet.getString(2));
+					tempMembre.setTelephone(resultSet.getLong(3));
+					tempMembre.setLimitePret(resultSet.getInt(4));
+					tempMembre.setNbPret(resultSet.getInt(5));
+					liste.add(tempMembre);
+				}
+			}
+			return liste;
+		} catch (SQLException sqlException) {
+			throw new DAOException(sqlException);
+		}
+	}
 }
