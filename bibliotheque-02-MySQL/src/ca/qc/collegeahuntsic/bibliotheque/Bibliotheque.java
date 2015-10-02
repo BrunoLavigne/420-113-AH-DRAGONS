@@ -8,11 +8,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Date;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.StringTokenizer;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
+import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 import ca.qc.collegeahuntsic.bibliotheque.util.BibliothequeCreateur;
@@ -163,12 +165,29 @@ public class Bibliotheque {
             if("aide".startsWith(command)) {
                 afficherAide();
             } else if("acquerir".startsWith(command)) {
-                getGestionBiblio().getGestionLivre().acquerir(readInt(tokenizer) /* idLivre */,
-                    readString(tokenizer) /* titre */,
-                    readString(tokenizer) /* auteur */,
-                    readDate(tokenizer) /* dateAcquisition */);
+                LivreDTO newLivre = new LivreDTO();
+                newLivre.setIdLivre(readInt(tokenizer));
+                newLivre.setTitre(readString(tokenizer));
+                newLivre.setAuteur(readString(tokenizer));
+                SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
+                Date date;
+                try {
+                    date = new Date(format.parse(readDate(tokenizer)).getTime());
+                } catch(ParseException exception) {
+                    // TODO Auto-generated catch block
+                    exception.printStackTrace();
+                    throw new BibliothequeException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
+                }
+                newLivre.setDateAcquisition(date);
+                getGestionBiblio().getGestionLivre().acquerir(newLivre);
+                /* getGestionBiblio().getGestionLivre().acquerir(readInt(tokenizer),
+                    readString(tokenizer),
+                    readString(tokenizer),
+                    readDate(tokenizer)); */
             } else if("vendre".startsWith(command)) {
-                getGestionBiblio().getGestionLivre().vendre(readInt(tokenizer) /* idLivre */);
+                LivreDTO newLivre = new LivreDTO();
+                newLivre.setIdLivre(readInt(tokenizer));
+                getGestionBiblio().getGestionLivre().vendre(newLivre);
             } else if("preter".startsWith(command)) {
                 getGestionBiblio().getGestionPret().preter(readInt(tokenizer) /* idLivre */,
                     readInt(tokenizer) /* idMembre */,
@@ -197,9 +216,9 @@ public class Bibliotheque {
             } else if("annulerRes".startsWith(command)) {
                 getGestionBiblio().getGestionReservation().annulerRes(readInt(tokenizer) /* idReservation */);
             } else if("listerLivres".startsWith(command)) {
-                getGestionBiblio().getLivre().listerTousLesLivres();
+                getGestionBiblio().getLivre().getAll();
             } else if("listerLivresTitre".startsWith(command)) {
-                getGestionBiblio().getLivre().listerLivresParTitre(readString(tokenizer) /* mot */);
+                getGestionBiblio().getLivre().findByTitre(readString(tokenizer) /* mot */);
             } else if("--".startsWith(command)) {
                 // TODO empty block
             }// ne rien faire; c'est un commentaire
@@ -215,8 +234,6 @@ public class Bibliotheque {
             throw new BibliothequeException(serviceException);
         } catch(DAOException daoException) {
             throw new BibliothequeException(daoException);
-        } catch(ConnexionException connexionException) {
-            throw new BibliothequeException(connexionException);
         }
     }
 

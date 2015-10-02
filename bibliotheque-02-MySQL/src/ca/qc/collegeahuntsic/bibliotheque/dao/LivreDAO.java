@@ -62,7 +62,6 @@ public class LivreDAO extends DAO {
     public void update(LivreDTO livreDTO) throws DAOException {
         try(
             PreparedStatement updatePreparedStatement = getConnection().prepareStatement(LivreDAO.UPDATE_REQUEST)) {
-
             updatePreparedStatement.setInt(1,
                 livreDTO.getIdMembre());
             updatePreparedStatement.setDate(2,
@@ -158,8 +157,8 @@ public class LivreDAO extends DAO {
      *
      * @throws DAOException en cas d'erreur de connexion ou d'erreur SQL.
      */
-    public List<Object> listerTousLesLivres() throws DAOException {
-        List<Object> liste = new ArrayList<>();
+    public List<LivreDTO> getAll() throws DAOException {
+        List<LivreDTO> liste = new ArrayList<>();
         try(
             PreparedStatement stmtGetAllLivres = (getConnection().prepareStatement(LivreDAO.GET_ALL_REQUEST));
             ResultSet results = stmtGetAllLivres.executeQuery()) {
@@ -189,14 +188,14 @@ public class LivreDAO extends DAO {
      * titres des livres enregistrés dans la base de données
      * @throws DAOException en cas d'erreur de connexion ou de format d'objets ou d'enregistrements incompatibles.
      */
-    public List<Object> listerLivresParTitre(String motTitre) throws DAOException {
+    public List<LivreDTO> findByTitre(String motTitre) throws DAOException {
         try(
             PreparedStatement stmtGetLivresByTitre = (getConnection().prepareStatement(LivreDAO.FIND_BY_TITRE));) {
             stmtGetLivresByTitre.setString(1,
                 motTitre);
             try(
                 ResultSet rset = stmtGetLivresByTitre.executeQuery()) {
-                List<Object> liste = new ArrayList<>();
+                List<LivreDTO> liste = new ArrayList<>();
                 while(rset.next()) {
                     LivreDTO tempLivre = new LivreDTO();
                     tempLivre.setIdLivre(rset.getInt(1));
@@ -221,7 +220,7 @@ public class LivreDAO extends DAO {
      * @return liste un objet <code>List</code> contenant des objets de type <code>LivreDTO</code>.
      * @throws DAOException d'erreur de connexion ou de format d'objets ou d'enregistrements incompatibles.
      */
-    public List<Object> listerLivresParMembre(int idMembre) throws DAOException {
+    public List<LivreDTO> findByMembre(int idMembre) throws DAOException {
 
         try(
             PreparedStatement stmtGetLivresByMembre = (getConnection().prepareStatement(LivreDAO.FIND_BY_MEMBRE));) {
@@ -229,7 +228,7 @@ public class LivreDAO extends DAO {
                 idMembre);
             try(
                 ResultSet rset = stmtGetLivresByMembre.executeQuery()) {
-                List<Object> liste = new ArrayList<>();
+                List<LivreDTO> liste = new ArrayList<>();
                 while(rset.next()) {
                     LivreDTO tempLivre = new LivreDTO();
                     tempLivre.setIdLivre(rset.getInt(1));
@@ -272,104 +271,36 @@ public class LivreDAO extends DAO {
 
     /**
      *
-     * Ajout d'un nouveau livre dans la base de données.
+     * Méthode permettant de mettre à jour le livre emprunté dans la base de donnée. Appelle la méthode
+     * <code>update</code> de la classe <code>LivreDAO</code>.
      *
-     * @param idLivre
-     * @param titre
-     * @param auteur
-     * @param dateAcquisition
-     * @throws DAOException
+     * @param LivreDTO L'objet <code>LivreDTO</code> représentant le livre à emprunter.
+     * @throws DAOException en cas d'erreur dans la mise à jour du livre dans la base de données.
      */
-    /*
-    public void acquerir(int idLivre,
-        String titre,
-        String auteur,
-        String dateAcquisition) throws DAOException {
+    public void emprunter(LivreDTO LivreDTO) throws DAOException {
         try {
-            getStmtInsert().setInt(1,
-                idLivre);
-            getStmtInsert().setString(2,
-                titre);
-            getStmtInsert().setString(3,
-                auteur);
-            getStmtInsert().setDate(4,
-                Date.valueOf(dateAcquisition));
-            getStmtInsert().executeUpdate();
-        } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
+            update(LivreDTO);
+        } catch(DAOException daoexception) {
+            throw new DAOException(daoexception);
         }
     }
-     */
 
     /**
      *
-     * Enregistrement de l'emprunteur d'un livre.
+     * Méthode permettant de mettre à jour le livre retourné dans la base de donnée. Appelle la méthode
+     * <code>update</code> de la classe <code>LivreDAO</code>.
      *
-     * @param idLivre
-     * @param idMembre
-     * @param datePret
-     * @return int preter
-     * @throws DAOException
+     * @param LivreDTO L'objet <code>LivreDTO</code> représentant le livre à retourner.
+     * @throws DAOException en cas d'erreur dans la mise à jour du livre dans la base de données.
      */
-    /*
-    public int preter(int idLivre,
-        int idMembre,
-        String datePret) throws DAOException {
+    public void retourner(LivreDTO LivreDTO) throws DAOException {
         try {
-            getStmtUpdate().setInt(1,
-                idMembre);
-            getStmtUpdate().setDate(2,
-                Date.valueOf(datePret));
-            getStmtUpdate().setInt(3,
-                idLivre);
-            return getStmtUpdate().executeUpdate();
-        } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
+            // En théorie, si le livre passé en paramètre a comme valeurs de
+            // idMembre et datePret null, ça devrait le "setter comme non-prêté, non?
+            // TODO check si ça raise pas des NullPointerException dans update(LivreDTO)
+            update(LivreDTO);
+        } catch(DAOException daoexception) {
+            throw new DAOException(daoexception);
         }
     }
-     */
-
-    /**
-     *
-     * Rendre le livre disponible (non-prêté)
-     *
-     * @param idLivre
-     * @return int retourner
-     * @throws DAOException
-     */
-    /*
-    public int retourner(int idLivre) throws DAOException {
-        try {
-            getStmtUpdate().setNull(1,
-                Types.INTEGER);
-            getStmtUpdate().setNull(2,
-                Types.DATE);
-            getStmtUpdate().setInt(3,
-                idLivre);
-            return getStmtUpdate().executeUpdate();
-        } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
-        }
-    }
-     */
-
-    /**
-     *
-     * Suppression d'un livre
-     *
-     * @param idLivre
-     * @return int vendre
-     * @throws DAOException
-     */
-    /*
-    public int vendre(int idLivre) throws DAOException {
-        try {
-            getStmtDelete().setInt(1,
-                idLivre);
-            return getStmtDelete().executeUpdate();
-        } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
-        }
-    }
-     */
 }
