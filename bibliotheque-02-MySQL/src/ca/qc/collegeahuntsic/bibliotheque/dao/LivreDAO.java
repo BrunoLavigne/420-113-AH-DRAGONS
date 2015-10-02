@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
@@ -57,7 +58,7 @@ public class LivreDAO extends DAO {
      * Met à jour un livre.
      *
      * @param livreDTO
-     * @throws DAOException
+     * @throws DAOException S'il y a une erreur avec la base de donnée
      * @return livreDTO
      */
     public void update(LivreDTO livreDTO) throws DAOException {
@@ -159,23 +160,30 @@ public class LivreDAO extends DAO {
      * @throws DAOException en cas d'erreur de connexion ou d'erreur SQL.
      */
     public List<LivreDTO> getAll() throws DAOException {
-        List<LivreDTO> liste = new ArrayList<>();
+        List<LivreDTO> livres = Collections.EMPTY_LIST;
+
         try(
-            PreparedStatement stmtGetAllLivres = (getConnection().prepareStatement(LivreDAO.GET_ALL_REQUEST));
-            ResultSet results = stmtGetAllLivres.executeQuery()) {
+            PreparedStatement stmtGetAllLivres = (getConnection().prepareStatement(LivreDAO.GET_ALL_REQUEST))) {
             try(
                 ResultSet resultSet = stmtGetAllLivres.executeQuery()) {
-                while(resultSet.next()) {
-                    LivreDTO tempLivre = new LivreDTO();
-                    tempLivre.setIdLivre(resultSet.getInt(1));
-                    tempLivre.setTitre(resultSet.getString(2));
-                    tempLivre.setAuteur(resultSet.getString(3));
-                    tempLivre.setIdMembre(resultSet.getInt(4));
-                    tempLivre.setDatePret(resultSet.getDate(5));
-                    liste.add(tempLivre);
+                LivreDTO livreDTO = null;
+                if(resultSet.next()) {
+                    livres = new ArrayList<>();
+                    do {
+                        livreDTO = new LivreDTO();
+                        livreDTO.setIdLivre(resultSet.getInt(1));
+                        livreDTO.setTitre(resultSet.getString(2));
+                        livreDTO.setAuteur(resultSet.getString(3));
+                        livreDTO.setIdMembre(resultSet.getInt(4));
+                        livreDTO.setDatePret(resultSet.getDate(5));
+                        livres.add(livreDTO);
+                    } while(resultSet.next());
                 }
+
+                return livres;
+            } catch(SQLException sqlException) {
+                throw new DAOException(sqlException);
             }
-            return liste;
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
