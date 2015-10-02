@@ -55,7 +55,6 @@ public class BibliothequeCreateur {
     /**
      * Ouvre une connexion avec la BD relationnelle et
      * alloue les gestionnaires de transactions et des tables.
-     *
      * @param serveur SQL
      * @param bd nom de la base de données
      * @param user id pour établir une connexion avec le serveur SQL
