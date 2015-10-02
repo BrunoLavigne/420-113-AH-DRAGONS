@@ -75,7 +75,7 @@ public class ReservationDAO extends DAO {
 
     /**
      *
-     * Lecture de la reservation
+     * Lecture de la reéervation
      *
      * @param idReservation
      * @return
@@ -132,12 +132,11 @@ public class ReservationDAO extends DAO {
      * @param reservationDTO
      * @throws DAOException
      */
-    public void delete(int idReservation) throws DAOException {
+    public void delete(ReservationDTO reservationDTO) throws DAOException {
         try(
             PreparedStatement deletePreparedStatement = getConnection().prepareStatement(ReservationDAO.DELETE_REQUEST)) {
             deletePreparedStatement.setInt(1,
-                idReservation);
-
+                reservationDTO.getIdReservation());
             deletePreparedStatement.executeUpdate();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);

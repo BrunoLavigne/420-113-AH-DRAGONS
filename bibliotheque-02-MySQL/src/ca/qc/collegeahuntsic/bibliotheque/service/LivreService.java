@@ -5,11 +5,9 @@
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
-import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
@@ -37,18 +35,35 @@ public class LivreService extends Services {
 
     private static final long serialVersionUID = 1L;
 
-    private LivreDAO livre;
+    private LivreDAO livreDAO;
 
-    private ReservationDAO reservation;
+    private MembreDAO membreDAO;
 
-    private Connexion cx;
+    private ReservationDAO reservationDAO;
+
+    /**
+     *
+     * TODO Auto-generated method javadoc
+     *
+     * @param livreDTO
+     * @throws ServiceException
+     */
+    public void add(LivreDTO livreDTO) throws ServiceException {
+        try {
+            getLivreDAO().add(livreDTO);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
 
     //Création d'une instance
-    public LivreService(LivreDAO livre,
-        ReservationDAO reservation) {
+    public LivreService(LivreDAO livreDAO,
+        ReservationDAO reservationDAO,
+        MembreDAO membreDAO) {
         // setCx(livre.getConnexion());
-        setLivre(livre);
-        setReservation(reservation);
+        setLivreDAO(livreDAO);
+        setReservationDAO(reservationDAO);
+        setMembreDAO(membreDAO);
     }
 
     /**
@@ -59,130 +74,123 @@ public class LivreService extends Services {
      * @param auteur
      * @param dateAcquisition
      * @throws ServiceException
-     * @throws ConnexionException
      */
-    public void acquerir(int idLivre,
-        String titre,
-        String auteur,
-        String dateAcquisition) throws ServiceException {
+    public void acquerir(LivreDTO livreDTO) throws DAOException {
 
         //Vérifie si le livre existe  déjà
         try {
-            if(getLivre().existe(idLivre)) {
+            if(getLivreDAO().read(livreDTO.getIdLivre()) != null) {
                 throw new ServiceException("Le livre existe déjà: "
-                    + idLivre);
+                    + livreDTO.getIdLivre());
             }
 
             //Ajout du livre dans la table livre
+            getLivreDAO().add(livreDTO);
 
-            getLivre().acquerir(idLivre,
-                titre,
-                auteur,
-                dateAcquisition);
+            //getCx().commit();
 
-            getCx().commit();
-
-        } catch(DAOException daoException) {
-            try {
-                getCx().rollback();
-            } catch(ConnexionException connexionException) {
-                throw new ServiceException(connexionException);
-            }
-            throw new ServiceException(daoException);
-        } catch(ConnexionException connexionException) {
-            throw new ServiceException(connexionException);
+        } catch(ServiceException serviceException) {
+            throw new DAOException(serviceException);
         }
-
     }
 
     /**
      * Vente d'un livre
      * @param idLivre
      * @throws ServiceException
-     * @throws ConnexionException
      */
-    public void vendre(int idLivre) throws ServiceException,
-        ConnexionException {
+    public void vendre(LivreDTO livreDTO) throws DAOException {
         try {
-            LivreDTO tupleLivre = getLivre().getLivre(idLivre);
-            if(tupleLivre == null) {
-                throw new ServiceException("Livre inexistant: "
-                    + idLivre);
+
+            if(livreDTO == null) {
+                throw new DAOException("Livre inexistant: "
+                    + livreDTO);
             }
-            if(tupleLivre.getIdMembre() != 0) {
-                throw new ServiceException("Le livre est "
-                    + idLivre
+            //if(livreDTO.getIdMembre() != 0) {
+            if(getMembreDAO().read(livreDTO.getIdMembre()) != null) {
+                throw new DAOException("Le livre est "
+                    + livreDTO.getIdLivre()
                     + " prêté à "
-                    + tupleLivre.getIdMembre());
+                    + livreDTO.getIdMembre());
             }
-            if(getReservation().getReservationLivre(idLivre) != null) {
-                throw new ServiceException("Le livre est "
-                    + idLivre
+            if(getReservationDAO().read(livreDTO.getIdLivre()) != null) {
+                throw new DAOException("Le livre est "
+                    + livreDTO.getIdLivre()
                     + " réservé ");
             }
 
             // Suppression du livre
-            int nb = getLivre().vendre(idLivre);
-            if(nb == 0) {
-                throw new ServiceException("Le livre est "
-                    + idLivre
+            getLivreDAO().delete(livreDTO);
+            /*if(nb == 0) {
+                throw new DAOException("Le livre est "
+                    + livreDTO.getTitre()
                     + " inexistant");
-            }
-            getCx().commit();
+            }*/
 
-        } catch(ConnexionException connexionException) {
-            getCx().rollback();
-            throw new ServiceException(connexionException);
-        } catch(Exception exception) {
-            getCx().rollback();
-            throw new ServiceException(exception);
+            //getCx().commit();
+
+        }
+        //getCx().rollback();
+
+        catch(Exception exception) {
+            // getCx().rollback();
+            throw new DAOException(exception);
         }
 
     }
 
     /**
-     * Getter de la variable d'instance <code>this.livre</code>.
+     * Getter de la variable d'instance <code>this.livreDAO</code>.
      *
-     * @return La variable d'instance <code>this.livre</code>
+     * @return La variable d'instance <code>this.livreDAO</code>
      */
-    public LivreDAO getLivre() {
-        return this.livre;
+    private LivreDAO getLivreDAO() {
+        return this.livreDAO;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.livre</code>.
+     * Setter de la variable d'instance <code>this.livreDAO</code>.
      *
-     * @param livre La valeur à utiliser pour la variable d'instance <code>this.livre</code>
+     * @param livreDAO La valeur à utiliser pour la variable d'instance <code>this.livreDAO</code>
      */
-    private void setLivre(LivreDAO livre) {
-        this.livre = livre;
+    private void setLivreDAO(LivreDAO livreDAO) {
+        this.livreDAO = livreDAO;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.reservation</code>.
+     * Getter de la variable d'instance <code>this.membreDAO</code>.
      *
-     * @return La variable d'instance <code>this.reservation</code>
+     * @return La variable d'instance <code>this.membreDAO</code>
      */
-    public ReservationDAO getReservation() {
-        return this.reservation;
+    private MembreDAO getMembreDAO() {
+        return this.membreDAO;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.reservation</code>.
+     * Setter de la variable d'instance <code>this.membreDAO</code>.
      *
-     * @param reservation La valeur à utiliser pour la variable d'instance <code>this.reservation</code>
+     * @param membreDAO La valeur à utiliser pour la variable d'instance <code>this.membreDAO</code>
      */
-    private void setReservation(ReservationDAO reservation) {
-        this.reservation = reservation;
+    private void setMembreDAO(MembreDAO membreDAO) {
+        this.membreDAO = membreDAO;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.cx</code>.
+     * Getter de la variable d'instance <code>this.reservationDAO</code>.
      *
-     * @return La variable d'instance <code>this.cx</code>
+     * @return La variable d'instance <code>this.reservationDAO</code>
      */
-    public Connexion getCx() {
-        return this.cx;
+    private ReservationDAO getReservationDAO() {
+        return this.reservationDAO;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.reservationDAO</code>.
+     *
+     * @param reservationDAO La valeur à utiliser pour la variable d'instance <code>this.reservationDAO</code>
+     */
+    private void setReservationDAO(ReservationDAO reservationDAO) {
+        this.reservationDAO = reservationDAO;
     }
 
     /**
@@ -192,13 +200,13 @@ public class LivreService extends Services {
      * @param livreDTO
      * @throws ServiceException
      */
-    public void acquerir(LivreDTO livreDTO) throws ServiceException {
-        /*if(read(livreDTO.getIdLivre()) != null)) {
+    /* public void acquerir(LivreDTO livreDTO) throws ServiceException {
+        if(read(livreDTO.getIdLivre()) != null)) {
             throw new ServiceException("Le livre " + livreDTO.getTitre() + " existe déjà.");
-        }*/
-    }
 
-    public void emprunter(MembreDTO membreDTO,
+    }}*/
+
+    /*public void emprunter(MembreDTO membreDTO,
         LivreDTO livreDTO) throws ServiceException {
-    }
+    }*/
 }
