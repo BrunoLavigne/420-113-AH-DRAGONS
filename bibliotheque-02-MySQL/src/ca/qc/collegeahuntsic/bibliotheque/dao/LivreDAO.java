@@ -297,7 +297,7 @@ public class LivreDAO extends DAO {
      * <code>update</code> de la classe <code>LivreDAO</code>.
      *
      * @param LivreDTO L'objet <code>LivreDTO</code> représentant le livre à emprunter.
-     * @throws DAOException en cas d'erreur dans la mise à jour du livre dans la base de données.
+     * @throws DAOException en cas d'erreur dans la mise à jour du livre dans la base de données
      */
     public void emprunter(LivreDTO livreDTO) throws DAOException {
         try(
