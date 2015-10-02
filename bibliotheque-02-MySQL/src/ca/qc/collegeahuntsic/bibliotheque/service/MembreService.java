@@ -195,20 +195,52 @@ public class MembreService extends Services {
     /*
      *
      * !!! À compléter !!!
-     *
     public void emprunter(MembreDTO membreDTO,
         LivreDTO livreDTO) throws ServiceException {
 
         try {
-
             // Voir si le membre existe réellement
-            if(getMembreDAO().read(membreDTO.getIdMembre()) != null) {
-
+            MembreDTO unMembreDTO = read(membreDTO.getIDMembre())
+            if(unMembreDTO == null) {
+                throw new ServiceException(le membre existe pas)
             }
+
+            // Vérifier sur livre
+
+            // Voir si livre a été prêté
+            MembreDTO emprunter = read(unLivreDTO.getIdMembre());
+            if(emprunteur != null) {
+                throw new ServiceException(Le livre a été prêté);
+            }
+
+            // Voir si le livre a des réservations
+
+
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
     } */
+
+    /*
+    public void renouveler(MembreDTO unMembreDTO, LivreDTO unLivreDTO) {
+
+        // Il faut que le livre existe
+        //LivreDTO unLivreDTO getLivreDAO().read(livreDTO.get)
+
+        // Il faut que le livre ait un emprunteur
+
+        // Il faut que celui qui renouvele ait le même ID que le membre
+        // tjrs throw new ServiceException
+
+        // VÉrifier si a déjà des réservations...drop l'emprunt s'il a des réservations
+    }
+
+    public void retourner(MembreDTO unMembreDTO, LivreDTO unLivreDTO) {
+
+        // à la fin
+        // getLivreDAO().retourner(unLivreDTO);
+        // getMembreDAO().retourner(unMembreDTO);
+    }*/
 
     /**
      * Suppression d'un membre dans la base de données.
@@ -216,41 +248,39 @@ public class MembreService extends Services {
      * @param idMembre
      * @throws ServiceException
      */
-    public void desinscrire(int idMembre) throws ServiceException {
-        try {
+    public void desinscrire(MembreDTO membreDTO) throws ServiceException {
 
-            // Instance du membre
-            MembreDTO tupleMembre = getMembreDAO().read(idMembre);
+        // Instance du membre
+        MembreDTO tupleMembre = read(membreDTO.getIdMembre());
 
-            // Vérifie si le membre existe
-            if(tupleMembre == null) {
-                throw new ServiceException("Membre inexistant: "
-                    + idMembre);
-            }
-
-            // Vérifier si le membre a encore des prêts en cours
-            if(tupleMembre.getNbPret() > 0) {
-                throw new ServiceException("Le membre "
-                    + idMembre
-                    + " a encore des prêts.");
-            }
-
-            /*
-             * !!! À compléter !!!
-             *
-             * Vérifier si le membre a encore des réservations
-             *
-             if (getReservationDAO() != null) {
-                 throw new ServiceException("Membre " + idMembre +
-                     " a des réservations");
-             } */
-
-            /* Suppression du membre */
-            getMembreDAO().delete(idMembre);
-
-        } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+        // Vérifie si le membre existe
+        if(tupleMembre == null) {
+            throw new ServiceException("Membre inexistant: "
+                + membreDTO.getIdMembre());
         }
+
+        // Vérifier si le membre a encore des prêts en cours
+        if(tupleMembre.getNbPret() > 0) {
+            throw new ServiceException("Le membre "
+                + tupleMembre.getIdMembre()
+                + " a encore des prêts.");
+        }
+
+        //if(!getReservationDAO().getByMembre())
+
+        /*
+         * !!! À compléter !!!
+         *
+         * Vérifier si le membre a encore des réservations
+         *
+         if (!getReservationDAO() != null) {
+             throw new ServiceException("Membre " + idMembre +
+                 " a des réservations");
+         } */
+
+        /* Suppression du membre */
+        delete(membreDTO.getIdMembre());
+
     }
 
     /**
