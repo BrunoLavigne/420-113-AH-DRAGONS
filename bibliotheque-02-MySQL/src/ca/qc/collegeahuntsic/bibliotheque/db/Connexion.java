@@ -78,7 +78,7 @@ public class Connexion {
 
             // mettre en mode sérialisable si possible
             // (plus haut niveau d'integrité l'accès concurrent aux données)
-            DatabaseMetaData dbmd = this.conn.getMetaData();
+            DatabaseMetaData dbmd = getConn().getMetaData();
             if(dbmd.supportsTransactionIsolationLevel(Connection.TRANSACTION_SERIALIZABLE)) {
                 getConn().setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
                 System.out.println("Ouverture de la connexion en mode sérialisable :\n"
