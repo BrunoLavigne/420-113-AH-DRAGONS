@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
+import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 
@@ -205,12 +207,12 @@ public class ReservationDAO extends DAO {
      *
      * Recherche des réservations associées à un livre
      *
-     * @param idLivre Le ID du livre pour lequel nous cherchons les réservations
+     * @param livreDTO Le livre pour lequel nous cherchons les réservations
      * @return liste La liste qui contient les réservations selon le livre
      * @throws DAOException Si il-y-a une erreur lors de l'exécution de la requête SQL, celle-ci est traitée
      */
 
-    public List<ReservationDTO> getByLivre(int idLivre) throws DAOException {
+    public List<ReservationDTO> getByLivre(LivreDTO livreDTO) throws DAOException {
 
         List<ReservationDTO> liste = Collections.EMPTY_LIST;
 
@@ -218,7 +220,7 @@ public class ReservationDAO extends DAO {
             PreparedStatement stmtGetByLivre = (getConnection().prepareStatement(ReservationDAO.FIND_BY_LIVRE));) {
 
             stmtGetByLivre.setInt(1,
-                idLivre);
+                livreDTO.getIdLivre());
 
             liste = new ArrayList<>();
 
@@ -251,12 +253,12 @@ public class ReservationDAO extends DAO {
      *
      * Recherche des réservations associées à un membre
      *
-     * @param idMembre Le ID du membre pour lequel nous cherchons les réservations
+     * @param membreDTO Le membre pour lequel nous cherchons les réservations
      * @return liste La liste qui contient toutes les réservation associées à un membre
      * @throws DAOException Si il-y-a une erreur lors de l'exécution de la requête SQL, celle-ci est traitée
      */
 
-    public List<ReservationDTO> getByMembre(int idMembre) throws DAOException {
+    public List<ReservationDTO> getByMembre(MembreDTO membreDTO) throws DAOException {
 
         List<ReservationDTO> liste = Collections.EMPTY_LIST;
 
@@ -264,7 +266,7 @@ public class ReservationDAO extends DAO {
             PreparedStatement stmtGetByMembre = (getConnection().prepareStatement(ReservationDAO.FIND_BY_MEMBRE));) {
 
             stmtGetByMembre.setInt(1,
-                idMembre);
+                membreDTO.getIdMembre());
 
             liste = new ArrayList<>();
 
