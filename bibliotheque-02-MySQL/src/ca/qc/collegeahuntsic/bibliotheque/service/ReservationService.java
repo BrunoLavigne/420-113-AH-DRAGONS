@@ -239,7 +239,7 @@ public class ReservationService extends Services {
             uneReservationDTO.setIdReservation(reservationDTO.getIdReservation());
             uneReservationDTO.setDateReservation(Date.valueOf(dateReservation));
 
-            add(reservationDTO);
+            add(uneReservationDTO);
 
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
