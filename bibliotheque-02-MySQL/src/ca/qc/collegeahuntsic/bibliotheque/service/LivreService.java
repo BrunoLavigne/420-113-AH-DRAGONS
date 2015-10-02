@@ -41,21 +41,6 @@ public class LivreService extends Services {
 
     private ReservationDAO reservationDAO;
 
-    /**
-     *
-     * TODO Auto-generated method javadoc
-     *
-     * @param livreDTO
-     * @throws ServiceException
-     */
-    public void add(LivreDTO livreDTO) throws ServiceException {
-        try {
-            getLivreDAO().add(livreDTO);
-        } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
-        }
-    }
-
     //Création d'une instance
     public LivreService(LivreDAO livreDAO,
         ReservationDAO reservationDAO,
@@ -67,76 +52,59 @@ public class LivreService extends Services {
     }
 
     /**
-     * Ajout d'un nouveau livre dans la base de données.
-     * S'il existe déjà, une exception est levée.
-     * @param idLivre
-     * @param titre
-     * @param auteur
-     * @param dateAcquisition
-     * @throws ServiceException
+     *
+     * Méthode appelant la fonction <code>add</code> de la classe <code>LivreDAO</code> permettant d'ajouter (d'acquérir) un objet <code>LivreDTO</code> à la base de données.
+     *
+     * @param livreDTO un objet de type <code>LivreDTO</code> à ajouter dans la base de données.
+     * @throws ServiceException en cas d'erreur dans l'exécution de la méthode <code>add</code> de la classe <code>LivreDAO</code>
      */
-    public void acquerir(LivreDTO livreDTO) throws DAOException {
-
-        //Vérifie si le livre existe  déjà
+    public void acquerir(LivreDTO livreDTO) throws ServiceException {
         try {
+            // Vérification si le livre existe dans la base de données.
             if(getLivreDAO().read(livreDTO.getIdLivre()) != null) {
                 throw new ServiceException("Le livre existe déjà: "
                     + livreDTO.getIdLivre());
             }
-
-            //Ajout du livre dans la table livre
+            // Ajout du livre s'il n'existe pas déjà.
             getLivreDAO().add(livreDTO);
-
-            //getCx().commit();
-
-        } catch(ServiceException serviceException) {
-            throw new DAOException(serviceException);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
         }
     }
 
     /**
-     * Vente d'un livre
-     * @param idLivre
+     *
+     * Méthode appelant la fonction <code>delete</code> de la classe <code>LivreDAO</code> permettant de retirer (de vendre) un objet <code>LivreDTO</code> de la base de données.
+     *
+     * @param LivreDTO
      * @throws ServiceException
      */
-    public void vendre(LivreDTO livreDTO) throws DAOException {
+    public void vendre(LivreDTO LivreDTO) throws ServiceException {
         try {
-
-            if(livreDTO == null) {
-                throw new DAOException("Livre inexistant: "
-                    + livreDTO);
+            // Vérifie si le livre passé en paramètre existe dans la base de données.
+            if(getLivreDAO().read(LivreDTO.getIdLivre()) == null) {
+                throw new ServiceException("Livre inexistant dans la base de données: "
+                    + LivreDTO.getTitre());
             }
-            //if(livreDTO.getIdMembre() != 0) {
-            if(getMembreDAO().read(livreDTO.getIdMembre()) != null) {
-                throw new DAOException("Le livre est "
-                    + livreDTO.getIdLivre()
-                    + " prêté à "
-                    + livreDTO.getIdMembre());
+            // Vérifie si le livre passé en paramètre est prêté à un membre.
+            if(getMembreDAO().read(LivreDTO.getIdMembre()) != null) {
+                throw new ServiceException("Le livre "
+                    + LivreDTO.getTitre()
+                    + " est prêté au membre #"
+                    + LivreDTO.getIdMembre());
             }
-            if(getReservationDAO().read(livreDTO.getIdLivre()) != null) {
-                throw new DAOException("Le livre est "
-                    + livreDTO.getIdLivre()
-                    + " réservé ");
+            // Vérifie si le livre passé en paramètre est réservé par un membre.
+            if(getReservationDAO().read(LivreDTO.getIdLivre()) != null) {
+                throw new ServiceException("Le livre "
+                    + LivreDTO.getTitre()
+                    + " est réservé.");
             }
+            // Sinon, suppression du livre de la base de données.
+            getLivreDAO().delete(LivreDTO);
 
-            // Suppression du livre
-            getLivreDAO().delete(livreDTO);
-            /*if(nb == 0) {
-                throw new DAOException("Le livre est "
-                    + livreDTO.getTitre()
-                    + " inexistant");
-            }*/
-
-            //getCx().commit();
-
+        } catch(DAOException daoexception) {
+            throw new ServiceException(daoexception);
         }
-        //getCx().rollback();
-
-        catch(Exception exception) {
-            // getCx().rollback();
-            throw new DAOException(exception);
-        }
-
     }
 
     /**
