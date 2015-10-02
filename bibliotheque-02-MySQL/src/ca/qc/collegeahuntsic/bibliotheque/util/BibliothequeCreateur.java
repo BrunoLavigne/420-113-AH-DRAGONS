@@ -78,7 +78,8 @@ public class BibliothequeCreateur {
             setMembre(new MembreDAO(getCx()));
             setReservation(new ReservationDAO(getCx()));
             setGestionLivre(new LivreService(getLivre(),
-                getReservation()));
+                getReservation(),
+                getMembre()));
             setGestionMembre(new MembreService(getMembre(),
                 getReservation()));
             setGestionPret(new PretService(getLivre(),
