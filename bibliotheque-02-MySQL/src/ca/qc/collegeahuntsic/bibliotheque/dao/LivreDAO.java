@@ -61,30 +61,23 @@ public class LivreDAO extends DAO {
 
     /**
      *
-     * Met à jour un livre.
+     * Méthode permettant d'ajouter un livre à la base de données.
      *
-     * @param livreDTO
-     * @throws DAOException
-     * @return livreDTO
+     * @param livreDTO Le livre à ajouter
+     * @throws DAOException en cas d'erreur de connexion ou d'objet <code>LivreDTO</code> incomplet.
      */
-    public void update(LivreDTO livreDTO) throws DAOException {
+    public void add(LivreDTO livreDTO) throws DAOException {
         try(
-            PreparedStatement updatePreparedStatement = getConnection().prepareStatement(LivreDAO.UPDATE_REQUEST)) {
-
-            updatePreparedStatement.setInt(1,
+            PreparedStatement stmtAdd = (getConnection().prepareStatement(LivreDAO.ADD_REQUEST))) {
+            stmtAdd.setInt(1,
                 livreDTO.getIdLivre());
-            updatePreparedStatement.setString(2,
+            stmtAdd.setString(2,
                 livreDTO.getTitre());
-            updatePreparedStatement.setString(3,
+            stmtAdd.setString(3,
                 livreDTO.getAuteur());
-            updatePreparedStatement.setDate(4,
+            stmtAdd.setDate(4,
                 livreDTO.getDateAcquisition());
-            updatePreparedStatement.setInt(5,
-                livreDTO.getIdMembre());
-            updatePreparedStatement.setDate(6,
-                livreDTO.getDatePret());
-
-            updatePreparedStatement.executeUpdate();
+            stmtAdd.executeUpdate();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
@@ -125,23 +118,30 @@ public class LivreDAO extends DAO {
 
     /**
      *
-     * Méthode permettant d'ajouter un livre à la base de données.
+     * Met à jour un livre.
      *
-     * @param livreDTO Le livre à ajouter
-     * @throws DAOException en cas d'erreur de connexion ou d'objet <code>LivreDTO</code> incomplet.
+     * @param livreDTO
+     * @throws DAOException
+     * @return livreDTO
      */
-    public void add(LivreDTO livreDTO) throws DAOException {
+    public void update(LivreDTO livreDTO) throws DAOException {
         try(
-            PreparedStatement stmtAdd = (getConnection().prepareStatement(LivreDAO.ADD_REQUEST))) {
-            stmtAdd.setInt(1,
+            PreparedStatement updatePreparedStatement = getConnection().prepareStatement(LivreDAO.UPDATE_REQUEST)) {
+
+            updatePreparedStatement.setInt(1,
                 livreDTO.getIdLivre());
-            stmtAdd.setString(2,
+            updatePreparedStatement.setString(2,
                 livreDTO.getTitre());
-            stmtAdd.setString(3,
+            updatePreparedStatement.setString(3,
                 livreDTO.getAuteur());
-            stmtAdd.setDate(4,
+            updatePreparedStatement.setDate(4,
                 livreDTO.getDateAcquisition());
-            stmtAdd.executeUpdate();
+            updatePreparedStatement.setInt(5,
+                livreDTO.getIdMembre());
+            updatePreparedStatement.setDate(6,
+                livreDTO.getDatePret());
+
+            updatePreparedStatement.executeUpdate();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
