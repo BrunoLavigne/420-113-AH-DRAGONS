@@ -74,9 +74,15 @@ public class BibliothequeCreateur {
                 bd,
                 user,
                 password));
-            setLivre(new LivreDAO(getCx()));
-            setMembre(new MembreDAO(getCx()));
-            setReservation(new ReservationDAO(getCx()));
+
+            LivreDAO livreDAO = new LivreDAO(getCx());
+            MembreDAO membreDAO = new MembreDAO(getCx());
+            ReservationDAO reservationDAO = new ReservationDAO(getCx());
+
+            setLivre(livreDAO);
+            setMembre(membreDAO);
+            setReservation(reservationDAO);
+
             setGestionLivre(new LivreService(getLivre(),
                 getReservation(),
                 getMembre()));
