@@ -27,19 +27,12 @@ public class MembreDAO extends DAO {
 
     private static final String READ_REQUEST = "SELECT idMembre, nom, telephone, limitePret, nbPret FROM membre WHERE idMembre = ?";
 
-    private static final String UPDATE_REQUEST = "UPDATE membre SET idMembre = ?, nom = ?, telephone = ?, limitePret = ?, nbPret = ? WHERE idMembre = ?";
+    private static final String UPDATE_REQUEST = "UPDATE membre SET nom = ?, telephone = ?, limitePret = ?, nbPret = ? WHERE idMembre = ?";
 
     private static final String DELETE_REQUEST = "DELETE FROM membre WHERE idMembre = ?";
 
     private final static String GET_ALL_REQUEST = "select idMembre, nom, telephone, limitePret, nbPret "
         + "from livre";
-
-    // private final static String SELECT_REQUEST = "select idlivre, titre,
-    // auteur, dateAcquisition, idMembre, datePret from livre where idlivre =
-    // ?";
-
-    // private final static String UPDATE_REQUEST_ADD_PRET = "update membre set
-    // nbpret = nbPret + 1 where idMembre = ?";
 
     /**
      *
@@ -197,17 +190,15 @@ public class MembreDAO extends DAO {
 
         try(
             PreparedStatement updatePreparedStatement = getConnection().prepareStatement(UPDATE_REQUEST)) {
-            updatePreparedStatement.setInt(1,
-                membreDTO.getIdMembre());
-            updatePreparedStatement.setString(2,
+            updatePreparedStatement.setString(1,
                 membreDTO.getNom());
-            updatePreparedStatement.setLong(3,
+            updatePreparedStatement.setLong(2,
                 membreDTO.getTelephone());
-            updatePreparedStatement.setInt(4,
+            updatePreparedStatement.setInt(3,
                 membreDTO.getLimitePret());
-            updatePreparedStatement.setInt(5,
+            updatePreparedStatement.setInt(4,
                 membreDTO.getNbPret());
-            updatePreparedStatement.setInt(6,
+            updatePreparedStatement.setInt(5,
                 membreDTO.getIdMembre());
             updatePreparedStatement.execute();
         } catch(SQLException sqlException) {
