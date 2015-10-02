@@ -86,6 +86,9 @@ public class MembreService extends Services {
 
 				MembreDTO nouveauMembre = new MembreDTO();
 				nouveauMembre.setIdMembre(idMembre);
+				nouveauMembre.setNom(nom);
+				nouveauMembre.setTelephone(telephone);
+				nouveauMembre.setLimitePret(limitePret);
 
 				getMembre().add(nouveauMembre);
 			}
