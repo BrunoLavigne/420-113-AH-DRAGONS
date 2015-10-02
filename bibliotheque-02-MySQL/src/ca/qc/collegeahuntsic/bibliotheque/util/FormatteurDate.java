@@ -14,11 +14,12 @@ import java.util.Date;
  */
 public class FormatteurDate {
 
-    private static SimpleDateFormat formatAMJ;
+    private static final String FORMAT_DATE = "yyyy-MM-dd";
+
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat(FormatteurDate.FORMAT_DATE);
 
     static {
-        setFormatAMJ(new SimpleDateFormat("yyyy-MM-dd"));
-        getFormatAMJ().setLenient(false);
+        FormatteurDate.SIMPLE_DATE_FORMAT.setLenient(false);
     }
 
     /**
@@ -30,7 +31,7 @@ public class FormatteurDate {
      * @throws ParseException
      */
     public static Date convertirDate(String dateString) throws ParseException {
-        return getFormatAMJ().parse(dateString);
+        return FormatteurDate.SIMPLE_DATE_FORMAT.parse(dateString);
     }
 
     /**
@@ -41,15 +42,7 @@ public class FormatteurDate {
      * @return La date en string
      */
     public static String toString(Date date) {
-        return getFormatAMJ().format(date);
-    }
-
-    public static SimpleDateFormat getFormatAMJ() {
-        return formatAMJ;
-    }
-
-    public static void setFormatAMJ(SimpleDateFormat formatAMJ) {
-        FormatteurDate.formatAMJ = formatAMJ;
+        return FormatteurDate.SIMPLE_DATE_FORMAT.format(date);
     }
 
 }
