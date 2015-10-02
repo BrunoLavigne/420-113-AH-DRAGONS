@@ -60,35 +60,12 @@ public class MembreService extends Services {
 	 */
 	public boolean existe(int idMembre) throws ServiceException {
 
-		return (getMembre().read(idMembre) != null);
-
-	}
-
-	/**
-	 * @TODO [test comment]
-	 */
-	public void inscrire(int idMembre, String nom, long telephone, int limitePret) throws ServiceException {
-
-		if (!existe(idMembre)) {
-			MembreDAO nouveauMembre = new MembreDAO(getMembre());
-		}
-
-		getMembre().add(nouveauMembre);
-
+		// Un membre est-il trouvé? Si null, non: donc false
 		try {
-
-			getStmtInsert().setInt(1, idMembre);
-			getStmtInsert().setString(2, nom);
-			getStmtInsert().setLong(3, telephone);
-			getStmtInsert().setInt(4, limitePret);
-			getStmtInsert().executeUpdate();
-		} catch (SQLException sqlException) {
-			throw new DAOException(sqlException);
+			return getMembre().read(idMembre) != null ? true : false;
+		} catch (DAOException daoException) {
+			throw new ServiceException(daoException);
 		}
-	}
-
-	public void emprunter(MembreDTO unLivreDTO) {
-
 	}
 
 	/**
@@ -100,27 +77,26 @@ public class MembreService extends Services {
 	 * @param telephone
 	 * @param limitePret
 	 * @throws ServiceException
-	 * @throws ConnexionException
 	 */
 	public void inscrire(int idMembre, String nom, long telephone, int limitePret) throws ServiceException {
+
 		try {
-			// Vérifie si le membre existe déjà
-			if (getMembre().existe(idMembre)) {
-				throw new ServiceException("Membre existe deja: " + idMembre);
-			}
 
-			// Ajout du membre
-			getMembre().inscrire(idMembre, nom, telephone, limitePret);
-			getCx().commit();
+			if (!existe(idMembre)) {
 
-		} catch (Exception exception) {
-			try {
-				getCx().rollback();
-			} catch (ConnexionException connexionException) {
-				throw new ServiceException(connexionException);
+				MembreDTO nouveauMembre = new MembreDTO();
+				nouveauMembre.setIdMembre(idMembre);
+
+				getMembre().add(nouveauMembre);
 			}
-			throw new ServiceException(exception);
+		} catch (DAOException daoException) {
+			throw new ServiceException(daoException);
 		}
+
+	}
+
+	public void emprunter(MembreDTO unLivreDTO) {
+		if()
 	}
 
 	/**

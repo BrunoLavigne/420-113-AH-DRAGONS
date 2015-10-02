@@ -155,7 +155,8 @@ public class MembreDAO extends DAO {
 	 * Lit et renvoie un membre de la table membre
 	 *
 	 * @param idMembre
-	 * @return MembreDTO Le membre dont L'ID est spécifié
+	 * @return MembreDTO Le membre dont L'ID est spécifié, null si rien de
+	 *         trouvé
 	 * @throws DAOException
 	 *             S'il y a une erreur avec la base de données
 	 */
