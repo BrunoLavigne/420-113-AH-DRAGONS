@@ -186,36 +186,36 @@ public class ReservationService extends Services {
      * @param dateReservation La date à laquelle le membre désire effectuer la réservation
      * @throws ServiceException En cas d'erreur avec le DAO, un exception de type <code>ServiceException</code> est lancée.
      */
-    public void reserver(int idReservation,
-        int idLivre,
-        int idMembre,
+    public void reserver(ReservationDTO reservationDTO,
+        LivreDTO livreDTO,
+        MembreDTO membreDTO,
         String dateReservation) throws ServiceException {
 
         try {
 
             // Vérifie sur le livre
-            LivreDTO livreDTO = getLivreDAO().read(idLivre);
+            LivreDTO unLivreDTO = getLivreDAO().read(livreDTO.getIdLivre());
 
-            if(livreDTO == null) {
+            if(unLivreDTO == null) {
                 throw new ServiceException("Livre inexistant: "
-                    + idLivre);
+                    + livreDTO.getIdLivre());
             }
-            if(livreDTO.getIdMembre() == 0) {
+            if(unLivreDTO.getIdMembre() == 0) {
                 throw new ServiceException("Livre "
-                    + idLivre
+                    + livreDTO.getIdLivre()
                     + " n'est pas prêté");
             }
-            if(livreDTO.getIdMembre() == idMembre) {
+            if(unLivreDTO.getIdMembre() == membreDTO.getIdMembre()) {
                 throw new ServiceException("Livre "
-                    + idLivre
+                    + livreDTO.getIdLivre()
                     + " déjà prêté à ce membre");
             }
 
             // Vérifie sur le membre
-            MembreDTO membreDTO = getMembreDAO().read(idMembre);
-            if(membreDTO == null) {
+            MembreDTO unMembreDTO = getMembreDAO().read(membreDTO.getIdMembre());
+            if(unMembreDTO == null) {
                 throw new ServiceException("Membre inexistant: "
-                    + idMembre);
+                    + membreDTO.getIdMembre());
             }
 
             // Vérification sur la réservation
@@ -225,19 +225,19 @@ public class ReservationService extends Services {
             }
 
             // Vérifie que la réservation n'existe pas
-            if(getReservationDAO().read(idReservation) != null) {
+            if(getReservationDAO().read(reservationDTO.getIdReservation()) != null) {
                 throw new ServiceException("Réservation "
-                    + idReservation
+                    + reservationDTO.getIdReservation()
                     + " existe déjà");
             }
 
             //Création de la réservation
-            ReservationDTO reservationDTO = new ReservationDTO();
+            ReservationDTO uneReservationDTO = new ReservationDTO();
 
-            reservationDTO.setIdLivre(idLivre);
-            reservationDTO.setIdMembre(idMembre);
-            reservationDTO.setIdReservation(idReservation);
-            reservationDTO.setDateReservation(Date.valueOf(dateReservation));
+            uneReservationDTO.setIdLivre(livreDTO.getIdLivre());
+            uneReservationDTO.setIdMembre(membreDTO.getIdMembre());
+            uneReservationDTO.setIdReservation(reservationDTO.getIdReservation());
+            uneReservationDTO.setDateReservation(Date.valueOf(dateReservation));
 
             add(reservationDTO);
 
