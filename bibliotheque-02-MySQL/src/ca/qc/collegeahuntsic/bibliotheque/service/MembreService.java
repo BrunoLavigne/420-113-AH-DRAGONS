@@ -196,13 +196,19 @@ public class MembreService extends Services {
      *
      * !!! À compléter !!!
      *
-     * public void emprunter(MembreDTO membreDTO) {
-     *
-     * // Voir si le membre existe réellement
-     * if(getMembre().read(membreDTO.getIdMembre()) != null) {
-     *
-     * } }
-     */
+    public void emprunter(MembreDTO membreDTO,
+        LivreDTO livreDTO) throws ServiceException {
+
+        try {
+
+            // Voir si le membre existe réellement
+            if(getMembreDAO().read(membreDTO.getIdMembre()) != null) {
+
+            }
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
+    } */
 
     /**
      * Suppression d'un membre dans la base de données.
