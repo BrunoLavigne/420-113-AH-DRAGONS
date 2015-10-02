@@ -15,4 +15,13 @@ public class DTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     *
+     * Constructeur pour un nouveau DTO vide.
+     *
+     */
+    public DTO() {
+        super();
+    }
+
 }
