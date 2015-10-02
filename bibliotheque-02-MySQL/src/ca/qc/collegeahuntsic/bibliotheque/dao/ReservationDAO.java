@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
+import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 
@@ -33,12 +35,13 @@ public class ReservationDAO extends DAO {
         + "WHERE idReservation = ?";
 
     private final static String ADD_REQUEST = "INSERT INTO reservation (idReservation, idlivre, idMembre, dateReservation) "
-        + "VALUES (?,?,?,str_to_date(?, '%Y-%m-%d'))";
+        + "VALUES (?,?,?,CURRENT_TIMESTAMP)";
 
     private static final String DELETE_REQUEST = "DELETE FROM reservation "
         + "WHERE idReservation = ?";
 
-    private final static String UPDATE_REQUEST = "UPDATE reservation set dateReservation = ?"
+    private final static String UPDATE_REQUEST = "UPDATE reservation "
+        + "set idLivre = ?, idMembre = ?, dateReservation = ?"
         + "WHERE idReservation = ?";
 
     private final static String GET_ALL_REQUEST = "SELECT idReservation, idLivre, idMembre, dateReservation "
@@ -46,7 +49,8 @@ public class ReservationDAO extends DAO {
 
     private final static String FIND_BY_LIVRE = "SELECT idReservation, idLivre, idMembre, dateReservation "
         + "FROM reservation "
-        + "WHERE idLivre = ?";
+        + "WHERE idLivre = ? "
+        + "ORDER BY dateReservation ASC";
 
     private final static String FIND_BY_MEMBRE = "SELECT idReservation, idLivre, idMembre, dateReservation "
         + "FROM reservation "
@@ -79,8 +83,6 @@ public class ReservationDAO extends DAO {
                 reservationDTO.getIdLivre());
             addPreparedStatement.setInt(3,
                 reservationDTO.getIdMembre());
-            addPreparedStatement.setDate(4,
-                reservationDTO.getDateReservation());
             addPreparedStatement.executeUpdate();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
@@ -122,6 +124,7 @@ public class ReservationDAO extends DAO {
      *
      * Mise à jour d'une réservation qui se trouve dans la base de données
      *
+     * @param reservationDTO La réservation à updater
      * @param idReservation Le ID de la réservation à mettre à jour
      * @throws DAOException Si il-y-a une erreur lors de l'exécution de la requête SQL, celle-ci est traitée
      */
@@ -129,7 +132,13 @@ public class ReservationDAO extends DAO {
         Date dateReservation) throws DAOException {
         try(
             PreparedStatement updatePreparedStatement = getConnection().prepareStatement(ReservationDAO.UPDATE_REQUEST)) {
-            updatePreparedStatement.setDate(1,
+
+            updatePreparedStatement.setInt(1,
+                reservationDTO.getIdLivre());
+            updatePreparedStatement.setInt(2,
+                reservationDTO.getIdMembre());
+
+            updatePreparedStatement.setDate(3,
                 dateReservation);
             updatePreparedStatement.setInt(2,
                 reservationDTO.getIdLivre());
@@ -198,12 +207,12 @@ public class ReservationDAO extends DAO {
      *
      * Recherche des réservations associées à un livre
      *
-     * @param idLivre Le ID du livre pour lequel nous cherchons les réservations
+     * @param livreDTO Le livre pour lequel nous cherchons les réservations
      * @return liste La liste qui contient les réservations selon le livre
      * @throws DAOException Si il-y-a une erreur lors de l'exécution de la requête SQL, celle-ci est traitée
      */
 
-    public List<ReservationDTO> getByLivre(int idLivre) throws DAOException {
+    public List<ReservationDTO> getByLivre(LivreDTO livreDTO) throws DAOException {
 
         List<ReservationDTO> liste = Collections.EMPTY_LIST;
 
@@ -211,7 +220,7 @@ public class ReservationDAO extends DAO {
             PreparedStatement stmtGetByLivre = (getConnection().prepareStatement(ReservationDAO.FIND_BY_LIVRE));) {
 
             stmtGetByLivre.setInt(1,
-                idLivre);
+                livreDTO.getIdLivre());
 
             liste = new ArrayList<>();
 
@@ -244,12 +253,12 @@ public class ReservationDAO extends DAO {
      *
      * Recherche des réservations associées à un membre
      *
-     * @param idMembre Le ID du membre pour lequel nous cherchons les réservations
+     * @param membreDTO Le membre pour lequel nous cherchons les réservations
      * @return liste La liste qui contient toutes les réservation associées à un membre
      * @throws DAOException Si il-y-a une erreur lors de l'exécution de la requête SQL, celle-ci est traitée
      */
 
-    public List<ReservationDTO> getByMembre(int idMembre) throws DAOException {
+    public List<ReservationDTO> getByMembre(MembreDTO membreDTO) throws DAOException {
 
         List<ReservationDTO> liste = Collections.EMPTY_LIST;
 
@@ -257,7 +266,7 @@ public class ReservationDAO extends DAO {
             PreparedStatement stmtGetByMembre = (getConnection().prepareStatement(ReservationDAO.FIND_BY_MEMBRE));) {
 
             stmtGetByMembre.setInt(1,
-                idMembre);
+                membreDTO.getIdMembre());
 
             liste = new ArrayList<>();
 

@@ -61,7 +61,7 @@ public class ReservationService extends Services {
         setReservationDAO(reservationDAO);
     }
 
-    // Opérations CRUD
+    // Region Opérations CRUD
 
     /**
      *
@@ -132,7 +132,9 @@ public class ReservationService extends Services {
 
     }
 
-    // Opérations de recherche
+    // End Opérations CRUD
+
+    // Region Opérations de recherche
 
     /**
      *
@@ -162,14 +164,17 @@ public class ReservationService extends Services {
     public List<ReservationDTO> findByLivre(int idLivre) throws ServiceException {
 
         try {
-            return getReservationDAO().getByLivre(idLivre);
+            LivreDTO livreDTO = getLivreDAO().read(idLivre);
+            return getReservationDAO().getByLivre(livreDTO);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
 
     }
 
-    // Méthodes métier
+    // End Opérations de recherche
+
+    // Region Méthodes métier
 
     /**
      * Réservation d'un livre par un membre.
@@ -355,6 +360,10 @@ public class ReservationService extends Services {
         }
     }
 
+    // End Méthodes métier
+
+    // Region Getter et Setter
+
     /**
      * Getter de la variable d'instance <code>this.livreDAO</code>.
      *
@@ -408,5 +417,7 @@ public class ReservationService extends Services {
     public void setReservationDAO(ReservationDAO reservationDAO) {
         this.reservationDAO = reservationDAO;
     }
+
+    // End Getter et Setter
 
 }
