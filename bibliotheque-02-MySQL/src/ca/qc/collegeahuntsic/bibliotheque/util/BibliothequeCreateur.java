@@ -67,7 +67,7 @@ public class BibliothequeCreateur {
         String bd,
         String user,
         String password) throws BibliothequeException {
-        // allocation des objets pour le traitement des transactions
+        // allocation des objets pour le traitement des transaction
 
         try {
             setCx(new Connexion(serveur,
