@@ -233,6 +233,8 @@ public class MembreService extends Services {
         // tjrs throw new ServiceException
 
         // VÉrifier si a déjà des réservations...drop l'emprunt s'il a des réservations
+
+        // faudrait faire getLivreDao().emprunter(unLivreDTO);
     }
 
     public void retourner(MembreDTO unMembreDTO, LivreDTO unLivreDTO) {
