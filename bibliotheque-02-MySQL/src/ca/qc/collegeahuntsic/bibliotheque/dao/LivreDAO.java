@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 
 /**
@@ -220,12 +221,11 @@ public class LivreDAO extends DAO {
      * @return liste un objet <code>List</code> contenant des objets de type <code>LivreDTO</code>.
      * @throws DAOException d'erreur de connexion ou de format d'objets ou d'enregistrements incompatibles.
      */
-    public List<LivreDTO> findByMembre(int idMembre) throws DAOException {
-
+    public List<LivreDTO> findByMembre(MembreDTO membreDTO) throws DAOException {
         try(
             PreparedStatement stmtGetLivresByMembre = (getConnection().prepareStatement(LivreDAO.FIND_BY_MEMBRE));) {
             stmtGetLivresByMembre.setInt(1,
-                idMembre);
+                membreDTO.getIdMembre());
             try(
                 ResultSet rset = stmtGetLivresByMembre.executeQuery()) {
                 List<LivreDTO> liste = new ArrayList<>();
