@@ -27,6 +27,7 @@ public class LivreDTO extends DTO {
 
     private Date datePret;
 
+    // Region Getters and Setters
     /**
      * Getter de la variable d'instance <code>this.idLivre</code>.
      *
@@ -100,6 +101,7 @@ public class LivreDTO extends DTO {
         this.dateAcquisition = dateAcquisition;
     }
 
+    // End Region Getters and Setters
     /**
      * Getter de la variable d'instance <code>this.idMembre</code>.
      *
@@ -135,4 +137,5 @@ public class LivreDTO extends DTO {
     public void setDatePret(Date datePret) {
         this.datePret = datePret;
     }
+    // EndRegion Getters and Setters
 }
