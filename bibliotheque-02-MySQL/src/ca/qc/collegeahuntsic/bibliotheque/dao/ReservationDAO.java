@@ -160,7 +160,7 @@ public class ReservationDAO extends DAO {
     /**
      *
      * Méthode retournant une liste de type <code>List</code> contenant des objets <code>ReservationDTO</code>.
-     * La liste contient toutes les réservations enregistrées dans la base de données.
+     * La liste contient toutes les réservations enregistrées dans la base de données
      *
      * @return liste une liste d'objets de type <code>ReservationDTO</code> représentant
      * les réservation enregistrées dans la base de données.
