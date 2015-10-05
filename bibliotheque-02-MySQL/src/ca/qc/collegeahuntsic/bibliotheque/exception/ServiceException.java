@@ -13,14 +13,21 @@ public class ServiceException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     *
+     * Constructs a new exception with null as its detail message. The cause is not initialized, and may subsequently be initialized by a call to
+     * {@link Throwable#initCause(java.lang.Throwable)}
+     *
+     */
+
     public ServiceException() {
         super();
     }
 
     /**
      *
-     * Constructs a new exception with the specified detail message. The cause is not initialized, and may subsequently be
-     * initialized by a call to {@link Throwable#initCause(java.lang.Throwable)}.
+     * Constructs a new exception with the specified detail message. The cause is not initialized, and may subsequently be initialized by a call to
+     *  {@link Throwable#initCause(java.lang.Throwable)}.
      *
      * @param message  the detail message. The detail message is saved for later retrieval by the {@link java.lang.Throwable#getMessage()} method.
      */
