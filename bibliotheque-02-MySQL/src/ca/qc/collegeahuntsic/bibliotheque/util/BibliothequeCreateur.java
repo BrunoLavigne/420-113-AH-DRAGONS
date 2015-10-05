@@ -53,26 +53,26 @@ public class BibliothequeCreateur {
     private ReservationService gestionReservation;
 
     /**
-     * Ouvre une connexion avec la BD relationnelle et
-     * alloue les gestionnaires de transactions et des tables.
-     * @param serveur SQL
-     * @param bd nom de la base de données
-     * @param user id pour établir une connexion avec le serveur SQL
-     * @param password mot de passe pour le user id
-     * @throws BibliothequeException
+     * Crée les services nécessaires à l'application bibliothèque.
+     *
+     * @param typeServeur Type de serveur SQL de la BD
+     * @param schema Nom du schéma de la base de données
+     * @param nomUtilisateur Nom d'utilisateur sur le serveur SQL
+     * @param motPasse Mot de passe sur le serveur SQL
+     * @throws BibliothequeException S'il y a une erreur avec la base de données
      *
      */
-    public BibliothequeCreateur(String serveur,
-        String bd,
-        String user,
-        String password) throws BibliothequeException {
+    public BibliothequeCreateur(String typeServeur,
+        String schema,
+        String nomUtilisateur,
+        String motPasse) throws BibliothequeException {
         // allocation des objets pour le traitement des transaction
 
         try {
-            setCx(new Connexion(serveur,
-                bd,
-                user,
-                password));
+            setCx(new Connexion(typeServeur,
+                schema,
+                nomUtilisateur,
+                motPasse));
 
             LivreDAO livreDAO = new LivreDAO(getCx());
             MembreDAO membreDAO = new MembreDAO(getCx());
@@ -107,7 +107,9 @@ public class BibliothequeCreateur {
     }
 
     /**
-     * @throws BibliothequeException
+     * Ferme la connexion
+     *
+     * @throws BibliothequeException S'il y a une erreur avec la base de données
      */
     public void fermer() throws BibliothequeException {
         // fermeture de la connexion
