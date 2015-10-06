@@ -269,12 +269,11 @@ public class MembreService extends Services {
 	public void renouveler(MembreDTO membreDTO, LivreDTO livreDTO) throws ServiceException, DAOException {
 
 		// Si membre n'existe pas
-        MembreDTO unMembreDTO = getMembreDAO().read(membreDTO.getIdMembre());
+		MembreDTO unMembreDTO = getMembreDAO().read(membreDTO.getIdMembre());
 
-        if(unMembreDTO == null) {
-            throw new ServiceException("Membre inexistant: "
-                + membreDTO.getIdMembre());
-        }
+		if (unMembreDTO == null) {
+			throw new ServiceException("Membre inexistant: " + membreDTO.getIdMembre());
+		}
 
 		// Si livre n'existe pas
 		if (!getLivreDAO().checkLivreExist(livreDTO.getIdLivre())) {
@@ -282,20 +281,24 @@ public class MembreService extends Services {
 		}
 
 		// Si livre n'a pas été prêté
-		if (getReservationDAO().) {
-			throw new ServiceException(
-					"Aucune réservation pour le livre avec l'ID " + livreDTO.getIdLivre() + " trouvée.");
-		}
+		// if (getReservationDAO().) {
+		// throw new ServiceException(
+		// "Aucune réservation pour le livre avec l'ID " + livreDTO.getIdLivre()
+		// + " trouvée.");
+		// }
 
-		// S'il y a eu réservation, vérifier que ce n'est pas avec le membre qui veut renouveler
+		// S'il y a eu réservation, vérifier que ce n'est pas avec le membre qui
+		// veut renouveler
 		if (getReservationDAO().findByLivre(livreDTO).get(0).getIdMembre() != membreDTO.getIdMembre()) {
 			throw new ServiceException("Le membre avec l'ID " + membreDTO.getIdMembre()
 					+ " n'a pas de réservation pour le livre avec l'ID " + livreDTO.getIdLivre());
 		}
 
-		// Si le livre n'a pas été emprunté par le membre, il ne peut le renouveler
-		if(!getLivreDAO().findByMembre(membreDTO).contains(livreDTO)) {
-			throw new ServiceException("Le membre avec l'ID " + membreDTO.getIdMembre() + " n'a pas le livre avec l'ID " + livreDTO.getIdLivre() + " dans sa liste de prêts.");
+		// Si le livre n'a pas été emprunté par le membre, il ne peut le
+		// renouveler
+		if (!getLivreDAO().findByMembre(membreDTO).contains(livreDTO)) {
+			throw new ServiceException("Le membre avec l'ID " + membreDTO.getIdMembre() + " n'a pas le livre avec l'ID "
+					+ livreDTO.getIdLivre() + " dans sa liste de prêts.");
 		}
 
 		// faudrait faire getLivreDao().emprunter(unLivreDTO);
@@ -318,11 +321,20 @@ public class MembreService extends Services {
 	 */
 	public void retourner(MembreDTO membreDTO, LivreDTO livreDTO) throws ServiceException {
 
-		// à la fin // getLivreDAO().retourner(unLivreDTO); //
-		getMembreDAO().retourner(unMembreDTO);
+		try {
 
-		// Si le membre n'existe pas
-		if(getMembreDAO().)
+			// Si membre n'existe pas
+			if (!existe(membreDTO.getIdMembre())) {
+				throw new ServiceException("Le membre avec l'ID " + membreDTO.getIdMembre() + " n'existe pas.");
+			}
+
+			// Si le livre n'existe pas
+			if (!getLivreDAO().checkLivreExist(livreDTO.getIdLivre())) {
+				throw new ServiceException("Le livre avec l'ID " + livreDTO.getIdLivre() + " n'existe pas.");
+			}
+		} catch (DAOException daoException) {
+			throw new ServiceException(daoException);
+		}
 	}
 
 	/**
