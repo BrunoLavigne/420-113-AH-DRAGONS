@@ -68,11 +68,13 @@ public class BibliothequeCreateur {
         String motPasse) throws BibliothequeException {
         // allocation des objets pour le traitement des transaction
 
-        try {
-            setCx(new Connexion(typeServeur,
+        try(
+            Connexion connexion = new Connexion(typeServeur,
                 schema,
                 nomUtilisateur,
-                motPasse));
+                motPasse)) {
+
+            setCx(connexion);
 
             LivreDAO livreDAO = new LivreDAO(getCx());
             MembreDAO membreDAO = new MembreDAO(getCx());
@@ -86,6 +88,7 @@ public class BibliothequeCreateur {
                 getMembre(),
                 getReservation()));
             setGestionMembre(new MembreService(getMembre(),
+                getLivre(),
                 getReservation()));
             setGestionPret(new PretService(getLivre(),
                 getMembre(),
@@ -102,6 +105,8 @@ public class BibliothequeCreateur {
 
         } catch(DAOException daoException) {
             throw new BibliothequeException(daoException);
+        } catch(Exception exception) {
+            throw new BibliothequeException(exception);
         }
 
     }
