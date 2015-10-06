@@ -185,7 +185,7 @@ public class ReservationDAO extends DAO {
      */
     public List<ReservationDTO> getAll() throws DAOException {
 
-        List<ReservationDTO> listeReservations = Collections.EMPTY_LIST;
+        List<ReservationDTO> listeReservations = Collections.<ReservationDTO> emptyList();
 
         try(
             PreparedStatement stmtGetAllReservation = (getConnection().prepareStatement(ReservationDAO.GET_ALL_REQUEST));
@@ -224,7 +224,7 @@ public class ReservationDAO extends DAO {
 
     public List<ReservationDTO> findByLivre(LivreDTO livreDTO) throws DAOException {
 
-        List<ReservationDTO> listeReservations = Collections.EMPTY_LIST;
+        List<ReservationDTO> listeReservations = Collections.<ReservationDTO> emptyList();
 
         try(
             PreparedStatement findByLivreStmt = (getConnection().prepareStatement(ReservationDAO.FIND_BY_LIVRE));) {
@@ -270,7 +270,7 @@ public class ReservationDAO extends DAO {
 
     public List<ReservationDTO> findByMembre(MembreDTO membreDTO) throws DAOException {
 
-        List<ReservationDTO> listeReservations = Collections.EMPTY_LIST;
+        List<ReservationDTO> listeReservations = Collections.<ReservationDTO> emptyList();
 
         try(
             PreparedStatement findByMembreStmt = (getConnection().prepareStatement(ReservationDAO.FIND_BY_MEMBRE));) {
