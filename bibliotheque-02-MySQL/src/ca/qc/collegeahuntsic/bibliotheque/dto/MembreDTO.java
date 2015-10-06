@@ -5,7 +5,7 @@
 package ca.qc.collegeahuntsic.bibliotheque.dto;
 
 /**
- * Permet de représenter un tuple de la table membre.
+ * DTO de la table membre.
  *
  */
 

@@ -101,7 +101,6 @@ public class LivreDTO extends DTO {
         this.dateAcquisition = dateAcquisition;
     }
 
-    // End Region Getters and Setters
     /**
      * Getter de la variable d'instance <code>this.idMembre</code>.
      *

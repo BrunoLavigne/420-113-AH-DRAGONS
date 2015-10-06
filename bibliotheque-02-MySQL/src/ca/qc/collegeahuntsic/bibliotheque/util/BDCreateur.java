@@ -10,20 +10,17 @@ import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BDCreateurException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 
-/**
- *<pre>
- * Permet de créer la BD utilisée par Biblio.java.
- *
- * Paramètres:0- serveur SQL
- *            1- bd nom de la BD
- *            2- user id pour établir une connexion avec le serveur SQL
- *            3- mot de passe pour le user id
- *</pre>
- */
 class BDCreateur {
 
     /**
-     * @throws BDCreateurException
+     * Crée la base de données nécessaire à l'application bibliothèque.
+     *
+     * Paramètres:
+     *        0- serveur SQL
+     *        1- bd nom de la BD
+     *        2- user id pour établir une connexion avec le serveur SQL
+     *        3- mot de passe pour le user id
+     *@throws BDCreateurException S'il y a une erreur avec la connexion ou s'il y a une erreur avec la base de données.
      */
     public static void main(String args[]) throws BDCreateurException {
 
