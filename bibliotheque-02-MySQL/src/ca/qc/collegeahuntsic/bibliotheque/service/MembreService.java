@@ -279,33 +279,37 @@ public class MembreService extends Services {
 		}
 
 		// Si livre n'a pas été prêté
-		if (getReservationDAO().findByLivre(livreDTO).isEmpty()) {
+		if (getReservationDAO().) {
 			throw new ServiceException(
 					"Aucune réservation pour le livre avec l'ID " + livreDTO.getIdLivre() + " trouvée.");
 		}
 
-		// S'il y a eu réservation, vérifier que c'est avec le membre qui veut
-		// renouveler
+		// S'il y a eu réservation, vérifier que ce n'est pas avec le membre qui veut renouveler
 		if (getReservationDAO().findByLivre(livreDTO).get(0).getIdMembre() != membreDTO.getIdMembre()) {
 			throw new ServiceException("Le membre avec l'ID " + membreDTO.getIdMembre()
 					+ " n'a pas de réservation pour le livre avec l'ID " + livreDTO.getIdLivre());
 		}
 
-		// Il faut que celui qui renouvele ait le même ID que le membre
-		// tjrs throw new ServiceException
-
-		// VÉrifier si a déjà des réservations...drop l'emprunt s'il a des
-		// réservations
+		// Si le livre n'a pas été emprunté par le membre, il ne peut le renouveler
+		if(!getLivreDAO().findByMembre(membreDTO).contains(livreDTO)) {
+			throw new ServiceException("Le membre avec l'ID " + membreDTO.getIdMembre() + " n'a pas le livre avec l'ID " + livreDTO.getIdLivre() + " dans sa liste de prêts.");
+		}
 
 		// faudrait faire getLivreDao().emprunter(unLivreDTO);
 	}
 
-	/*
-	 * public void retourner(MembreDTO unMembreDTO, LivreDTO unLivreDTO) {
+	/**
 	 *
-	 * // à la fin // getLivreDAO().retourner(unLivreDTO); //
-	 * getMembreDAO().retourner(unMembreDTO); }
+	 * Retourne un livre.
+	 *
+	 * @param membreDTO
+	 * @param livreDTO
 	 */
+	public void retourner(MembreDTO membreDTO, LivreDTO livreDTO) {
+
+		// à la fin // getLivreDAO().retourner(unLivreDTO); //
+		getMembreDAO().retourner(unMembreDTO);
+	}
 
 	/**
 	 * Suppression d'un membre dans la base de données.
