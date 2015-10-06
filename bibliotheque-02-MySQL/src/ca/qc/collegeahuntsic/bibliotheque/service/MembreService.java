@@ -228,7 +228,7 @@ public class MembreService extends Services {
             }
 
             // Après vérifications, le livre peut être emprunté au membre
-            // livreDTO.setDatePret(datePret); à faire
+            // livreDTO.setDatePret(datePret); !!! à faire mettre timestamp
             livreDTO.setIdMembre(membreDTO.getIdMembre());
             getLivreDAO().emprunter(livreDTO);
 
@@ -239,27 +239,21 @@ public class MembreService extends Services {
 
     /**
      *
-     * Vérifie si un membre existe
+     * Renouvelle le prêt d'un livre
      *
-     * @param idMembre
-     * @return
-     * @throws ServiceException En cas d'erreur d'appel au DAO, une exception est levée
+     * @param membreDTO Le membre qui renouvelle
+     * @param livreDTO Le livre à renouveler
+     * @throws ServiceException Si le membre n'existe pas, si le livre n'existe pas, si le livre n'a pas encore été prêté, si le livre a été prêté à quelqu'un d'autre ou s'il y a une erreur avec la base de données
      */
-    public boolean existe(int idMembre) throws ServiceException {
+    public void renouveler(MembreDTO membreDTO,
+        LivreDTO livreDTO) throws ServiceException {
 
-        // Un membre est-il trouvé? Si null, non: donc false
-        try {
-            return getMembreDAO().read(idMembre) != null ? true : false;
-        } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+        // Il faut que le membre existe
+        if(!existe(membreDTO.getIdMembre())) {
+            throw new ServiceException("Aucun membre avec l'ID "
+                + membreDTO.getIdMembre()
+                + " trouvé.");
         }
-    }
-
-    /*
-    public void renouveler(MembreDTO unMembreDTO, LivreDTO unLivreDTO) {
-
-        // Il faut que le livre existe
-        //LivreDTO unLivreDTO getLivreDAO().read(livreDTO.get)
 
         // Il faut que le livre ait un emprunteur
 
@@ -271,6 +265,7 @@ public class MembreService extends Services {
         // faudrait faire getLivreDao().emprunter(unLivreDTO);
     }
 
+    /*
     public void retourner(MembreDTO unMembreDTO, LivreDTO unLivreDTO) {
 
         // à la fin
@@ -315,8 +310,7 @@ public class MembreService extends Services {
          } */
 
         /* Suppression du membre */
-        delete(membreDTO.getIdMembre());
-
+        delete(membreDTO);
     }
 
     /**
@@ -340,12 +334,32 @@ public class MembreService extends Services {
     }
 
     private void setLivreDAO(LivreDAO livreDAO) {
+        this.livreDAO = livreDAO;
     }
 
     private void setReservationDAO(ReservationDAO reservationDAO) {
+        this.reservationDAO = reservationDAO;
     }
 
     private ReservationDAO getReservationDAO() {
         return this.reservationDAO;
+    }
+
+    /**
+     *
+     * Vérifie si un membre existe
+     *
+     * @param idMembre
+     * @return
+     * @throws ServiceException En cas d'erreur d'appel au DAO, une exception est levée
+     */
+    public boolean existe(int idMembre) throws ServiceException {
+
+        // Un membre est-il trouvé? Si null, non: donc false
+        try {
+            return getMembreDAO().read(idMembre) != null ? true : false;
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
     }
 }
