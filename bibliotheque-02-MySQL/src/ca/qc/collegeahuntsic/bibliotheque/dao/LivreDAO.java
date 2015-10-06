@@ -54,7 +54,7 @@ public class LivreDAO extends DAO {
      *
      * Crée un DAO à partir d'une connexion à la base de données.
      *
-     * @param <code>connexion</code> - La connexion à utiliser.
+     * @param connexion - La connexion à utiliser.
      */
     public LivreDAO(Connexion connexion) {
         super(connexion);
@@ -64,7 +64,7 @@ public class LivreDAO extends DAO {
      *
      * Ajoute un nouveau livre.
      *
-     * @param <code>livreDTO</code> - Le livre à ajouter.
+     * @param livreDTO - Le livre à ajouter.
      * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données
      */
     public void add(LivreDTO livreDTO) throws DAOException {
@@ -88,7 +88,7 @@ public class LivreDAO extends DAO {
      *
      * Lit un livre.
      *
-     * @param <code>idLivre</code> - L'ID du livre à lire.
+     * @param idLivre - L'ID du livre à lire.
      * @return Le livre.
      * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données
      */
@@ -122,7 +122,7 @@ public class LivreDAO extends DAO {
      *
      * Met à jour un livre.
      *
-     * @param <code>livreDTO</code> - Le livre à mettre à jour.
+     * @param livreDTO - Le livre à mettre à jour.
      * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données
      */
     public void update(LivreDTO livreDTO) throws DAOException {
@@ -152,7 +152,7 @@ public class LivreDAO extends DAO {
      *
      * Supprime un livre.
      *
-     * @param <code>livreDTO</code> - Le livre à supprimer.
+     * @param livreDTO - Le livre à supprimer.
      * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
      */
     public void delete(LivreDTO livreDTO) throws DAOException {
@@ -207,7 +207,7 @@ public class LivreDAO extends DAO {
      *
      * Trouve les livres à partir d'un titre.
      *
-     * @param <code>titre</code> - Le titre à utiliser
+     * @param titre - Le titre à utiliser
      * @return La liste des livres correspondants ; une liste vide sinon.
      * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
      */
@@ -240,7 +240,7 @@ public class LivreDAO extends DAO {
      *
      * Trouve les livres à partir d'un membre.
      *
-     * @param <code>membreDTO</code> - Le membre à utiliser.
+     * @param membreDTO - Le membre à utiliser.
      * @return La liste des livres correspondants ; une liste vide sinon.
      * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
      */
@@ -273,7 +273,7 @@ public class LivreDAO extends DAO {
      *
      * Vérifie l'existence d'un livre dans la base de données.
      *
-     * @param <code>idLivre</code> L'ID du livre à rechercher.
+     * @param idLivre L'ID du livre à rechercher.
      * @return VRAI si le livre existe, FAUX s'il n'est pas trouvé.
      * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
      */

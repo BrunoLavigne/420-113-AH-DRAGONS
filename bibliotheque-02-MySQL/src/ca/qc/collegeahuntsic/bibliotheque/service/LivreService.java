@@ -14,23 +14,10 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
 /**
- * Gestion des transactions reliées à la création et
- * la suppression de livres dans une bibliothèque.
+ * Service de la table livre.
  *
- * Ce programme permet de gérer les transaction reliées à la
- * création et à la suppression de livres.
- *
- *<pre>
- * Pré-condition:
- *   la base de données de la bibliothèque doit exister
- *</pre>
- *
- *<post>
- * Post-condition:
- *   le programme effectue les majuscules associées à chaque
- *   transaction
- * </post>
- *
+ * @author Dragons Vicieux
+ * @see {@link #Serialized Form Serialized Form}
  */
 public class LivreService extends Services {
 
