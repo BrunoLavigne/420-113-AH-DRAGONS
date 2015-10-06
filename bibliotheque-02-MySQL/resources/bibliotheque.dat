@@ -75,7 +75,7 @@ preter 3 2 1999-01-09
 --
 reserver 3 2 998 1999-01-09
 --
--- erreur : no r�servation existant
+-- erreur : no réservation existant
 --
 reserver 2 2 3 1999-01-09
 --
