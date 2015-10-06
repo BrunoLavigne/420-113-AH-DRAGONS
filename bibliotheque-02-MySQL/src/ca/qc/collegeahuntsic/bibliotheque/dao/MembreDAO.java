@@ -137,12 +137,12 @@ public class MembreDAO extends DAO {
      * @param idMembre Le membre à supprimer
      * @throws DAOException S'il y a une erreur avec la base de données
      */
-    public void delete(int idMembre) throws DAOException {
+    public void delete(MembreDTO membreDTO) throws DAOException {
 
         try(
             PreparedStatement deletePreparedStatement = getConnection().prepareStatement(DELETE_REQUEST)) {
             deletePreparedStatement.setInt(1,
-                idMembre);
+                membreDTO.getIdMembre());
             deletePreparedStatement.execute();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);

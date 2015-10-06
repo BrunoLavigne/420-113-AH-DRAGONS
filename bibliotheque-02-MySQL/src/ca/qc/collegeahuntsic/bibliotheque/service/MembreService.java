@@ -32,13 +32,9 @@ public class MembreService extends Services {
     private static final long serialVersionUID = 1L;
 
     private MembreDAO membreDAO;
-    
-    private LivreDAO livreDAO;
-
-    private ReservationDAO reservationDAO;
 
     /**
-     * 
+     *
      * Crée le service de la table <code>membre</code>
      *
      * @param membreDAO Le DAO de la table <code>membre</code>
@@ -57,10 +53,10 @@ public class MembreService extends Services {
 
     /**
      *
-     * Appel la méthode ADD de membreDAO
+     * Ajoute un nouveau membre
      *
-     * @param membreDTO Le membre à ajouter à la base de données
-     * @throws ServiceException En cas d'erreur lors de l'appel au DAO, une exception est levée.
+     * @param membreDTO Le membre à ajouter
+     * @throws ServiceException S'il y a une erreur avec la base de données
      */
     public void add(MembreDTO membreDTO) throws ServiceException {
 
@@ -73,11 +69,11 @@ public class MembreService extends Services {
 
     /**
      *
-     * Appelle la méthode READ de le membreDAO
+     * Lit un membre.
      *
-     * @param idMembre Le ID du membre pour lequel nous désirons avoir des informations
-     * @return MembreDTO Le membre dont L'ID est spécifié
-     * @throws ServiceException En cas d'erreur lors de l'appel au DAO, une exception est levée.
+     * @param idMembre L'ID du membre à lire
+     * @return MembreDTO Le membre à lire
+     * @throws ServiceException S'il y a une erreur avec la base de données
      */
     public MembreDTO read(int idMembre) throws ServiceException {
 
@@ -90,10 +86,10 @@ public class MembreService extends Services {
 
     /**
      *
-     * Appel de la méthode UPDATE de membreDAO
+     * Met à jour un membre.
      *
-     * @param membreDTO Le membre pour lequel nous désirons effectuer des modifications
-     * @throws ServiceException En cas d'erreur lors de l'appel au DAO, une exception est levée.
+     * @param membreDTO Le membre à mettre à jour
+     * @throws ServiceException S'il y a une erreur avec la base de données
      */
     public void update(MembreDTO membreDTO) throws ServiceException {
 
@@ -106,15 +102,15 @@ public class MembreService extends Services {
 
     /**
      *
-     * Appel la methode DELETE de membreDAO
+     * Supprime un membre
      *
-     * @param idMembre Le ID du membre que nous désirons enlever de la base de données
-     * @throws ServiceException En cas d'erreur lors de l'appel au DAO, une exception est levée.
+     * @param membreDTO Le membre à supprimer
+     * @throws ServiceException Si le membre a encore des prêts, s'il a des réservations ou s'il y a une erreur avec la base de données
      */
-    public void delete(int idMembre) throws ServiceException {
+    public void delete(MembreDTO membreDTO) throws ServiceException {
 
         try {
-            getMembreDAO().delete(idMembre);
+            getMembreDAO().delete(membreDTO);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
@@ -293,7 +289,7 @@ public class MembreService extends Services {
     }
 
     /**
-     * 
+     *
      * Retourne le membre
      *
      * @return MembreDAO Le membre DAO
@@ -303,7 +299,7 @@ public class MembreService extends Services {
     }
 
     /**
-     * 
+     *
      * Set le membre
      *
      * @param membreDAO Le membre DAO
@@ -312,25 +308,9 @@ public class MembreService extends Services {
         this.membreDAO = membreDAO;
     }
 
-    /**
-     * 
-     * Retourne le livre
-     *
-     * @return LivreDAO Le livre DAO
-     */
-    private LivreDAO getLivreDAO() {
-        return this.livreDAO;
-    }
-
     private void setLivreDAO(LivreDAO livreDAO) {
-        this.livreDAO = livreDAO;
-    }
-
-    private ReservationDAO getReservationDAO() {
-        return this.reservationDAO;
     }
 
     private void setReservationDAO(ReservationDAO reservationDAO) {
-        this.reservationDAO = reservationDAO;
     }
 }
