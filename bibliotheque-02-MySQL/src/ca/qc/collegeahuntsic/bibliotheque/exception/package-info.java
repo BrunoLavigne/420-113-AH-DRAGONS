@@ -1,10 +1,9 @@
 // Fichier package-info.java
-// Auteur : Bruno Lavigne
+// Auteur : Dragons Vicieux
 // Date de création : 2015-09-18
 /**
- * TODO Auto-generated class javadoc
  *
- * @author Bruno Lavigne
+ * @author Dragons Vicieux
  */
 
 package ca.qc.collegeahuntsic.bibliotheque.exception;
