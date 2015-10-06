@@ -33,16 +33,15 @@ public class ReservationService extends Services {
 
     /**
      *
-     * Crée le service de la table reservation.
+     * Crée le service de la table <code>reservation</code>.
      *
-     * @param livreDAO L'accès à la table livre
-     * @param membreDAO L'accès à la table membre
-     * @param reservationDAO L'accès à la table réservation
-     * @throws ServiceException En cas d'erreur lors de la création du service, une erreur de type ServiceException est lancé.
+     * @param livreDAO Le DAO de la table <code>livre</code>
+     * @param membreDAO Le DAO de la table <code>membre</code>
+     * @param reservationDAO Le DAO de la table <code>reservation</code>
      */
     public ReservationService(LivreDAO livreDAO,
         MembreDAO membreDAO,
-        ReservationDAO reservationDAO) throws ServiceException {
+        ReservationDAO reservationDAO) {
 
         super();
         setLivreDAO(livreDAO);

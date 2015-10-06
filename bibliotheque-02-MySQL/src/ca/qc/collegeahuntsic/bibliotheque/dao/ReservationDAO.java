@@ -19,7 +19,7 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 
 /**
  *
- * DAO pour effectuer des CRUDs avec la table reservation.
+ * DAO pour effectuer des CRUDs avec la table <code>reservation</code>.
  *
  * @author Dragons Vicieux
  */

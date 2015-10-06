@@ -9,7 +9,7 @@ import java.sql.Connection;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 
 /**
- * TODO Auto-generated class javadoc
+ * Classe de base pour tous les DAOs.
  *
  * @author Dragons Vicieux
  */
@@ -20,11 +20,11 @@ public class DAO implements Serializable {
     private Connexion connexion;
 
     /**
-     * Getter de la variable d'instance <code>this.connection</code>.
      *
-     * @return La variable d'instance <code>this.connection</code>
+     * Crée un DAO à partir d'une connexion à la base de données.
+     *
+     * @param connexion La connexion à utiliser
      */
-
     public DAO(Connexion connexion) {
         super();
         setConnexion(connexion);
@@ -50,9 +50,9 @@ public class DAO implements Serializable {
 
     /**
      *
-     * Retourne la {@link java connexion}}
+     * Retourne la connexion à la base de données
      *
-     * @return La connexion java
+     * @return La connexion à la base de données
      */
     protected Connection getConnection() {
         return getConnexion().getConnection();

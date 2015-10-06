@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.StringTokenizer;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
@@ -32,11 +34,13 @@ import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
  * transactions traitées, voir la méthode afficherAide().
  *
  * Paramètres
- * 0- Site du serveur SQL ("local" ou "distant")
- * 1- Nom de la BD
- * 2- User id pour établir une connexion avec le serveur SQL
- * 3- Mot de passe pour le user id
- * 4- Fichier de transaction
+ * <ul>
+ * <li>0- Site du serveur SQL ("local" ou "distant")</li>
+ * <li>1- Nom de la BD</li>
+ * <li>2- User id pour établir une connexion avec le serveur SQL</li>
+ * <li>3- Mot de passe pour le user id</li>
+ * <li>4- Fichier de transaction</li>
+ * </ul>
  *
  * Pré-condition
  *   La base de données de la bibliothèque doit exister
@@ -50,10 +54,10 @@ public class Bibliotheque {
     private static BibliothequeCreateur gestionBibliotheque;
 
     /**
-     * Ouverture de la BD,
-     * traitement des transactions et
-     * fermeture de la BD.
-     * @throws BibliothequeException
+     *
+     * Ouverture de la BD, traitement des transactions et fermeture de la BD.
+     *
+     * @throws BibliothequeException En cas d'erreur lors de la gestion de la bibliothèque
      */
     public static void main(String argv[]) throws BibliothequeException {
         // validation du nombre de paramètres
@@ -199,17 +203,57 @@ public class Bibliotheque {
                     readLong(tokenizer) /* tel */,
                     readInt(tokenizer) /* limitePret */);
             } else if("desinscrire".startsWith(command)) {
-                getGestionBiblio().getGestionMembre().desinscrire(readInt(tokenizer) /* idMembre */);
+
+                MembreDTO membreDTO = new MembreDTO();
+                membreDTO = getGestionBiblio().getGestionMembre().read(readInt(tokenizer));
+
+                getGestionBiblio().getGestionMembre().desinscrire(membreDTO);
             } else if("reserver".startsWith(command)) {
-                getGestionBiblio().getGestionReservation().reserver(readInt(tokenizer) /* idReservation */,
-                    readInt(tokenizer) /* idLivre */,
-                    readInt(tokenizer) /* idMembre */,
-                    readDate(tokenizer) /* dateReservation */);
+
+                ReservationDTO reservationDTO = new ReservationDTO();
+                reservationDTO.setIdReservation(readInt(tokenizer));
+                reservationDTO.setIdLivre(readInt(tokenizer));
+                reservationDTO.setIdMembre(readInt(tokenizer));
+                String dateReservation = readDate(tokenizer);
+
+                SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
+                Date date;
+
+                try {
+                    date = new Date(format.parse(dateReservation).getTime());
+                } catch(ParseException exception) {
+                    throw new BibliothequeException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
+                }
+
+                reservationDTO.setDateReservation(date);
+
+                LivreDTO livreDTO = getGestionBiblio().getLivre().read(reservationDTO.getIdLivre());
+                MembreDTO membreDTO = getGestionBiblio().getGestionMembre().read(reservationDTO.getIdMembre());
+
+                getGestionBiblio().getGestionReservation().reserver(reservationDTO,
+                    livreDTO,
+                    membreDTO,
+                    dateReservation);
+
             } else if("prendreRes".startsWith(command)) {
-                getGestionBiblio().getGestionReservation().prendreRes(readInt(tokenizer) /* idReservation */,
-                    readDate(tokenizer) /* dateReservation */);
+
+                ReservationDTO reservationDTO = new ReservationDTO();
+                reservationDTO = getGestionBiblio().getGestionReservation().read(readInt(tokenizer));
+                //String dateReservation = readDate(tokenizer);
+
+                LivreDTO livreDTO = getGestionBiblio().getGestionLivre().read(reservationDTO.getIdLivre());
+                MembreDTO membreDTO = getGestionBiblio().getGestionMembre().read(reservationDTO.getIdMembre());
+
+                getGestionBiblio().getGestionReservation().utiliser(reservationDTO,
+                    membreDTO,
+                    livreDTO);
+
             } else if("annulerRes".startsWith(command)) {
-                getGestionBiblio().getGestionReservation().annulerRes(readInt(tokenizer) /* idReservation */);
+
+                ReservationDTO reservationDTO = new ReservationDTO();
+                reservationDTO = getGestionBiblio().getGestionReservation().read(readInt(tokenizer));
+                getGestionBiblio().getGestionReservation().annuler(reservationDTO);
+
             } else if("listerLivres".startsWith(command)) {
                 getGestionBiblio().getLivre().getAll();
             } else if("listerLivresTitre".startsWith(command)) {

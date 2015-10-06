@@ -7,12 +7,21 @@ package ca.qc.collegeahuntsic.bibliotheque.service;
 import java.io.Serializable;
 
 /**
- * TODO Auto-generated class javadoc
+ *
+ * Classe de base pour tous les services.
  *
  * @author Dragons Vicieux
  */
 public class Services implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     *
+     * Crée un service.
+     *
+     */
+    public Services() {
+    }
 
 }
