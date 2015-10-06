@@ -16,9 +16,11 @@ import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 
 /**
- * Permet d'effectuer les accès à la table livre.
+ *
+ * DAO pour effectuer des CRUDs avec la table <code>livre</code>
+ *
+ * @author Marc-Éric Boury 2015
  */
-
 public class LivreDAO extends DAO {
 
     private static final long serialVersionUID = 1L;
@@ -50,21 +52,20 @@ public class LivreDAO extends DAO {
 
     /**
      *
-     * Creation d'une instance. Des énoncés SQL pour chaque requête sont précompilés.
+     * Crée un DAO à partir d'une connexion à la base de données.
      *
-     * @param connexion
-     * @throws DAOException
+     * @param <code>connexion</code> - La connexion à utiliser.
      */
-    public LivreDAO(Connexion connexion) throws DAOException {
+    public LivreDAO(Connexion connexion) {
         super(connexion);
     }
 
     /**
      *
-     * Méthode permettant d'ajouter un livre à la base de données.
+     * Ajoute un nouveau livre.
      *
-     * @param livreDTO Le livre à ajouter
-     * @throws DAOException en cas d'erreur de connexion ou d'objet <code>LivreDTO</code> incomplet.
+     * @param <code>livreDTO</code> - Le livre à ajouter.
+     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données
      */
     public void add(LivreDTO livreDTO) throws DAOException {
         try(
@@ -85,13 +86,14 @@ public class LivreDAO extends DAO {
 
     /**
      *
-     * Lecture d'un livre
+     * Lit un livre.
      *
-     * @param idLivre
-     * @return TupleLivre
-     * @throws DAOException
+     * @param <code>idLivre</code> - L'ID du livre à lire.
+     * @return Le livre.
+     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données
      */
     public LivreDTO read(int idLivre) throws DAOException {
+        LivreDTO tempLivre = null;
         try(
             PreparedStatement stmtExistCheck = (getConnection().prepareStatement(LivreDAO.READ_REQUEST))) {
             stmtExistCheck.setInt(1,
@@ -99,7 +101,7 @@ public class LivreDAO extends DAO {
             try(
                 ResultSet rset = stmtExistCheck.executeQuery()) {
                 if(rset.next()) {
-                    LivreDTO tempLivre = new LivreDTO();
+                    tempLivre = new LivreDTO();
                     tempLivre.setIdLivre(idLivre);
                     tempLivre.setTitre(rset.getString(2));
                     tempLivre.setAuteur(rset.getString(3));
@@ -107,22 +109,21 @@ public class LivreDAO extends DAO {
                     tempLivre.setIdMembre(rset.getInt(5));
                     tempLivre.setDatePret(rset.getDate(6));
                     rset.close();
-                    return tempLivre;
+
                 }
             }
         } catch(SQLException e) {
             throw new DAOException();
         }
-        return null;
+        return tempLivre;
     }
 
     /**
      *
      * Met à jour un livre.
      *
-     * @param livreDTO
-     * @throws DAOException
-     * @return livreDTO
+     * @param <code>livreDTO</code> - Le livre à mettre à jour.
+     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données
      */
     public void update(LivreDTO livreDTO) throws DAOException {
         try(
@@ -149,10 +150,10 @@ public class LivreDAO extends DAO {
 
     /**
      *
-     * Méthode permettant de retirer un livre de la base de données.
+     * Supprime un livre.
      *
-     * @param livreDTO le livre à effacer
-     * @throws DAOException en cas d'erreur de connexion ou d'objet <code>LivreDTO</code> incomplet.
+     * @param <code>livreDTO</code> - Le livre à supprimer.
+     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
      */
     public void delete(LivreDTO livreDTO) throws DAOException {
         try(
@@ -167,16 +168,14 @@ public class LivreDAO extends DAO {
 
     /**
      *
-     * Méthode retournant une liste de type <code>List</code> contenant des objets <code>LivreDTO</code>.
-     * La liste contient tous les livres enregistrés dans la base de données.
+     * Trouve tous les livres.
      *
-     * @return liste une liste d'objets de type <code>LivreDTO</code> représentant
-     * les livres enregistrés dans la base de données
+     * @return La liste des livres ; une liste vide sinon.
      *
-     * @throws DAOException en cas d'erreur de connexion ou d'erreur SQL.
+     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
      */
     public List<LivreDTO> getAll() throws DAOException {
-        List<LivreDTO> livres = Collections.EMPTY_LIST;
+        List<LivreDTO> livres = Collections.<LivreDTO> emptyList();
 
         try(
             PreparedStatement stmtGetAllLivres = (getConnection().prepareStatement(LivreDAO.GET_ALL_REQUEST))) {
@@ -195,7 +194,6 @@ public class LivreDAO extends DAO {
                         livres.add(livreDTO);
                     } while(resultSet.next());
                 }
-
                 return livres;
             } catch(SQLException sqlException) {
                 throw new DAOException(sqlException);
@@ -207,20 +205,21 @@ public class LivreDAO extends DAO {
 
     /**
      *
-     * Méthode retournant une <code>List</code> de <code>LivreDTO</code> contenant les livres dont le titre contient un mot clé recherché.
+     * Trouve les livres à partir d'un titre.
      *
-     * @param motTitre la chaîne de caractères à rechercher dans les
-     * titres des livres enregistrés dans la base de données
-     * @throws DAOException en cas d'erreur de connexion ou de format d'objets ou d'enregistrements incompatibles.
+     * @param <code>titre</code> - Le titre à utiliser
+     * @return La liste des livres correspondants ; une liste vide sinon.
+     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
      */
-    public List<LivreDTO> findByTitre(String motTitre) throws DAOException {
+    public List<LivreDTO> findByTitre(String titre) throws DAOException {
+        List<LivreDTO> liste = Collections.<LivreDTO> emptyList();
         try(
             PreparedStatement stmtGetLivresByTitre = (getConnection().prepareStatement(LivreDAO.FIND_BY_TITRE));) {
             stmtGetLivresByTitre.setString(1,
-                motTitre);
+                titre);
             try(
                 ResultSet rset = stmtGetLivresByTitre.executeQuery()) {
-                List<LivreDTO> liste = new ArrayList<>();
+                liste = new ArrayList<>();
                 while(rset.next()) {
                     LivreDTO tempLivre = new LivreDTO();
                     tempLivre.setIdLivre(rset.getInt(1));
@@ -230,29 +229,30 @@ public class LivreDAO extends DAO {
                     tempLivre.setDatePret(rset.getDate(5));
                     liste.add(tempLivre);
                 }
-                return liste;
             }
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
+        return liste;
     }
 
     /**
      *
-     * Méthode retournant une <code>List</code> de <code>LivreDTO</code> contenant les livres associés à un membre particulier.
+     * Trouve les livres à partir d'un membre.
      *
-     * @param idMembre un <code>int</code> représentant le numéro d'identification du membre dont les livres sont recherchés.
-     * @return liste un objet <code>List</code> contenant des objets de type <code>LivreDTO</code>.
-     * @throws DAOException d'erreur de connexion ou de format d'objets ou d'enregistrements incompatibles.
+     * @param <code>membreDTO</code> - Le membre à utiliser.
+     * @return La liste des livres correspondants ; une liste vide sinon.
+     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
      */
     public List<LivreDTO> findByMembre(MembreDTO membreDTO) throws DAOException {
+        List<LivreDTO> liste = Collections.<LivreDTO> emptyList();
         try(
             PreparedStatement stmtGetLivresByMembre = (getConnection().prepareStatement(LivreDAO.FIND_BY_MEMBRE));) {
             stmtGetLivresByMembre.setInt(1,
                 membreDTO.getIdMembre());
             try(
                 ResultSet rset = stmtGetLivresByMembre.executeQuery()) {
-                List<LivreDTO> liste = new ArrayList<>();
+                liste = new ArrayList<>();
                 while(rset.next()) {
                     LivreDTO tempLivre = new LivreDTO();
                     tempLivre.setIdLivre(rset.getInt(1));
@@ -262,52 +262,45 @@ public class LivreDAO extends DAO {
                     tempLivre.setDatePret(rset.getDate(5));
                     liste.add(tempLivre);
                 }
-                return liste;
             }
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
+        return liste;
     }
 
     /**
      *
-     * Vérifie l'existence d'un enregistrement Livre dans la base de données.
+     * Vérifie l'existence d'un livre dans la base de données.
      *
-     * @param idLivre un <code>int</code> représentant le numéro d'identification du livre à rechercher.
-     * @return boolean livreExiste un bouléen. VRAI si le livre existe, FAUX s'il n'est pas trouvé.
-     * @throws DAOException en cas d'erreur de connexion ou si <code>idLivre</code> n'est pas valide.
+     * @param <code>idLivre</code> L'ID du livre à rechercher.
+     * @return VRAI si le livre existe, FAUX s'il n'est pas trouvé.
+     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
      */
     public boolean checkLivreExist(int idLivre) throws DAOException {
+        boolean livreExiste = false;
         try(
             PreparedStatement stmtExistCheck = (getConnection().prepareStatement(LivreDAO.READ_REQUEST))) {
             stmtExistCheck.setInt(1,
                 idLivre);
             try(
                 ResultSet rset = stmtExistCheck.executeQuery()) {
-                boolean livreExiste = rset.next();
+                livreExiste = rset.next();
                 rset.close();
-                return livreExiste;
+
             }
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
+        return livreExiste;
     }
 
     /**
      *
-     * Méthode permettant de mettre à jour le livre emprunté dans la base de donnée. Appelle la méthode
-     * <code>update</code> de la classe <code>LivreDAO</code>.
+     * Emprunte un livre.
      *
-     * @param LivreDTO L'objet <code>LivreDTO</code> représentant le livre à emprunter.
-     * @throws DAOException en cas d'erreur dans la mise à jour du livre dans la base de données.
-     */
-    /**
-     *
-     * Méthode permettant de mettre à jour le livre emprunté dans la base de donnée. Appelle la méthode
-     * <code>update</code> de la classe <code>LivreDAO</code>.
-     *
-     * @param LivreDTO L'objet <code>LivreDTO</code> représentant le livre à emprunter.
-     * @throws DAOException en cas d'erreur dans la mise à jour du livre dans la base de données
+     * @param <code>livreDTO</code> - Le livre à emprunter.
+     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
      */
     public void emprunter(LivreDTO livreDTO) throws DAOException {
         try(
@@ -332,11 +325,10 @@ public class LivreDAO extends DAO {
 
     /**
      *
-     * Méthode permettant de mettre à jour le livre retourné dans la base de donnée. Appelle la méthode
-     * <code>update</code> de la classe <code>LivreDAO</code>.
+     * Retourne un livre.
      *
-     * @param LivreDTO L'objet <code>LivreDTO</code> représentant le livre à retourner.
-     * @throws DAOException en cas d'erreur dans la mise à jour du livre dans la base de données
+     * @param <code>livreDTO</code> - Le livre à retourner.
+     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
      */
     public void retourner(LivreDTO livreDTO) throws DAOException {
         try(
