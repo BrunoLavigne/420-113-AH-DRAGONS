@@ -218,18 +218,18 @@ public class BibliothequeCreateur {
     }
 
     /**
-     * Getter de la variable d'instance <code>this.membreMembre</code>.
+     * Getter de la variable d'instance <code>this.membreService</code>.
      *
-     * @return La variable d'instance <code>this.membreMembre</code>
+     * @return La variable d'instance <code>this.membreService</code>
      */
     public MembreService getMembreService() {
         return this.membreService;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.membreMembre</code>.
+     * Setter de la variable d'instance <code>this.membreService</code>.
      *
-     * @param membreMembre La valeur à utiliser pour la variable d'instance <code>this.membreMembre</code>
+     * @param membreService La valeur à utiliser pour la variable d'instance <code>this.membreService</code>
      */
     public void setMembreService(MembreService membreService) {
         this.membreService = membreService;
