@@ -13,13 +13,14 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 class BDCreateur {
 
     /**
-     * Crée la base de données nécessaire à l'application bibliothèque.
+     *  Crée la base de données nécessaire à l'application bibliothèque.
      *
-     * Paramètres:
+     *  Paramètres:
      *        0- serveur SQL
      *        1- bd nom de la BD
      *        2- user id pour établir une connexion avec le serveur SQL
      *        3- mot de passe pour le user id
+     *
      *@throws BDCreateurException S'il y a une erreur avec la connexion ou s'il y a une erreur avec la base de données.
      */
     public static void main(String args[]) throws BDCreateurException {

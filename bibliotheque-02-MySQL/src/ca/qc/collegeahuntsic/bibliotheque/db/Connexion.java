@@ -39,10 +39,10 @@ public class Connexion {
 
     /**
      * Crée une connexion en mode autocommit false.
-     * @param typeServeur serveur SQL de la BD
-     * @param schema schéma de la BD
-     * @param nomUtilisateur userid sur le serveur SQL
-     * @param motPasse mot de passe sur le serveur SQL
+     * @param typeServeur Type de serveur SQL de la base de données
+     * @param schema Nom du schéma de la base de données
+     * @param nomUtilisateur Nom d'utilisateur sur le serveur SQL
+     * @param motPasse Mot de passe sur le serveur SQL
      * @throws ConnexionException Si le driver n'existe pas, s'il y a une erreur avec la base de données ou si typeServeur n'est pas valide.
      */
     public Connexion(String typeServeur,
