@@ -36,21 +36,21 @@ import ca.qc.collegeahuntsic.bibliotheque.service.ReservationService;
  *  </post>
  */
 public class BibliothequeCreateur {
-    private Connexion cx;
+    private Connexion connexion;
 
-    private LivreDAO livre;
+    private LivreDAO livreDAO;
 
-    private MembreDAO membre;
+    private MembreDAO membreDAO;
 
-    private ReservationDAO reservation;
+    private ReservationDAO reservationDAO;
 
-    private LivreService gestionLivre;
+    private LivreService livreService;
 
-    private MembreService gestionMembre;
+    private MembreService membreService;
 
-    private PretService gestionPret;
+    private PretService pretService;
 
-    private ReservationService gestionReservation;
+    private ReservationService reservationService;
 
     /**
      * Crée les services nécessaires à l'application bibliothèque.
@@ -69,35 +69,35 @@ public class BibliothequeCreateur {
         // allocation des objets pour le traitement des transaction
 
         try(
-            Connexion connexion = new Connexion(typeServeur,
+            Connexion connection = new Connexion(typeServeur,
                 schema,
                 nomUtilisateur,
                 motPasse)) {
 
-            setCx(connexion);
+            setConnexion(connection);
             //System.out.println(connexion.toString());
 
-            LivreDAO livreDAO = new LivreDAO(getCx());
+            LivreDAO unLivreDAO = new LivreDAO(getConnexion());
             //System.out.println(livreDAO.getConnection().toString());
-            MembreDAO membreDAO = new MembreDAO(getCx());
-            ReservationDAO reservationDAO = new ReservationDAO(getCx());
+            MembreDAO unMembreDAO = new MembreDAO(getConnexion());
+            ReservationDAO uneReservationDAO = new ReservationDAO(getConnexion());
 
-            setLivre(livreDAO);
-            setMembre(membreDAO);
-            setReservation(reservationDAO);
+            setLivreDAO(unLivreDAO);
+            setMembreDAO(unMembreDAO);
+            setReservationDAO(uneReservationDAO);
 
-            setGestionLivre(new LivreService(getLivre(),
-                getMembre(),
-                getReservation()));
-            setGestionMembre(new MembreService(getMembre(),
-                getLivre(),
-                getReservation()));
-            setGestionPret(new PretService(getLivre(),
-                getMembre(),
-                getReservation()));
-            setGestionReservation(new ReservationService(getLivre(),
-                getMembre(),
-                getReservation()));
+            setLivreService(new LivreService(getLivreDAO(),
+                getMembreDAO(),
+                getReservationDAO()));
+            setMembreService(new MembreService(getMembreDAO(),
+                getLivreDAO(),
+                getReservationDAO()));
+            setPretService(new PretService(getLivreDAO(),
+                getMembreDAO(),
+                getReservationDAO()));
+            setReservationService(new ReservationService(getLivreDAO(),
+                getMembreDAO(),
+                getReservationDAO()));
 
         } catch(ServiceException serviceException) {
             throw new BibliothequeException(serviceException);
@@ -121,155 +121,153 @@ public class BibliothequeCreateur {
     public void fermer() throws BibliothequeException {
         // fermeture de la connexion
         try {
-            getCx().fermer();
+            getConnexion().fermer();
         } catch(ConnexionException connexionException) {
             throw new BibliothequeException(connexionException);
         }
     }
 
     /**
-     * Getter de la variable d'instance <code>this.cx</code>.
+     * Getter de la variable d'instance <code>this.connexion</code>.
      *
-     * @return La variable d'instance <code>this.cx</code>
+     * @return La variable d'instance <code>this.connexion</code>
      */
-    private Connexion getCx() {
-        return this.cx;
+    public Connexion getConnexion() {
+        return this.connexion;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.cx</code>.
+     * Setter de la variable d'instance <code>this.connexion</code>.
      *
-     * @param cx La valeur à utiliser pour la variable d'instance <code>this.cx</code>
+     * @param connexion La valeur à utiliser pour la variable d'instance <code>this.connexion</code>
      */
-    private void setCx(Connexion cx) {
-        this.cx = cx;
+    public void setConnexion(Connexion connexion) {
+        this.connexion = connexion;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.livre</code>.
+     * Getter de la variable d'instance <code>this.livreDAO</code>.
      *
-     * @return La variable d'instance <code>this.livre</code>
+     * @return La variable d'instance <code>this.livreDAO</code>
      */
-    public LivreDAO getLivre() {
-        return this.livre;
+    public LivreDAO getLivreDAO() {
+        return this.livreDAO;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.livre</code>.
+     * Setter de la variable d'instance <code>this.livreDAO</code>.
      *
-     * @param livre La valeur à utiliser pour la variable d'instance <code>this.livre</code>
+     * @param livreDAO La valeur à utiliser pour la variable d'instance <code>this.livreDAO</code>
      */
-    private void setLivre(LivreDAO livre) {
-        this.livre = livre;
+    public void setLivreDAO(LivreDAO livreDAO) {
+        this.livreDAO = livreDAO;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.membre</code>.
+     * Getter de la variable d'instance <code>this.membreDAO</code>.
      *
-     * @return La variable d'instance <code>this.membre</code>
+     * @return La variable d'instance <code>this.membreDAO</code>
      */
-    private MembreDAO getMembre() {
-        return this.membre;
+    public MembreDAO getMembreDAO() {
+        return this.membreDAO;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.membre</code>.
+     * Setter de la variable d'instance <code>this.membreDAO</code>.
      *
-     * @param membre La valeur à utiliser pour la variable d'instance <code>this.membre</code>
+     * @param membreDAO La valeur à utiliser pour la variable d'instance <code>this.membreDAO</code>
      */
-    private void setMembre(MembreDAO membre) {
-        this.membre = membre;
+    public void setMembreDAO(MembreDAO membreDAO) {
+        this.membreDAO = membreDAO;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.reservation</code>.
+     * Getter de la variable d'instance <code>this.reservationDAO</code>.
      *
-     * @return La variable d'instance <code>this.reservation</code>
+     * @return La variable d'instance <code>this.reservationDAO</code>
      */
-    private ReservationDAO getReservation() {
-        return this.reservation;
+    public ReservationDAO getReservationDAO() {
+        return this.reservationDAO;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.reservation</code>.
+     * Setter de la variable d'instance <code>this.reservationDAO</code>.
      *
-     * @param reservation La valeur à utiliser pour la variable d'instance <code>this.reservation</code>
+     * @param reservationDAO La valeur à utiliser pour la variable d'instance <code>this.reservationDAO</code>
      */
-    private void setReservation(ReservationDAO reservation) {
-        this.reservation = reservation;
+    public void setReservationDAO(ReservationDAO reservationDAO) {
+        this.reservationDAO = reservationDAO;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.gestionLivre</code>.
+     * Getter de la variable d'instance <code>this.livreService</code>.
      *
-     * @return La variable d'instance <code>this.gestionLivre</code>
+     * @return La variable d'instance <code>this.livreService</code>
      */
-
-    public LivreService getGestionLivre() {
-        return this.gestionLivre;
+    public LivreService getLivreService() {
+        return this.livreService;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.gestionLivre</code>.
+     * Setter de la variable d'instance <code>this.livreService</code>.
      *
-     * @param gestionLivre La valeur à utiliser pour la variable d'instance <code>this.gestionLivre</code>
+     * @param livreService La valeur à utiliser pour la variable d'instance <code>this.livreService</code>
      */
-    private void setGestionLivre(LivreService gestionLivre) {
-        this.gestionLivre = gestionLivre;
+    public void setLivreService(LivreService livreService) {
+        this.livreService = livreService;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.gestionMembre</code>.
+     * Getter de la variable d'instance <code>this.membreMembre</code>.
      *
-     * @return La variable d'instance <code>this.gestionMembre</code>
+     * @return La variable d'instance <code>this.membreMembre</code>
      */
-    public MembreService getGestionMembre() {
-        return this.gestionMembre;
+    public MembreService getMembreService() {
+        return this.membreService;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.gestionMembre</code>.
+     * Setter de la variable d'instance <code>this.membreMembre</code>.
      *
-     * @param gestionMembre La valeur à utiliser pour la variable d'instance <code>this.gestionMembre</code>
+     * @param membreMembre La valeur à utiliser pour la variable d'instance <code>this.membreMembre</code>
      */
-    private void setGestionMembre(MembreService gestionMembre) {
-        this.gestionMembre = gestionMembre;
+    public void setMembreService(MembreService membreService) {
+        this.membreService = membreService;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.gestionPret</code>.
+     * Getter de la variable d'instance <code>this.pretService</code>.
      *
-     * @return La variable d'instance <code>this.gestionPret</code>
+     * @return La variable d'instance <code>this.pretService</code>
      */
-    public PretService getGestionPret() {
-        return this.gestionPret;
+    public PretService getPretService() {
+        return this.pretService;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.gestionPret</code>.
+     * Setter de la variable d'instance <code>this.pretService</code>.
      *
-     * @param gestionPret La valeur à utiliser pour la variable d'instance <code>this.gestionPret</code>
+     * @param pretService La valeur à utiliser pour la variable d'instance <code>this.pretService</code>
      */
-    private void setGestionPret(PretService gestionPret) {
-        this.gestionPret = gestionPret;
+    public void setPretService(PretService pretService) {
+        this.pretService = pretService;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.gestionReservation</code>.
+     * Getter de la variable d'instance <code>this.reservationService</code>.
      *
-     * @return La variable d'instance <code>this.gestionReservation</code>
+     * @return La variable d'instance <code>this.reservationService</code>
      */
-    public ReservationService getGestionReservation() {
-        return this.gestionReservation;
+    public ReservationService getReservationService() {
+        return this.reservationService;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.gestionReservation</code>.
+     * Setter de la variable d'instance <code>this.reservationService</code>.
      *
-     * @param gestionReservation La valeur à utiliser pour la variable d'instance <code>this.gestionReservation</code>
+     * @param reservationService La valeur à utiliser pour la variable d'instance <code>this.reservationService</code>
      */
-    private void setGestionReservation(ReservationService gestionReservation) {
-        this.gestionReservation = gestionReservation;
+    public void setReservationService(ReservationService reservationService) {
+        this.reservationService = reservationService;
     }
-
 }
