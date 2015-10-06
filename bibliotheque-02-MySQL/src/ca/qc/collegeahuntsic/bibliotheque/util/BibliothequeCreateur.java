@@ -75,8 +75,10 @@ public class BibliothequeCreateur {
                 motPasse)) {
 
             setCx(connexion);
+            //System.out.println(connexion.toString());
 
             LivreDAO livreDAO = new LivreDAO(getCx());
+            //System.out.println(livreDAO.getConnection().toString());
             MembreDAO membreDAO = new MembreDAO(getCx());
             ReservationDAO reservationDAO = new ReservationDAO(getCx());
 
