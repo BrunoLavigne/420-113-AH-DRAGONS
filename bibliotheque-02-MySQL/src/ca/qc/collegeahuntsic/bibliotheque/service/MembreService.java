@@ -252,7 +252,7 @@ public class MembreService extends Services {
 
 	/**
 	 *
-	 * Renouvelle le prêt d'un livre
+	 * Renouvelle le prêt d'un livre.
 	 *
 	 * @param membreDTO
 	 *            Le membre qui renouvelle
@@ -269,9 +269,12 @@ public class MembreService extends Services {
 	public void renouveler(MembreDTO membreDTO, LivreDTO livreDTO) throws ServiceException, DAOException {
 
 		// Si membre n'existe pas
-		if (!existe(membreDTO.getIdMembre())) {
-			throw new ServiceException("Aucun membre avec l'ID " + membreDTO.getIdMembre() + " trouvé.");
-		}
+        MembreDTO unMembreDTO = getMembreDAO().read(membreDTO.getIdMembre());
+
+        if(unMembreDTO == null) {
+            throw new ServiceException("Membre inexistant: "
+                + membreDTO.getIdMembre());
+        }
 
 		// Si livre n'existe pas
 		if (!getLivreDAO().checkLivreExist(livreDTO.getIdLivre())) {
@@ -303,49 +306,92 @@ public class MembreService extends Services {
 	 * Retourne un livre.
 	 *
 	 * @param membreDTO
+	 *            Le membre qui retourne
 	 * @param livreDTO
+	 *            Le livre à retourner
+	 *
+	 * @throws ServiceException
+	 *             Si le membre n'existe pas, si le livre n'existe pas, si le
+	 *             livre n'a pas encore été prêté, si le livre a été prêté à
+	 *             quelqu'un d'autre ou s'il y a une erreur avec la base de
+	 *             données
 	 */
-	public void retourner(MembreDTO membreDTO, LivreDTO livreDTO) {
+	public void retourner(MembreDTO membreDTO, LivreDTO livreDTO) throws ServiceException {
 
 		// à la fin // getLivreDAO().retourner(unLivreDTO); //
 		getMembreDAO().retourner(unMembreDTO);
+
+		// Si le membre n'existe pas
+		if(getMembreDAO().)
 	}
 
 	/**
-	 * Suppression d'un membre dans la base de données.
 	 *
-	 * @param idMembre
+	 * Désincrit un membre.
+	 *
+	 * @param membreDTO
+	 *            Le membre à désinscrire
 	 * @throws ServiceException
+	 *             Si le membre n'existe pas, si le membre a encore des prêts,
+	 *             s'il a des réservations ou s'il y a une erreur avec la base
+	 *             de données
 	 */
 	public void desinscrire(MembreDTO membreDTO) throws ServiceException {
 
-		// Instance du membre
-		MembreDTO tupleMembre = read(membreDTO.getIdMembre());
+		try {
 
-		// Vérifie si le membre existe
-		if (tupleMembre == null) {
-			throw new ServiceException("Membre inexistant: " + membreDTO.getIdMembre());
+			// Si le membre n'existe pas
+			if (!existe(membreDTO.getIdMembre())) {
+				throw new ServiceException("Le membre avec l'ID " + membreDTO.getIdMembre() + " n'existe pas.");
+			}
+
+			// Si le membre a encore des prêts
+			if (membreDTO.getNbPret() > 0) {
+				throw new ServiceException(
+						"Le membre avec l'ID" + membreDTO.getIdMembre() + " a encore " + membreDTO.getNbPret()
+								+ " prêts." + "\nVeuillez retourner les livres avant de supprimer le compte.");
+			}
+
+			// Si le membre a encore des réservations
+
+			// Obtenir la liste de réservations du membre
+			List<ReservationDTO> listeReservations = getReservationDAO().findByMembre(membreDTO);
+
+			if (listeReservations.size() > 0) {
+				throw new ServiceException("Le membre avec l'ID " + membreDTO.getIdMembre() + " a encore "
+						+ listeReservations.size() + " réservations.");
+			}
+
+			// On peut supprimer le membre
+			delete(membreDTO);
+
+		} catch (DAOException daoException) {
+			throw new ServiceException("Erreur avec la base de données: " + daoException.toString());
 		}
-
-		// Vérifier si le membre a encore des prêts en cours
-		if (tupleMembre.getNbPret() > 0) {
-			throw new ServiceException("Le membre " + tupleMembre.getIdMembre() + " a encore des prêts.");
-		}
-
-		// if(!getReservationDAO().getByMembre())
-
-		/*
-		 * !!! À compléter !!!
-		 *
-		 * Vérifier si le membre a encore des réservations
-		 *
-		 * if (!getReservationDAO() != null) { throw new ServiceException(
-		 * "Membre " + idMembre + " a des réservations"); }
-		 */
-
-		/* Suppression du membre */
-		delete(membreDTO);
 	}
+
+	/**
+	 *
+	 * Vérifie si un membre existe.
+	 *
+	 * @param idMembre
+	 *            L'ID du membre recherché
+	 * @return boolean <code>true</code> si le membre existe, <code>false</code>
+	 *         si ce n'est pas le cas.
+	 * @throws ServiceException
+	 *             En cas d'erreur d'appel au DAO, une exception est levée
+	 */
+	public boolean existe(int idMembre) throws ServiceException {
+
+		// Un membre est-il trouvé? Si null, non: donc false
+		try {
+			return getMembreDAO().read(idMembre) != null ? true : false;
+		} catch (DAOException daoException) {
+			throw new ServiceException(daoException);
+		}
+	}
+
+	// Getters & setters
 
 	/**
 	 *
@@ -378,24 +424,5 @@ public class MembreService extends Services {
 
 	private ReservationDAO getReservationDAO() {
 		return this.reservationDAO;
-	}
-
-	/**
-	 *
-	 * Vérifie si un membre existe
-	 *
-	 * @param idMembre
-	 * @return
-	 * @throws ServiceException
-	 *             En cas d'erreur d'appel au DAO, une exception est levée
-	 */
-	public boolean existe(int idMembre) throws ServiceException {
-
-		// Un membre est-il trouvé? Si null, non: donc false
-		try {
-			return getMembreDAO().read(idMembre) != null ? true : false;
-		} catch (DAOException daoException) {
-			throw new ServiceException(daoException);
-		}
 	}
 }
