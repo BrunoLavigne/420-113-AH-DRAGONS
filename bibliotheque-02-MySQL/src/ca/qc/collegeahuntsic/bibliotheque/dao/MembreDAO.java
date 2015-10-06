@@ -36,21 +36,20 @@ public class MembreDAO extends DAO {
 
     /**
      *
-     * Création d'une instance. Pré-compilation d'énoncés SQL
+     * Crée un DAO à partir d'une connexion à la base de données.
      *
-     * @param connexion La connexion à la BD
-     * @throws DAOException S'il y a un problème avec la base de données
+     * @param connexion La connexion à utiliser
      */
-    public MembreDAO(Connexion connexion) throws DAOException {
+    public MembreDAO(Connexion connexion) {
         super(connexion);
     }
 
     /**
      *
-     * Ajoute un membre à la table membre
+     * Ajoute un nouveau membre.
      *
      * @param membreDTO Le membre à ajouter
-     * @throws DAOException S'il y a un problème avec la base de données
+     * @throws DAOException S'il y a une erreur avec la base de données
      */
     public void add(MembreDTO membreDTO) throws DAOException {
 
@@ -74,11 +73,11 @@ public class MembreDAO extends DAO {
 
     /**
      *
-     * Lit et retourne un membre de la table membre
+     * Lit un membre.
      *
-     * @param idMembre L'ID du membre recherché
-     * @return MembreDTO Le membre en objet <code>MembreDTO</code> dont L'ID est spécifié, null si rien de trouvé
-     * @throws DAOException S'il y a un problème avec la base de données
+     * @param idMembre Le membre à lire
+     * @return MembreDTO Le membre
+     * @throws DAOException S'il y a une erreur avec la base de données
      */
     public MembreDTO read(int idMembre) throws DAOException {
         MembreDTO membreDTO = null;
@@ -106,10 +105,10 @@ public class MembreDAO extends DAO {
 
     /**
      *
-     * Met les informations d'un membre à jour (en se basant sur son ID)
+     * Met à jour un membre.
      *
      * @param membreDTO Le membre à mettre à jour
-     * @throws DAOException S'il y a un problème avec la base de données
+     * @throws DAOException S'il y a une erreur avec la base de données
      */
     public void update(MembreDTO membreDTO) throws DAOException {
 
@@ -133,17 +132,17 @@ public class MembreDAO extends DAO {
 
     /**
      *
-     * Supprime un membre de la table membre
+     * Supprime un membre
      *
-     * @param idMembre L'ID du membre à supprimer
-     * @throws DAOException S'il y a un problème avec la base de données
+     * @param idMembre Le membre à supprimer
+     * @throws DAOException S'il y a une erreur avec la base de données
      */
-    public void delete(int idMembre) throws DAOException {
+    public void delete(MembreDTO membreDTO) throws DAOException {
 
         try(
             PreparedStatement deletePreparedStatement = getConnection().prepareStatement(DELETE_REQUEST)) {
             deletePreparedStatement.setInt(1,
-                idMembre);
+                membreDTO.getIdMembre());
             deletePreparedStatement.execute();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
@@ -152,12 +151,10 @@ public class MembreDAO extends DAO {
 
     /**
      *
-     * Méthode retournant une liste de type <code>List</code> contenant des
-     * objets <code>MembreDTO</code>. La liste contient tous les membres
-     * enregistrés dans la base de données.
+     * Trouve tous les membres.
      *
-     * @return liste une liste d'objets de type <code>MembreDTO</code> représentant les membres enregistrés dans la table
-     * @throws DAOException S'il y a un problème avec la base de données
+     * @return List<MembreDTO> La liste des membres; une liste vide sinon
+     * @throws DAOException S'il y a une erreur avec la base de données
      */
     public List<MembreDTO> getAll() throws DAOException {
 
@@ -181,5 +178,29 @@ public class MembreDAO extends DAO {
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
+    }
+
+    /**
+     *
+     * Emprunte un livre (augmente le nombre de livres empruntés par le membre)
+     *
+     * @param membreDTO Le membre à mettre à jour
+     * @throws DAOException S'il y a une erreur avec la base de données
+     */
+    public void emprunter(MembreDTO membreDTO) throws DAOException {
+        membreDTO.setNbPret(membreDTO.getNbPret() + 1);
+        update(membreDTO);
+    }
+
+    /**
+     *
+     * Retourne un livre (diminue le nombre de livres empruntés par le membre)
+     *
+     * @param membreDTO Le membre à mettre à jour
+     * @throws DAOException S'il y a une erreur avec la base de données
+     */
+    public void retourner(MembreDTO membreDTO) throws DAOException {
+        membreDTO.setNbPret(membreDTO.getNbPret() - 1);
+        update(membreDTO);
     }
 }

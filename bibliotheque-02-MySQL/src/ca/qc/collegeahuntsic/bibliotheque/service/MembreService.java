@@ -5,6 +5,7 @@
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
 import java.util.List;
+import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
@@ -32,28 +33,30 @@ public class MembreService extends Services {
 
     private MembreDAO membreDAO;
 
-    private ReservationDAO reservationDAO;
-
     /**
-     * Création d'une instance
      *
-     * @param membre
-     * @param reservation
+     * Crée le service de la table <code>membre</code>
+     *
+     * @param membreDAO Le DAO de la table <code>membre</code>
+     * @param livreDAO Le DAO de la table <code>livre</code>
+     * @param reservationDAO Le DAO de la table <code>reservation</code>
      */
-    public MembreService(MembreDAO membre,
-        ReservationDAO reservation) {
-        setMembreDAO(membre);
-        setReservationDAO(reservation);
+    public MembreService(MembreDAO membreDAO,
+        LivreDAO livreDAO,
+        ReservationDAO reservationDAO) {
+        setMembreDAO(membreDAO);
+        setLivreDAO(livreDAO);
+        setReservationDAO(reservationDAO);
     }
 
     // Opérations CRUD
 
     /**
      *
-     * Appel la méthode ADD de membreDAO
+     * Ajoute un nouveau membre
      *
-     * @param membreDTO Le membre à ajouter à la base de données
-     * @throws ServiceException En cas d'erreur lors de l'appel au DAO, une exception est levée.
+     * @param membreDTO Le membre à ajouter
+     * @throws ServiceException S'il y a une erreur avec la base de données
      */
     public void add(MembreDTO membreDTO) throws ServiceException {
 
@@ -66,11 +69,11 @@ public class MembreService extends Services {
 
     /**
      *
-     * Appelle la méthode READ de le membreDAO
+     * Lit un membre.
      *
-     * @param idMembre Le ID du membre pour lequel nous désirons avoir des informations
-     * @return MembreDTO Le membre dont L'ID est spécifié
-     * @throws ServiceException En cas d'erreur lors de l'appel au DAO, une exception est levée.
+     * @param idMembre L'ID du membre à lire
+     * @return MembreDTO Le membre à lire
+     * @throws ServiceException S'il y a une erreur avec la base de données
      */
     public MembreDTO read(int idMembre) throws ServiceException {
 
@@ -83,10 +86,10 @@ public class MembreService extends Services {
 
     /**
      *
-     * Appel de la méthode UPDATE de membreDAO
+     * Met à jour un membre.
      *
-     * @param membreDTO Le membre pour lequel nous désirons effectuer des modifications
-     * @throws ServiceException En cas d'erreur lors de l'appel au DAO, une exception est levée.
+     * @param membreDTO Le membre à mettre à jour
+     * @throws ServiceException S'il y a une erreur avec la base de données
      */
     public void update(MembreDTO membreDTO) throws ServiceException {
 
@@ -99,15 +102,15 @@ public class MembreService extends Services {
 
     /**
      *
-     * Appel la methode DELETE de membreDAO
+     * Supprime un membre
      *
-     * @param idMembre Le ID du membre que nous désirons enlever de la base de données
-     * @throws ServiceException En cas d'erreur lors de l'appel au DAO, une exception est levée.
+     * @param membreDTO Le membre à supprimer
+     * @throws ServiceException Si le membre a encore des prêts, s'il a des réservations ou s'il y a une erreur avec la base de données
      */
-    public void delete(int idMembre) throws ServiceException {
+    public void delete(MembreDTO membreDTO) throws ServiceException {
 
         try {
-            getMembreDAO().delete(idMembre);
+            getMembreDAO().delete(membreDTO);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
@@ -236,7 +239,7 @@ public class MembreService extends Services {
 
         // faudrait faire getLivreDao().emprunter(unLivreDTO);
     }
-    
+
     public void retourner(MembreDTO unMembreDTO, LivreDTO unLivreDTO) {
 
         // à la fin
@@ -286,43 +289,28 @@ public class MembreService extends Services {
     }
 
     /**
-     * Getter de la variable d'instance <code>this.membreDAO</code>.
      *
-     * @return La variable d'instance <code>this.membreDAO</code>
+     * Retourne le membre
+     *
+     * @return MembreDAO Le membre DAO
      */
-    public MembreDAO getMembreDAO() {
+    private MembreDAO getMembreDAO() {
         return this.membreDAO;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.membreDAO</code>.
      *
-     * @param membre
-     *            La valeur à utiliser pour la variable d'instance
-     *            <code>this.membreDAO</code>
+     * Set le membre
+     *
+     * @param membreDAO Le membre DAO
      */
     private void setMembreDAO(MembreDAO membreDAO) {
         this.membreDAO = membreDAO;
     }
 
-    /**
-     * Getter de la variable d'instance <code>this.reservationDAO</code>.
-     *
-     * @return La variable d'instance <code>this.reservationDAO</code>
-     */
-    public ReservationDAO getReservationDAO() {
-        return this.reservationDAO;
+    private void setLivreDAO(LivreDAO livreDAO) {
     }
 
-    /**
-     * Setter de la variable d'instance <code>this.reservationDAO</code>.
-     *
-     * @param reservation
-     *            La valeur à utiliser pour la variable d'instance
-     *            <code>this.reservationDAO</code>
-     */
     private void setReservationDAO(ReservationDAO reservationDAO) {
-        this.reservationDAO = reservationDAO;
     }
-
 }
