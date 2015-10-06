@@ -264,6 +264,7 @@ public class MembreService extends Services {
 	 *             quelqu'un d'autre ou s'il y a une erreur avec la base de
 	 *             données
 	 * @throws DAOException
+	 *             On ne devrait pas avoir cette exception normalement.
 	 */
 	public void renouveler(MembreDTO membreDTO, LivreDTO livreDTO) throws ServiceException, DAOException {
 
@@ -279,7 +280,15 @@ public class MembreService extends Services {
 
 		// Si livre n'a pas été prêté
 		if (getReservationDAO().findByLivre(livreDTO).isEmpty()) {
-			throw new ServiceException("Aucune réservation avec l'ID " + livreDTO.getIdLivre() + " trouvée.");
+			throw new ServiceException(
+					"Aucune réservation pour le livre avec l'ID " + livreDTO.getIdLivre() + " trouvée.");
+		}
+
+		// S'il y a eu réservation, vérifier que c'est avec le membre qui veut
+		// renouveler
+		if (getReservationDAO().findByLivre(livreDTO).get(0).getIdMembre() != membreDTO.getIdMembre()) {
+			throw new ServiceException("Le membre avec l'ID " + membreDTO.getIdMembre()
+					+ " n'a pas de réservation pour le livre avec l'ID " + livreDTO.getIdLivre());
 		}
 
 		// Il faut que celui qui renouvele ait le même ID que le membre
