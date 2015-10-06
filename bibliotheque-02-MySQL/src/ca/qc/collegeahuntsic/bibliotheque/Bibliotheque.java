@@ -164,6 +164,8 @@ public class Bibliotheque {
             if("aide".startsWith(command)) {
                 afficherAide();
             } else if("acquerir".startsWith(command)) {
+                // TODO remove
+                System.out.println("TRANSACTION ACQUERIR");
                 LivreDTO newLivre = new LivreDTO();
                 newLivre.setIdLivre(readInt(tokenizer));
                 newLivre.setTitre(readString(tokenizer));
@@ -184,11 +186,15 @@ public class Bibliotheque {
                     readString(tokenizer),
                     readDate(tokenizer)); */
             } else if("vendre".startsWith(command)) {
+                // TODO remove
+                System.out.println("TRANSACTION VENDRE");
                 // TODO LATER REMOVE OLD SHIT
                 //LivreDTO newLivre = new LivreDTO();
                 //newLivre.setIdLivre(readInt(tokenizer));
                 getGestionBiblio().getGestionLivre().vendre(getGestionBiblio().getGestionLivre().read(readInt(tokenizer)));
             } else if("preter".startsWith(command)) {
+                // TODO remove
+                System.out.println("TRANSACTION PRETER");
                 LivreDTO livreDTO = getGestionBiblio().getGestionLivre().read(readInt(tokenizer));
                 MembreDTO membreDTO = getGestionBiblio().getGestionMembre().read(readInt(tokenizer));
                 SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
@@ -211,12 +217,18 @@ public class Bibliotheque {
                     readDate(tokenizer));
                  */
             } else if("renouveler".startsWith(command)) {
+                // TODO remove
+                System.out.println("TRANSACTION RENOUVELER");
                 getGestionBiblio().getGestionPret().renouveler(readInt(tokenizer) /* idLivre */,
                     readDate(tokenizer) /* dateRenouvellement */);
             } else if("retourner".startsWith(command)) {
+                // TODO remove
+                System.out.println("TRANSACTION RETOURNER");
                 getGestionBiblio().getGestionPret().retourner(readInt(tokenizer) /* idLivre */,
                     readDate(tokenizer) /* dateRetour */);
             } else if("inscrire".startsWith(command)) {
+                // TODO remove
+                System.out.println("TRANSACTION INSCRIRE");
                 MembreDTO membreDTO = new MembreDTO();
                 membreDTO.setIdMembre(readInt(tokenizer));
                 membreDTO.setNom(readString(tokenizer));
@@ -231,12 +243,16 @@ public class Bibliotheque {
                     readInt(tokenizer));
                  */
             } else if("desinscrire".startsWith(command)) {
+                // TODO remove
+                System.out.println("TRANSACTION DÉSINSCRIRE");
 
                 MembreDTO membreDTO = new MembreDTO();
                 membreDTO = getGestionBiblio().getGestionMembre().read(readInt(tokenizer));
 
                 getGestionBiblio().getGestionMembre().desinscrire(membreDTO);
             } else if("reserver".startsWith(command)) {
+                // TODO remove
+                System.out.println("TRANSACTION RÉSERVER");
 
                 ReservationDTO reservationDTO = new ReservationDTO();
                 reservationDTO.setIdReservation(readInt(tokenizer));
@@ -294,6 +310,10 @@ public class Bibliotheque {
             /* ***********************   */else {
                 System.out.println("  Transactions non reconnue.  Essayer \"aide\"");
             }
+
+            // TEST DEBUG DEBUG DEBUG
+            System.out.println(getGestionBiblio().getLivre().getAll().toString());
+
         } catch(BibliothequeException bibliothequeException) {
             throw new BibliothequeException("** "
                 + bibliothequeException.toString());
