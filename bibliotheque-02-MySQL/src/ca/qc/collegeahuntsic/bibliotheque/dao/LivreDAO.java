@@ -299,7 +299,7 @@ public class LivreDAO extends DAO {
      *
      * Emprunte un livre.
      *
-     * @param <code>livreDTO</code> - Le livre à emprunter.
+     * @param livreDTO - Le livre à emprunter.
      * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
      */
     public void emprunter(LivreDTO livreDTO) throws DAOException {
@@ -327,7 +327,7 @@ public class LivreDAO extends DAO {
      *
      * Retourne un livre.
      *
-     * @param <code>livreDTO</code> - Le livre à retourner.
+     * @param livreDTO - Le livre à retourner.
      * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
      */
     public void retourner(LivreDTO livreDTO) throws DAOException {

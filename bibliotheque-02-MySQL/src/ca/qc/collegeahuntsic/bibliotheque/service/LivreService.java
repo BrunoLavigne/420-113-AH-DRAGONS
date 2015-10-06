@@ -17,7 +17,8 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
  * Service de la table livre.
  *
  * @author Dragons Vicieux
- * @see {@link #Serialized Form Serialized Form}
+ *
+ * @see {@link #Serialized Serialized} {@link #Form Form}
  */
 public class LivreService extends Services {
 
@@ -29,11 +30,17 @@ public class LivreService extends Services {
 
     private ReservationDAO reservationDAO;
 
-    //Création d'une instance
+    /**
+     *
+     * Crée le service de la table <code>livre</code>.
+     *
+     * @param livreDAO - Le DAO de la table <code>livre</code>.
+     * @param membreDAO - Le DAO de la table <code>membre</code>.
+     * @param reservationDAO - Le DAO de la table <code>reservation</code>.
+     */
     public LivreService(LivreDAO livreDAO,
-        ReservationDAO reservationDAO,
-        MembreDAO membreDAO) {
-        // setCx(livre.getConnexion());
+        MembreDAO membreDAO,
+        ReservationDAO reservationDAO) {
         setLivreDAO(livreDAO);
         setReservationDAO(reservationDAO);
         setMembreDAO(membreDAO);
@@ -41,19 +48,13 @@ public class LivreService extends Services {
 
     /**
      *
-     * Méthode appelant la fonction <code>add</code> de la classe <code>LivreDAO</code> permettant d'ajouter (d'acquérir) un objet <code>LivreDTO</code> à la base de données.
+     * Ajoute un nouveau livre.
      *
-     * @param livreDTO un objet de type <code>LivreDTO</code> à ajouter dans la base de données.
-     * @throws ServiceException en cas d'erreur dans l'exécution de la méthode <code>add</code> de la classe <code>LivreDAO</code>
+     * @param livreDTO - Le livre à ajouter.
+     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
      */
-    public void acquerir(LivreDTO livreDTO) throws ServiceException {
+    public void add(LivreDTO livreDTO) throws ServiceException {
         try {
-            // Vérification si le livre existe dans la base de données.
-            if(getLivreDAO().read(livreDTO.getIdLivre()) != null) {
-                throw new ServiceException("Le livre existe déjà: "
-                    + livreDTO.getIdLivre());
-            }
-            // Ajout du livre s'il n'existe pas déjà.
             getLivreDAO().add(livreDTO);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
@@ -62,96 +63,11 @@ public class LivreService extends Services {
 
     /**
      *
-     * Méthode appelant la fonction <code>delete</code> de la classe <code>LivreDAO</code> permettant de retirer (de vendre) un objet <code>LivreDTO</code> de la base de données.
+     * Lit un livre.
      *
-     * @param LivreDTO un objet de type <code>LivreDTO</code> à retirer de la base de données.
-     * @throws ServiceException en cas d'erreur dans l'exécution de la méthode <code>delete</code> de la classe <code>LivreDAO</code>
-     */
-    public void vendre(LivreDTO LivreDTO) throws ServiceException {
-        try {
-            // Vérifie si le livre passé en paramètre existe dans la base de données.
-            if(getLivreDAO().read(LivreDTO.getIdLivre()) == null) {
-                throw new ServiceException("Livre inexistant dans la base de données: "
-                    + LivreDTO.getTitre());
-            }
-            // Vérifie si le livre passé en paramètre est prêté à un membre.
-            if(getMembreDAO().read(LivreDTO.getIdMembre()) != null) {
-                throw new ServiceException("Le livre "
-                    + LivreDTO.getTitre()
-                    + " est prêté au membre #"
-                    + LivreDTO.getIdMembre());
-            }
-            // Vérifie si le livre passé en paramètre est réservé par un membre.
-            if(getReservationDAO().read(LivreDTO.getIdLivre()) != null) {
-                throw new ServiceException("Le livre "
-                    + LivreDTO.getTitre()
-                    + " est réservé.");
-            }
-            // Sinon, suppression du livre de la base de données.
-            getLivreDAO().delete(LivreDTO);
-
-        } catch(DAOException daoexception) {
-            throw new ServiceException(daoexception);
-        }
-    }
-
-    /**
-     *
-     * Méthode appelant la fonction <code>emprunter</code> de la classe <code>LivreDAO</code> permettant de mettre à jour (prêter) un objet <code>LivreDTO</code> de la base de données.
-     *
-     * @param LivreDTO Le livre à emprunter.
-     * @throws ServiceException en cas d'erreur dans l'exécution de la méthode <code>emprunter</code> de la classe <code>LivreDAO</code>
-     */
-    public void emprunter(LivreDTO LivreDTO) throws ServiceException {
-        try {
-            getLivreDAO().emprunter(LivreDTO);
-        } catch(DAOException daoexception) {
-            throw new ServiceException(daoexception);
-        }
-    }
-
-    /**
-     *
-     * Méthode appelant la fonction <code>retourner</code> de la classe <code>LivreDAO</code> permettant de mettre à jour (retourner) un objet <code>LivreDTO</code> de la base de données.
-     *
-     * @param LivreDTO Le livre à retourner.
-     * @throws ServiceException en cas d'erreur dans l'exécution de la méthode <code>retourner</code> de la classe <code>LivreDAO</code>
-     */
-    public void retourner(LivreDTO LivreDTO) throws ServiceException {
-        try {
-            getLivreDAO().retourner(LivreDTO);
-        } catch(DAOException daoexception) {
-            throw new ServiceException(daoexception);
-        }
-    }
-
-    /**
-     *
-     * Méthode appelant la fonction <code>update</code> de la classe <code>LivreDAO</code> permettant de mettre à jour (prêter ou retourner) un objet <code>LivreDTO</code> de la base de données.
-     *
-     * @param LivreDTO un objet de type <code>LivreDTO</code> à modifier (update) dans la base de données.
-     * @throws ServiceException en cas d'erreur dans l'exécution de la méthode <code>update</code> de la classe <code>LivreDAO</code>
-     */
-    public void update(LivreDTO LivreDTO) throws ServiceException {
-        try {
-            // Vérifie si le livre passé en paramètre existe dans la base de données.
-            if(getLivreDAO().read(LivreDTO.getIdLivre()) == null) {
-                throw new ServiceException("Livre inexistant dans la base de données: "
-                    + LivreDTO.getTitre());
-            }
-            getLivreDAO().update(LivreDTO);
-        } catch(DAOException daoexception) {
-            throw new ServiceException(daoexception);
-        }
-    }
-
-    /**
-     *
-     * Méthode appelant la fonction <code>read</code> de la classe <code>LivreDAO</code> permettant la lecture d'un objet <code>LivreDTO</code> de la base de données.
-     *
-     * @param idLivre un entier représentant le numéro d'identification du livre à lire (read) dans la Base de données.
-     * @return un objet de type <code>LivreDTO</code> représentant le livre lu dans la base de données.
-     * @throws ServiceException en cas d'erreur dans l'exécution de la méthode <code>read</code> de la classe <code>LivreDAO</code>
+     * @param idLivre - L'ID du livre à lire.
+     * @return Le livre.
+     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
      */
     public LivreDTO read(int idLivre) throws ServiceException {
         try {
@@ -163,10 +79,44 @@ public class LivreService extends Services {
 
     /**
      *
-     * Méthode appelant la fonction <code>getAll</code> de la classe <code>LivreDAO</code> retournant l'ensemble des livres contenus dans la base de données.
+     * Met à jour un livre.
      *
-     * @return un objet de type <code>List</code> contenant des objets <code>LivreDTO</code> représentant l'ensemble des livres contenus dans la base de données.
-     * @throws ServiceException en cas d'erreur dans l'exécution de la méthode <code>getAll</code> de la classe <code>LivreDAO</code>
+     * @param livreDTO - Le livre à mettre à jour.
+     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     */
+    public void update(LivreDTO livreDTO) throws ServiceException {
+        try {
+            if(getLivreDAO().checkLivreExist(livreDTO.getIdLivre())) {
+                throw new ServiceException("Livre inexistant dans la base de données: "
+                    + livreDTO.getTitre());
+            }
+            getLivreDAO().update(livreDTO);
+        } catch(DAOException daoexception) {
+            throw new ServiceException(daoexception);
+        }
+    }
+
+    /**
+     *
+     * Supprime un livre.
+     *
+     * @param livreDTO - Le livre à supprimer.
+     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     */
+    public void delete(LivreDTO livreDTO) throws ServiceException {
+        try {
+            getLivreDAO().delete(livreDTO);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
+
+    /**
+     *
+     * Trouve tous les livres.
+     *
+     * @return La liste des livres ; une liste vide sinon.
+     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
      */
     public List<LivreDTO> getAll() throws ServiceException {
         try {
@@ -178,15 +128,15 @@ public class LivreService extends Services {
 
     /**
      *
-     * Méthode appelant la fonction <code>findByTitre</code> de la classe <code>LivreDAO</code> retournant les livres contenus dans la base de données ayant les mots du paramètre <code>Titre</code> dans leur titre.
+     * Trouve les livres à partir d'un titre.
      *
-     * @param Titre un <code>String</code> contenant des mots à rechercher dans les titres de livre de la base de données.
-     * @return un objet de type <code>List</code> contenant des objets <code>LivreDTO</code> représentant les livres contenus dans la base de données ayant les mots du paramètre <code>Titre</code> dans leur titre.
-     * @throws ServiceException en cas d'erreur dans l'exécution de la méthode <code>findByTitre</code> de la classe <code>LivreDAO</code>
+     * @param titre - Le titre à utiliser.
+     * @return La liste des livres correspondants ; une liste vide sinon.
+     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
      */
-    public List<LivreDTO> findByTitre(String Titre) throws ServiceException {
+    public List<LivreDTO> findByTitre(String titre) throws ServiceException {
         try {
-            return getLivreDAO().findByTitre(Titre);
+            return getLivreDAO().findByTitre(titre);
         } catch(DAOException daoexception) {
             throw new ServiceException(daoexception);
         }
@@ -194,15 +144,99 @@ public class LivreService extends Services {
 
     /**
      *
-     * Méthode appelant la fonction <code>findByMembre</code> de la classe <code>LivreDAO</code> retournant les livres contenus dans la base de données ayant été prêtés à un membre particulier.
+     * Trouve les livres à partir d'un membre.
      *
-     * @param MembreDTO un objet <code>MembreDTO</code> représentant le membre duquel on veut rechercher les livres prêtés.
-     * @return un objet de type <code>List</code> contenant des objets <code>LivreDTO</code> représentant les livres contenus dans la base de données prêtés à un membre.
-     * @throws ServiceException en cas d'erreur dans l'exécution de la méthode <code>findByMembre</code> de la classe <code>LivreDAO</code>
+     * @param membreDTO - Le membre à utiliser.
+     * @return La liste des livres correspondants ; une liste vide sinon.
+     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
      */
-    public List<LivreDTO> findByMembre(MembreDTO MembreDTO) throws ServiceException {
+    public List<LivreDTO> findByMembre(MembreDTO membreDTO) throws ServiceException {
         try {
-            return getLivreDAO().findByMembre(MembreDTO);
+            return getLivreDAO().findByMembre(membreDTO);
+        } catch(DAOException daoexception) {
+            throw new ServiceException(daoexception);
+        }
+    }
+
+    /**
+     *
+     * Acquiert un livre.
+     *
+     * @param livreDTO - Le livre à ajouter.
+     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     */
+    public void acquerir(LivreDTO livreDTO) throws ServiceException {
+        try {
+            if(getLivreDAO().checkLivreExist(livreDTO.getIdLivre())) {
+                throw new ServiceException("Le livre existe déjà: "
+                    + livreDTO.getIdLivre());
+            }
+            this.add(livreDTO);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
+
+    /**
+     *
+     * Emprunte un livre.
+     *
+     * @param livreDTO - Le livre à emprunter.
+     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     */
+    public void emprunter(LivreDTO livreDTO) throws ServiceException {
+        try {
+            getLivreDAO().emprunter(livreDTO);
+        } catch(DAOException daoexception) {
+            throw new ServiceException(daoexception);
+        }
+    }
+
+    /**
+     *
+     * Retourne un livre.
+     *
+     * @param livreDTO - Le livre à retourner.
+     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     */
+    public void retourner(LivreDTO livreDTO) throws ServiceException {
+        try {
+            getLivreDAO().retourner(livreDTO);
+        } catch(DAOException daoexception) {
+            throw new ServiceException(daoexception);
+        }
+    }
+
+    /**
+     *
+     * Vendre un livre.
+     *
+     * @param livreDTO - Le livre à vendre.
+     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     */
+    public void vendre(LivreDTO livreDTO) throws ServiceException {
+        try {
+            // Vérifie si le livre passé en paramètre existe dans la base de données.
+            if(getLivreDAO().read(livreDTO.getIdLivre()) == null) {
+                throw new ServiceException("Livre inexistant dans la base de données: "
+                    + livreDTO.getTitre());
+            }
+            // Vérifie si le livre passé en paramètre est prêté à un membre.
+            if(getMembreDAO().read(livreDTO.getIdMembre()) != null) {
+                throw new ServiceException("Le livre "
+                    + livreDTO.getTitre()
+                    + " est prêté au membre #"
+                    + livreDTO.getIdMembre());
+            }
+            // Vérifie si le livre passé en paramètre est réservé par un membre.
+            if(getReservationDAO().read(livreDTO.getIdLivre()) != null) {
+                throw new ServiceException("Le livre "
+                    + livreDTO.getTitre()
+                    + " est réservé.");
+            }
+            // Sinon, suppression du livre de la base de données.
+            getLivreDAO().delete(livreDTO);
+
         } catch(DAOException daoexception) {
             throw new ServiceException(daoexception);
         }
