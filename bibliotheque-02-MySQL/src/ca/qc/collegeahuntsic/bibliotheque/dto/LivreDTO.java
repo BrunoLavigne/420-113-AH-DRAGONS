@@ -7,7 +7,7 @@ package ca.qc.collegeahuntsic.bibliotheque.dto;
 import java.sql.Date;
 
 /**
- * Permet de représenter un tuple de la table livre.
+ * DTO de la table membre.
  *
  */
 
@@ -101,7 +101,6 @@ public class LivreDTO extends DTO {
         this.dateAcquisition = dateAcquisition;
     }
 
-    // End Region Getters and Setters
     /**
      * Getter de la variable d'instance <code>this.idMembre</code>.
      *

@@ -7,7 +7,6 @@ package ca.qc.collegeahuntsic.bibliotheque.dto;
 import java.io.Serializable;
 
 /**
- * TODO Auto-generated class javadoc
  *
  * @author Dragons Vicieux
  */

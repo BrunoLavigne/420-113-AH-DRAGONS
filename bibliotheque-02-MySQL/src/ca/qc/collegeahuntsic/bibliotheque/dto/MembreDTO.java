@@ -5,7 +5,7 @@
 package ca.qc.collegeahuntsic.bibliotheque.dto;
 
 /**
- * Permet de représenter un tuple de la table membre.
+ * DTO de la table membre.
  *
  */
 
@@ -105,7 +105,7 @@ public class MembreDTO extends DTO {
     }
 
     /**
-     * Setter de la variable d'instance <code>this.nbPret</code>.
+     * Setter de la variable d'instance <code> this.nbPret</code>.
      *
      * @param nbPret La valeur à utiliser pour la variable d'instance <code>this.nbPret</code>
      */

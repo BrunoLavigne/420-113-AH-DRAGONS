@@ -12,26 +12,22 @@ import java.sql.SQLException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 
 /**
- * Gestionnaire d'une connexion avec une BD relationnelle via JDBC.
+ * Cette classe encapsule une connexion JDBC en fonction d'un type et d'une instance de base de données.
  *
- * Ce programme ouvrir une connexion avec une BD via JDBC.
- * La méthode serveursSupportes() indique les serveurs supportés.
+ * La méthode serveursSupportes() indique les types serveurs supportés.
  *
- * Pré-condition
- *   le driver JDBC approprié doit être accessible.
+ * Pré-condition: le driver JDBC approprié doit être accessible.
  *
- * Post-condition
- *   la connexion est ouverte en mode autocommit false et sérialisable,
- *   (s'il est supporté par le serveur).
- *
+ * Post-condition: la connexion est ouverte en mode autocommit false.
  */
+
 public class Connexion {
 
     private Connection conn;
 
-    private final static String CONNEXIONMYSQL = "local";
+    private final static String CONNEXION_MYSQL = "local";
 
-    private final static String CONNEXIONORACLE = "distant";
+    private final static String CONNEXION_ORACLE = "distant";
 
     private final static String NOM_DRIVER_MYSQL = "com.mysql.jdbc.Driver";
 
@@ -42,33 +38,33 @@ public class Connexion {
     private final static String URL_ORACLE = "jdbc:oracle:thin:@collegeahuntsic.info:1521:";
 
     /**
-     * Ouverture d'une connexion en mode autocommit false et sérialisable (si supporté)
-     * @param serveur serveur SQL de la BD
-     * @param schema schéma de la BD
-     * @param user userid sur le serveur SQL
-     * @param pass mot de passe sur le serveur SQL
-     * @throws ConnexionException
+     * Crée une connexion en mode autocommit false.
+     * @param typeServeur Type de serveur SQL de la base de données
+     * @param schema Nom du schéma de la base de données
+     * @param nomUtilisateur Nom d'utilisateur sur le serveur SQL
+     * @param motPasse Mot de passe sur le serveur SQL
+     * @throws ConnexionException Si le driver n'existe pas, s'il y a une erreur avec la base de données ou si typeServeur n'est pas valide.
      */
-    public Connexion(String serveur,
+    public Connexion(String typeServeur,
         String schema,
-        String user,
-        String pass) throws ConnexionException {
+        String nomUtilisateur,
+        String motPasse) throws ConnexionException {
         Driver d;
         try {
-            if(serveur.equals(CONNEXIONMYSQL)) {
+            if(typeServeur.equals(CONNEXION_MYSQL)) {
                 d = (Driver) Class.forName(NOM_DRIVER_MYSQL).newInstance();
                 DriverManager.registerDriver(d);
                 setConn(DriverManager.getConnection(URL_MYSQL
                     + schema,
-                    user,
-                    pass));
-            } else if(serveur.equals(CONNEXIONORACLE)) {
+                    nomUtilisateur,
+                    motPasse));
+            } else if(typeServeur.equals(CONNEXION_ORACLE)) {
                 d = (Driver) Class.forName(NOM_DRIVER_ORACLE).newInstance();
                 DriverManager.registerDriver(d);
                 setConn(DriverManager.getConnection(URL_ORACLE
                     + schema,
-                    user,
-                    pass));
+                    nomUtilisateur,
+                    motPasse));
             } else {
                 System.out.println("Erreur de driver");
             }
@@ -110,7 +106,7 @@ public class Connexion {
      *
      * Fermeture d'une connexion
      *
-     * @throws ConnexionException
+     * @throws ConnexionException {@link - java.sql.SQLException ConnexionException} S'il y a une erreur avec la base de données.
      */
     public void fermer() throws ConnexionException {
 
@@ -126,10 +122,9 @@ public class Connexion {
     }
 
     /**
+     * Effectue un commit sur la Connection JDBC
      *
-     * Commit
-     *
-     * @throws ConnexionException
+     * @throws ConnexionException {@link - java.sql.SQLException ConnexionException} S'il y a une erreur avec la base de données.
      */
     public void commit() throws ConnexionException {
 
@@ -141,10 +136,9 @@ public class Connexion {
     }
 
     /**
+     * Effectue un rollback sur la Connection JDBC
      *
-     * Rollback
-     *
-     * @throws ConnexionException
+     * @throws ConnexionException {@link - java.sql.SQLException ConnexionException} S'il y a une erreur avec la base de données.
      */
     public void rollback() throws ConnexionException {
 
@@ -166,19 +160,37 @@ public class Connexion {
     }
 
     /**
-     * Retourne la liste des serveurs supportés par ce gestionnaire de connexions
+     * Retourne la liste des serveurs supportés par ce gestionnaire de connexion:
+     * local: MySQL installé localement
+     * distant: Oracle installé au Département d'informatique du Collège Ahuntsic
+     * postgres: Postgres installé localement
+     * access: Microsoft Access installé localement et inscrit dans ODBC
+     *
+     * @return la liste des serveurs supportés par ce gestionnaire de connexion
      */
-    public static String serveursSupportes() {
+    public static String getServeursSupportes() {
         return "local : MySQL installé localement\n"
             + "distant : Oracle installé au Département d'Informatique du Collège Ahuntsic\n"
             + "postgres : Postgres installé localement\n"
             + "access : Microsoft Access installé localement et inscrit dans ODBC";
     }
 
+    /**
+     *
+     * Getter de la variable d'instance this.conn
+     *
+     * @return La variable d'instance this.conn
+     */
     private Connection getConn() {
         return this.conn;
     }
 
+    /**
+     *
+     * Setter de la variable d'instance this.conn
+     *
+     * @return La variable d'instance this.conn
+     */
     private void setConn(Connection conn) {
         this.conn = conn;
     }
