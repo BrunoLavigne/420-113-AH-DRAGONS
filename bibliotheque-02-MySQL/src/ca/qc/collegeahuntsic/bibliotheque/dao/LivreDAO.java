@@ -79,6 +79,8 @@ public class LivreDAO extends DAO {
             stmtAdd.setDate(4,
                 livreDTO.getDateAcquisition());
             stmtAdd.executeUpdate();
+
+            getConnection().commit();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
@@ -143,6 +145,7 @@ public class LivreDAO extends DAO {
                 livreDTO.getDatePret());
 
             updatePreparedStatement.executeUpdate();
+            getConnection().commit();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
@@ -161,6 +164,7 @@ public class LivreDAO extends DAO {
             stmtDelete.setInt(1,
                 livreDTO.getIdLivre());
             stmtDelete.executeUpdate();
+            getConnection().commit();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
@@ -318,6 +322,7 @@ public class LivreDAO extends DAO {
                 livreDTO.getIdMembre());
 
             updatePreparedStatement.executeUpdate();
+            getConnection().commit();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
@@ -342,6 +347,7 @@ public class LivreDAO extends DAO {
                 livreDTO.getAuteur());
 
             retourPreparedStatement.executeUpdate();
+            getConnection().commit();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
