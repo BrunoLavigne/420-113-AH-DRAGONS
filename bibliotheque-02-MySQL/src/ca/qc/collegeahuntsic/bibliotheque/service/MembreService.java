@@ -5,6 +5,7 @@
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
 import java.util.List;
+import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
@@ -31,19 +32,25 @@ public class MembreService extends Services {
     private static final long serialVersionUID = 1L;
 
     private MembreDAO membreDAO;
+    
+    private LivreDAO livreDAO;
 
     private ReservationDAO reservationDAO;
 
     /**
-     * Création d'une instance
+     * 
+     * Crée le service de la table <code>membre</code>
      *
-     * @param membre
-     * @param reservation
+     * @param membreDAO Le DAO de la table <code>membre</code>
+     * @param livreDAO Le DAO de la table <code>livre</code>
+     * @param reservationDAO Le DAO de la table <code>reservation</code>
      */
-    public MembreService(MembreDAO membre,
-        ReservationDAO reservation) {
-        setMembreDAO(membre);
-        setReservationDAO(reservation);
+    public MembreService(MembreDAO membreDAO,
+        LivreDAO livreDAO,
+        ReservationDAO reservationDAO) {
+        setMembreDAO(membreDAO);
+        setLivreDAO(livreDAO);
+        setReservationDAO(reservationDAO);
     }
 
     // Opérations CRUD
@@ -236,7 +243,7 @@ public class MembreService extends Services {
 
         // faudrait faire getLivreDao().emprunter(unLivreDTO);
     }
-    
+
     public void retourner(MembreDTO unMembreDTO, LivreDTO unLivreDTO) {
 
         // à la fin
@@ -286,43 +293,44 @@ public class MembreService extends Services {
     }
 
     /**
-     * Getter de la variable d'instance <code>this.membreDAO</code>.
+     * 
+     * Retourne le membre
      *
-     * @return La variable d'instance <code>this.membreDAO</code>
+     * @return MembreDAO Le membre DAO
      */
-    public MembreDAO getMembreDAO() {
+    private MembreDAO getMembreDAO() {
         return this.membreDAO;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.membreDAO</code>.
+     * 
+     * Set le membre
      *
-     * @param membre
-     *            La valeur à utiliser pour la variable d'instance
-     *            <code>this.membreDAO</code>
+     * @param membreDAO Le membre DAO
      */
     private void setMembreDAO(MembreDAO membreDAO) {
         this.membreDAO = membreDAO;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.reservationDAO</code>.
+     * 
+     * Retourne le livre
      *
-     * @return La variable d'instance <code>this.reservationDAO</code>
+     * @return LivreDAO Le livre DAO
      */
-    public ReservationDAO getReservationDAO() {
+    private LivreDAO getLivreDAO() {
+        return this.livreDAO;
+    }
+
+    private void setLivreDAO(LivreDAO livreDAO) {
+        this.livreDAO = livreDAO;
+    }
+
+    private ReservationDAO getReservationDAO() {
         return this.reservationDAO;
     }
 
-    /**
-     * Setter de la variable d'instance <code>this.reservationDAO</code>.
-     *
-     * @param reservation
-     *            La valeur à utiliser pour la variable d'instance
-     *            <code>this.reservationDAO</code>
-     */
     private void setReservationDAO(ReservationDAO reservationDAO) {
         this.reservationDAO = reservationDAO;
     }
-
 }
