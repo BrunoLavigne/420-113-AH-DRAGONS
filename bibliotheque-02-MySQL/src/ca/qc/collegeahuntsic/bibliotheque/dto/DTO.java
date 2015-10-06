@@ -7,16 +7,16 @@ package ca.qc.collegeahuntsic.bibliotheque.dto;
 import java.io.Serializable;
 
 /**
- *
+ * Classe de base pour tous les DTOs.
  * @author Dragons Vicieux
  */
-public class DTO implements Serializable {
+public class DTO extends Object implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      *
-     * Constructeur pour un nouveau DTO vide.
+     * Crée un nouveau DTO vide.
      *
      */
     public DTO() {

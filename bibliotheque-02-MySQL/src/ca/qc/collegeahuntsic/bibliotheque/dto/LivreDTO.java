@@ -7,8 +7,9 @@ package ca.qc.collegeahuntsic.bibliotheque.dto;
 import java.sql.Date;
 
 /**
- * DTO de la table membre.
+ * DTO de la table <code>livre</code>.
  *
+ * @author Dragons Vicieux
  */
 
 public class LivreDTO extends DTO {
@@ -26,6 +27,10 @@ public class LivreDTO extends DTO {
     private int idMembre;
 
     private Date datePret;
+
+    public LivreDTO() {
+        super();
+    }
 
     // Region Getters and Setters
     /**

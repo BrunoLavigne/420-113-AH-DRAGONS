@@ -15,13 +15,15 @@ class BDCreateur {
     /**
      *  Crée la base de données nécessaire à l'application bibliothèque.
      *
+     *
      *  Paramètres:
      *        0- serveur SQL
      *        1- bd nom de la BD
      *        2- user id pour établir une connexion avec le serveur SQL
      *        3- mot de passe pour le user id
      *
-     *@throws BDCreateurException S'il y a une erreur avec la connexion ou s'il y a une erreur avec la base de données.
+     * @author Dragons Vicieux
+     * @throws BDCreateurException S'il y a une erreur avec la connexion ou s'il y a une erreur avec la base de données.
      */
     public static void main(String args[]) throws BDCreateurException {
 
@@ -30,15 +32,14 @@ class BDCreateur {
             return;
         }
 
-        try {
-
-            Connexion cx = new Connexion(args[0],
+        try(
+            Connexion connexion = new Connexion(args[0],
                 args[1],
                 args[2],
-                args[3]);
+                args[3])) {
 
             try(
-                Statement stmt = cx.getConnection().createStatement()) {
+                Statement stmt = connexion.getConnection().createStatement()) {
 
                 stmt.executeUpdate("DROP TABLE IF EXISTS reservation CASCADE");
                 stmt.executeUpdate("DROP TABLE IF EXISTS livre CASCADE");
@@ -79,12 +80,15 @@ class BDCreateur {
                     + ")");
 
                 stmt.close();
-                cx.fermer();
+                connexion.fermer();
             }
+
         } catch(SQLException sqlException) {
             throw new BDCreateurException(sqlException);
         } catch(ConnexionException connexionException) {
             throw new BDCreateurException(connexionException);
+        } catch(Exception exception) {
+            throw new BDCreateurException(exception);
         }
 
     }

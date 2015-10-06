@@ -19,11 +19,14 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
  * Pré-condition: le driver JDBC approprié doit être accessible.
  *
  * Post-condition: la connexion est ouverte en mode autocommit false.
+ *
+ * @author Dragons Vicieux
+ *
  */
 
-public class Connexion {
+public class Connexion extends Object implements AutoCloseable {
 
-    private Connection conn;
+    private Connection connection;
 
     private final static String CONNEXION_MYSQL = "local";
 
@@ -49,19 +52,19 @@ public class Connexion {
         String schema,
         String nomUtilisateur,
         String motPasse) throws ConnexionException {
-        Driver d;
+        Driver driver;
         try {
             if(typeServeur.equals(CONNEXION_MYSQL)) {
-                d = (Driver) Class.forName(NOM_DRIVER_MYSQL).newInstance();
-                DriverManager.registerDriver(d);
-                setConn(DriverManager.getConnection(URL_MYSQL
+                driver = (Driver) Class.forName(NOM_DRIVER_MYSQL).newInstance();
+                DriverManager.registerDriver(driver);
+                setConnection(DriverManager.getConnection(URL_MYSQL
                     + schema,
                     nomUtilisateur,
                     motPasse));
             } else if(typeServeur.equals(CONNEXION_ORACLE)) {
-                d = (Driver) Class.forName(NOM_DRIVER_ORACLE).newInstance();
-                DriverManager.registerDriver(d);
-                setConn(DriverManager.getConnection(URL_ORACLE
+                driver = (Driver) Class.forName(NOM_DRIVER_ORACLE).newInstance();
+                DriverManager.registerDriver(driver);
+                setConnection(DriverManager.getConnection(URL_ORACLE
                     + schema,
                     nomUtilisateur,
                     motPasse));
@@ -70,24 +73,24 @@ public class Connexion {
             }
 
             // mettre en mode de commit manuel
-            getConn().setAutoCommit(false);
+            getConnection().setAutoCommit(false);
 
             // mettre en mode sérialisable si possible
             // (plus haut niveau d'integrité l'accès concurrent aux données)
-            DatabaseMetaData dbmd = getConn().getMetaData();
+            DatabaseMetaData dbmd = getConnection().getMetaData();
             if(dbmd.supportsTransactionIsolationLevel(Connection.TRANSACTION_SERIALIZABLE)) {
-                getConn().setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+                getConnection().setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
                 System.out.println("Ouverture de la connexion en mode sérialisable :\n"
                     + "Estampille "
                     + System.currentTimeMillis()
                     + " "
-                    + getConn());
+                    + getConnection());
             } else {
                 System.out.println("Ouverture de la connexion en mode read committed (default) :\n"
                     + "Heure "
                     + System.currentTimeMillis()
                     + " "
-                    + getConn());
+                    + getConnection());
             }
         } catch(ClassNotFoundException classNotFoundException) {
             throw new ConnexionException(classNotFoundException);
@@ -106,16 +109,16 @@ public class Connexion {
      *
      * Fermeture d'une connexion
      *
-     * @throws ConnexionException {@link - java.sql.SQLException ConnexionException} S'il y a une erreur avec la base de données.
+     * @throws ConnexionException {@link - java.sql.SQLException SQLException} S'il y a une erreur avec la base de données.
      */
     public void fermer() throws ConnexionException {
 
         try {
-            getConn().rollback();
-            getConn().close();
+            getConnection().rollback();
+            getConnection().close();
             System.out.println("Connexion fermée"
                 + " "
-                + getConn());
+                + getConnection());
         } catch(SQLException sqlException) {
             throw new ConnexionException(sqlException);
         }
@@ -124,12 +127,12 @@ public class Connexion {
     /**
      * Effectue un commit sur la Connection JDBC
      *
-     * @throws ConnexionException {@link - java.sql.SQLException ConnexionException} S'il y a une erreur avec la base de données.
+     * @throws ConnexionException {@link - java.sql.SQLException SQLException} S'il y a une erreur avec la base de données.
      */
     public void commit() throws ConnexionException {
 
         try {
-            getConn().commit();
+            getConnection().commit();
         } catch(SQLException sqlException) {
             throw new ConnexionException(sqlException);
         }
@@ -138,25 +141,15 @@ public class Connexion {
     /**
      * Effectue un rollback sur la Connection JDBC
      *
-     * @throws ConnexionException {@link - java.sql.SQLException ConnexionException} S'il y a une erreur avec la base de données.
+     * @throws ConnexionException {@link - java.sql.SQLException SQLException} S'il y a une erreur avec la base de données.
      */
     public void rollback() throws ConnexionException {
 
         try {
-            getConn().rollback();
+            getConnection().rollback();
         } catch(SQLException sqlException) {
             throw new ConnexionException(sqlException);
         }
-    }
-
-    /**
-     *
-     * Retourne la Connection JDBC
-     *
-     * @return La Connection JDBC
-     */
-    public Connection getConnection() {
-        return getConn();
     }
 
     /**
@@ -176,23 +169,30 @@ public class Connexion {
     }
 
     /**
+     * Getter de la variable d'instance <code>this.connection</code>.
      *
-     * Getter de la variable d'instance this.conn
-     *
-     * @return La variable d'instance this.conn
+     * @return La variable d'instance <code>this.connection</code>
      */
-    private Connection getConn() {
-        return this.conn;
+    public Connection getConnection() {
+        return this.connection;
     }
 
     /**
+     * Setter de la variable d'instance <code>this.connection</code>.
      *
-     * Setter de la variable d'instance this.conn
-     *
-     * @return La variable d'instance this.conn
+     * @param connection La valeur à utiliser pour la variable d'instance <code>this.connection</code>
      */
-    private void setConn(Connection conn) {
-        this.conn = conn;
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.AutoCloseable#close()
+     */
+    @Override
+    public void close() throws Exception {
+        // TODO Auto-generated method stub
+
     }
 
 }// Classe Connexion

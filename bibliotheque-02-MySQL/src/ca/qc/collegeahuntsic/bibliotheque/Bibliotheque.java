@@ -63,7 +63,7 @@ public class Bibliotheque {
         // validation du nombre de paramètres
         if(argv.length < 5) {
             System.out.println("Usage: java Biblio <serveur> <bd> <user> <password> <fichier-transactions>");
-            System.out.println(Connexion.serveursSupportes());
+            System.out.println(Connexion.getServeursSupportes());
             return;
         }
 

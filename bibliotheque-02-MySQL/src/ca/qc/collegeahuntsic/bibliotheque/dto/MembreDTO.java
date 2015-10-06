@@ -5,8 +5,9 @@
 package ca.qc.collegeahuntsic.bibliotheque.dto;
 
 /**
- * DTO de la table membre.
+ * DTO de la table <code>membre</code>.
  *
+ * @author Dragons Vicieux
  */
 
 public class MembreDTO extends DTO {
@@ -22,6 +23,10 @@ public class MembreDTO extends DTO {
     private int limitePret;
 
     private int nbPret;
+
+    public MembreDTO() {
+        super();
+    }
 
     /**
      * Getter de la variable d'instance <code>this.idMembre</code>.
