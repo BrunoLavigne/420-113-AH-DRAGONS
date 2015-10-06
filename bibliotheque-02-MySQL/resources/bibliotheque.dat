@@ -1,4 +1,4 @@
--- *********** cas sans erreur *********
+-- *********** cas sans erreur **********
 --
 -- création des livres
 acquerir 1 t1 a1 1999-01-03
