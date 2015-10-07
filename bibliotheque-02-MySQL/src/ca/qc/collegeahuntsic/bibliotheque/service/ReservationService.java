@@ -208,6 +208,7 @@ public class ReservationService extends Services {
                 System.err.println("La réservation : "
                     + reservationDTO.getIdReservation()
                     + " existe déjà");
+                return;
             }
 
             //  Si le membre n'existe pas
@@ -217,6 +218,7 @@ public class ReservationService extends Services {
             if(unMembreDTO == null) {
                 System.err.println("Membre inexistant: "
                     + membreDTO.getIdMembre());
+                return;
             }
 
             // Vérification sur le livre
@@ -226,6 +228,7 @@ public class ReservationService extends Services {
             if(unLivreDTO == null) {
                 System.err.println("Livre inexistant: "
                     + livreDTO.getIdLivre());
+                return;
             }
 
             // Si le livre n'a pas encore été prêté,
@@ -236,6 +239,7 @@ public class ReservationService extends Services {
                 System.err.println("Le livre : "
                     + unLivreDTO.getIdLivre()
                     + " n'a pas été prêté encore. Faire un emprunt au lieu d'un réservation");
+                return;
             }
 
             // Si le livre est déjà prêté au membre
@@ -245,6 +249,7 @@ public class ReservationService extends Services {
                     + unLivreDTO.getIdLivre()
                     + " est déjà prêté au membre : "
                     + unMembreDTO.getIdMembre());
+                return;
             }
 
             // si le membre a déjà réservé ce livre
@@ -257,6 +262,7 @@ public class ReservationService extends Services {
                         + unLivreDTO.getIdLivre()
                         + " a déjà été réservé par le membre : "
                         + unMembreDTO.getIdMembre());
+                    return;
                 }
             }
 
@@ -302,6 +308,7 @@ public class ReservationService extends Services {
                 System.err.println("La réservation : "
                     + reservationDTO.getIdReservation()
                     + " n'existe pas");
+                return;
             }
 
             //  Si le membre n'existe pas
@@ -311,6 +318,7 @@ public class ReservationService extends Services {
             if(unMembreDTO == null) {
                 System.err.println("Membre inexistant: "
                     + membreDTO.getIdMembre());
+                return;
             }
 
             // Vérification sur le livre
@@ -320,6 +328,7 @@ public class ReservationService extends Services {
             if(unLivreDTO == null) {
                 System.err.println("Livre inexistant: "
                     + livreDTO.getIdLivre());
+                return;
             }
 
             // Si la réservation n'est pas la première de la liste
@@ -334,6 +343,7 @@ public class ReservationService extends Services {
                     System.err.println("La réservation n'est pas la première de la liste "
                         + "pour ce livre; la première est "
                         + firstReservationDTO.getIdReservation());
+                    return;
                 }
             }
 
@@ -344,6 +354,7 @@ public class ReservationService extends Services {
                     + unLivreDTO.getIdLivre()
                     + " déjà prêté à "
                     + unLivreDTO.getIdMembre());
+                return;
             }
 
             // Si le membre a atteint sa limite de prêt
@@ -352,6 +363,7 @@ public class ReservationService extends Services {
                 System.err.println("Limite de prêt du membre "
                     + uneReservationDTO.getIdMembre()
                     + " atteinte");
+                return;
             }
 
             // Éliminer la réservation.
@@ -380,6 +392,7 @@ public class ReservationService extends Services {
                 System.err.println("Réservation "
                     + reservationDTO.getIdReservation()
                     + " n'existe pas");
+                return;
             }
 
             delete(reservationDTO);
