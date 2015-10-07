@@ -427,16 +427,16 @@ public class LivreDAO extends DAO {
         try(
             PreparedStatement updatePreparedStatement = getConnection().prepareStatement(LivreDAO.EMRPUNT_REQUEST)) {
 
-            updatePreparedStatement.setInt(1,
-                livreDTO.getIdLivre());
-            updatePreparedStatement.setString(2,
+            updatePreparedStatement.setString(1,
                 livreDTO.getTitre());
-            updatePreparedStatement.setString(3,
+            updatePreparedStatement.setString(2,
                 livreDTO.getAuteur());
-            updatePreparedStatement.setDate(4,
+            updatePreparedStatement.setDate(3,
                 livreDTO.getDateAcquisition());
-            updatePreparedStatement.setInt(5,
+            updatePreparedStatement.setInt(4,
                 livreDTO.getIdMembre());
+            updatePreparedStatement.setInt(5,
+                livreDTO.getIdLivre());
 
             updatePreparedStatement.executeUpdate();
             getConnection().commit();

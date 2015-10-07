@@ -242,7 +242,9 @@ public class MembreService extends Services {
             // Voir si livre a été prêté
             MembreDTO emprunteur = read(livreDTO.getIdMembre());
             if(emprunteur != null) {
-                throw new ServiceException("Impossible d'emprunter - le livre a été prêté.");
+                System.err.println("Impossible d'emprunter - le livre a été prêté.");
+                return;
+                // throw new ServiceException("Impossible d'emprunter - le livre a été prêté.");
             }
 
             // Voir si le livre a des réservations
@@ -257,6 +259,7 @@ public class MembreService extends Services {
             getLivreDAO().emprunter(livreDTO);
 
         } catch(DAOException daoException) {
+            daoException.printStackTrace();
             throw new ServiceException(daoException);
         }
     }
