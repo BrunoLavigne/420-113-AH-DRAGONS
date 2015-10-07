@@ -40,7 +40,7 @@ public class LivreDAO extends DAO {
 
     private final static String FIND_BY_TITRE = "SELECT idLivre, titre, auteur, idmembre, datePret + 14 "
         + "FROM LIVRE "
-        + "WHERE LOWER(titre) LIKE '%?%'";
+        + "WHERE LOWER(titre) LIKE ?";
 
     private final static String FIND_BY_MEMBRE = "SELECT idLivre, titre, auteur, idmembre, datePret from livre where idmembre = ?";
 
@@ -250,7 +250,9 @@ public class LivreDAO extends DAO {
         try(
             PreparedStatement stmtGetLivresByTitre = (getConnection().prepareStatement(LivreDAO.FIND_BY_TITRE));) {
             stmtGetLivresByTitre.setString(1,
-                titre);
+                "%"
+                    + titre
+                    + "%");
             try(
                 ResultSet rset = stmtGetLivresByTitre.executeQuery()) {
                 liste = new ArrayList<>();

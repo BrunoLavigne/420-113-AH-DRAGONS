@@ -221,6 +221,20 @@ public class Bibliotheque {
             } else if("retourner".startsWith(command)) {
                 // TODO remove
                 System.out.println("TRANSACTION RETOURNER");
+                /*
+                LivreDTO livreDTO = getGestionBiblio().getLivreService().read(readInt(tokenizer));
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+                Date dateRetour;
+                try {
+                    dateRetour = new Date(format.parse(readDate(tokenizer)).getTime());
+                } catch(ParseException exception) {
+                    // TODO TES TEST TEST TEST
+                    exception.printStackTrace();
+                    throw new BibliothequeException("Erreur de parsing dans le format de date lors de son retour.");
+                }
+                livreDTO.setDatePret(null);
+                getGestionBiblio().getLivreService().retourner(livreDTO);
+                 */
                 getGestionBiblio().getPretService().retourner(readInt(tokenizer) /* idLivre */,
                     readDate(tokenizer) /* dateRetour */);
             } else if("inscrire".startsWith(command)) {

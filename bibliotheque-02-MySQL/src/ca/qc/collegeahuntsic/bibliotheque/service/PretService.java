@@ -248,25 +248,32 @@ public class PretService extends Services {
         String dateRetour) throws ServiceException {
         try {
             // Vérifie si le livre est prêté
-            LivreDTO tupleLivre = getLivreDAO().read(idLivre);
-            if(tupleLivre == null) {
-                throw new ServiceException("Livre inexistant: "
+            LivreDTO livreDTO = getLivreDAO().read(idLivre);
+            if(livreDTO == null) {
+                System.err.println("Livre inexistant: "
                     + idLivre);
+                return;
+                /* throw new ServiceException("Livre inexistant: "
+                    + idLivre); */
             }
-            if(tupleLivre.getIdMembre() == 0) {
-                throw new ServiceException("Livre "
+            if(livreDTO.getIdMembre() == 0) {
+                System.err.println("Livre "
                     + idLivre
                     + " n'est pas prêté ");
+                return;
+                /* throw new ServiceException("Livre "
+                    + idLivre
+                    + " n'est pas prêté "); */
             }
 
             // Vérifie si date retour >= datePret
-            if(Date.valueOf(dateRetour).before(tupleLivre.getDatePret())) {
-                throw new ServiceException("Date de retour inférieure à la date de prêt");
+            if(Date.valueOf(dateRetour).before(livreDTO.getDatePret())) {
+                System.err.println("Date de retour inférieure à la date de prêt");
+                return;
+                // throw new ServiceException("Date de retour inférieure à la date de prêt");
             }
 
             // Retour du prêt
-            LivreDTO livre = new LivreDTO();
-            livre.setIdLivre(idLivre);
             SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
             Date date;
             try {
@@ -274,11 +281,12 @@ public class PretService extends Services {
             } catch(ParseException exception) {
                 // TODO Auto-generated catch block
                 exception.printStackTrace();
-                throw new ServiceException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
+                return;
+                // throw new ServiceException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
             }
-            livre.setDatePret(date);
-            livre.setIdMembre(tupleLivre.getIdMembre());
-            getLivreDAO().emprunter(livre);
+            livreDTO.setDatePret(date);
+            livreDTO.setDatePret(null);
+            getLivreDAO().emprunter(livreDTO);
             /*
             int nb1 = getLivreDAO().retourner(idLivre);
             if(nb1 == 0) {
@@ -291,13 +299,8 @@ public class PretService extends Services {
             }
             getCx().commit();
              */
-        } catch(Exception exception) {
-            try {
-                getCx().rollback();
-            } catch(ConnexionException connexionException) {
-                throw new ServiceException(connexionException);
-            }
-            throw new ServiceException(exception);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
         }
 
     }
