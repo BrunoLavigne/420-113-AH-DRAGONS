@@ -318,6 +318,7 @@ public class Bibliotheque {
                 + exception.getClass()
                 + " caused by "
                 + exception.getCause());
+            exception.printStackTrace();
             throw new BibliothequeException(exception);
         }
     }

@@ -186,7 +186,9 @@ public class PretService extends Services {
 
             // Vérifie si date renouvellement >= datePret
             if(Date.valueOf(datePret).before(tupleLivre.getDatePret())) {
-                throw new ServiceException("Date de renouvellement inférieure à la date de prêt");
+                System.err.println("Date de renouvellement inférieure à la date de prêt");
+                return;
+                // throw new ServiceException("Date de renouvellement inférieure à la date de prêt");
             }
 
             // Vérifie s'il existe une réservation pour le livre.
