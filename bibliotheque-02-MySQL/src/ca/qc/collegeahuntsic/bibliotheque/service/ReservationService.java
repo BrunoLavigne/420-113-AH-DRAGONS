@@ -205,7 +205,7 @@ public class ReservationService extends Services {
             ReservationDTO uneReservationDTO = getReservationDAO().read(reservationDTO.getIdReservation());
 
             if(uneReservationDTO != null) {
-                throw new ServiceException("La réservation : "
+                System.err.println("La réservation : "
                     + reservationDTO.getIdReservation()
                     + " existe déjà");
             }
@@ -215,7 +215,7 @@ public class ReservationService extends Services {
             MembreDTO unMembreDTO = getMembreDAO().read(membreDTO.getIdMembre());
 
             if(unMembreDTO == null) {
-                throw new ServiceException("Membre inexistant: "
+                System.err.println("Membre inexistant: "
                     + membreDTO.getIdMembre());
             }
 
@@ -224,7 +224,7 @@ public class ReservationService extends Services {
             LivreDTO unLivreDTO = getLivreDAO().read(livreDTO.getIdLivre());
 
             if(unLivreDTO == null) {
-                throw new ServiceException("Livre inexistant: "
+                System.err.println("Livre inexistant: "
                     + livreDTO.getIdLivre());
             }
 
@@ -233,7 +233,7 @@ public class ReservationService extends Services {
             MembreDTO emprunteur = getMembreDAO().read(unLivreDTO.getIdMembre());
 
             if(emprunteur == null) {
-                throw new ServiceException("Le livre : "
+                System.err.println("Le livre : "
                     + unLivreDTO.getIdLivre()
                     + " n'a pas été prêté encore. Faire un emprunt au lieu d'un réservation");
             }
@@ -241,7 +241,7 @@ public class ReservationService extends Services {
             // Si le livre est déjà prêté au membre
 
             if(unMembreDTO.getIdMembre() == emprunteur.getIdMembre()) {
-                throw new ServiceException("Le livre : "
+                System.err.println("Le livre : "
                     + unLivreDTO.getIdLivre()
                     + " est déjà prêté au membre : "
                     + unMembreDTO.getIdMembre());
@@ -253,7 +253,7 @@ public class ReservationService extends Services {
 
             for(ReservationDTO reservation : listeReservation) {
                 if(reservation.getIdLivre() == unLivreDTO.getIdLivre()) {
-                    throw new ServiceException("Le livre : "
+                    System.err.println("Le livre : "
                         + unLivreDTO.getIdLivre()
                         + " a déjà été réservé par le membre : "
                         + unMembreDTO.getIdMembre());
@@ -299,7 +299,7 @@ public class ReservationService extends Services {
             uneReservationDTO = getReservationDAO().read(reservationDTO.getIdReservation());
 
             if(uneReservationDTO == null) {
-                throw new ServiceException("La réservation : "
+                System.err.println("La réservation : "
                     + reservationDTO.getIdReservation()
                     + " n'existe pas");
             }
@@ -309,7 +309,7 @@ public class ReservationService extends Services {
             MembreDTO unMembreDTO = getMembreDAO().read(membreDTO.getIdMembre());
 
             if(unMembreDTO == null) {
-                throw new ServiceException("Membre inexistant: "
+                System.err.println("Membre inexistant: "
                     + membreDTO.getIdMembre());
             }
 
@@ -318,7 +318,7 @@ public class ReservationService extends Services {
             LivreDTO unLivreDTO = getLivreDAO().read(livreDTO.getIdLivre());
 
             if(unLivreDTO == null) {
-                throw new ServiceException("Livre inexistant: "
+                System.err.println("Livre inexistant: "
                     + livreDTO.getIdLivre());
             }
 
@@ -331,7 +331,7 @@ public class ReservationService extends Services {
                 ReservationDTO firstReservationDTO = listReservations.get(0);
 
                 if(reservationDTO.getIdReservation() != firstReservationDTO.getIdReservation()) {
-                    throw new ServiceException("La réservation n'est pas la première de la liste "
+                    System.err.println("La réservation n'est pas la première de la liste "
                         + "pour ce livre; la première est "
                         + firstReservationDTO.getIdReservation());
                 }
@@ -340,7 +340,7 @@ public class ReservationService extends Services {
             // Si le livre est déjà prété
 
             if(unLivreDTO.getIdMembre() != 0) {
-                throw new ServiceException("Livre "
+                System.err.println("Livre "
                     + unLivreDTO.getIdLivre()
                     + " déjà prêté à "
                     + unLivreDTO.getIdMembre());
@@ -349,7 +349,7 @@ public class ReservationService extends Services {
             // Si le membre a atteint sa limite de prêt
 
             if(unMembreDTO.getNbPret() >= unMembreDTO.getLimitePret()) {
-                throw new ServiceException("Limite de prêt du membre "
+                System.err.println("Limite de prêt du membre "
                     + uneReservationDTO.getIdMembre()
                     + " atteinte");
             }
@@ -377,7 +377,7 @@ public class ReservationService extends Services {
             // Si la réservation existe
 
             if(getReservationDAO().read(reservationDTO.getIdReservation()) == null) {
-                throw new ServiceException("Réservation "
+                System.err.println("Réservation "
                     + reservationDTO.getIdReservation()
                     + " n'existe pas");
             }
