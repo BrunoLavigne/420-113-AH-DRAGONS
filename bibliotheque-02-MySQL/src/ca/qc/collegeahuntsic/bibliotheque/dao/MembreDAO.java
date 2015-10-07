@@ -136,7 +136,7 @@ public class MembreDAO extends DAO {
      *
      * Supprime un membre
      *
-     * @param idMembre Le membre à supprimer
+     * @param membreDTO Le membre à supprimer
      * @throws DAOException S'il y a une erreur avec la base de données
      */
     public void delete(MembreDTO membreDTO) throws DAOException {

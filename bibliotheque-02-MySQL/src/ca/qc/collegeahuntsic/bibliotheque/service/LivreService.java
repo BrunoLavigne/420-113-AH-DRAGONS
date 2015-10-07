@@ -14,11 +14,10 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
 /**
- * Service de la table livre.
+ * Service de la table <code>livre</code>.
  *
  * @author Dragons Vicieux
  *
- * @see {@link #Serialized Serialized} {@link #Form Form}
  */
 public class LivreService extends Services {
 
@@ -51,7 +50,7 @@ public class LivreService extends Services {
      * Ajoute un nouveau livre.
      *
      * @param livreDTO - Le livre à ajouter.
-     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
      */
     public void add(LivreDTO livreDTO) throws ServiceException {
         try {
@@ -67,7 +66,7 @@ public class LivreService extends Services {
      *
      * @param idLivre - L'ID du livre à lire.
      * @return Le livre.
-     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
      */
     public LivreDTO read(int idLivre) throws ServiceException {
         try {
@@ -82,7 +81,7 @@ public class LivreService extends Services {
      * Met à jour un livre.
      *
      * @param livreDTO - Le livre à mettre à jour.
-     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
      */
     public void update(LivreDTO livreDTO) throws ServiceException {
         try {
@@ -102,7 +101,7 @@ public class LivreService extends Services {
      * Supprime un livre.
      *
      * @param livreDTO - Le livre à supprimer.
-     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
      */
     public void delete(LivreDTO livreDTO) throws ServiceException {
         try {
@@ -117,7 +116,7 @@ public class LivreService extends Services {
      * Trouve tous les livres.
      *
      * @return La liste des livres ; une liste vide sinon.
-     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
      */
     public List<LivreDTO> getAll() throws ServiceException {
         try {
@@ -133,7 +132,7 @@ public class LivreService extends Services {
      *
      * @param titre - Le titre à utiliser.
      * @return La liste des livres correspondants ; une liste vide sinon.
-     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
      */
     public List<LivreDTO> findByTitre(String titre) throws ServiceException {
         try {
@@ -149,7 +148,7 @@ public class LivreService extends Services {
      *
      * @param membreDTO - Le membre à utiliser.
      * @return La liste des livres correspondants ; une liste vide sinon.
-     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
      */
     public List<LivreDTO> findByMembre(MembreDTO membreDTO) throws ServiceException {
         try {
@@ -164,7 +163,7 @@ public class LivreService extends Services {
      * Acquiert un livre.
      *
      * @param livreDTO - Le livre à ajouter.
-     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
      */
     public void acquerir(LivreDTO livreDTO) throws ServiceException {
         try {
@@ -185,7 +184,7 @@ public class LivreService extends Services {
      * Emprunte un livre.
      *
      * @param livreDTO - Le livre à emprunter.
-     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
      */
     public void emprunter(LivreDTO livreDTO) throws ServiceException {
         try {
@@ -200,7 +199,7 @@ public class LivreService extends Services {
      * Retourne un livre.
      *
      * @param livreDTO - Le livre à retourner.
-     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
      */
     public void retourner(LivreDTO livreDTO) throws ServiceException {
         try {
@@ -215,7 +214,7 @@ public class LivreService extends Services {
      * Vendre un livre.
      *
      * @param livreDTO - Le livre à vendre.
-     * @throws {@link #ServiceException ServiceException} - S'il y a une erreur avec la base de données.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
      */
     public void vendre(LivreDTO livreDTO) throws ServiceException {
         try {

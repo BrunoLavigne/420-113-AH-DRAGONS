@@ -109,7 +109,7 @@ public class Connexion extends Object implements AutoCloseable {
      *
      * Fermeture d'une connexion
      *
-     * @throws ConnexionException {@link - java.sql.SQLException SQLException} S'il y a une erreur avec la base de données.
+     * @throws ConnexionException {@link java.sql.SQLException} S'il y a une erreur avec la base de données.
      */
     public void fermer() throws ConnexionException {
 
@@ -127,7 +127,7 @@ public class Connexion extends Object implements AutoCloseable {
     /**
      * Effectue un commit sur la Connection JDBC
      *
-     * @throws ConnexionException {@link - java.sql.SQLException SQLException} S'il y a une erreur avec la base de données.
+     * @throws ConnexionException {@link java.sql.SQLException} S'il y a une erreur avec la base de données.
      */
     public void commit() throws ConnexionException {
 
@@ -141,7 +141,7 @@ public class Connexion extends Object implements AutoCloseable {
     /**
      * Effectue un rollback sur la Connection JDBC
      *
-     * @throws ConnexionException {@link - java.sql.SQLException SQLException} S'il y a une erreur avec la base de données.
+     * @throws ConnexionException {@link java.sql.SQLException} S'il y a une erreur avec la base de données.
      */
     public void rollback() throws ConnexionException {
 

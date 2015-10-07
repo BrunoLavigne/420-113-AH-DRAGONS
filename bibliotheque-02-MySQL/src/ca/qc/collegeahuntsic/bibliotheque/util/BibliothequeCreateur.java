@@ -18,24 +18,13 @@ import ca.qc.collegeahuntsic.bibliotheque.service.PretService;
 import ca.qc.collegeahuntsic.bibliotheque.service.ReservationService;
 
 /**
- * Système de gestion d'une bibliothèque
  *
- * Ce programme permet de gérer les transaction de base d'une
- * bibliothèque.  Il gère des livres, des membres et des
- * réservations. Les données sont conservées dans une base de
- * données relationnelles accédé avec JDBC.
+ * Utilitaire de création des outils de la bibliothèque.
  *
- *  <pre>
- * Pré-condition
- *   la base de données de la bibliothèque doit exister
- *  </pre>
- *
- *  <post>
- * Post-condition
- *   le programme effectue les majuscules associées à chaque transaction
- *  </post>
+ * @author Dragons Vicieux
  */
 public class BibliothequeCreateur {
+
     private Connexion connexion;
 
     private LivreDAO livreDAO;

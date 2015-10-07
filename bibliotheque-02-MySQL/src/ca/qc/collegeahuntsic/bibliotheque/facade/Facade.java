@@ -7,12 +7,21 @@ package ca.qc.collegeahuntsic.bibliotheque.facade;
 import java.io.Serializable;
 
 /**
- *  Classes chargées d’exposer l’accès aux services.
+ * Classe de base pour toutes les façades.
  *
  * @author Dragons Vicieux
  */
 public class Facade implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     *
+     * Crée une nouvelle Facade vide.
+     *
+     */
+    public Facade() {
+
+    }
 
 }

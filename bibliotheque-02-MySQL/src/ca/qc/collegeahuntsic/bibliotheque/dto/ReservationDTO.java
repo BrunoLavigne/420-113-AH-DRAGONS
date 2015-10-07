@@ -8,7 +8,7 @@ import java.sql.Date;
 
 /**
  *
- * DTO de la table reservation.
+ * DTO de la table <code>reservation</code>.
  *
  * @author Dragons Vicieux
  */
