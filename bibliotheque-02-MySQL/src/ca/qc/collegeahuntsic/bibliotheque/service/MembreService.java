@@ -59,6 +59,10 @@ public class MembreService extends Services {
 
 	// Opérations CRUD
 
+	private LivreDAO getLivreDAO() {
+		return this.livreDAO;
+	}
+
 	/**
 	 *
 	 * Ajoute un nouveau membre
@@ -230,21 +234,11 @@ public class MembreService extends Services {
 				throw new ServiceException("Impossible d'emprunter - le livre a été prêté.");
 			}
 
-<<<<<<< HEAD
 			// Voir si le livre a des réservations
 			List<ReservationDTO> listeReservations = getReservationDAO().findByLivre(livreDTO);
 			if (listeReservations.size() > 0) {
 				throw new ServiceException("Impossible d'emprunter - ce livre a des réservations.");
 			}
-=======
-            // Voir si livre a été prêté
-            MembreDTO emprunteur = read(livreDTO.getIdMembre());
-            if(emprunteur != null) {
-                System.err.println("Impossible d'emprunter - le livre a été prêté.");
-                return;
-                // throw new ServiceException("Impossible d'emprunter - le livre a été prêté.");
-            }
->>>>>>> branch 'master' of ssh://git@github.com/BrunoLavigne/420-113-AH-DRAGONS.git
 
 			// Après vérifications, le livre peut être emprunté au membre
 			// livreDTO.setDatePret(datePret); !!! à faire mettre timestamp
@@ -256,7 +250,6 @@ public class MembreService extends Services {
 		}
 	}
 
-<<<<<<< HEAD
 	/**
 	 *
 	 * Renouvelle le prêt d'un livre.
@@ -274,13 +267,6 @@ public class MembreService extends Services {
 	 *             On ne devrait pas avoir cette exception normalement.
 	 */
 	public void renouveler(MembreDTO membreDTO, LivreDTO livreDTO) throws ServiceException {
-=======
-        } catch(DAOException daoException) {
-            daoException.printStackTrace();
-            throw new ServiceException(daoException);
-        }
-    }
->>>>>>> branch 'master' of ssh://git@github.com/BrunoLavigne/420-113-AH-DRAGONS.git
 
 		try {
 
@@ -443,62 +429,35 @@ public class MembreService extends Services {
 	// Getters & setters
 
 	/**
-	 * Getter de la variable d'instance <code>this.membreDAO</code>.
 	 *
-	 * @return La variable d'instance <code>this.membreDAO</code>
+	 * Retourne le membre
+	 *
+	 * @return MembreDAO Le membre DAO
 	 */
 	private MembreDAO getMembreDAO() {
 		return this.membreDAO;
 	}
 
 	/**
-	 * Setter de la variable d'instance <code>this.membreDAO</code>.
+	 *
+	 * Set le membre
 	 *
 	 * @param membreDAO
-	 *            La valeur à utiliser pour la variable d'instance
-	 *            <code>this.membreDAO</code>
+	 *            Le membre DAO
 	 */
 	private void setMembreDAO(MembreDAO membreDAO) {
 		this.membreDAO = membreDAO;
 	}
 
-	/**
-	 * Getter de la variable d'instance <code>this.livreDAO</code>.
-	 *
-	 * @return La variable d'instance <code>this.livreDAO</code>
-	 */
-	private LivreDAO getLivreDAO() {
-		return this.livreDAO;
-	}
-
-	/**
-	 * Setter de la variable d'instance <code>this.livreDAO</code>.
-	 *
-	 * @param livreDAO
-	 *            La valeur à utiliser pour la variable d'instance
-	 *            <code>this.livreDAO</code>
-	 */
 	private void setLivreDAO(LivreDAO livreDAO) {
 		this.livreDAO = livreDAO;
 	}
 
-	/**
-	 * Getter de la variable d'instance <code>this.reservationDAO</code>.
-	 *
-	 * @return La variable d'instance <code>this.reservationDAO</code>
-	 */
-	private ReservationDAO getReservationDAO() {
-		return this.reservationDAO;
-	}
-
-	/**
-	 * Setter de la variable d'instance <code>this.reservationDAO</code>.
-	 *
-	 * @param reservationDAO
-	 *            La valeur à utiliser pour la variable d'instance
-	 *            <code>this.reservationDAO</code>
-	 */
 	private void setReservationDAO(ReservationDAO reservationDAO) {
 		this.reservationDAO = reservationDAO;
+	}
+
+	private ReservationDAO getReservationDAO() {
+		return this.reservationDAO;
 	}
 }
