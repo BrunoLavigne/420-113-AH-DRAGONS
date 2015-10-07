@@ -171,7 +171,8 @@ public class LivreService extends Services {
                 throw new ServiceException("Le livre existe déjà: "
                     + livreDTO.getIdLivre());
             }
-            this.add(livreDTO);
+            add(livreDTO);
+
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }

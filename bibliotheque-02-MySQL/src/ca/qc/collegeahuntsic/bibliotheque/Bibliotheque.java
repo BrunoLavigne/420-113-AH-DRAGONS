@@ -100,31 +100,28 @@ public class Bibliotheque {
         afficherAide();
         String transaction;
 
-        try {
-            transaction = lireTransaction(reader);
+        transaction = lireTransaction(reader);
 
-            while(!finTransaction(transaction)) {
-                /* découpage de la transaction en mots*/
-                // TODO Remplacer par un SPLIT. StringTokenizer est déprécier
-                StringTokenizer tokenizer = new StringTokenizer(transaction,
-                    " ");
-                if(tokenizer.hasMoreTokens()) {
-                    executerTransaction(tokenizer);
-                }
-                /*
-                 * TODO Big time, changer le tokenizer pour un split va prendre du temps;
-                 * il faut modifier aussi la methodeexecuterTransaction...
-                 *
-                String[] parts = transaction.split(" ");
-                for (int i=0; i<parts.length; i++){
-                    executerTransaction(parts[i]);
-                }
-                 */
-                transaction = lireTransaction(reader);
+        while(!finTransaction(transaction)) {
+            /* découpage de la transaction en mots*/
+            // TODO Remplacer par un SPLIT. StringTokenizer est déprécier
+            StringTokenizer tokenizer = new StringTokenizer(transaction,
+                " ");
+            if(tokenizer.hasMoreTokens()) {
+                executerTransaction(tokenizer);
             }
-        } catch(Exception exceptions) {
-            throw new BibliothequeException(exceptions);
+            /*
+             * TODO Big time, changer le tokenizer pour un split va prendre du temps;
+             * il faut modifier aussi la methodeexecuterTransaction...
+             *
+            String[] parts = transaction.split(" ");
+            for (int i=0; i<parts.length; i++){
+                executerTransaction(parts[i]);
+            }
+             */
+            transaction = lireTransaction(reader);
         }
+
     }
 
     /**
@@ -314,13 +311,10 @@ public class Bibliotheque {
             // TEST DEBUG DEBUG DEBUG
             //System.out.println(getGestionBiblio().getLivre().getAll().toString());
 
-        } catch(BibliothequeException bibliothequeException) {
-            throw new BibliothequeException("** "
-                + bibliothequeException.toString());
-        } catch(ServiceException serviceException) {
-            throw new BibliothequeException(serviceException);
-        } catch(DAOException daoException) {
-            throw new BibliothequeException(daoException);
+        } catch(
+            ServiceException
+            | DAOException exception) {
+            throw new BibliothequeException(exception);
         }
     }
 
