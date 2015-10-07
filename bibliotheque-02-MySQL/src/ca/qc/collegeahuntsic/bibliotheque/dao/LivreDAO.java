@@ -85,16 +85,8 @@ public class LivreDAO extends DAO {
             try {
                 getConnection().rollback();
             } catch(SQLException sqlException2) {
-                System.err.println("Error in "
-                    + sqlException2.getClass()
-                    + " caused by "
-                    + sqlException2.getCause());
                 throw new DAOException(sqlException2);
             }
-            System.err.println("Error in "
-                + sqlException.getClass()
-                + " caused by "
-                + sqlException.getCause());
             throw new DAOException(sqlException);
         }
     }
@@ -131,16 +123,8 @@ public class LivreDAO extends DAO {
             try {
                 getConnection().rollback();
             } catch(SQLException sqlException2) {
-                System.err.println("Error in "
-                    + sqlException2.getClass()
-                    + " caused by "
-                    + sqlException2.getCause());
                 throw new DAOException(sqlException2);
             }
-            System.err.println("Error in "
-                + sqlException.getClass()
-                + " caused by "
-                + sqlException.getCause());
             throw new DAOException(sqlException);
         }
         return tempLivre;
@@ -176,16 +160,8 @@ public class LivreDAO extends DAO {
             try {
                 getConnection().rollback();
             } catch(SQLException sqlException2) {
-                System.err.println("Error in "
-                    + sqlException2.getClass()
-                    + " caused by "
-                    + sqlException2.getCause());
                 throw new DAOException(sqlException2);
             }
-            System.err.println("Error in "
-                + sqlException.getClass()
-                + " caused by "
-                + sqlException.getCause());
             throw new DAOException(sqlException);
         }
     }
@@ -208,16 +184,8 @@ public class LivreDAO extends DAO {
             try {
                 getConnection().rollback();
             } catch(SQLException sqlException2) {
-                System.err.println("Error in "
-                    + sqlException2.getClass()
-                    + " caused by "
-                    + sqlException2.getCause());
                 throw new DAOException(sqlException2);
             }
-            System.err.println("Error in "
-                + sqlException.getClass()
-                + " caused by "
-                + sqlException.getCause());
             throw new DAOException(sqlException);
         }
     }
@@ -255,32 +223,16 @@ public class LivreDAO extends DAO {
                 try {
                     getConnection().rollback();
                 } catch(SQLException sqlException2) {
-                    System.err.println("Error in "
-                        + sqlException2.getClass()
-                        + " caused by "
-                        + sqlException2.getCause());
                     throw new DAOException(sqlException2);
                 }
-                System.err.println("Error in "
-                    + sqlException.getClass()
-                    + " caused by "
-                    + sqlException.getCause());
                 throw new DAOException(sqlException);
             }
         } catch(SQLException sqlException) {
             try {
                 getConnection().rollback();
             } catch(SQLException sqlException2) {
-                System.err.println("Error in "
-                    + sqlException2.getClass()
-                    + " caused by "
-                    + sqlException2.getCause());
                 throw new DAOException(sqlException2);
             }
-            System.err.println("Error in "
-                + sqlException.getClass()
-                + " caused by "
-                + sqlException.getCause());
             throw new DAOException(sqlException);
         }
     }
@@ -316,16 +268,8 @@ public class LivreDAO extends DAO {
             try {
                 getConnection().rollback();
             } catch(SQLException sqlException2) {
-                System.err.println("Error in "
-                    + sqlException2.getClass()
-                    + " caused by "
-                    + sqlException2.getCause());
                 throw new DAOException(sqlException2);
             }
-            System.err.println("Error in "
-                + sqlException.getClass()
-                + " caused by "
-                + sqlException.getCause());
             throw new DAOException(sqlException);
         }
         return liste;
@@ -362,16 +306,8 @@ public class LivreDAO extends DAO {
             try {
                 getConnection().rollback();
             } catch(SQLException sqlException2) {
-                System.err.println("Error in "
-                    + sqlException2.getClass()
-                    + " caused by "
-                    + sqlException2.getCause());
                 throw new DAOException(sqlException2);
             }
-            System.err.println("Error in "
-                + sqlException.getClass()
-                + " caused by "
-                + sqlException.getCause());
             throw new DAOException(sqlException);
         }
         return liste;
@@ -395,22 +331,8 @@ public class LivreDAO extends DAO {
                 ResultSet rset = stmtExistCheck.executeQuery()) {
                 livreExiste = rset.next();
                 rset.close();
-
             }
         } catch(SQLException sqlException) {
-            try {
-                getConnection().rollback();
-            } catch(SQLException sqlException2) {
-                System.err.println("Error in "
-                    + sqlException2.getClass()
-                    + " caused by "
-                    + sqlException2.getCause());
-                throw new DAOException(sqlException2);
-            }
-            System.err.println("Error in "
-                + sqlException.getClass()
-                + " caused by "
-                + sqlException.getCause());
             throw new DAOException(sqlException);
         }
         return livreExiste;
@@ -444,16 +366,8 @@ public class LivreDAO extends DAO {
             try {
                 getConnection().rollback();
             } catch(SQLException sqlException2) {
-                System.err.println("Error in "
-                    + sqlException2.getClass()
-                    + " caused by "
-                    + sqlException2.getCause());
                 throw new DAOException(sqlException2);
             }
-            System.err.println("Error in "
-                + sqlException.getClass()
-                + " caused by "
-                + sqlException.getCause());
             throw new DAOException(sqlException);
         }
     }
@@ -482,16 +396,8 @@ public class LivreDAO extends DAO {
             try {
                 getConnection().rollback();
             } catch(SQLException sqlException2) {
-                System.err.println("Error in "
-                    + sqlException2.getClass()
-                    + " caused by "
-                    + sqlException2.getCause());
                 throw new DAOException(sqlException2);
             }
-            System.err.println("Error in "
-                + sqlException.getClass()
-                + " caused by "
-                + sqlException.getCause());
             throw new DAOException(sqlException);
         }
     }
