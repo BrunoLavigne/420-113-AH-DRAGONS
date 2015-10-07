@@ -59,10 +59,6 @@ public class MembreService extends Services {
 
 	// Opérations CRUD
 
-	private LivreDAO getLivreDAO() {
-		return this.livreDAO;
-	}
-
 	/**
 	 *
 	 * Ajoute un nouveau membre
@@ -429,35 +425,62 @@ public class MembreService extends Services {
 	// Getters & setters
 
 	/**
+	 * Getter de la variable d'instance <code>this.membreDAO</code>.
 	 *
-	 * Retourne le membre
-	 *
-	 * @return MembreDAO Le membre DAO
+	 * @return La variable d'instance <code>this.membreDAO</code>
 	 */
 	private MembreDAO getMembreDAO() {
 		return this.membreDAO;
 	}
 
 	/**
-	 *
-	 * Set le membre
+	 * Setter de la variable d'instance <code>this.membreDAO</code>.
 	 *
 	 * @param membreDAO
-	 *            Le membre DAO
+	 *            La valeur à utiliser pour la variable d'instance
+	 *            <code>this.membreDAO</code>
 	 */
 	private void setMembreDAO(MembreDAO membreDAO) {
 		this.membreDAO = membreDAO;
 	}
 
+	/**
+	 * Getter de la variable d'instance <code>this.livreDAO</code>.
+	 *
+	 * @return La variable d'instance <code>this.livreDAO</code>
+	 */
+	private LivreDAO getLivreDAO() {
+		return this.livreDAO;
+	}
+
+	/**
+	 * Setter de la variable d'instance <code>this.livreDAO</code>.
+	 *
+	 * @param livreDAO
+	 *            La valeur à utiliser pour la variable d'instance
+	 *            <code>this.livreDAO</code>
+	 */
 	private void setLivreDAO(LivreDAO livreDAO) {
 		this.livreDAO = livreDAO;
 	}
 
-	private void setReservationDAO(ReservationDAO reservationDAO) {
-		this.reservationDAO = reservationDAO;
-	}
-
+	/**
+	 * Getter de la variable d'instance <code>this.reservationDAO</code>.
+	 *
+	 * @return La variable d'instance <code>this.reservationDAO</code>
+	 */
 	private ReservationDAO getReservationDAO() {
 		return this.reservationDAO;
+	}
+
+	/**
+	 * Setter de la variable d'instance <code>this.reservationDAO</code>.
+	 *
+	 * @param reservationDAO
+	 *            La valeur à utiliser pour la variable d'instance
+	 *            <code>this.reservationDAO</code>
+	 */
+	private void setReservationDAO(ReservationDAO reservationDAO) {
+		this.reservationDAO = reservationDAO;
 	}
 }
