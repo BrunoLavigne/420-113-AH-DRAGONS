@@ -38,7 +38,7 @@ public class Connexion extends Object implements AutoCloseable {
 
     private final static String URL_MYSQL = "jdbc:mysql://localhost:3306/";
 
-    private final static String URL_ORACLE = "jdbc:oracle:thin:@collegeahuntsic.info:1521:";
+    private final static String URL_ORACLE = "jdbc:oracle:thin:@localhost:1521:";
 
     /**
      * Crée une connexion en mode autocommit false.
