@@ -116,7 +116,8 @@ public class LivreDAO extends DAO {
                     tempLivre.setIdMembre(rset.getInt(5));
                     tempLivre.setDatePret(rset.getDate(6));
                     rset.close();
-
+                } else {
+                    System.err.println("Le livre n'existe pas dans la BD.");
                 }
             }
         } catch(SQLException sqlException) {

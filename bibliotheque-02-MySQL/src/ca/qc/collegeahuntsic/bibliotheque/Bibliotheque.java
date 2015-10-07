@@ -194,6 +194,10 @@ public class Bibliotheque {
                 System.out.println("TRANSACTION PRETER");
                 LivreDTO livreDTO = getGestionBiblio().getLivreService().read(readInt(tokenizer));
                 MembreDTO membreDTO = getGestionBiblio().getMembreService().read(readInt(tokenizer));
+                if(livreDTO == null
+                    || membreDTO == null) {
+                    return;
+                }
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
                 Date dateEmprunt;
                 try {
@@ -284,6 +288,10 @@ public class Bibliotheque {
 
                 LivreDTO livreDTO = getGestionBiblio().getLivreDAO().read(reservationDTO.getIdLivre());
                 MembreDTO membreDTO = getGestionBiblio().getMembreService().read(reservationDTO.getIdMembre());
+                if(livreDTO == null
+                    || membreDTO == null) {
+                    return;
+                }
 
                 getGestionBiblio().getReservationService().reserver(reservationDTO,
                     livreDTO,
