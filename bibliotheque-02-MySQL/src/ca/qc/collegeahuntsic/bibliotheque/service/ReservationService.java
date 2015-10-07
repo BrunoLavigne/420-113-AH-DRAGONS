@@ -274,10 +274,12 @@ public class ReservationService extends Services {
             laReservationDTO.setIdReservation(reservationDTO.getIdReservation());
             laReservationDTO.setDateReservation(Date.valueOf(dateReservation));
 
-            add(uneReservationDTO);
+            add(laReservationDTO);
 
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
+        } catch(NullPointerException nullPointerException) {
+            throw new ServiceException(nullPointerException);
         }
 
     }
@@ -371,6 +373,8 @@ public class ReservationService extends Services {
 
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
+        } catch(NullPointerException nullPointerException) {
+            throw new ServiceException(nullPointerException);
         }
 
     }
