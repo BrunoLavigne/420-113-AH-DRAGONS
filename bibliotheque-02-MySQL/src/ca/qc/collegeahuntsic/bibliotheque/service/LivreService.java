@@ -167,13 +167,17 @@ public class LivreService extends Services {
      */
     public void acquerir(LivreDTO livreDTO) throws ServiceException {
         try {
-            if(getLivreDAO().checkLivreExist(livreDTO.getIdLivre())) {
-                throw new ServiceException("Le livre existe déjà: "
-                    + livreDTO.getIdLivre());
+            if(!getLivreDAO().checkLivreExist(livreDTO.getIdLivre())) {
+                add(livreDTO);
+            } else {
+                /*throw new ServiceException("Le livre existe déjà: "
+                    + livreDTO.getIdLivre());*/
             }
-            add(livreDTO);
-
         } catch(DAOException daoException) {
+            System.err.println("Error in "
+                + daoException.getClass()
+                + " caused by "
+                + daoException.getCause());
             throw new ServiceException(daoException);
         }
     }
