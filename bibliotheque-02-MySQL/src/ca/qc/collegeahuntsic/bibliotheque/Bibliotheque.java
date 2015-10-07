@@ -314,6 +314,10 @@ public class Bibliotheque {
         } catch(
             ServiceException
             | DAOException exception) {
+            System.err.println("Error in "
+                + exception.getClass()
+                + " caused by "
+                + exception.getCause());
             throw new BibliothequeException(exception);
         }
     }

@@ -94,7 +94,7 @@ public class MembreDAO extends DAO {
                     membreDTO.setNom(resultSet.getString(2));
                     membreDTO.setTelephone(resultSet.getLong(3));
                     membreDTO.setLimitePret(resultSet.getInt(4));
-                    membreDTO.setNbPret(resultSet.getInt(6));
+                    membreDTO.setNbPret(resultSet.getInt(5));
 
                 }
             }
