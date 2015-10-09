@@ -16,7 +16,7 @@ CREATE TABLE livre (
 	idLivre         INTEGER(3) 		CHECK(idLivre > 0),
 	titre           VARCHAR(10) 	NOT NULL,
 	auteur          VARCHAR(10) 	NOT NULL,
-	dateAcquisition TIMESTAMP 			NOT NULL,
+	dateAcquisition TIMESTAMP 		NOT NULL,
 	idMembre        INTEGER(3),
 	datePret        TIMESTAMP,
 	CONSTRAINT 		cleLivre 		PRIMARY KEY (idLivre),
