@@ -25,14 +25,19 @@ public class MembreDAO extends DAO {
 
     private static final String INSERT_REQUEST = "INSERT INTO membre (idMembre, nom, telephone, limitePret, nbPret) VALUES (?, ?, ?, ?, ?)";
 
-    private static final String READ_REQUEST = "SELECT idMembre, nom, telephone, limitePret, nbPret FROM membre WHERE idMembre = ?";
+    private static final String READ_REQUEST = "SELECT idMembre, nom, telephone, limitePret, nbPret "
+        + "FROM membre"
+        + "WHERE idMembre = ?";
 
-    private static final String UPDATE_REQUEST = "UPDATE membre SET nom = ?, telephone = ?, limitePret = ?, nbPret = ? WHERE idMembre = ?";
+    private static final String UPDATE_REQUEST = "UPDATE membre SET nom = ?, telephone = ?, limitePret = ?, nbPret = ? "
+        + "WHERE idMembre = ?";
 
-    private static final String DELETE_REQUEST = "DELETE FROM membre WHERE idMembre = ?";
+    private static final String DELETE_REQUEST = "DELETE "
+        + "FROM membre "
+        + "WHERE idMembre = ?";
 
-    private final static String GET_ALL_REQUEST = "select idMembre, nom, telephone, limitePret, nbPret "
-        + "from livre";
+    private final static String GET_ALL_REQUEST = "SELECT idMembre, nom, telephone, limitePret, nbPret "
+        + "FROM livre";
 
     /**
      *
