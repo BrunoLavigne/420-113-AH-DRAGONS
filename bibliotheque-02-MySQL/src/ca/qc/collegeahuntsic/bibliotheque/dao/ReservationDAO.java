@@ -4,10 +4,10 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.dao;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -134,7 +134,7 @@ public class ReservationDAO extends DAO {
      * @throws DAOException S'il y a une erreur avec la base de données
      */
     public void update(ReservationDTO reservationDTO,
-        Date dateReservation) throws DAOException {
+        Timestamp dateReservation) throws DAOException {
 
         try(
             PreparedStatement updatePreparedStatement = getConnection().prepareStatement(ReservationDAO.UPDATE_REQUEST)) {
@@ -143,7 +143,7 @@ public class ReservationDAO extends DAO {
                 reservationDTO.getIdLivre());
             updatePreparedStatement.setInt(2,
                 reservationDTO.getIdMembre());
-            updatePreparedStatement.setDate(3,
+            updatePreparedStatement.setTimestamp(3,
                 dateReservation);
             updatePreparedStatement.setInt(2,
                 reservationDTO.getIdLivre());
