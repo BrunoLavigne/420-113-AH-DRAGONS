@@ -19,36 +19,42 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
  *
  * DAO pour effectuer des CRUDs avec la table <code>livre</code>
  *
- * @author Marc-Éric Boury 2015
+ * @author Dragons Vicieux
  */
 public class LivreDAO extends DAO {
 
     private static final long serialVersionUID = 1L;
 
-    private final static String READ_REQUEST = "select idlivre, titre, auteur, dateAcquisition, idMembre, datePret from livre where idlivre = ?";
+    private final static String READ_REQUEST = "SELECT idlivre, titre, auteur, dateAcquisition, idMembre, datePret "
+        + "FROM livre "
+        + "WHERE idlivre = ?";
 
-    private final static String ADD_REQUEST = "insert into livre (idLivre, titre, auteur, dateAcquisition, idMembre, datePret) "
-        + "values (?,?,?,?,null,null)";
+    private final static String ADD_REQUEST = "INSERT into livre (idLivre, titre, auteur, dateAcquisition, idMembre, datePret) "
+        + "VALUES (?,?,?,?,NULL,NULL)";
 
-    private final static String UPDATE_REQUEST = "update livre set titre = ?, auteur = ?, dateAcquisition = ?, idMembre = ?, datePret = ? "
-        + "where idLivre = ?";
+    private final static String UPDATE_REQUEST = "UPDATE livre set titre = ?, auteur = ?, dateAcquisition = ?, idMembre = ?, datePret = ? "
+        + "WHERE idLivre = ?";
 
-    private final static String DELETE_REQUEST = "delete from livre where idlivre = ?";
+    private final static String DELETE_REQUEST = "DELETE from livre "
+        + "WHERE idlivre = ?";
 
-    private final static String GET_ALL_REQUEST = "select idLivre, titre, auteur, idmembre, datePret "
-        + "from livre";
+    private final static String GET_ALL_REQUEST = "SELECT idLivre, titre, auteur, idmembre, datePret "
+        + "FROM livre";
 
     private final static String FIND_BY_TITRE = "SELECT idLivre, titre, auteur, idmembre, datePret + 14 "
         + "FROM LIVRE "
-        + "WHERE LOWER(titre) LIKE ?";
+        + "WHERE LOWER(titre) LIKE LOWER(?)";
 
-    private final static String FIND_BY_MEMBRE = "SELECT idLivre, titre, auteur, idmembre, datePret from livre where idmembre = ?";
+    private final static String FIND_BY_MEMBRE = "SELECT idLivre, titre, auteur, idmembre, datePret "
+        + "FROM livre where idmembre = ?";
 
-    private final static String EMRPUNT_REQUEST = "update livre set titre = ?, auteur = ?, dateAcquisition = ?, idMembre = ?, datePret = CURRENT_TIMESTAMP "
-        + "where idLivre = ?";
+    private final static String EMPRUNT_REQUEST = "UPDATE livre "
+        + "SET titre = ?, auteur = ?, dateAcquisition = ?, idMembre = ?, datePret = CURRENT_TIMESTAMP "
+        + "WHERE idLivre = ?";
 
-    private final static String RETOUR_REQUEST = "update livre set titre = ?, auteur = ?, dateAcquisition = ?, idMembre = null, datePret = null "
-        + "where idLivre = ?";
+    private final static String RETOUR_REQUEST = "UPDATE livre "
+        + "SET titre = ?, auteur = ?, dateAcquisition = ?, idMembre = NULL, datePret = NULL "
+        + "WHERE idLivre = ?";
 
     /**
      *
@@ -65,7 +71,7 @@ public class LivreDAO extends DAO {
      * Ajoute un nouveau livre.
      *
      * @param livreDTO - Le livre à ajouter.
-     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données
+     * @throws DAOException - S'il y a une erreur avec la base de données
      */
     public void add(LivreDTO livreDTO) throws DAOException {
         try(
@@ -97,7 +103,7 @@ public class LivreDAO extends DAO {
      *
      * @param idLivre - L'ID du livre à lire.
      * @return Le livre.
-     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données
+     * @throws DAOException - S'il y a une erreur avec la base de données
      */
     public LivreDTO read(int idLivre) throws DAOException {
         LivreDTO tempLivre = null;
@@ -136,7 +142,7 @@ public class LivreDAO extends DAO {
      * Met à jour un livre.
      *
      * @param livreDTO - Le livre à mettre à jour.
-     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données
+     * @throws DAOException - S'il y a une erreur avec la base de données
      */
     public void update(LivreDTO livreDTO) throws DAOException {
         try(
@@ -172,7 +178,7 @@ public class LivreDAO extends DAO {
      * Supprime un livre.
      *
      * @param livreDTO - Le livre à supprimer.
-     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
+     * @throws DAOException - S'il y a une erreur avec la base de données.
      */
     public void delete(LivreDTO livreDTO) throws DAOException {
         try(
@@ -197,7 +203,7 @@ public class LivreDAO extends DAO {
      *
      * @return La liste des livres ; une liste vide sinon.
      *
-     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
+     * @throws DAOException - S'il y a une erreur avec la base de données.
      */
     public List<LivreDTO> getAll() throws DAOException {
         List<LivreDTO> livres = Collections.<LivreDTO> emptyList();
@@ -244,7 +250,7 @@ public class LivreDAO extends DAO {
      *
      * @param titre - Le titre à utiliser
      * @return La liste des livres correspondants ; une liste vide sinon.
-     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
+     * @throws DAOException - S'il y a une erreur avec la base de données.
      */
     public List<LivreDTO> findByTitre(String titre) throws DAOException {
         List<LivreDTO> liste = Collections.<LivreDTO> emptyList();
@@ -284,7 +290,7 @@ public class LivreDAO extends DAO {
      *
      * @param membreDTO - Le membre à utiliser.
      * @return La liste des livres correspondants ; une liste vide sinon.
-     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
+     * @throws DAOException - S'il y a une erreur avec la base de données.
      */
     public List<LivreDTO> findByMembre(MembreDTO membreDTO) throws DAOException {
         List<LivreDTO> liste = Collections.<LivreDTO> emptyList();
@@ -321,24 +327,11 @@ public class LivreDAO extends DAO {
      * Vérifie l'existence d'un livre dans la base de données.
      *
      * @param idLivre L'ID du livre à rechercher.
-     * @return VRAI si le livre existe, FAUX s'il n'est pas trouvé.
-     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
+     * @return <code>true</code>si le livre existe, <code>false</code> sinon.
+     * @throws DAOException - S'il y a une erreur avec la base de données.
      */
     public boolean checkLivreExist(int idLivre) throws DAOException {
-        boolean livreExiste = false;
-        try(
-            PreparedStatement stmtExistCheck = (getConnection().prepareStatement(LivreDAO.READ_REQUEST))) {
-            stmtExistCheck.setInt(1,
-                idLivre);
-            try(
-                ResultSet rset = stmtExistCheck.executeQuery()) {
-                livreExiste = rset.next();
-                rset.close();
-            }
-        } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
-        }
-        return livreExiste;
+        return read(idLivre) != null;
     }
 
     /**
@@ -346,11 +339,11 @@ public class LivreDAO extends DAO {
      * Emprunte un livre.
      *
      * @param livreDTO - Le livre à emprunter.
-     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
+     * @throws DAOException - S'il y a une erreur avec la base de données.
      */
     public void emprunter(LivreDTO livreDTO) throws DAOException {
         try(
-            PreparedStatement updatePreparedStatement = getConnection().prepareStatement(LivreDAO.EMRPUNT_REQUEST)) {
+            PreparedStatement updatePreparedStatement = getConnection().prepareStatement(LivreDAO.EMPRUNT_REQUEST)) {
 
             updatePreparedStatement.setString(1,
                 livreDTO.getTitre());
@@ -380,7 +373,7 @@ public class LivreDAO extends DAO {
      * Retourne un livre.
      *
      * @param livreDTO - Le livre à retourner.
-     * @throws {@link #DAOException DAOException} - S'il y a une erreur avec la base de données.
+     * @throws DAOException - S'il y a une erreur avec la base de données.
      */
     public void retourner(LivreDTO livreDTO) throws DAOException {
         try(
