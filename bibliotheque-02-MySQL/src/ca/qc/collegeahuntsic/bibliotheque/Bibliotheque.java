@@ -8,7 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.StringTokenizer;
@@ -28,7 +28,7 @@ import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
  *
  *
  * Ce programme permet d'appeler les transactions de base d'une
- * bibliothèque.  Il gère des livres, des membres et des
+ * bibliothèque. Il gère des livres, des membres et des
  * réservations. Les données sont conservées dans une base de
  * données relationnelles accédée avec JDBC. Pour une liste des
  * transactions traitées, voir la méthode afficherAide().
@@ -177,10 +177,10 @@ public class Bibliotheque {
                 newLivre.setAuteur(readString(tokenizer));
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
 
-                Date date;
+                Timestamp date;
 
                 try {
-                    date = new Date(format.parse(readDate(tokenizer)).getTime());
+                    date = new Timestamp(format.parse(readDate(tokenizer)).getTime());
                 } catch(ParseException exception) {
                     throw new BibliothequeException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
                 }
@@ -203,10 +203,10 @@ public class Bibliotheque {
                 }
 
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-                Date dateEmprunt;
+                Timestamp dateEmprunt;
 
                 try {
-                    dateEmprunt = new Date(format.parse(readDate(tokenizer)).getTime());
+                    dateEmprunt = new Timestamp(format.parse(readDate(tokenizer)).getTime());
                 } catch(ParseException exception) {
                     throw new BibliothequeException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
                 }
@@ -265,10 +265,10 @@ public class Bibliotheque {
                 String dateReservation = readDate(tokenizer);
 
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-                Date date;
+                Timestamp date;
 
                 try {
-                    date = new Date(format.parse(dateReservation).getTime());
+                    date = new Timestamp(format.parse(dateReservation).getTime());
                 } catch(ParseException exception) {
                     throw new BibliothequeException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
                 }
