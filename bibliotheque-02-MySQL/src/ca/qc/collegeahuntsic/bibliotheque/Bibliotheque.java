@@ -28,7 +28,7 @@ import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
  *
  *
  * Ce programme permet d'appeler les transactions de base d'une
- * bibliothèque.  Il gère des livres, des membres et des
+ * bibliothèque. Il gère des livres, des membres et des
  * réservations. Les données sont conservées dans une base de
  * données relationnelles accédée avec JDBC. Pour une liste des
  * transactions traitées, voir la méthode afficherAide().
