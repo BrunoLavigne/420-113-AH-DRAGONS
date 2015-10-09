@@ -94,10 +94,8 @@ public class MembreService extends Services {
      *
      * Met à jour un membre.
      *
-     * @param membreDTO
-     *            Le membre à mettre à jour
-     * @throws ServiceException
-     *             S'il y a une erreur avec la base de données
+     * @param membreDTO Le membre à mettre à jour
+     * @throws ServiceException S'il y a une erreur avec la base de données
      */
     public void update(MembreDTO membreDTO) throws ServiceException {
 
@@ -339,7 +337,6 @@ public class MembreService extends Services {
      *
      * @param membreDTO Le membre qui retourne
      * @param livreDTO Le livre à retourner
-     *
      * @throws ServiceException Si le membre n'existe pas, si le livre n'existe pas, si le livre n'a pas encore été prêté, si le livre a été prêté à quelqu'un d'autre ou s'il y a une erreur avec la base de données
      */
     public void retourner(MembreDTO membreDTO,
