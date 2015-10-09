@@ -544,9 +544,7 @@ public class MembreService extends Services {
     /**
      * Setter de la variable d'instance <code>this.membreDAO</code>.
      *
-     * @param membreDAO
-     *            La valeur à utiliser pour la variable d'instance
-     *            <code>this.membreDAO</code>
+     * @param membreDAO La valeur à utiliser pour la variable d'instance <code>this.membreDAO</code>
      */
     private void setMembreDAO(MembreDAO membreDAO) {
         this.membreDAO = membreDAO;
@@ -564,9 +562,7 @@ public class MembreService extends Services {
     /**
      * Setter de la variable d'instance <code>this.livreDAO</code>.
      *
-     * @param livreDAO
-     *            La valeur à utiliser pour la variable d'instance
-     *            <code>this.livreDAO</code>
+     * @param livreDAO La valeur à utiliser pour la variable d'instance <code>this.livreDAO</code>
      */
     private void setLivreDAO(LivreDAO livreDAO) {
         this.livreDAO = livreDAO;
@@ -584,9 +580,7 @@ public class MembreService extends Services {
     /**
      * Setter de la variable d'instance <code>this.reservationDAO</code>.
      *
-     * @param reservationDAO
-     *            La valeur à utiliser pour la variable d'instance
-     *            <code>this.reservationDAO</code>
+     * @param reservationDAO La valeur à utiliser pour la variable d'instance <code>this.reservationDAO</code>
      */
     private void setReservationDAO(ReservationDAO reservationDAO) {
         this.reservationDAO = reservationDAO;
