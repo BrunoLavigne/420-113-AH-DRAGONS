@@ -1,7 +1,7 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
@@ -127,9 +127,9 @@ public class PretService extends Services {
             LivreDTO livre = new LivreDTO();
             livre.setIdLivre(idLivre);
             SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
-            Date date;
+            Timestamp date;
             try {
-                date = new Date(format.parse(datePret).getTime());
+                date = new Timestamp(format.parse(datePret).getTime());
             } catch(ParseException exception) {
                 // TODO Auto-generated catch block
                 exception.printStackTrace();
@@ -185,7 +185,7 @@ public class PretService extends Services {
             }
 
             // Vérifie si date renouvellement >= datePret
-            if(Date.valueOf(datePret).before(tupleLivre.getDatePret())) {
+            if(Timestamp.valueOf(datePret).before(tupleLivre.getDatePret())) {
                 System.err.println("Date de renouvellement inférieure à la date de prêt");
                 return;
                 // throw new ServiceException("Date de renouvellement inférieure à la date de prêt");
@@ -204,9 +204,9 @@ public class PretService extends Services {
             LivreDTO livre = new LivreDTO();
             livre.setIdLivre(idLivre);
             SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
-            Date date;
+            Timestamp date;
             try {
-                date = new Date(format.parse(datePret).getTime());
+                date = new Timestamp(format.parse(datePret).getTime());
             } catch(ParseException exception) {
                 // TODO Auto-generated catch block
                 exception.printStackTrace();
@@ -267,7 +267,7 @@ public class PretService extends Services {
             }
 
             // Vérifie si date retour >= datePret
-            if(Date.valueOf(dateRetour).before(livreDTO.getDatePret())) {
+            if(Timestamp.valueOf(dateRetour).before(livreDTO.getDatePret())) {
                 System.err.println("Date de retour inférieure à la date de prêt");
                 return;
                 // throw new ServiceException("Date de retour inférieure à la date de prêt");
@@ -275,9 +275,9 @@ public class PretService extends Services {
 
             // Retour du prêt
             SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
-            Date date;
+            Timestamp date;
             try {
-                date = new Date(format.parse(dateRetour).getTime());
+                date = new Timestamp(format.parse(dateRetour).getTime());
             } catch(ParseException exception) {
                 // TODO Auto-generated catch block
                 exception.printStackTrace();
