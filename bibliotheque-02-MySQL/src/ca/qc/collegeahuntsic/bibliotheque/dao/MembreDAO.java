@@ -71,7 +71,6 @@ public class MembreDAO extends DAO {
             addPreparedStatement.setInt(5,
                 membreDTO.getNbPret());
             addPreparedStatement.execute();
-            getConnection().commit();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
@@ -131,7 +130,6 @@ public class MembreDAO extends DAO {
             updatePreparedStatement.setInt(5,
                 membreDTO.getIdMembre());
             updatePreparedStatement.execute();
-            getConnection().commit();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
@@ -151,7 +149,6 @@ public class MembreDAO extends DAO {
             deletePreparedStatement.setInt(1,
                 membreDTO.getIdMembre());
             deletePreparedStatement.execute();
-            getConnection().commit();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }

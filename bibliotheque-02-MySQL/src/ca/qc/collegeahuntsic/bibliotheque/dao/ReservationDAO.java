@@ -82,7 +82,6 @@ public class ReservationDAO extends DAO {
             addPreparedStatement.setInt(3,
                 reservationDTO.getIdMembre());
             addPreparedStatement.executeUpdate();
-            getConnection().commit();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
@@ -149,7 +148,6 @@ public class ReservationDAO extends DAO {
             updatePreparedStatement.setInt(2,
                 reservationDTO.getIdLivre());
             updatePreparedStatement.executeUpdate();
-            getConnection().commit();
 
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
@@ -171,7 +169,6 @@ public class ReservationDAO extends DAO {
             deletePreparedStatement.setInt(1,
                 reservationDTO.getIdReservation());
             deletePreparedStatement.executeUpdate();
-            getConnection().commit();
 
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
@@ -237,8 +234,7 @@ public class ReservationDAO extends DAO {
 
             listeReservations = new ArrayList<>();
 
-            try(
-                ResultSet rset = findByLivreStmt.executeQuery();) {
+            try(ResultSet rset = findByLivreStmt.executeQuery();) {
 
                 if(rset.next()) {
 
@@ -253,10 +249,8 @@ public class ReservationDAO extends DAO {
 
                 return listeReservations;
 
-            } catch(Exception exception) {
-                throw new DAOException(exception);
             }
-
+            
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);
         }
