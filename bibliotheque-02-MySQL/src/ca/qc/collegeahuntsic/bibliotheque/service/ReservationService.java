@@ -4,7 +4,7 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
@@ -272,7 +272,7 @@ public class ReservationService extends Services {
             laReservationDTO.setIdLivre(livreDTO.getIdLivre());
             laReservationDTO.setIdMembre(membreDTO.getIdMembre());
             laReservationDTO.setIdReservation(reservationDTO.getIdReservation());
-            laReservationDTO.setDateReservation(Date.valueOf(dateReservation));
+            laReservationDTO.setDateReservation(Timestamp.valueOf(dateReservation));
 
             add(laReservationDTO);
 
