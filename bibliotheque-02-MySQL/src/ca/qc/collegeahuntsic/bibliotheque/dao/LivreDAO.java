@@ -85,13 +85,7 @@ public class LivreDAO extends DAO {
                 livreDTO.getDateAcquisition());
             stmtAdd.executeUpdate();
 
-            getConnection().commit();
         } catch(SQLException sqlException) {
-            try {
-                getConnection().rollback();
-            } catch(SQLException sqlException2) {
-                throw new DAOException(sqlException2);
-            }
             throw new DAOException(sqlException);
         }
     }
@@ -126,11 +120,6 @@ public class LivreDAO extends DAO {
                 }
             }
         } catch(SQLException sqlException) {
-            try {
-                getConnection().rollback();
-            } catch(SQLException sqlException2) {
-                throw new DAOException(sqlException2);
-            }
             throw new DAOException(sqlException);
         }
         return tempLivre;
@@ -161,13 +150,7 @@ public class LivreDAO extends DAO {
                 livreDTO.getDatePret());
 
             updatePreparedStatement.executeUpdate();
-            getConnection().commit();
         } catch(SQLException sqlException) {
-            try {
-                getConnection().rollback();
-            } catch(SQLException sqlException2) {
-                throw new DAOException(sqlException2);
-            }
             throw new DAOException(sqlException);
         }
     }
@@ -185,13 +168,7 @@ public class LivreDAO extends DAO {
             stmtDelete.setInt(1,
                 livreDTO.getIdLivre());
             stmtDelete.executeUpdate();
-            getConnection().commit();
         } catch(SQLException sqlException) {
-            try {
-                getConnection().rollback();
-            } catch(SQLException sqlException2) {
-                throw new DAOException(sqlException2);
-            }
             throw new DAOException(sqlException);
         }
     }
@@ -226,19 +203,9 @@ public class LivreDAO extends DAO {
                 }
                 return livres;
             } catch(SQLException sqlException) {
-                try {
-                    getConnection().rollback();
-                } catch(SQLException sqlException2) {
-                    throw new DAOException(sqlException2);
-                }
                 throw new DAOException(sqlException);
             }
         } catch(SQLException sqlException) {
-            try {
-                getConnection().rollback();
-            } catch(SQLException sqlException2) {
-                throw new DAOException(sqlException2);
-            }
             throw new DAOException(sqlException);
         }
     }
@@ -273,11 +240,6 @@ public class LivreDAO extends DAO {
                 }
             }
         } catch(SQLException sqlException) {
-            try {
-                getConnection().rollback();
-            } catch(SQLException sqlException2) {
-                throw new DAOException(sqlException2);
-            }
             throw new DAOException(sqlException);
         }
         return liste;
@@ -311,11 +273,6 @@ public class LivreDAO extends DAO {
                 }
             }
         } catch(SQLException sqlException) {
-            try {
-                getConnection().rollback();
-            } catch(SQLException sqlException2) {
-                throw new DAOException(sqlException2);
-            }
             throw new DAOException(sqlException);
         }
         return liste;
@@ -356,13 +313,7 @@ public class LivreDAO extends DAO {
                 livreDTO.getIdLivre());
 
             updatePreparedStatement.executeUpdate();
-            getConnection().commit();
         } catch(SQLException sqlException) {
-            try {
-                getConnection().rollback();
-            } catch(SQLException sqlException2) {
-                throw new DAOException(sqlException2);
-            }
             throw new DAOException(sqlException);
         }
     }
@@ -386,13 +337,7 @@ public class LivreDAO extends DAO {
                 livreDTO.getAuteur());
 
             retourPreparedStatement.executeUpdate();
-            getConnection().commit();
         } catch(SQLException sqlException) {
-            try {
-                getConnection().rollback();
-            } catch(SQLException sqlException2) {
-                throw new DAOException(sqlException2);
-            }
             throw new DAOException(sqlException);
         }
     }
