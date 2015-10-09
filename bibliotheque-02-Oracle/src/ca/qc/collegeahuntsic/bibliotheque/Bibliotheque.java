@@ -17,6 +17,7 @@ import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 import ca.qc.collegeahuntsic.bibliotheque.util.BibliothequeCreateur;
@@ -95,8 +96,10 @@ public class Bibliotheque {
      *
      * @param reader
      * @throws BibliothequeException
+     * @throws ConnexionException
      */
-    static void traiterTransactions(BufferedReader reader) throws BibliothequeException {
+    static void traiterTransactions(BufferedReader reader) throws BibliothequeException,
+    ConnexionException {
         afficherAide();
         String transaction;
 
@@ -153,8 +156,10 @@ public class Bibliotheque {
      *
      * @param tokenizer
      * @throws BibliothequeException
+     * @throws ConnexionException
      */
-    static void executerTransaction(StringTokenizer tokenizer) throws BibliothequeException {
+    static void executerTransaction(StringTokenizer tokenizer) throws BibliothequeException,
+    ConnexionException {
 
         try {
 
@@ -326,14 +331,19 @@ public class Bibliotheque {
             else {
                 System.out.println("  Transactions non reconnue.  Essayer \"aide\"");
             }
+            getGestionBiblio().getConnexion().commit();
+            System.out.println("TEST OUTPUT : commiting to database...");
 
         } catch(
             ServiceException
             | DAOException exception) {
-            System.err.println("Error in "
-                + exception.getClass()
-                + " caused by "
-                + exception.getCause());
+            try {
+                getGestionBiblio().getConnexion().rollback();
+                System.out.println("TEST OUTPUT : Error! database rollback...");
+            } catch(ConnexionException connexionException) {
+                connexionException.printStackTrace();
+                return;
+            }
             exception.printStackTrace();
             throw new BibliothequeException(exception);
         }
