@@ -109,7 +109,15 @@ public class Bibliotheque {
             StringTokenizer tokenizer = new StringTokenizer(transaction,
                 " ");
             if(tokenizer.hasMoreTokens()) {
-                executerTransaction(tokenizer);
+                try {
+                    executerTransaction(tokenizer);
+                    transaction = lireTransaction(reader);
+                } catch(BibliothequeException bibliothequeException) {
+                    // TODO Auto-generated catch block
+                    // bibliothequeException.printStackTrace();
+                    transaction = lireTransaction(reader);
+                    continue;
+                }
             }
             /*
              * TODO Big time, changer le tokenizer pour un split va prendre du temps;
@@ -120,9 +128,7 @@ public class Bibliotheque {
                 executerTransaction(parts[i]);
             }
              */
-            transaction = lireTransaction(reader);
         }
-
     }
 
     /**
@@ -337,12 +343,12 @@ public class Bibliotheque {
             | ConnexionException exception) {
             try {
                 getGestionBiblio().getConnexion().rollback();
-                System.out.println("TEST OUTPUT : Error! database rollback...");
+                System.err.println("TEST OUTPUT : Error! database rollback...");
             } catch(ConnexionException connexionException) {
                 connexionException.printStackTrace();
                 return;
             }
-            exception.printStackTrace();
+            // exception.printStackTrace();
             throw new BibliothequeException(exception);
         }
     }
