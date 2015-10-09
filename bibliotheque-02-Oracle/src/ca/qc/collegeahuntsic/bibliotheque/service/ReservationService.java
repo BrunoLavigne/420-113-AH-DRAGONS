@@ -288,7 +288,7 @@ public class ReservationService extends Services {
      *
      * Utilise une réservation.
      *
-     * @param reservationDTO La réservation à utiliser
+     * @param reservationDTO La réservation à utiliser.
      * @param membreDTO Le membre qui utilise sa réservation
      * @param livreDTO Le livre à emprunter
      * @throws ServiceException Si la réservation n'existe pas, si le membre n'existe pas, si le livre n'existe pas, si la réservation n'est pas la première de la liste, si le livre est déjà prété, si le membre a atteint sa limite de prêt ou s'il y a une erreur avec la base de données.
