@@ -22,12 +22,12 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
  * suppression des membres.
  *
  * <pre>
- * Pré-condition:
- *   la base de données de la bibliothèque doit exister
+ * Pré-condition: la base de données de la bibliothèque doit exister
  * </pre>
  *
- * <post> Post-condition: le programme effectue les *mises à jour* associées à
- * chaque transaction </post>
+ * <post>
+ * Post-condition: le programme effectue les *mises à jour* associées à chaque transaction
+ * </post>
  */
 public class MembreService extends Services {
 
@@ -43,12 +43,9 @@ public class MembreService extends Services {
      *
      * Crée le service de la table <code>membre</code>
      *
-     * @param membreDAO
-     *            Le DAO de la table <code>membre</code>
-     * @param livreDAO
-     *            Le DAO de la table <code>livre</code>
-     * @param reservationDAO
-     *            Le DAO de la table <code>reservation</code>
+     * @param membreDAO Le DAO de la table <code>membre</code>
+     * @param livreDAO Le DAO de la table <code>livre</code>
+     * @param reservationDAO Le DAO de la table <code>reservation</code>
      */
     public MembreService(MembreDAO membreDAO,
         LivreDAO livreDAO,
@@ -64,10 +61,8 @@ public class MembreService extends Services {
      *
      * Ajoute un nouveau membre
      *
-     * @param membreDTO
-     *            Le membre à ajouter
-     * @throws ServiceException
-     *             S'il y a une erreur avec la base de données
+     * @param membreDTO Le membre à ajouter
+     * @throws ServiceException S'il y a une erreur avec la base de données
      */
     public void add(MembreDTO membreDTO) throws ServiceException {
 
@@ -82,11 +77,9 @@ public class MembreService extends Services {
      *
      * Lit un membre.
      *
-     * @param idMembre
-     *            L'ID du membre à lire
+     * @param idMembre L'ID du membre à lire
      * @return MembreDTO Le membre à lire
-     * @throws ServiceException
-     *             S'il y a une erreur avec la base de données
+     * @throws ServiceException S'il y a une erreur avec la base de données
      */
     public MembreDTO read(int idMembre) throws ServiceException {
 
@@ -119,11 +112,8 @@ public class MembreService extends Services {
      *
      * Supprime un membre
      *
-     * @param membreDTO
-     *            Le membre à supprimer
-     * @throws ServiceException
-     *             Si le membre a encore des prêts, s'il a des réservations ou
-     *             s'il y a une erreur avec la base de données
+     * @param membreDTO Le membre à supprimer
+     * @throws ServiceException Si le membre a encore des prêts, s'il a des réservations ou s'il y a une erreur avec la base de données
      */
     public void delete(MembreDTO membreDTO) throws ServiceException {
 
@@ -141,8 +131,7 @@ public class MembreService extends Services {
      * Trouve tous les membres
      *
      * @return List<MembreDTO> La liste des membres; une liste vide sinon
-     * @throws ServiceException
-     *             S'il y a une erreur avec la base de données
+     * @throws ServiceException S'il y a une erreur avec la base de données
      */
     public List<MembreDTO> getAll() throws ServiceException {
 
@@ -159,11 +148,8 @@ public class MembreService extends Services {
      *
      * Inscrit un membre.
      *
-     * @param membreDTO
-     *            Le membre à ajouter
-     * @throws ServiceException
-     *             Si le membre existe déjà ou s'il y a une erreur avec la base
-     *             de données
+     * @param membreDTO Le membre à ajouter
+     * @throws ServiceException Si le membre existe déjà ou s'il y a une erreur avec la base de données
      */
     public void inscrire(MembreDTO membreDTO) throws ServiceException {
 
@@ -199,15 +185,9 @@ public class MembreService extends Services {
      *
      * Emprunte un livre.
      *
-     * @param membreDTO
-     *            Le membre qui emprunte
-     * @param livreDTO
-     *            Le livre à emprunter
-     * @throws ServiceException
-     *             Si le membre n'existe pas, si le livre n'existe pas, si le
-     *             livre a été prêté, si le livre a été réservé, si le membre a
-     *             atteint sa limite de prêt ou s'il y a une erreur avec la base
-     *             de données
+     * @param membreDTO Le membre qui emprunte
+     * @param livreDTO Le livre à emprunter
+     * @throws ServiceException Si le membre n'existe pas, si le livre n'existe pas, si le livre a été prêté, si le livre a été réservé, si le membre a atteint sa limite de prêt ou s'il y a une erreur avec la base de données
      */
     public void emprunter(MembreDTO membreDTO,
         LivreDTO livreDTO) throws ServiceException {
@@ -278,17 +258,10 @@ public class MembreService extends Services {
      *
      * Renouvelle le prêt d'un livre.
      *
-     * @param membreDTO
-     *            Le membre qui renouvelle
-     * @param livreDTO
-     *            Le livre à renouveler
-     * @throws ServiceException
-     *             Si le membre n'existe pas, si le livre n'existe pas, si le
-     *             livre n'a pas encore été prêté, si le livre a été prêté à
-     *             quelqu'un d'autre ou s'il y a une erreur avec la base de
-     *             données
-     * @throws DAOException
-     *             On ne devrait pas avoir cette exception normalement.
+     * @param membreDTO Le membre qui renouvelle
+     * @param livreDTO Le livre à renouveler
+     * @throws ServiceException Si le membre n'existe pas, si le livre n'existe pas, si le livre n'a pas encore été prêté, si le livre a été prêté à quelqu'un d'autre ou s'il y a une erreur avec la base de données
+     * @throws DAOException On ne devrait pas avoir cette exception normalement.
      */
     public void renouveler(MembreDTO membreDTO,
         LivreDTO livreDTO) throws ServiceException {
@@ -364,16 +337,10 @@ public class MembreService extends Services {
      *
      * Retourne un livre.
      *
-     * @param membreDTO
-     *            Le membre qui retourne
-     * @param livreDTO
-     *            Le livre à retourner
+     * @param membreDTO Le membre qui retourne
+     * @param livreDTO Le livre à retourner
      *
-     * @throws ServiceException
-     *             Si le membre n'existe pas, si le livre n'existe pas, si le
-     *             livre n'a pas encore été prêté, si le livre a été prêté à
-     *             quelqu'un d'autre ou s'il y a une erreur avec la base de
-     *             données
+     * @throws ServiceException Si le membre n'existe pas, si le livre n'existe pas, si le livre n'a pas encore été prêté, si le livre a été prêté à quelqu'un d'autre ou s'il y a une erreur avec la base de données
      */
     public void retourner(MembreDTO membreDTO,
         LivreDTO livreDTO) throws ServiceException {
@@ -443,12 +410,8 @@ public class MembreService extends Services {
      *
      * Désincrit un membre.
      *
-     * @param membreDTO
-     *            Le membre à désinscrire
-     * @throws ServiceException
-     *             Si le membre n'existe pas, si le membre a encore des prêts,
-     *             s'il a des réservations ou s'il y a une erreur avec la base
-     *             de données
+     * @param membreDTO Le membre à désinscrire
+     * @throws ServiceException Si le membre n'existe pas, si le membre a encore des prêts, s'il a des réservations ou s'il y a une erreur avec la base de données
      */
     public void desinscrire(MembreDTO membreDTO) throws ServiceException {
 
@@ -513,12 +476,9 @@ public class MembreService extends Services {
      *
      * Vérifie si un membre existe.
      *
-     * @param idMembre
-     *            L'ID du membre recherché
-     * @return boolean <code>true</code> si le membre existe, <code>false</code>
-     *         si ce n'est pas le cas.
-     * @throws ServiceException
-     *             En cas d'erreur d'appel au DAO, une exception est levée
+     * @param idMembre L'ID du membre recherché
+     * @return boolean <code>true</code> si le membre existe, <code>false</code> si ce n'est pas le cas.
+     * @throws ServiceException En cas d'erreur d'appel au DAO, une exception est levée
      */
     public boolean existe(int idMembre) throws ServiceException {
 
