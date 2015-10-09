@@ -149,7 +149,7 @@ public class Bibliotheque {
 
     /**
      *
-     * Décodage et traitement d'une transaction
+     * Décodage et traitement d'une transaction.
      *
      * @param tokenizer
      * @throws BibliothequeException
