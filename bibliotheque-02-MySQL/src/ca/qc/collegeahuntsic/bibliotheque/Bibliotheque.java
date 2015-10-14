@@ -237,8 +237,8 @@ public class Bibliotheque {
                 livreDTO.setDatePret(null);
                 getGestionBiblio().getLivreService().retourner(livreDTO);
                  */
-                getGestionBiblio().getPretService().retourner(readInt(tokenizer) /* idLivre */,
-                    readDate(tokenizer) /* dateRetour */);
+                getGestionBiblio().getPretService().retourner(readInt(tokenizer)); /* idLivre */
+                System.out.println(readDate(tokenizer) /* dateRetour */);
 
             } else if("inscrire".startsWith(command)) {
 

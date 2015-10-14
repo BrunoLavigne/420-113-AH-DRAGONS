@@ -230,8 +230,7 @@ public class PretService extends Services {
      * @param dateRetour
      * @throws ServiceException
      */
-    public void retourner(int idLivre,
-        String dateRetour) throws ServiceException {
+    public void retourner(int idLivre) throws ServiceException {
         try {
             // Vérifie si le livre est prêté
             LivreDTO livreDTO = getLivreDAO().read(idLivre);
@@ -252,7 +251,7 @@ public class PretService extends Services {
                     + " n'est pas prêté "); */
             }
 
-            // Vérifie si date retour >= datePret
+            /* Vérifie si date retour >= datePret
             if(Timestamp.valueOf(dateRetour).before(livreDTO.getDatePret())) {
                 System.err.println("Date de retour inférieure à la date de prêt");
                 return;
@@ -269,9 +268,9 @@ public class PretService extends Services {
                 exception.printStackTrace();
                 return;
                 // throw new ServiceException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
-            }
+            } */
             livreDTO.setDatePret(null);
-            getLivreDAO().emprunter(livreDTO);
+            getLivreDAO().retourner(livreDTO);
             /*
             int nb1 = getLivreDAO().retourner(idLivre);
             if(nb1 == 0) {
