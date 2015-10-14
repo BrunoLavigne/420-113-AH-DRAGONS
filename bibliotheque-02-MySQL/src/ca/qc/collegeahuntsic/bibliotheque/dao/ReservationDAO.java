@@ -113,6 +113,9 @@ public class ReservationDAO extends DAO {
                     readReservationDTO.setIdLivre(resultSet.getInt(2));
                     readReservationDTO.setIdMembre(resultSet.getInt(3));
                     readReservationDTO.setDateReservation(resultSet.getTimestamp(4));
+                } else {
+                    throw new DAOException("ERR-004 : Reservation inexistante. Method: READ, Class: "
+                        + getClass());
                 }
 
             }

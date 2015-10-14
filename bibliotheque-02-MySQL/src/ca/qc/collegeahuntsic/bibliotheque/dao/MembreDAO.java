@@ -100,6 +100,9 @@ public class MembreDAO extends DAO {
                     membreDTO.setLimitePret(resultSet.getInt(4));
                     membreDTO.setNbPret(resultSet.getInt(5));
                     resultSet.close();
+                } else {
+                    throw new DAOException("ERR-003 : Membre inexistant. Method: READ, Class: "
+                        + getClass());
                 }
             }
         } catch(SQLException sqlException) {

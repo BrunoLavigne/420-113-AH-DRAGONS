@@ -233,14 +233,16 @@ public class PretService extends Services {
     public void retourner(int idLivre) throws ServiceException {
         try {
             // Vérifie si le livre est prêté
+            System.out.println("RETOURNER STEP 1");
             LivreDTO livreDTO = getLivreDAO().read(idLivre);
             if(livreDTO == null) {
-                System.err.println("Livre inexistant: "
+                /*System.err.println("Livre inexistant: "
                     + idLivre);
-                return;
-                /* throw new ServiceException("Livre inexistant: "
-                    + idLivre); */
+                return; */
+                throw new ServiceException("Livre inexistant: "
+                    + idLivre);
             }
+            System.out.println("RETOURNER STEP 2");
             if(livreDTO.getIdMembre() == 0) {
                 System.err.println("Livre "
                     + idLivre
@@ -250,39 +252,11 @@ public class PretService extends Services {
                     + idLivre
                     + " n'est pas prêté "); */
             }
-
-            /* Vérifie si date retour >= datePret
-            if(Timestamp.valueOf(dateRetour).before(livreDTO.getDatePret())) {
-                System.err.println("Date de retour inférieure à la date de prêt");
-                return;
-                // throw new ServiceException("Date de retour inférieure à la date de prêt");
-            }
-
-            // Retour du prêt
-            SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
-            try {
-                Timestamp timestamp = new Timestamp(format.parse(dateRetour).getTime());
-                livreDTO.setDatePret(timestamp);
-            } catch(ParseException exception) {
-                // TODO Auto-generated catch block
-                exception.printStackTrace();
-                return;
-                // throw new ServiceException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
-            } */
+            System.out.println("RETOURNER STEP 3");
             livreDTO.setDatePret(null);
+            System.out.println("RETOURNER STEP 4");
             getLivreDAO().retourner(livreDTO);
-            /*
-            int nb1 = getLivreDAO().retourner(idLivre);
-            if(nb1 == 0) {
-                throw new ServiceException("Livre suprimé par une autre transaction");
-            }
 
-            int nb2 = getMembreDAO().retourner(tupleLivre.getIdMembre());
-            if(nb2 == 0) {
-                throw new ServiceException("Livre suprimé par une autre transaction");
-            }
-            getCx().commit();
-             */
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }

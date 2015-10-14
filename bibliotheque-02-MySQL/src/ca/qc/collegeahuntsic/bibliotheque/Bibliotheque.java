@@ -206,12 +206,8 @@ public class Bibliotheque {
 
                 // TRANSACTION PRETER ( <idMembre> <idLivre> )
 
-                LivreDTO livreDTO = new LivreDTO();
-                livreDTO.setIdLivre(readInt(tokenizer));
-
-                MembreDTO membreDTO = new MembreDTO();
-                membreDTO.setIdMembre(readInt(tokenizer));
-
+                LivreDTO livreDTO = getGestionBiblio().getLivreService().read(readInt(tokenizer));
+                MembreDTO membreDTO = getGestionBiblio().getMembreService().read(readInt(tokenizer));
                 getGestionBiblio().getMembreService().emprunter(membreDTO,
                     livreDTO);
 
@@ -222,21 +218,6 @@ public class Bibliotheque {
                 getGestionBiblio().getPretService().renouveler(readInt(tokenizer));
 
             } else if("retourner".startsWith(command)) {
-
-                /*
-                LivreDTO livreDTO = getGestionBiblio().getLivreService().read(readInt(tokenizer));
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-                Date dateRetour;
-                try {
-                    dateRetour = new Date(format.parse(readDate(tokenizer)).getTime());
-                } catch(ParseException exception) {
-                    // TODO TES TEST TEST TEST
-                    exception.printStackTrace();
-                    throw new BibliothequeException("Erreur de parsing dans le format de date lors de son retour.");
-                }
-                livreDTO.setDatePret(null);
-                getGestionBiblio().getLivreService().retourner(livreDTO);
-                 */
                 getGestionBiblio().getPretService().retourner(readInt(tokenizer)); /* idLivre */
                 System.out.println(readDate(tokenizer) /* dateRetour */);
 
@@ -283,8 +264,7 @@ public class Bibliotheque {
 
             } else if("prendreRes".startsWith(command)) {
 
-                ReservationDTO reservationDTO = new ReservationDTO();
-                reservationDTO = getGestionBiblio().getReservationService().read(readInt(tokenizer));
+                ReservationDTO reservationDTO = getGestionBiblio().getReservationService().read(readInt(tokenizer));
                 //String dateReservation = readDate(tokenizer);
 
                 LivreDTO livreDTO = getGestionBiblio().getLivreService().read(reservationDTO.getIdLivre());
@@ -330,10 +310,39 @@ public class Bibliotheque {
             | ConnexionException exception) {
             try {
                 getGestionBiblio().getConnexion().rollback();
-                //System.err.println("TEST OUTPUT : Error! database rollback...");
+                // System.err.println("TEST OUTPUT : Error! database rollback...");
             } catch(ConnexionException connexionException) {
                 connexionException.printStackTrace();
                 return;
+            }
+            try(
+                BufferedReader reader = new BufferedReader(new InputStreamReader(Bibliotheque.class.getResourceAsStream("/messagesFile.dat")))) {
+                String line = reader.readLine();
+                while(line != null) {
+                    String[] lineParts = line.split(";");
+                    if(line.startsWith("#")) {
+                        line = reader.readLine();
+                        continue;
+                    }
+                    if(lineParts[0].equals(exception.getMessage())) {
+                        if(lineParts[1].equals("ERROR")) {
+                            System.err.println(lineParts[1]
+                                + " "
+                                + lineParts[0]
+                                + ": "
+                                + lineParts[2]);
+                        } else {
+                            System.out.println(lineParts[1]
+                                + " "
+                                + lineParts[0]
+                                + ": "
+                                + lineParts[2]);
+                        }
+                    }
+                    line = reader.readLine();
+                }
+            } catch(IOException ioException) {
+                throw new BibliothequeException(ioException);
             }
             // exception.printStackTrace();
             throw new BibliothequeException(exception);

@@ -1,0 +1,7 @@
+# CODE;TYPE;MESSAGE
+# Message TYPE can be: ERROR, RESULT or INFORMATION
+DAO-0001;ERROR;Class: LIVREDAO, Method: READ, Message: Livre recherché inexistant dans la BD.
+DAO-0002;RESULT;Aucun livre trouvé dans la BD.
+DAO-0003;RESULT;Aucun livre correspondant aux critères trouvé dans la BD.
+DAO-0004;ERROR;Class: LIVREDAO, Method: EMPRUNTER, Message: Le livre passé en paramètre contient des attributs incompatibles.
+DAO-0005;ERROR;Class: LIVREDAO, Method: RETOURNER, Message: Le livre passé en paramètre contient des attributs incompatibles.
