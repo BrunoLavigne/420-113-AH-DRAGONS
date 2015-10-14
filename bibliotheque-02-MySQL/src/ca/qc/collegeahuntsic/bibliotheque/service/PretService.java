@@ -233,7 +233,6 @@ public class PretService extends Services {
     public void retourner(int idLivre) throws ServiceException {
         try {
             // Vérifie si le livre est prêté
-            System.out.println("RETOURNER STEP 1");
             LivreDTO livreDTO = getLivreDAO().read(idLivre);
             if(livreDTO == null) {
                 /*System.err.println("Livre inexistant: "
@@ -242,7 +241,6 @@ public class PretService extends Services {
                 throw new ServiceException("Livre inexistant: "
                     + idLivre);
             }
-            System.out.println("RETOURNER STEP 2");
             if(livreDTO.getIdMembre() == 0) {
                 System.err.println("Livre "
                     + idLivre
@@ -252,9 +250,7 @@ public class PretService extends Services {
                     + idLivre
                     + " n'est pas prêté "); */
             }
-            System.out.println("RETOURNER STEP 3");
             livreDTO.setDatePret(null);
-            System.out.println("RETOURNER STEP 4");
             getLivreDAO().retourner(livreDTO);
 
         } catch(DAOException daoException) {
