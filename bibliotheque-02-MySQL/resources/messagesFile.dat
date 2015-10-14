@@ -1,7 +1,16 @@
 # CODE;TYPE;MESSAGE
 # Message TYPE can be: ERROR, RESULT or INFORMATION
-DAO-0001;ERROR;Class: LIVREDAO, Method: READ, Message: Livre recherché inexistant dans la BD.
+DAO-0001;ERROR;Class: LIVREDAO, Method: READ, Message: Le livre recherché est inexistant dans la BD.
 DAO-0002;RESULT;Aucun livre trouvé dans la BD.
 DAO-0003;RESULT;Aucun livre correspondant aux critères trouvé dans la BD.
 DAO-0004;ERROR;Class: LIVREDAO, Method: EMPRUNTER, Message: Le livre passé en paramètre contient des attributs incompatibles.
 DAO-0005;ERROR;Class: LIVREDAO, Method: RETOURNER, Message: Le livre passé en paramètre contient des attributs incompatibles.
+DAO-0006;ERROR;Class: RESERVATIONDAO, Method: READ, Message: La réservation recherchée est inexistant dans la BD.
+DAO-0007;RESULT;Aucune réservation correspondant aux critères trouvé dans la BD.
+DAO-0008;ERROR;Class: MEMBREDAO, Method: READ, Message: Le membre recerché est inexistant dans la BD.
+DAO-0009;RESULT;Aucun membre correspondant aux critères trouvé dans la BD.
+################
+SRV-0001;ERROR;Class: LIVRESERVICE, Method: UPDATE, Message: Le livre à mettre a jour est inexistant dans la BD.
+SRV-0002;ERROR;Class: LIVRESERVICE, Method: ACQUERIR, Message: Le livre à aquérir existe déjà dans la BD.
+SRV-0003;ERROR;Class: MEMBRESERVICE, Method: INSCRIRE, Message: Un membre avec cette ID existe déjà dans la BD.
+SRV-0004;ERROR;Class: MEMBRESERVICE, Method: EMPRUNTER, Message: Un membre avec cette ID existe déjà dans la BD.

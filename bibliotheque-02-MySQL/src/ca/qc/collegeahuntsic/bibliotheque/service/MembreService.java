@@ -154,12 +154,11 @@ public class MembreService extends Services {
         // Vérifier si le membre existe déjà
         if(read(membreDTO.getIdMembre()) != null) {
 
-            System.err.println("Un membre avec l'id "
+            /* System.err.println("Un membre avec l'id "
                 + membreDTO.getIdMembre()
                 + " existe déjà.");
-            return;
-            // throw new ServiceException("Un membre avec l'id " +
-            // membreDTO.getIdMembre() + " existe déjà.");
+            return; */
+            throw new ServiceException("SRV-0003");
 
         }
         // S'il n'existe pas, on en crée un nouveau
@@ -192,12 +191,11 @@ public class MembreService extends Services {
 
             // Si le membre n'existe pas, exception
             if(read(unMembreDTO.getIdMembre()) == null) {
-                System.err.println("Le membre avec l'ID "
+                /* System.err.println("Le membre avec l'ID "
                     + unMembreDTO.getIdMembre()
                     + " n'existe pas.");
-                return;
-                // throw new ServiceException("Le membre avec l'ID " +
-                // membreDTO.getIdMembre() + " n'existe pas.");
+                return; */
+                throw new ServiceException("SRV-0004");
             }
 
             // Si le membre a atteint sa limite de prêts

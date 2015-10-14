@@ -83,7 +83,8 @@ public class ReservationDAO extends DAO {
                 reservationDTO.getIdMembre());
             addPreparedStatement.executeUpdate();
         } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
+            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+                sqlException);
         }
     }
 
@@ -114,14 +115,14 @@ public class ReservationDAO extends DAO {
                     readReservationDTO.setIdMembre(resultSet.getInt(3));
                     readReservationDTO.setDateReservation(resultSet.getTimestamp(4));
                 } else {
-                    throw new DAOException("ERR-004 : Reservation inexistante. Method: READ, Class: "
-                        + getClass());
+                    throw new DAOException("DAO-0006");
                 }
 
             }
 
         } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
+            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+                sqlException);
         }
 
         return readReservationDTO;
@@ -174,7 +175,8 @@ public class ReservationDAO extends DAO {
             deletePreparedStatement.executeUpdate();
 
         } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
+            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+                sqlException);
         }
 
     }
@@ -195,7 +197,7 @@ public class ReservationDAO extends DAO {
             ResultSet results = stmtGetAllReservation.executeQuery()) {
 
             listeReservations = new ArrayList<>();
-
+            boolean listIsEmpty = true;
             try(
                 ResultSet resultSet = stmtGetAllReservation.executeQuery()) {
 
@@ -206,13 +208,18 @@ public class ReservationDAO extends DAO {
                     reservationDTO.setIdMembre(resultSet.getInt(3));
                     reservationDTO.setDateReservation(resultSet.getTimestamp(4));
                     listeReservations.add(reservationDTO);
+                    listIsEmpty = false;
+                }
+                if(listIsEmpty) {
+                    throw new DAOException("DAO-0007");
                 }
 
             }
             return listeReservations;
 
         } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
+            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+                sqlException);
         }
     }
 
@@ -236,7 +243,7 @@ public class ReservationDAO extends DAO {
                 livreDTO.getIdLivre());
 
             listeReservations = new ArrayList<>();
-
+            boolean listIsEmpty = true;
             try(
                 ResultSet rset = findByLivreStmt.executeQuery();) {
 
@@ -248,15 +255,18 @@ public class ReservationDAO extends DAO {
                     reservationDTO.setIdMembre(rset.getInt(3));
                     reservationDTO.setDateReservation(rset.getTimestamp(4));
                     listeReservations.add(reservationDTO);
-
+                    listIsEmpty = false;
                 }
-
+                if(listIsEmpty) {
+                    throw new DAOException("DAO-0007");
+                }
                 return listeReservations;
 
             }
 
         } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
+            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+                sqlException);
         }
     }
 
@@ -280,7 +290,7 @@ public class ReservationDAO extends DAO {
                 membreDTO.getIdMembre());
 
             listeReservations = new ArrayList<>();
-
+            boolean listIsEmpty = true;
             try(
                 ResultSet rset = findByMembreStmt.executeQuery();) {
 
@@ -291,15 +301,17 @@ public class ReservationDAO extends DAO {
                     reservationDTO.setIdMembre(rset.getInt(3));
                     reservationDTO.setDateReservation(rset.getTimestamp(4));
                     listeReservations.add(reservationDTO);
+                    listIsEmpty = false;
+                }
+                if(listIsEmpty) {
+                    throw new DAOException("DAO-0007");
                 }
                 return listeReservations;
-
-            } catch(Exception exception) {
-                throw new DAOException(exception);
             }
 
         } catch(SQLException sqlException) {
-            throw new DAOException(sqlException);
+            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+                sqlException);
         }
     }
 
