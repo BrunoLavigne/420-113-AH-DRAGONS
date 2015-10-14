@@ -86,10 +86,10 @@ public class LivreService extends Services {
     public void update(LivreDTO livreDTO) throws ServiceException {
         try {
             if(getLivreDAO().checkLivreExist(livreDTO.getIdLivre())) {
-                /* System.err.println("Livre inexistant dans la base de données: "
+                System.err.println("Livre inexistant dans la base de données: "
                     + livreDTO.getTitre());
-                return; */
-                throw new ServiceException("SRV-0001");
+                return;
+                //throw new ServiceException("SRV-0001");
             }
             getLivreDAO().update(livreDTO);
         } catch(DAOException daoexception) {
@@ -171,10 +171,10 @@ public class LivreService extends Services {
             if(getLivreDAO().read(livreDTO.getIdLivre()) == null) {
                 add(livreDTO);
             } else {
-                /* System.err.println("Le livre existe déjà: "
+                System.err.println("Le livre existe déjà: "
                     + livreDTO.getIdLivre());
-                return; */
-                throw new ServiceException("SRV-0002");
+                return;
+                //throw new ServiceException("SRV-0002");
             }
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
@@ -221,29 +221,34 @@ public class LivreService extends Services {
     public void vendre(LivreDTO livreDTO) throws ServiceException {
         try {
 
+            LivreDTO unLivreDTO;
+
             // Vérifie si le livre passé en paramètre existe dans la base de données.
             if(getLivreDAO().read(livreDTO.getIdLivre()) == null) {
-                /* System.err.println("Livre inexistant dans la base de données: "
+                System.err.println("Livre inexistant dans la base de données: "
                     + livreDTO.getTitre());
-                return; */
+                return;
             }
+
+            unLivreDTO = getLivreDAO().read(livreDTO.getIdLivre());
+
             // Vérifie si le livre passé en paramètre est prêté à un membre.
-            if(getMembreDAO().read(livreDTO.getIdMembre()) != null) {
-                /* System.err.println("Le livre "
+            if(getMembreDAO().read(unLivreDTO.getIdMembre()) != null) {
+                System.err.println("Le livre "
                     + livreDTO.getTitre()
                     + " est prêté au membre #"
                     + livreDTO.getIdMembre());
-                return; */
+                return;
             }
             // Vérifie si le livre passé en paramètre est réservé par un membre.
             if(getReservationDAO().read(livreDTO.getIdLivre()) != null) {
-                /* System.err.println("Le livre "
+                System.err.println("Le livre "
                     + livreDTO.getTitre()
                     + " est réservé.");
-                return; */
+                return;
             }
             // Sinon, suppression du livre de la base de données.
-            getLivreDAO().delete(livreDTO);
+            getLivreDAO().delete(unLivreDTO);
 
         } catch(DAOException daoexception) {
             throw new ServiceException(daoexception);

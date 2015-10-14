@@ -202,9 +202,7 @@ public class ReservationService extends Services {
 
             // Si la réservation existe déjà
 
-            ReservationDTO uneReservationDTO = getReservationDAO().read(reservationDTO.getIdReservation());
-
-            if(uneReservationDTO != null) {
+            if(getReservationDAO().read(reservationDTO.getIdReservation()) != null) {
                 System.err.println("La réservation : "
                     + reservationDTO.getIdReservation()
                     + " existe déjà");
@@ -213,34 +211,40 @@ public class ReservationService extends Services {
 
             //  Si le membre n'existe pas
 
-            MembreDTO unMembreDTO = getMembreDAO().read(membreDTO.getIdMembre());
+            MembreDTO unMembreDTO;
 
-            if(unMembreDTO == null) {
+            if(getMembreDAO().read(membreDTO.getIdMembre()) == null) {
                 System.err.println("Membre inexistant: "
                     + membreDTO.getIdMembre());
                 return;
             }
 
+            unMembreDTO = getMembreDAO().read(membreDTO.getIdMembre());
+
             // Vérification sur le livre
 
-            LivreDTO unLivreDTO = getLivreDAO().read(livreDTO.getIdLivre());
+            LivreDTO unLivreDTO;
 
-            if(unLivreDTO == null) {
+            if(getLivreDAO().read(livreDTO.getIdLivre()) == null) {
                 System.err.println("Livre inexistant: "
                     + livreDTO.getIdLivre());
                 return;
             }
 
+            unLivreDTO = getLivreDAO().read(livreDTO.getIdLivre());
+
             // Si le livre n'a pas encore été prêté,
 
-            MembreDTO emprunteur = getMembreDAO().read(unLivreDTO.getIdMembre());
+            MembreDTO emprunteur;
 
-            if(emprunteur == null) {
+            if(getMembreDAO().read(unLivreDTO.getIdMembre()) == null) {
                 System.err.println("Le livre : "
                     + unLivreDTO.getIdLivre()
                     + " n'a pas été prêté encore. Faire un emprunt au lieu d'un réservation");
                 return;
             }
+
+            emprunteur = getMembreDAO().read(unLivreDTO.getIdMembre());
 
             // Si le livre est déjà prêté au membre
 
@@ -304,34 +308,38 @@ public class ReservationService extends Services {
 
             ReservationDTO uneReservationDTO;
 
-            uneReservationDTO = getReservationDAO().read(reservationDTO.getIdReservation());
-
-            if(uneReservationDTO == null) {
+            if(getReservationDAO().read(reservationDTO.getIdReservation()) == null) {
                 System.err.println("La réservation : "
                     + reservationDTO.getIdReservation()
                     + " n'existe pas");
                 return;
             }
 
+            uneReservationDTO = getReservationDAO().read(reservationDTO.getIdReservation());
+
             //  Si le membre n'existe pas
 
-            MembreDTO unMembreDTO = getMembreDAO().read(membreDTO.getIdMembre());
+            MembreDTO unMembreDTO;
 
-            if(unMembreDTO == null) {
+            if(getMembreDAO().read(membreDTO.getIdMembre()) == null) {
                 System.err.println("Membre inexistant: "
                     + membreDTO.getIdMembre());
                 return;
             }
 
+            unMembreDTO = getMembreDAO().read(membreDTO.getIdMembre());
+
             // Vérification sur le livre
 
-            LivreDTO unLivreDTO = getLivreDAO().read(livreDTO.getIdLivre());
+            LivreDTO unLivreDTO;
 
-            if(unLivreDTO == null) {
+            if(getLivreDAO().read(livreDTO.getIdLivre()) == null) {
                 System.err.println("Livre inexistant: "
                     + livreDTO.getIdLivre());
                 return;
             }
+
+            unLivreDTO = getLivreDAO().read(livreDTO.getIdLivre());
 
             // Si la réservation n'est pas la première de la liste
 
@@ -370,6 +378,8 @@ public class ReservationService extends Services {
 
             // Éliminer la réservation.
             delete(reservationDTO);
+            getLivreDAO().emprunter(unLivreDTO);
+            getMembreDAO().emprunter(unMembreDTO);
 
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);

@@ -49,10 +49,12 @@ public class LivreDAO extends DAO {
         + "FROM livre "
         + "WHERE idmembre = ?";
 
-    private final static String EMPRUNT_REQUEST = "UPDATE livre set titre = ?, auteur = ?, dateAcquisition = ?, idMembre = ?, datePret = CURRENT_TIMESTAMP "
+    private final static String EMPRUNT_REQUEST = "UPDATE livre "
+        + "SET idMembre = ?, datePret = CURRENT_TIMESTAMP "
         + "WHERE idLivre = ?";
 
-    private final static String RETOUR_REQUEST = "UPDATE livre set titre = ?, auteur = ?, dateAcquisition = ?, idMembre = null, datePret = null "
+    private final static String RETOUR_REQUEST = "UPDATE livre "
+        + "SET idMembre = null, datePret = null "
         + "WHERE idLivre = ?";
 
     /**
@@ -116,9 +118,11 @@ public class LivreDAO extends DAO {
                     tempLivre.setIdMembre(rset.getInt(5));
                     tempLivre.setDatePret(rset.getTimestamp(6));
                     rset.close();
-                } else {
+                }
+                /*else {
                     throw new DAOException("DAO-0001");
                 }
+                 */
             }
         } catch(SQLException sqlException) {
             throw new DAOException(Integer.toString(sqlException.getErrorCode()),
@@ -204,9 +208,11 @@ public class LivreDAO extends DAO {
                         livreDTO.setDatePret(resultSet.getTimestamp(5));
                         livres.add(livreDTO);
                     } while(resultSet.next());
-                } else {
+                }
+                /*else {
                     throw new DAOException("DAO-0002");
                 }
+                 */
                 return livres;
             } catch(SQLException sqlException) {
                 throw new DAOException(Integer.toString(sqlException.getErrorCode()),
@@ -237,7 +243,7 @@ public class LivreDAO extends DAO {
             try(
                 ResultSet rset = stmtGetLivresByTitre.executeQuery()) {
                 liste = new ArrayList<>();
-                boolean listIsEmpty = true;
+                //boolean listIsEmpty = true;
                 while(rset.next()) {
                     LivreDTO tempLivre = new LivreDTO();
                     tempLivre.setIdLivre(rset.getInt(1));
@@ -246,11 +252,13 @@ public class LivreDAO extends DAO {
                     tempLivre.setIdMembre(rset.getInt(4));
                     tempLivre.setDatePret(rset.getTimestamp(5));
                     liste.add(tempLivre);
-                    listIsEmpty = false;
+                    //listIsEmpty = false;
                 }
+                /*
                 if(listIsEmpty) {
                     throw new DAOException("DAO-0003");
                 }
+                 */
             }
         } catch(SQLException sqlException) {
             throw new DAOException(Integer.toString(sqlException.getErrorCode()),
@@ -276,7 +284,7 @@ public class LivreDAO extends DAO {
             try(
                 ResultSet rset = stmtGetLivresByMembre.executeQuery()) {
                 liste = new ArrayList<>();
-                boolean listIsEmpty = true;
+                //boolean listIsEmpty = true;
                 while(rset.next()) {
                     LivreDTO tempLivre = new LivreDTO();
                     tempLivre.setIdLivre(rset.getInt(1));
@@ -285,11 +293,13 @@ public class LivreDAO extends DAO {
                     tempLivre.setIdMembre(rset.getInt(4));
                     tempLivre.setDatePret(rset.getTimestamp(5));
                     liste.add(tempLivre);
-                    listIsEmpty = false;
+                    //listIsEmpty = false;
                 }
+                /*
                 if(listIsEmpty) {
                     throw new DAOException("DAO-0003");
                 }
+                 */
             }
         } catch(SQLException sqlException) {
             throw new DAOException(Integer.toString(sqlException.getErrorCode()),
@@ -321,17 +331,12 @@ public class LivreDAO extends DAO {
         try(
             PreparedStatement updatePreparedStatement = getConnection().prepareStatement(LivreDAO.EMPRUNT_REQUEST)) {
 
-            updatePreparedStatement.setString(1,
-                livreDTO.getTitre());
-            updatePreparedStatement.setString(2,
-                livreDTO.getAuteur());
-            updatePreparedStatement.setTimestamp(3,
-                livreDTO.getDateAcquisition());
-            updatePreparedStatement.setInt(4,
+            updatePreparedStatement.setInt(1,
                 livreDTO.getIdMembre());
-            updatePreparedStatement.setInt(5,
+            updatePreparedStatement.setInt(2,
                 livreDTO.getIdLivre());
             updatePreparedStatement.executeUpdate();
+
         } catch(NullPointerException NPException) {
             throw new DAOException("DAO-0004",
                 NPException);
@@ -354,12 +359,8 @@ public class LivreDAO extends DAO {
 
             retourPreparedStatement.setInt(1,
                 livreDTO.getIdLivre());
-            retourPreparedStatement.setString(2,
-                livreDTO.getTitre());
-            retourPreparedStatement.setString(3,
-                livreDTO.getAuteur());
-
             retourPreparedStatement.executeUpdate();
+
         } catch(NullPointerException NPException) {
             throw new DAOException("DAO-0005",
                 NPException);

@@ -101,9 +101,11 @@ public class MembreDAO extends DAO {
                     membreDTO.setLimitePret(resultSet.getInt(4));
                     membreDTO.setNbPret(resultSet.getInt(5));
                     resultSet.close();
-                } else {
+                }
+                /* else {
                     throw new DAOException("DAO-0008");
                 }
+                 */
             }
         } catch(SQLException sqlException) {
             throw new DAOException(Integer.toString(sqlException.getErrorCode()),
@@ -170,7 +172,7 @@ public class MembreDAO extends DAO {
     public List<MembreDTO> getAll() throws DAOException {
 
         List<MembreDTO> liste = new ArrayList<>();
-        boolean listIsEmpty = true;
+        //boolean listIsEmpty = true;
         try(
             PreparedStatement stmtGetAllMembres = (getConnection().prepareStatement(MembreDAO.GET_ALL_REQUEST));
             ResultSet results = stmtGetAllMembres.executeQuery()) {
@@ -184,11 +186,12 @@ public class MembreDAO extends DAO {
                     tempMembre.setLimitePret(resultSet.getInt(4));
                     tempMembre.setNbPret(resultSet.getInt(5));
                     liste.add(tempMembre);
-                    listIsEmpty = false;
+                    //listIsEmpty = false;
                 }
-                if(listIsEmpty) {
+                /*if(listIsEmpty) {
                     throw new DAOException("DAO-0009");
                 }
+                 */
             }
             return liste;
         } catch(SQLException sqlException) {

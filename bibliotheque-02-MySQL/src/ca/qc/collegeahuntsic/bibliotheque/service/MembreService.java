@@ -154,11 +154,11 @@ public class MembreService extends Services {
         // Vérifier si le membre existe déjà
         if(read(membreDTO.getIdMembre()) != null) {
 
-            /* System.err.println("Un membre avec l'id "
+            System.err.println("Un membre avec l'id "
                 + membreDTO.getIdMembre()
                 + " existe déjà.");
-            return; */
-            throw new ServiceException("SRV-0003");
+            return;
+            //throw new ServiceException("SRV-0003");
 
         }
         // S'il n'existe pas, on en crée un nouveau
@@ -186,17 +186,31 @@ public class MembreService extends Services {
 
         try {
 
-            MembreDTO unMembreDTO = read(membreDTO.getIdMembre());
-            LivreDTO unLivreDTO = getLivreDAO().read(livreDTO.getIdLivre());
+            MembreDTO unMembreDTO;
+            LivreDTO unLivreDTO;
 
             // Si le membre n'existe pas, exception
-            if(read(unMembreDTO.getIdMembre()) == null) {
-                /* System.err.println("Le membre avec l'ID "
-                    + unMembreDTO.getIdMembre()
+            if(read(membreDTO.getIdMembre()) == null) {
+                System.err.println("Le membre avec l'ID "
+                    + membreDTO.getIdMembre()
                     + " n'existe pas.");
-                return; */
-                throw new ServiceException("SRV-0004");
+                return;
+                //throw new ServiceException("SRV-0004");
             }
+
+            unMembreDTO = read(membreDTO.getIdMembre());
+
+            // Si le livre n'existe pas, exception
+            if(getLivreDAO().read(livreDTO.getIdLivre()) == null) {
+                System.err.println("Le livre avec l'ID "
+                    + livreDTO.getIdLivre()
+                    + " n'existe pas.");
+                return;
+                // throw new ServiceException("Le livre avec l'ID " +
+                // livreDTO.getIdLivre() + " n'existe pas.");
+            }
+
+            unLivreDTO = getLivreDAO().read(livreDTO.getIdLivre());
 
             // Si le membre a atteint sa limite de prêts
             if(unMembreDTO.getNbPret() >= unMembreDTO.getLimitePret()) {
@@ -208,16 +222,6 @@ public class MembreService extends Services {
                  * throw new ServiceException( "Le membre avec l'ID " +
                  * membreDTO.getIdMembre() + " a atteint sa limite de prêts.");
                  */
-            }
-
-            // Si le livre n'existe pas, exception
-            if(getLivreDAO().read(unLivreDTO.getIdLivre()) == null) {
-                System.err.println("Le livre avec l'ID "
-                    + unLivreDTO.getIdLivre()
-                    + " n'existe pas.");
-                return;
-                // throw new ServiceException("Le livre avec l'ID " +
-                // livreDTO.getIdLivre() + " n'existe pas.");
             }
 
             // Voir si livre a été prêté

@@ -15,9 +15,9 @@ preter 1 1
 renouveler 1
 reserver 1 1 2
 reserver 2 1 3
-retourner 1 1999-01-08
-prendre 1 1999-01-09
-retourner 1 1999-01-10
+retourner 1
+utiliser 1 2 1
+retourner 2
 annuler 2
 --
 -- *********** cas d'erreur *********
@@ -35,53 +35,51 @@ inscrire 1 n1 8198218001 1
 -- *** Prêts ***
 --
 -- erreur : livre inexistant
-preter 999 1 1999-01-06
+preter 999 1
 --
 -- erreur : membre inexistant
-preter 1 999 1999-01-06
+preter 1 999
 --
 -- création d'un prêt
-preter 1 1 1999-01-06
+preter 1 1
 --
 -- erreur : livre déjà prêté
-preter 1 2 1999-01-06
+preter 1 2
 --
 -- erreur : limite de prêt atteinte
-preter 2 1 1999-01-06
+preter 2 1
 --
 -- réservation d'un livre
-reserver 1 1 2 1999-01-09
-reserver 2 1 3 1999-01-10
+reserver 1 1 2
+reserver 2 1 3
 --
 -- retour du livre 1
-retourner 1 1999-01-08
+retourner 1
 --
 -- erreur : livre réservé
-preter 1 3 1999-01-06
+preter 1 3
 --
 -- retourner livre non prêté
-retourner 2 1999-01-11
+retourner 2
 --
 -- *** Réservation ***
 -- erreur : livre inexistant
 --
-reserver 3 998 2 1999-01-09
+reserver 3 998 2
 --
 -- créer un pret
-preter 2 2 1999-01-09
-preter 3 2 1999-01-09
+preter 2 2
+preter 3 2
 --
 -- erreur : membre inexistant
 --
-reserver 3 2 998 1999-01-09
+reserver 3 2 998
 --
 -- erreur : no réservation existant
 --
-reserver 2 2 3 1999-01-09
+reserver 2 2 3
 --
 -- prendre deuxième réservation dans la file
 --
-prendre 2 1999-01-10
-prendre 1 1999-01-10
-listerLivres
-listerLivresTitre t
+utiliser 2
+utiliser 1

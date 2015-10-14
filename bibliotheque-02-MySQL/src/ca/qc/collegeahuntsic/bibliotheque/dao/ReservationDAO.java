@@ -114,9 +114,11 @@ public class ReservationDAO extends DAO {
                     readReservationDTO.setIdLivre(resultSet.getInt(2));
                     readReservationDTO.setIdMembre(resultSet.getInt(3));
                     readReservationDTO.setDateReservation(resultSet.getTimestamp(4));
-                } else {
+                }
+                /*else {
                     throw new DAOException("DAO-0006");
                 }
+                 */
 
             }
 
@@ -197,7 +199,7 @@ public class ReservationDAO extends DAO {
             ResultSet results = stmtGetAllReservation.executeQuery()) {
 
             listeReservations = new ArrayList<>();
-            boolean listIsEmpty = true;
+            //boolean listIsEmpty = true;
             try(
                 ResultSet resultSet = stmtGetAllReservation.executeQuery()) {
 
@@ -208,11 +210,12 @@ public class ReservationDAO extends DAO {
                     reservationDTO.setIdMembre(resultSet.getInt(3));
                     reservationDTO.setDateReservation(resultSet.getTimestamp(4));
                     listeReservations.add(reservationDTO);
-                    listIsEmpty = false;
+                    //listIsEmpty = false;
                 }
-                if(listIsEmpty) {
+                /*if(listIsEmpty) {
                     throw new DAOException("DAO-0007");
                 }
+                 */
 
             }
             return listeReservations;
@@ -243,7 +246,7 @@ public class ReservationDAO extends DAO {
                 livreDTO.getIdLivre());
 
             listeReservations = new ArrayList<>();
-            boolean listIsEmpty = true;
+            //boolean listIsEmpty = true;
             try(
                 ResultSet rset = findByLivreStmt.executeQuery();) {
 
@@ -255,11 +258,12 @@ public class ReservationDAO extends DAO {
                     reservationDTO.setIdMembre(rset.getInt(3));
                     reservationDTO.setDateReservation(rset.getTimestamp(4));
                     listeReservations.add(reservationDTO);
-                    listIsEmpty = false;
+                    //listIsEmpty = false;
                 }
-                if(listIsEmpty) {
+                /*if(listIsEmpty) {
                     throw new DAOException("DAO-0007");
                 }
+                 */
                 return listeReservations;
 
             }
@@ -290,7 +294,7 @@ public class ReservationDAO extends DAO {
                 membreDTO.getIdMembre());
 
             listeReservations = new ArrayList<>();
-            boolean listIsEmpty = true;
+            //boolean listIsEmpty = true;
             try(
                 ResultSet rset = findByMembreStmt.executeQuery();) {
 
@@ -301,11 +305,13 @@ public class ReservationDAO extends DAO {
                     reservationDTO.setIdMembre(rset.getInt(3));
                     reservationDTO.setDateReservation(rset.getTimestamp(4));
                     listeReservations.add(reservationDTO);
-                    listIsEmpty = false;
+                    //listIsEmpty = false;
                 }
+                /*
                 if(listIsEmpty) {
                     throw new DAOException("DAO-0007");
                 }
+                 */
                 return listeReservations;
             }
 

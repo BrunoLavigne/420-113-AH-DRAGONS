@@ -205,8 +205,12 @@ public class Bibliotheque {
 
                 // TRANSACTION PRETER ( <idMembre> <idLivre> )
 
-                LivreDTO livreDTO = getGestionBiblio().getLivreService().read(readInt(tokenizer));
-                MembreDTO membreDTO = getGestionBiblio().getMembreService().read(readInt(tokenizer));
+                LivreDTO livreDTO = new LivreDTO();
+                livreDTO.setIdLivre(readInt(tokenizer));
+
+                MembreDTO membreDTO = new MembreDTO();
+                membreDTO.setIdMembre(readInt(tokenizer));
+
                 getGestionBiblio().getMembreService().emprunter(membreDTO,
                     livreDTO);
 
@@ -217,8 +221,10 @@ public class Bibliotheque {
                 getGestionBiblio().getPretService().renouveler(readInt(tokenizer));
 
             } else if("retourner".startsWith(command)) {
+
+                // TRANSACTION RETOURNER ( <idLivre> )
+
                 getGestionBiblio().getPretService().retourner(readInt(tokenizer)); /* idLivre */
-                System.out.println(readDate(tokenizer) /* dateRetour */);
 
             } else if("inscrire".startsWith(command)) {
 
@@ -242,41 +248,45 @@ public class Bibliotheque {
 
                 ReservationDTO reservationDTO = new ReservationDTO();
                 reservationDTO.setIdReservation(readInt(tokenizer));
-                reservationDTO.setIdLivre(readInt(tokenizer));
-                reservationDTO.setIdMembre(readInt(tokenizer));
+
+                LivreDTO livreDTO = new LivreDTO();
+                livreDTO.setIdLivre(readInt(tokenizer));
+
+                MembreDTO membreDTO = new MembreDTO();
+                membreDTO.setIdMembre(readInt(tokenizer));
 
                 Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
                 reservationDTO.setDateReservation(currentTimestamp);
-
-                LivreDTO livreDTO = getGestionBiblio().getLivreDAO().read(reservationDTO.getIdLivre());
-                MembreDTO membreDTO = getGestionBiblio().getMembreService().read(reservationDTO.getIdMembre());
-
-                if(livreDTO == null
-                    || membreDTO == null) {
-                    return;
-                }
 
                 getGestionBiblio().getReservationService().reserver(reservationDTO,
                     livreDTO,
                     membreDTO,
                     currentTimestamp);
 
-            } else if("prendreRes".startsWith(command)) {
+            } else if("utiliser".startsWith(command)) {
 
-                ReservationDTO reservationDTO = getGestionBiblio().getReservationService().read(readInt(tokenizer));
-                //String dateReservation = readDate(tokenizer);
+                // TRANSACTION UTILISER ( <idReservation> <idLivre> <idMembre> )
 
-                LivreDTO livreDTO = getGestionBiblio().getLivreService().read(reservationDTO.getIdLivre());
-                MembreDTO membreDTO = getGestionBiblio().getMembreService().read(reservationDTO.getIdMembre());
+                ReservationDTO reservationDTO = new ReservationDTO();
+                reservationDTO.setIdReservation(readInt(tokenizer));
+
+                LivreDTO livreDTO = new LivreDTO();
+                livreDTO.setIdLivre(readInt(tokenizer));
+
+                MembreDTO membreDTO = new MembreDTO();
+                membreDTO.setIdMembre(readInt(tokenizer));
 
                 getGestionBiblio().getReservationService().utiliser(reservationDTO,
                     membreDTO,
                     livreDTO);
 
-            } else if("annulerRes".startsWith(command)) {
+            } else if("annuler".startsWith(command)) {
+
+                // TRANSACTION ANNULER ( <idReservation> )
 
                 ReservationDTO reservationDTO = new ReservationDTO();
-                reservationDTO = getGestionBiblio().getReservationService().read(readInt(tokenizer));
+                reservationDTO.setIdReservation(readInt(tokenizer));
+
                 getGestionBiblio().getReservationService().annuler(reservationDTO);
 
             } else if("listerLivres".startsWith(command)) {

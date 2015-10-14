@@ -2,8 +2,6 @@
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
@@ -88,54 +86,63 @@ public class PretService extends Services {
     public void preter(int idLivre,
         int idMembre,
         String datePret) throws ServiceException {
+
         try {
+
+            LivreDTO livreDTO;
+
             // Vérfie si le livre est disponible
-            LivreDTO tupleLivre = getLivreDAO().read(idLivre);
-            if(tupleLivre == null) {
-                throw new ServiceException("Livre inexistant: "
+            if(getLivreDAO().read(idLivre) == null) {
+                System.err.println("Livre inexistant: "
                     + idLivre);
+                return;
             }
-            if(tupleLivre.getIdMembre() != 0) {
-                throw new ServiceException("Livre "
+
+            livreDTO = getLivreDAO().read(idLivre);
+
+            // Vérifie si le livre est déjà prêté
+            if(livreDTO.getIdMembre() != 0) {
+                System.err.println("Livre "
                     + idLivre
                     + " déjà prêté à "
-                    + tupleLivre.getIdMembre());
+                    + livreDTO.getIdMembre());
+                return;
             }
 
             // Vérifie si le membre existe et sa limite de prêt
-            MembreDTO tupleMembre = getMembreDAO().read(idMembre);
-            if(tupleMembre == null) {
-                throw new ServiceException("Membre inexistant: "
+            MembreDTO membreDTO;
+
+            if(getMembreDAO().read(idMembre) == null) {
+                System.err.println("Membre inexistant: "
                     + idMembre);
+                return;
             }
-            if(tupleMembre.getNbPret() >= tupleMembre.getLimitePret()) {
-                throw new ServiceException("Limite de prêt du membre "
+
+            membreDTO = getMembreDAO().read(idMembre);
+
+            if(membreDTO.getNbPret() >= membreDTO.getLimitePret()) {
+                System.err.println("Limite de prêt du membre "
                     + idMembre
                     + " atteinte");
+                return;
             }
 
             // Vérifie s'il existe une réservation pour le livre.
-            ReservationDTO tupleReservation = getReservationDAO().read(idLivre);
-            if(tupleReservation != null) {
-                throw new ServiceException("Livre réservé par : "
-                    + tupleReservation.getIdMembre()
-                    + " idReservation : "
-                    + tupleReservation.getIdReservation());
+
+            if(getReservationDAO().read(idLivre) != null) {
+
+                ReservationDTO reservationDTO = getReservationDAO().read(idLivre);
+
+                System.err.println("Livre réservé par le membre : "
+                    + reservationDTO.getIdMembre()
+                    + " Le idReservation : "
+                    + reservationDTO.getIdReservation());
+                return;
             }
 
             // Enregistrement du prêt.
-            LivreDTO livre = new LivreDTO();
-            livre.setIdLivre(idLivre);
-            SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
-            try {
-                Timestamp timestamp = new Timestamp(format.parse(datePret).getTime());
-                livre.setDatePret(timestamp);
-            } catch(ParseException exception) {
-                exception.printStackTrace();
-                throw new ServiceException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
-            }
-            livre.setIdMembre(idMembre);
-            getLivreDAO().emprunter(livre);
+            livreDTO.setIdMembre(idMembre);
+            getLivreDAO().emprunter(livreDTO);
             /*
             if(nb1 == 0) {
                 throw new ServiceException("Livre suprimé par une autre transaction");
@@ -231,16 +238,21 @@ public class PretService extends Services {
      * @throws ServiceException
      */
     public void retourner(int idLivre) throws ServiceException {
+
         try {
-            // Vérifie si le livre est prêté
-            LivreDTO livreDTO = getLivreDAO().read(idLivre);
-            if(livreDTO == null) {
-                /*System.err.println("Livre inexistant: "
+
+            // Vérifie si le livre existe
+            LivreDTO livreDTO;
+            if(getLivreDAO().read(idLivre) == null) {
+                System.err.println("Livre inexistant: "
                     + idLivre);
-                return; */
-                throw new ServiceException("Livre inexistant: "
-                    + idLivre);
+                return;
+                //throw new ServiceException("Livre inexistant: " + idLivre);
             }
+
+            livreDTO = getLivreDAO().read(idLivre);
+
+            // Vérifie si le livre est prêté
             if(livreDTO.getIdMembre() == 0) {
                 System.err.println("Livre "
                     + idLivre
@@ -250,6 +262,7 @@ public class PretService extends Services {
                     + idLivre
                     + " n'est pas prêté "); */
             }
+
             livreDTO.setDatePret(null);
             getLivreDAO().retourner(livreDTO);
 
