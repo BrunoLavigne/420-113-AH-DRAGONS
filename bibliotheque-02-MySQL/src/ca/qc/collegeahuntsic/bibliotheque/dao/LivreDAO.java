@@ -115,8 +115,6 @@ public class LivreDAO extends DAO {
                     tempLivre.setIdMembre(rset.getInt(5));
                     tempLivre.setDatePret(rset.getTimestamp(6));
                     rset.close();
-                } else {
-                    System.err.println("Le livre n'existe pas dans la BD.");
                 }
             }
         } catch(SQLException sqlException) {
@@ -311,7 +309,6 @@ public class LivreDAO extends DAO {
                 livreDTO.getIdMembre());
             updatePreparedStatement.setInt(5,
                 livreDTO.getIdLivre());
-
             updatePreparedStatement.executeUpdate();
         } catch(SQLException sqlException) {
             throw new DAOException(sqlException);

@@ -167,7 +167,7 @@ public class LivreService extends Services {
      */
     public void acquerir(LivreDTO livreDTO) throws ServiceException {
         try {
-            if(!getLivreDAO().checkLivreExist(livreDTO.getIdLivre())) {
+            if(getLivreDAO().read(livreDTO.getIdLivre()) == null) {
                 add(livreDTO);
             } else {
                 System.err.println("Le livre existe déjà: "

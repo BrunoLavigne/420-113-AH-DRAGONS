@@ -196,7 +196,7 @@ public class ReservationService extends Services {
     public void reserver(ReservationDTO reservationDTO,
         LivreDTO livreDTO,
         MembreDTO membreDTO,
-        String dateReservation) throws ServiceException {
+        Timestamp dateReservation) throws ServiceException {
 
         try {
 
@@ -272,7 +272,7 @@ public class ReservationService extends Services {
             laReservationDTO.setIdLivre(livreDTO.getIdLivre());
             laReservationDTO.setIdMembre(membreDTO.getIdMembre());
             laReservationDTO.setIdReservation(reservationDTO.getIdReservation());
-            laReservationDTO.setDateReservation(Timestamp.valueOf(dateReservation));
+            laReservationDTO.setDateReservation(dateReservation);
 
             add(laReservationDTO);
 

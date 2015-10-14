@@ -1,7 +1,6 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -167,24 +166,28 @@ public class PretService extends Services {
      * @param datePret
      * @throws ServiceException
      */
-    public void renouveler(int idLivre,
-        String datePret) throws ServiceException {
+    public void renouveler(int idLivre) throws ServiceException {
+
         try {
             // Vérifie si le livre est prêté
             LivreDTO tupleLivre;
             tupleLivre = getLivreDAO().read(idLivre);
             if(tupleLivre == null) {
-                throw new ServiceException("Livre inexistant: "
+                System.err.println("Livre inexistant: "
                     + idLivre);
+                return;
             }
             if(tupleLivre.getIdMembre() == 0) {
-                throw new ServiceException("Livre "
-                    + idLivre
-                    + " n'est pas prêté");
+                System.err.println(("Livre "
+                    + idLivre + " n'est pas prêté"));
+                return;
             }
 
+            java.util.Date date = new java.util.Date();
+            Timestamp maintenant = new Timestamp(date.getTime());
+
             // Vérifie si date renouvellement >= datePret
-            if(Date.valueOf(datePret).before(tupleLivre.getDatePret())) {
+            if(maintenant.before(tupleLivre.getDatePret())) {
                 System.err.println("Date de renouvellement inférieure à la date de prêt");
                 return;
                 // throw new ServiceException("Date de renouvellement inférieure à la date de prêt");
@@ -193,26 +196,16 @@ public class PretService extends Services {
             // Vérifie s'il existe une réservation pour le livre.
             ReservationDTO tupleReservation = getReservationDAO().read(idLivre);
             if(tupleReservation != null) {
-                throw new ServiceException("Livre réservé par : "
+                System.err.println("Livre réservé par : "
                     + tupleReservation.getIdMembre()
                     + " idReservation : "
                     + tupleReservation.getIdReservation());
+                return;
             }
 
             // Enregistrement du prêt.
-            LivreDTO livre = new LivreDTO();
-            livre.setIdLivre(idLivre);
-            SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
-            try {
-                Timestamp timestamp = new Timestamp(format.parse(datePret).getTime());
-                livre.setDatePret(timestamp);
-            } catch(ParseException exception) {
-                // TODO Auto-generated catch block
-                exception.printStackTrace();
-                throw new ServiceException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
-            }
-            livre.setIdMembre(tupleLivre.getIdMembre());
-            getLivreDAO().emprunter(livre);
+
+            getLivreDAO().emprunter(tupleLivre);
             /*
             int nb1 = getLivreDAO().preter(idLivre,
                 tupleLivre.getIdMembre(),
@@ -224,12 +217,7 @@ public class PretService extends Services {
              */
 
         } catch(DAOException daoException) {
-            try {
-                getCx().rollback();
-            } catch(ConnexionException connexionException) {
-                throw new ServiceException(connexionException);
-            }
-            // TODO handle after-rollback plz.
+            throw new ServiceException(daoException);
         }
 
     }

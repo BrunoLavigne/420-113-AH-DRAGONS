@@ -11,10 +11,10 @@ inscrire 2 n2 8198218002 2
 inscrire 3 n3 8198218002 2
 --
 -- préts
-preter 1 1 1999-01-06
-renouveler 1 1999-01-07
-reserver 1 1 2 1999-01-08
-reserver 2 1 3 1999-01-09
+preter 1 1
+renouveler 1
+reserver 1 1 2
+reserver 2 1 3
 retourner 1 1999-01-08
 prendre 1 1999-01-09
 retourner 1 1999-01-10

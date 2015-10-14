@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.StringTokenizer;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
@@ -177,11 +178,13 @@ public class Bibliotheque {
 
             } else if("acquerir".startsWith(command)) {
 
-                LivreDTO newLivre = new LivreDTO();
+                // TRANSACTION ACQUERIR ( <idLivre> <titre> <auteur> <dateAcquisition> )
 
-                newLivre.setIdLivre(readInt(tokenizer));
-                newLivre.setTitre(readString(tokenizer));
-                newLivre.setAuteur(readString(tokenizer));
+                LivreDTO livreDTO = new LivreDTO();
+
+                livreDTO.setIdLivre(readInt(tokenizer));
+                livreDTO.setTitre(readString(tokenizer));
+                livreDTO.setAuteur(readString(tokenizer));
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
 
                 Timestamp date;
@@ -192,8 +195,8 @@ public class Bibliotheque {
                     throw new BibliothequeException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
                 }
 
-                newLivre.setDateAcquisition(date);
-                getGestionBiblio().getLivreService().acquerir(newLivre);
+                livreDTO.setDateAcquisition(date);
+                getGestionBiblio().getLivreService().acquerir(livreDTO);
 
             } else if("vendre".startsWith(command)) {
 
@@ -201,32 +204,22 @@ public class Bibliotheque {
 
             } else if("preter".startsWith(command)) {
 
-                LivreDTO livreDTO = getGestionBiblio().getLivreService().read(readInt(tokenizer));
-                MembreDTO membreDTO = getGestionBiblio().getMembreService().read(readInt(tokenizer));
+                // TRANSACTION PRETER ( <idMembre> <idLivre> )
 
-                if(livreDTO == null
-                    || membreDTO == null) {
-                    return;
-                }
+                LivreDTO livreDTO = new LivreDTO();
+                livreDTO.setIdLivre(readInt(tokenizer));
 
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-                Timestamp dateEmprunt;
-
-                try {
-                    dateEmprunt = new Timestamp(format.parse(readDate(tokenizer)).getTime());
-                } catch(ParseException exception) {
-                    throw new BibliothequeException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
-                }
-
-                livreDTO.setDatePret(dateEmprunt);
+                MembreDTO membreDTO = new MembreDTO();
+                membreDTO.setIdMembre(readInt(tokenizer));
 
                 getGestionBiblio().getMembreService().emprunter(membreDTO,
                     livreDTO);
 
             } else if("renouveler".startsWith(command)) {
 
-                getGestionBiblio().getPretService().renouveler(readInt(tokenizer) /* idLivre */,
-                    readDate(tokenizer) /* dateRenouvellement */);
+                // TRANSACTION RENOUVELER ( <idLivre> )
+
+                getGestionBiblio().getPretService().renouveler(readInt(tokenizer));
 
             } else if("retourner".startsWith(command)) {
 
@@ -265,25 +258,19 @@ public class Bibliotheque {
 
             } else if("reserver".startsWith(command)) {
 
+                // TRANSACTION RESERVER ( <idReservation> <idLivre> <idMembre> )
+
                 ReservationDTO reservationDTO = new ReservationDTO();
                 reservationDTO.setIdReservation(readInt(tokenizer));
                 reservationDTO.setIdLivre(readInt(tokenizer));
                 reservationDTO.setIdMembre(readInt(tokenizer));
-                String dateReservation = readDate(tokenizer);
 
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-                Timestamp date;
-
-                try {
-                    date = new Timestamp(format.parse(dateReservation).getTime());
-                } catch(ParseException exception) {
-                    throw new BibliothequeException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
-                }
-
-                reservationDTO.setDateReservation(date);
+                Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+                reservationDTO.setDateReservation(currentTimestamp);
 
                 LivreDTO livreDTO = getGestionBiblio().getLivreDAO().read(reservationDTO.getIdLivre());
                 MembreDTO membreDTO = getGestionBiblio().getMembreService().read(reservationDTO.getIdMembre());
+
                 if(livreDTO == null
                     || membreDTO == null) {
                     return;
@@ -292,7 +279,7 @@ public class Bibliotheque {
                 getGestionBiblio().getReservationService().reserver(reservationDTO,
                     livreDTO,
                     membreDTO,
-                    dateReservation);
+                    currentTimestamp);
 
             } else if("prendreRes".startsWith(command)) {
 
@@ -335,7 +322,7 @@ public class Bibliotheque {
             }
 
             getGestionBiblio().getConnexion().commit();
-            System.out.println("TEST OUTPUT : commiting to database...");
+            //System.out.println("TEST OUTPUT : commiting to database...");
 
         } catch(
             ServiceException
@@ -343,7 +330,7 @@ public class Bibliotheque {
             | ConnexionException exception) {
             try {
                 getGestionBiblio().getConnexion().rollback();
-                System.err.println("TEST OUTPUT : Error! database rollback...");
+                //System.err.println("TEST OUTPUT : Error! database rollback...");
             } catch(ConnexionException connexionException) {
                 connexionException.printStackTrace();
                 return;
@@ -368,18 +355,16 @@ public class Bibliotheque {
         System.out.println("  aide");
         System.out.println("  exit");
         System.out.println("  acquerir <idLivre> <titre> <auteur> <dateAcquisition>");
-        System.out.println("  preter <idLivre> <idMembre> <dateEmprunt>");
-        System.out.println("  renouveler <idLivre> <dateRenouvellement>");
-        System.out.println("  retourner <idLivre> <dateRetour>");
+        System.out.println("  preter <idLivre> <idMembre>");
+        System.out.println("  renouveler <idLivre>");
+        System.out.println("  retourner <idLivre>");
         System.out.println("  vendre <idLivre>");
         System.out.println("  inscrire <idMembre> <nom> <telephone> <limitePret>");
         System.out.println("  desinscrire <idMembre>");
-        System.out.println("  reserver <idReservation> <idLivre> <idMembre> <dateReservation>");
-        System.out.println("  prendreRes <idReservation> <dateEmprunt>");
-        System.out.println("  annulerRes <idReservation>");
-        System.out.println("  listerLivresRetard <dateCourante>");
-        System.out.println("  listerLivresTitre <mot>");
-        System.out.println("  listerLivres");
+        System.out.println("  reserver <idReservation> <idLivre> <idMembre> ");
+        System.out.println("  utiliser <idReservation> <dateEmprunt>");
+        System.out.println("  annuler <idReservation>");
+
     }
 
     /**

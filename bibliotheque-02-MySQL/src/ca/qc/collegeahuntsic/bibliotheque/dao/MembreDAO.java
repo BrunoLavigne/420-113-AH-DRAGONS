@@ -26,7 +26,7 @@ public class MembreDAO extends DAO {
     private static final String INSERT_REQUEST = "INSERT INTO membre (idMembre, nom, telephone, limitePret, nbPret) VALUES (?, ?, ?, ?, ?)";
 
     private static final String READ_REQUEST = "SELECT idMembre, nom, telephone, limitePret, nbPret "
-        + "FROM membre"
+        + "FROM membre "
         + "WHERE idMembre = ?";
 
     private static final String UPDATE_REQUEST = "UPDATE membre SET nom = ?, telephone = ?, limitePret = ?, nbPret = ? "
@@ -99,7 +99,7 @@ public class MembreDAO extends DAO {
                     membreDTO.setTelephone(resultSet.getLong(3));
                     membreDTO.setLimitePret(resultSet.getInt(4));
                     membreDTO.setNbPret(resultSet.getInt(5));
-
+                    resultSet.close();
                 }
             }
         } catch(SQLException sqlException) {
