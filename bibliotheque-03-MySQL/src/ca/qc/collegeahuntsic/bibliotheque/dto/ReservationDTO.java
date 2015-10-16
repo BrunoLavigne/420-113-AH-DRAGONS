@@ -66,18 +66,42 @@ public class ReservationDTO extends DTO {
     }
     //EndRegion Getters and Setters
 
+    /**
+     * 
+     * TODO Auto-generated method javadoc
+     *
+     * @return
+     */
     private MembreDTO getMembreDTO() {
         return this.membreDTO;
     }
 
+    /**
+     * 
+     * TODO Auto-generated method javadoc
+     *
+     * @param membreDTO
+     */
     private void setMembreDTO(MembreDTO membreDTO) {
         this.membreDTO = membreDTO;
     }
 
+    /**
+     * 
+     * TODO Auto-generated method javadoc
+     *
+     * @return
+     */
     private LivreDTO getLivreDTO() {
         return this.livreDTO;
     }
-
+    
+    /**
+     * 
+     * TODO Auto-generated method javadoc
+     *
+     * @param livreDTO
+     */
     private void setLivreDTO(LivreDTO livreDTO) {
         this.livreDTO = livreDTO;
     }
