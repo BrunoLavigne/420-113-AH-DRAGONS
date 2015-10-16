@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS livre 			CASCADE;
 DROP TABLE IF EXISTS membre 		CASCADE;
 
 CREATE TABLE membre (
-	idMembre        INTEGER(3) 		CHECK(idMembre > 0),
+	idMembre        INTEGER(3) 		AUTO_INCREMENT CHECK(idMembre > 0),
 	nom             VARCHAR(10) 	NOT NULL,
 	telephone       bigint(32),
 	limitePret      INTEGER(2) 		CHECK(limitePret > 0 and limitePret <= 10),
@@ -26,8 +26,8 @@ CREATE TABLE pret (
 	idMembre 	INTEGER(3)  CHECK (idMembre > 0),
 	idLivre 	INTEGER(3) 	CHECK (idLivre > 0),
 	datePret 	TIMESTAMP(3),
-	dateRetour 	TIMESTAMP(3) 	NULL,
-	CONSTRAINT 	cleprimairePret 	PRIMARY KEY (idPret),
+	dateRetour 	TIMESTAMP(3) 		NULL,
+	CONSTRAINT 	clePrimairePret 	PRIMARY KEY (idPret),
 	CONSTRAINT 	refPretMembre 		FOREIGN KEY (idMembre) 	REFERENCES membre (idMembre),
 	CONSTRAINT 	refPretLivre 		FOREIGN KEY (idLivre) 	REFERENCES livre (idLivre)
 );
