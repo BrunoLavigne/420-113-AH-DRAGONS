@@ -5,11 +5,9 @@ import java.sql.Timestamp;
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
-import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
-import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
@@ -41,8 +39,6 @@ public class PretService extends Services {
 
     private ReservationDAO reservationDAO;
 
-    private Connexion cx;
-
     /**
      * Création d'une instance.
      * La connection de l'instance de livre et de membre doit être la même que cx,
@@ -56,17 +52,6 @@ public class PretService extends Services {
     public PretService(LivreDAO livreDAO,
         MembreDAO membreDAO,
         ReservationDAO reservationDAO) throws ServiceException {
-
-        // This whole shit is useless since we now have a dedicated class for a single connection used by
-        // all DAOs...
-
-        /*
-        if(livreDAO.getConnexion() != membreDAO.getConnexion()
-            || reservationDAO.getConnexion() != membreDAO.getConnexion()) {
-            throw new ServiceException("Les instances de livre, de membre et de réservation n'utilisent pas la même connexion au serveur");
-        }
-        setCx(livreDAO.getConnexion());
-         */
 
         setLivreDAO(livreDAO);
         setMembreDAO(membreDAO);
@@ -143,23 +128,8 @@ public class PretService extends Services {
             // Enregistrement du prêt.
             livreDTO.setIdMembre(idMembre);
             getLivreDAO().emprunter(livreDTO);
-            /*
-            if(nb1 == 0) {
-                throw new ServiceException("Livre suprimé par une autre transaction");
-            }
-            int nb2 = getMembreDAO().preter(idMembre);
-            if(nb2 == 0) {
-                throw new ServiceException("Membre suprimé par une autre transaction");
-            }
-            getCx().commit();
-             */
 
         } catch(Exception exception) {
-            try {
-                getCx().rollback();
-            } catch(ConnexionException connexionException) {
-                throw new ServiceException(connexionException);
-            }
             throw new ServiceException(exception);
         }
     }
@@ -324,14 +294,5 @@ public class PretService extends Services {
      */
     private void setReservationDAO(ReservationDAO reservation) {
         this.reservationDAO = reservation;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.cx</code>.
-     *
-     * @return La variable d'instance <code>this.cx</code>
-     */
-    public Connexion getCx() {
-        return this.cx;
     }
 }
