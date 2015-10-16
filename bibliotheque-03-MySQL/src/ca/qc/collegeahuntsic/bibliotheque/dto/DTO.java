@@ -23,4 +23,20 @@ public class DTO extends Object implements Serializable {
         super();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        boolean equals = this == obj;
+        if(!equals) {
+            equals = obj != null
+                && obj instanceof DTO;
+        }
+        return equals;
+    }
+
+    @Override
+    public int hashCode() {
+        // TODO Auto-generated method stub
+        return super.hashCode();
+    }
+
 }
