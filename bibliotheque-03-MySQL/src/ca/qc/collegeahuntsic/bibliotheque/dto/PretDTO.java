@@ -1,6 +1,6 @@
 // Fichier LivreDTO.java
 // Auteur : Dragons Vicieux
-// Date de création : 2015-09-18
+// Date de création : 2015-10-16
 
 package ca.qc.collegeahuntsic.bibliotheque.dto;
 
@@ -17,9 +17,9 @@ public class PretDTO extends DTO {
 
     private int idPret;
 
-    private MembreDTO idMembre;
+    private MembreDTO membre;
 
-    private int idLivre;
+    private LivreDTO livre;
 
     private Timestamp datePret;
 
@@ -48,39 +48,39 @@ public class PretDTO extends DTO {
     }
 
     /**
-     * Getter de la variable d'instance <code>this.idMembre</code>.
+     * Getter de la variable d'instance <code>this.membre</code>.
      *
-     * @return La variable d'instance <code>this.idMembre</code>
+     * @return La variable d'instance <code>this.membre</code>
      */
-    public MembreDTO getIdMembre() {
-        return this.idMembre;
+    public MembreDTO getMembre() {
+        return this.membre;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.idMembre</code>.
+     * Setter de la variable d'instance <code>this.membre</code>.
      *
-     * @param idMembre La valeur à utiliser pour la variable d'instance <code>this.idMembre</code>
+     * @param membre La valeur à utiliser pour la variable d'instance <code>this.membre</code>
      */
-    public void setIdMembre(MembreDTO idMembre) {
-        this.idMembre = idMembre;
+    public void setMembre(MembreDTO membre) {
+        this.membre = membre;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.idLivre</code>.
+     * Getter de la variable d'instance <code>this.livre</code>.
      *
-     * @return La variable d'instance <code>this.idLivre</code>
+     * @return La variable d'instance <code>this.livre</code>
      */
-    public LivreDTO getIdLivre() {
-        return this.idLivre;
+    public LivreDTO getLivre() {
+        return this.livre;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.idLivre</code>.
+     * Setter de la variable d'instance <code>this.livre</code>.
      *
-     * @param idLivre La valeur à utiliser pour la variable d'instance <code>this.idLivre</code>
+     * @param livre La valeur à utiliser pour la variable d'instance <code>this.livre</code>
      */
-    public void setIdLivre(LivreDTO idLivre) {
-        this.idLivre = idLivre;
+    public void setLivre(LivreDTO livre) {
+        this.livre = livre;
     }
 
     /**
