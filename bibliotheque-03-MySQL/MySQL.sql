@@ -14,16 +14,13 @@ CREATE TABLE membre (
 
 CREATE TABLE livre (
 	idLivre         INTEGER(3) 		AUTO_INCREMENT CHECK(idLivre > 0) ,
-	titre           VARCHAR(10) 	NOT NULL,
-	auteur          VARCHAR(10) 	NOT NULL,
-	dateAcquisition TIMESTAMP 		NOT NULL,
-	idMembre        INTEGER(3),
-	datePret        TIMESTAMP,
-	CONSTRAINT 		cleLivre 		PRIMARY KEY (idLivre),
-	CONSTRAINT 		refPretMembre 	FOREIGN KEY (idMembre) REFERENCES membre (idMembre)
+	titre           VARCHAR(100) 	NOT NULL,
+	auteur          VARCHAR(100) 	NOT NULL,
+	dateAcquisition TIMESTAMP(3) 	NOT NULL,
+	CONSTRAINT 		cleLivre 		PRIMARY KEY (idLivre)
 );
 
-CREATE table pret (
+CREATE TABLE pret (
 	idPret 		INTEGER(3) 	AUTO_INCREMENT 	CHECK (idPret > 0),
 	idMembre 	INTEGER(3)  CHECK (idMembre > 0),
 	idLivre 	INTEGER(3) 	CHECK (idLivre > 0),
@@ -35,10 +32,10 @@ CREATE table pret (
 );
 
 CREATE TABLE reservation (
-	idReservation   INTEGER(3),
-	idMembre        INTEGER(3),
-	idLivre         INTEGER(3),
-	dateReservation TIMESTAMP,
+	idReservation   INTEGER(3)	AUTO_INCREMENT 	CHECK (idReservation > 0),
+	idMembre        INTEGER(3)	CHECK (idMembre > 0),
+	idLivre         INTEGER(3)	CHECK (idLivre > 0),
+	dateReservation TIMESTAMP(3),
 	CONSTRAINT 		cleReservation 			PRIMARY KEY (idReservation),
 	CONSTRAINT 		cleCandidateReservation UNIQUE (idMembre,idLivre),
 	CONSTRAINT 		refReservationMembre 	FOREIGN KEY (idMembre) 	REFERENCES membre (idMembre)
