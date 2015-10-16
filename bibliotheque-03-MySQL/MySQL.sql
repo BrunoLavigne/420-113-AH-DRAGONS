@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS reservation 	CASCADE;
+DROP TABLE IF EXISTS pret 			CASCADE;
 DROP TABLE IF EXISTS livre 			CASCADE;
 DROP TABLE IF EXISTS membre 		CASCADE;
 
@@ -36,8 +37,8 @@ CREATE TABLE reservation (
 	idMembre        INTEGER(3)	CHECK (idMembre > 0),
 	idLivre         INTEGER(3)	CHECK (idLivre > 0),
 	dateReservation TIMESTAMP(3),
-	CONSTRAINT 		cleReservation 			PRIMARY KEY (idReservation),
-	CONSTRAINT 		cleCandidateReservation UNIQUE (idMembre,idLivre),
+	CONSTRAINT 		clePrimaireReservation	PRIMARY KEY (idReservation),
+	CONSTRAINT 		cleEtrangereReservation UNIQUE (idMembre,idLivre),
 	CONSTRAINT 		refReservationMembre 	FOREIGN KEY (idMembre) 	REFERENCES membre (idMembre)
 	  ON DELETE CASCADE,
 	CONSTRAINT 		refReservationLivre 	FOREIGN KEY (idLivre) 	REFERENCES livre (idLivre)
