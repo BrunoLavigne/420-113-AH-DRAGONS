@@ -33,7 +33,7 @@ CREATE TABLE pret (
 );
 
 CREATE TABLE reservation (
-	idReservation   INTEGER(3)	AUTO_INCREMENT 	CHECK (idReservation > 0),
+	idReservation   INTEGER(3)	AUTO_INCREMENT 	CHECK (idReservation > 0) ,
 	idMembre        INTEGER(3)	CHECK (idMembre > 0),
 	idLivre         INTEGER(3)	CHECK (idLivre > 0),
 	dateReservation TIMESTAMP(3),
