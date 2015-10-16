@@ -23,6 +23,10 @@ public class ReservationDTO extends DTO {
     private LivreDTO livreDTO;
 
     private Timestamp dateReservation;
+    
+    public ReservationDTO() {
+        
+    }
 
     // Region Getters and Setters
     /**
@@ -41,42 +45,6 @@ public class ReservationDTO extends DTO {
      */
     public void setIdReservation(int idReservation) {
         this.idReservation = idReservation;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.idLivre</code>.
-     *
-     * @return La variable d'instance <code>this.idLivre</code>
-     */
-    public int getIdLivre() {
-        return this.idLivre;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.idLivre</code>.
-     *
-     * @param idLivre La valeur à utiliser pour la variable d'instance <code>this.idLivre</code>
-     */
-    public void setIdLivre(int idLivre) {
-        this.idLivre = idLivre;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.idMembre</code>.
-     *
-     * @return La variable d'instance <code>this.idMembre</code>
-     */
-    public int getIdMembre() {
-        return this.idMembre;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.idMembre</code>.
-     *
-     * @param idMembre La valeur à utiliser pour la variable d'instance <code>this.idMembre</code>
-     */
-    public void setIdMembre(int idMembre) {
-        this.idMembre = idMembre;
     }
 
     /**
