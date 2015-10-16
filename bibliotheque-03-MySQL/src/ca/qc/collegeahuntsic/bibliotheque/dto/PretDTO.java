@@ -17,7 +17,7 @@ public class PretDTO extends DTO {
 
     private int idPret;
 
-    private int idMembre;
+    private MembreDTO idMembre;
 
     private int idLivre;
 
@@ -52,7 +52,7 @@ public class PretDTO extends DTO {
      *
      * @return La variable d'instance <code>this.idMembre</code>
      */
-    public int getIdMembre() {
+    public MembreDTO getIdMembre() {
         return this.idMembre;
     }
 
@@ -61,7 +61,7 @@ public class PretDTO extends DTO {
      *
      * @param idMembre La valeur à utiliser pour la variable d'instance <code>this.idMembre</code>
      */
-    public void setIdMembre(int idMembre) {
+    public void setIdMembre(MembreDTO idMembre) {
         this.idMembre = idMembre;
     }
 
@@ -70,7 +70,7 @@ public class PretDTO extends DTO {
      *
      * @return La variable d'instance <code>this.idLivre</code>
      */
-    public int getIdLivre() {
+    public LivreDTO getIdLivre() {
         return this.idLivre;
     }
 
@@ -79,7 +79,7 @@ public class PretDTO extends DTO {
      *
      * @param idLivre La valeur à utiliser pour la variable d'instance <code>this.idLivre</code>
      */
-    public void setIdLivre(int idLivre) {
+    public void setIdLivre(LivreDTO idLivre) {
         this.idLivre = idLivre;
     }
 
