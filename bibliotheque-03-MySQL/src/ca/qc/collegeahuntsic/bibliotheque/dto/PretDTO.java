@@ -19,7 +19,7 @@ public class PretDTO extends DTO {
 
     private MembreDTO idMembre;
 
-    private LivreDTO idLivre;
+    private int idLivre;
 
     private Timestamp datePret;
 
