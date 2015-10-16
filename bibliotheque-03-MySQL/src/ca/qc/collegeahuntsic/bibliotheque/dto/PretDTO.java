@@ -17,17 +17,11 @@ public class PretDTO extends DTO {
 
     private int idPret;
 
-    private MembreDTO membre;
+    private MembreDTO membreDTO;
 
-    private LivreDTO livre;
+    private LivreDTO livreDTO;
 
     private Timestamp datePret;
-
-    private Timestamp dateRetour;
-
-    public PretDTO() {
-        super();
-    }
 
     /**
      * Getter de la variable d'instance <code>this.idPret</code>.
@@ -48,39 +42,39 @@ public class PretDTO extends DTO {
     }
 
     /**
-     * Getter de la variable d'instance <code>this.membre</code>.
+     * Getter de la variable d'instance <code>this.membreDTO</code>.
      *
-     * @return La variable d'instance <code>this.membre</code>
+     * @return La variable d'instance <code>this.membreDTO</code>
      */
-    public MembreDTO getMembre() {
-        return this.membre;
+    public MembreDTO getMembreDTO() {
+        return this.membreDTO;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.membre</code>.
+     * Setter de la variable d'instance <code>this.membreDTO</code>.
      *
-     * @param membre La valeur à utiliser pour la variable d'instance <code>this.membre</code>
+     * @param membreDTO La valeur à utiliser pour la variable d'instance <code>this.membreDTO</code>
      */
-    public void setMembre(MembreDTO membre) {
-        this.membre = membre;
+    public void setMembreDTO(MembreDTO membreDTO) {
+        this.membreDTO = membreDTO;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.livre</code>.
+     * Getter de la variable d'instance <code>this.livreDTO</code>.
      *
-     * @return La variable d'instance <code>this.livre</code>
+     * @return La variable d'instance <code>this.livreDTO</code>
      */
-    public LivreDTO getLivre() {
-        return this.livre;
+    public LivreDTO getLivreDTO() {
+        return this.livreDTO;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.livre</code>.
+     * Setter de la variable d'instance <code>this.livreDTO</code>.
      *
-     * @param livre La valeur à utiliser pour la variable d'instance <code>this.livre</code>
+     * @param livreDTO La valeur à utiliser pour la variable d'instance <code>this.livreDTO</code>
      */
-    public void setLivre(LivreDTO livre) {
-        this.livre = livre;
+    public void setLivreDTO(LivreDTO livreDTO) {
+        this.livreDTO = livreDTO;
     }
 
     /**
@@ -117,6 +111,12 @@ public class PretDTO extends DTO {
      */
     public void setDateRetour(Timestamp dateRetour) {
         this.dateRetour = dateRetour;
+    }
+
+    private Timestamp dateRetour;
+
+    public PretDTO() {
+        super();
     }
 
 }

@@ -183,7 +183,7 @@ public class Bibliotheque {
 
                 LivreDTO livreDTO = new LivreDTO();
 
-                livreDTO.setIdLivre(readInt(tokenizer));
+                //livreDTO.setIdLivre(readInt(tokenizer));
                 livreDTO.setTitre(readString(tokenizer));
                 livreDTO.setAuteur(readString(tokenizer));
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
@@ -231,7 +231,7 @@ public class Bibliotheque {
             } else if("inscrire".startsWith(command)) {
 
                 MembreDTO membreDTO = new MembreDTO();
-                membreDTO.setIdMembre(readInt(tokenizer));
+                //membreDTO.setIdMembre(readInt(tokenizer));
                 membreDTO.setNom(readString(tokenizer));
                 membreDTO.setTelephone(readLong(tokenizer));
                 membreDTO.setLimitePret(readInt(tokenizer));
@@ -249,7 +249,7 @@ public class Bibliotheque {
                 // TRANSACTION RESERVER ( <idReservation> <idLivre> <idMembre> )
 
                 ReservationDTO reservationDTO = new ReservationDTO();
-                reservationDTO.setIdReservation(readInt(tokenizer));
+                //reservationDTO.setIdReservation(readInt(tokenizer));
 
                 LivreDTO livreDTO = new LivreDTO();
                 livreDTO.setIdLivre(readInt(tokenizer));
@@ -316,10 +316,7 @@ public class Bibliotheque {
                         System.out.println("> Id: "
                             + livre.getIdLivre()
                             + "\n\tTitre: "
-                            + livre.getTitre()
-                            + "\n\tDate de prêt: "
-                            + livre.getDatePret()
-                            + "\n");
+                            + livre.getTitre());
                     }
                 }
 
