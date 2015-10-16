@@ -1,20 +1,20 @@
 -- *********** cas sans erreur **********
 --
 -- création des livres
-acquerir 1 t1 a1 1999-01-03
-acquerir 2 t2 a2 1999-01-04
-acquerir 3 t3 a1 1999-01-05
+acquerir t1 a1 1999-01-03
+acquerir t2 a2 1999-01-04
+acquerir t3 a1 1999-01-05
 --
 -- création des membres
-inscrire 1 n1 8198218001 1
-inscrire 2 n2 8198218002 2
-inscrire 3 n3 8198218002 2
+inscrire n1 8198218001 1
+inscrire n2 8198218002 2
+inscrire n3 8198218002 2
 --
 -- préts
 preter 1 1
 renouveler 1
-reserver 1 1 2
-reserver 2 1 3
+reserver 1 2
+reserver 1 3
 retourner 1
 utiliser 1 2 1
 retourner 2
@@ -25,12 +25,12 @@ annuler 2
 -- *** Livres ***
 --
 -- livre existe deja
-acquerir 1 t1 a1 1999-01-03
+acquerir t1 a1 1999-01-03
 --
 -- *** Membres ***
 --
 -- membre existe déjà
-inscrire 1 n1 8198218001 1
+inscrire n1 8198218001 1
 --
 -- *** Prêts ***
 --
@@ -50,8 +50,8 @@ preter 1 2
 preter 2 1
 --
 -- réservation d'un livre
-reserver 1 1 2
-reserver 2 1 3
+reserver 1 2
+reserver 1 3
 --
 -- retour du livre 1
 retourner 1
@@ -73,11 +73,11 @@ preter 3 2
 --
 -- erreur : membre inexistant
 --
-reserver 3 2 998
+reserver 2 998
 --
 -- erreur : no réservation existant
 --
-reserver 2 2 3
+reserver 2 3
 --
 -- prendre deuxième réservation dans la file
 --
