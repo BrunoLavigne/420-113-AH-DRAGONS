@@ -24,10 +24,6 @@ public class LivreDTO extends DTO {
 
     private Timestamp dateAcquisition;
 
-    private int idMembre;
-
-    private Timestamp datePret;
-
     public LivreDTO() {
         super();
     }
@@ -106,40 +102,5 @@ public class LivreDTO extends DTO {
         this.dateAcquisition = dateAcquisition;
     }
 
-    /**
-     * Getter de la variable d'instance <code>this.idMembre</code>.
-     *
-     * @return La variable d'instance <code>this.idMembre</code>
-     */
-    public int getIdMembre() {
-        return this.idMembre;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.idMembre</code>.
-     *
-     * @param idMembre La valeur à utiliser pour la variable d'instance <code>this.idMembre</code>
-     */
-    public void setIdMembre(int idMembre) {
-        this.idMembre = idMembre;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.datePret</code>.
-     *
-     * @return La variable d'instance <code>this.datePret</code>
-     */
-    public Timestamp getDatePret() {
-        return this.datePret;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.datePret</code>.
-     *
-     * @param datePret La valeur à utiliser pour la variable d'instance <code>this.datePret</code>
-     */
-    public void setDatePret(Timestamp datePret) {
-        this.datePret = datePret;
-    }
     // EndRegion Getters and Setters
 }
