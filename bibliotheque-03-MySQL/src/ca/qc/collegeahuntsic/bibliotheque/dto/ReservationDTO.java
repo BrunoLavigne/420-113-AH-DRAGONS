@@ -18,9 +18,9 @@ public class ReservationDTO extends DTO {
 
     private int idReservation;
 
-    private int idLivre;
-
-    private int idMembre;
+    private MembreDTO membreDTO;
+    
+    private LivreDTO livreDTO;
 
     private Timestamp dateReservation;
 
@@ -97,4 +97,20 @@ public class ReservationDTO extends DTO {
         this.dateReservation = dateReservation;
     }
     //EndRegion Getters and Setters
+
+    private MembreDTO getMembreDTO() {
+        return this.membreDTO;
+    }
+
+    private void setMembreDTO(MembreDTO membreDTO) {
+        this.membreDTO = membreDTO;
+    }
+
+    private LivreDTO getLivreDTO() {
+        return this.livreDTO;
+    }
+
+    private void setLivreDTO(LivreDTO livreDTO) {
+        this.livreDTO = livreDTO;
+    }
 }
