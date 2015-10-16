@@ -5,6 +5,7 @@
 package ca.qc.collegeahuntsic.bibliotheque.dto;
 
 import java.sql.Timestamp;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 /**
  * DTO de la table <code>livre</code>.
@@ -26,6 +27,22 @@ public class LivreDTO extends DTO {
 
     public LivreDTO() {
         super();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean equals = this == obj;
+        if(!equals) {
+            equals = obj != null
+                && obj instanceof LivreDTO;
+            if(equals) {
+                LivreDTO livreDTO = (LivreDTO) obj;
+                EqualsBuilder equalBuilder = new EqualsBuilder();
+                equalBuilder.appendSuper(super.equals(livreDTO));
+                //...
+                //...
+            }
+        }
     }
 
     // Region Getters and Setters
