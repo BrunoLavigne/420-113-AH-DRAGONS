@@ -1,6 +1,6 @@
 // Fichier LivreDTO.java
 // Auteur : Dragons Vicieux
-// Date de création : 2015-09-18
+// Date de création : 2015-10-16
 
 package ca.qc.collegeahuntsic.bibliotheque.dto;
 
