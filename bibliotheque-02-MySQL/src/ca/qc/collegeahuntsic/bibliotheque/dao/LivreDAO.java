@@ -7,8 +7,12 @@ package ca.qc.collegeahuntsic.bibliotheque.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
@@ -56,6 +60,14 @@ public class LivreDAO extends DAO {
     private final static String RETOUR_REQUEST = "UPDATE livre "
         + "SET idMembre = null, datePret = null "
         + "WHERE idLivre = ?";
+    
+    private final static int NOMBRE_SEMAINES_EN_RETARD = 4;
+
+    private final static String FIND_PRETS_EN_RETARD = "SELECT idLivre, titre, auteur, idmembre, datePret "
+        + "FROM livre "
+        + "WHERE    datePret IS NOT NULL "
+        + "AND      datePret < ? "
+        + "ORDER BY datePret ASC";
 
     /**
      *
@@ -369,4 +381,57 @@ public class LivreDAO extends DAO {
                 sqlException);
         }
     }
+    
+    /**
+    *
+    * Trouve les livres dont le prêt est en retard
+    *
+    * @param dateJour - La date du jour
+    * @return List<LivreDTO> - La liste des livres en retard
+    * @throws DAOException - S'il y a une erreur avec la base de données
+    */
+   public List<LivreDTO> findPretsEnRetard(Date dateJour) throws DAOException {
+
+       // La liste contenant les livres en retard
+       List<LivreDTO> livresRetard = Collections.EMPTY_LIST;
+
+       try(
+           PreparedStatement statementGetAllLivresRetard = (getConnection().prepareStatement(LivreDAO.FIND_PRETS_EN_RETARD));) {
+
+           GregorianCalendar gregorianCalendar = new GregorianCalendar();
+           gregorianCalendar.setTime(dateJour);
+           gregorianCalendar.add(Calendar.WEEK_OF_MONTH,
+               -LivreDAO.NOMBRE_SEMAINES_EN_RETARD);
+
+           Timestamp timestampRetard = new Timestamp(gregorianCalendar.getTimeInMillis());
+
+           statementGetAllLivresRetard.setTimestamp(1,
+               timestampRetard);
+
+           try(
+               ResultSet resultSet = statementGetAllLivresRetard.executeQuery()) {
+
+               LivreDTO livreDTO = null;
+
+               if(resultSet.next()) {
+                   livresRetard = new ArrayList<>();
+                   do {
+                       livreDTO = new LivreDTO();
+                       livreDTO.setIdLivre(resultSet.getInt(1));
+                       livreDTO.setTitre(resultSet.getString(2));
+                       livreDTO.setAuteur(resultSet.getString(3));
+                       livreDTO.setIdMembre(resultSet.getInt(4));
+                       livreDTO.setDatePret(resultSet.getTimestamp(5));
+                       livresRetard.add(livreDTO);
+                   } while(resultSet.next());
+               }
+           }
+       } catch(SQLException sqlException) {
+           throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+               sqlException);
+       }
+
+       return livresRetard;
+
+   }
 }

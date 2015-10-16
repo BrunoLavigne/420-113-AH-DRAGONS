@@ -12,6 +12,9 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.StringTokenizer;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
@@ -84,8 +87,7 @@ public class Bibliotheque {
                 reader.close();
             }
         } catch(Exception exception) {
-            // TODO CHECK & TEST runtime error. Erreur présente au préalable qui n'était pas traitée???
-            // throw new BibliothequeException(exception);
+            throw new BibliothequeException(exception);
         } finally {
             getGestionBiblio().fermer();
         }
@@ -297,6 +299,30 @@ public class Bibliotheque {
 
                 getGestionBiblio().getLivreDAO().findByTitre(readString(tokenizer) /* mot */);
 
+            } else if("listerPretsEnRetard".startsWith(command)) {
+
+                GregorianCalendar calendrier = new GregorianCalendar();
+                calendrier.add(Calendar.WEEK_OF_MONTH,
+                    10); // on prétend que la date actuelle est en avance de 5 semaines
+
+                Date dateJour = calendrier.getTime(); // prendre date (avancée) du jour
+                List<LivreDTO> listeRetards = getGestionBiblio().getLivreService().findPretsEnRetard(dateJour);
+
+                if(listeRetards.isEmpty()) {
+                    System.out.println("Aucun prêt n'est en retard!");
+                } else {
+
+                    for(LivreDTO livre : listeRetards) {
+                        System.out.println("> Id: "
+                            + livre.getIdLivre()
+                            + "\n\tTitre: "
+                            + livre.getTitre()
+                            + "\n\tDate de prêt: "
+                            + livre.getDatePret()
+                            + "\n");
+                    }
+                }
+
             } else if("--".startsWith(command)) {
 
                 // TODO empty block
@@ -305,7 +331,6 @@ public class Bibliotheque {
             /* ***********************   */
             /* TRANSACTION NON RECONNUEE */
             /* ***********************   */
-
             else {
                 System.out.println("  Transactions non reconnue.  Essayer \"aide\"");
             }

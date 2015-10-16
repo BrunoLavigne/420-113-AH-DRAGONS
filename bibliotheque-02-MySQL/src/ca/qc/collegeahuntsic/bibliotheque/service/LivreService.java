@@ -4,6 +4,7 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
+import java.util.Date;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
@@ -253,6 +254,28 @@ public class LivreService extends Services {
         } catch(DAOException daoexception) {
             throw new ServiceException(daoexception);
         }
+    }
+
+    /**
+     *
+     * Trouve les livres dont le prêt est en retard
+     *
+     * @param dateJour - La date du jour
+     * @return List<LivreDTO> - La liste des livres en retard
+     * @throws ServiceException - Si la date du jour est <code>null</code>
+     */
+    public List<LivreDTO> findPretsEnRetard(Date dateJour) throws ServiceException {
+
+        // Vérifier si la date du jour est valide (exception sinon)
+        if(dateJour != null) {
+            try {
+                return getLivreDAO().findPretsEnRetard(dateJour);
+            } catch(DAOException daoexception) {
+                throw new ServiceException(daoexception);
+            }
+        }
+        throw new ServiceException("La date du jour ne peut être null");
+
     }
 
     // GETTERS ET SETTERS
