@@ -4,7 +4,6 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.dto;
 
-
 import java.beans.BeanInfo;
 import java.beans.IndexedPropertyDescriptor;
 import java.beans.IntrospectionException;
@@ -30,7 +29,6 @@ public class DTO extends Object implements Serializable {
     /**
      *
      * Crée un nouveau DTO vide.
-     *
      */
     public DTO() {
         super();
@@ -59,7 +57,7 @@ public class DTO extends Object implements Serializable {
      * <br />
      * Note that it is generally necessary to override the hashCode method whenever this method is overridden, so as to maintain the general
      * contract for the hashCode method, which states that equal objects must have equal hash codes.
-     * 
+     *
      * @param obj The reference object with which to compare
      * @return <code>true</code> if this object is the same as the obj argument; <code>false</code> otherwise
      */
@@ -93,7 +91,7 @@ public class DTO extends Object implements Serializable {
      * As much as is reasonably practical, the hashCode method defined by class Object does return distinct integers for distinct objects (this
      * is typically implemented by converting the internal address of the object into an integer, but this implementation technique is not
      * required by the Java<small><sup>TM</sup></small> programming language).
-     * 
+     *
      * @return A hash code value for this object
      */
     @Override
@@ -112,13 +110,13 @@ public class DTO extends Object implements Serializable {
      * which the object is an instance, the at-sign character '<code>@</code>', and the unsigned hexadecimal representation of the hash code of
      * the object. In other words, this method returns a string equal to the value of:
      * <blockquote>
-     * 
+     *
      * <pre>
      * getClass().getName()
      *         + '@'
      *         + Integer.toHexString(hashCode())
      * </pre>
-     * 
+     *
      * </blockquote>
      * </p>
      * @return A string representation of the object.
@@ -151,7 +149,7 @@ public class DTO extends Object implements Serializable {
                             + Constants.SPACE.toString()
                             + getter.invoke(this,
                                 (Object[]) null)
-                            + Constants.COMMA.toString();
+                                + Constants.COMMA.toString();
                     } catch(NullPointerException nullPointerException) {
                         // Nothing to do.
                     } catch(IllegalAccessException illegalAccessException) {
@@ -172,7 +170,5 @@ public class DTO extends Object implements Serializable {
             + Constants.CLOSING_BRACE.toString();
         return string;
     }
-   
-
 
 }

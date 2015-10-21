@@ -13,6 +13,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * DTO de la table <code>reservation</code>.
  *
  * @author Dragons Vicieux
+ *
  */
 public class ReservationDTO extends DTO {
 

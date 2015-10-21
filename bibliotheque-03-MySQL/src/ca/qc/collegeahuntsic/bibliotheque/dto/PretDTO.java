@@ -12,6 +12,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * DTO de la table <code>pret</code>.
  *
  * @author Dragons Vicieux
+ *
  */
 public class PretDTO extends DTO {
 

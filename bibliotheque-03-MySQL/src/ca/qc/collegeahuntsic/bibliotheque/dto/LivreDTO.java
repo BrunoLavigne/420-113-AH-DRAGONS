@@ -123,6 +123,7 @@ public class LivreDTO extends DTO {
     }
 
     /**
+     *
      * {@inheritDoc}
      */
     @Override
