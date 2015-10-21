@@ -33,7 +33,7 @@ public class ReservationDAO extends DAO {
         + "WHERE idReservation = ?";
 
     private final static String ADD_REQUEST = "INSERT INTO RESERVATION (idReservation, idlivre, idMembre, dateReservation) "
-        + "VALUES (?,?,?,CURRENT_TIMESTAMP)";
+        + "VALUES (?, ?, ?, ?)";
 
     private static final String DELETE_REQUEST = "DELETE FROM RESERVATION "
         + "WHERE idReservation = ?";
