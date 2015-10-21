@@ -139,15 +139,15 @@ public class PretService extends Services {
 
     /**
      *
-     * Trouve toutes les réservations.
+     * Trouve toutes les prêts.
      *
-     * @return La liste des réservations ; une liste vide sinon.
+     * @return La liste des prêts ; une liste vide sinon.
      * @throws ServiceException S'il y a une erreur avec la base de données.
      */
-    public List<ReservationDTO> getAll() throws ServiceException {
+    public List<PretDTO> getAll() throws ServiceException {
 
         try {
-            return getReservationDAO().getAll();
+            return getPretDAO().getAll();
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
@@ -156,16 +156,70 @@ public class PretService extends Services {
 
     /**
      *
-     * Trouve les réservations à partir d'un livre.
+     * Trouve les prêts non terminés d'un membre.
      *
-     * @param livreDTO Le livre à utiliser
-     * @return La liste des réservations correspondantes, triée par date de réservation croissante ; une liste vide sinon.
+     * @param idMembre - L'ID du membre à trouver
+     * @return La liste des prêts correspondants ; une liste vide sinon
      * @throws ServiceException S'il y a une erreur avec la base de données.
      */
-    public List<ReservationDTO> findByLivre(LivreDTO livreDTO) throws ServiceException {
+    public List<PretDTO> findByMembre(int idMembre) throws ServiceException {
 
         try {
-            return getReservationDAO().findByLivre(getLivreDAO().read(livreDTO.getIdLivre()));
+            return getPretDAO().findByMembre(getMembreDAO().read(idMembre));
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
+
+    }
+
+    /**
+     *
+     * Trouve les livres en cours d'emprunt.
+     *
+     * @param idLivre - L'ID du livre à trouver
+     * @return La liste des prêts correspondants ; une liste vide sinon
+     * @throws ServiceException S'il y a une erreur avec la base de données.
+     */
+    public List<PretDTO> findByLivre(int idLivre) throws ServiceException {
+
+        try {
+            return getPretDAO().findByLivre(getLivreDAO().read(idLivre));
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
+
+    }
+
+    /**
+     *
+     * TODO Auto-generated method javadoc
+     *
+     * @param datePret La date de prêt à trouver
+     * @return La liste des prêts correspondants ; une liste vide sinon
+     * @throws ServiceException
+     */
+    public List<PretDTO> findByDatePret(Timestamp datePret) throws ServiceException {
+
+        try {
+            return getPretDAO().findByDatePret(datePret);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
+
+    }
+
+    /**
+     *
+     * TODO Auto-generated method javadoc
+     *
+     * @param datePret La date de prêt à trouver
+     * @return La liste des prêts correspondants ; une liste vide sinon
+     * @throws ServiceException
+     */
+    public List<PretDTO> findByDateRetour(Timestamp datePret) throws ServiceException {
+
+        try {
+            return getPretDAO().findByDateRetour(datePret);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
