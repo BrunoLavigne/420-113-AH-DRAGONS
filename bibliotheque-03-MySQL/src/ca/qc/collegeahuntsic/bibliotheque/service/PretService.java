@@ -2,11 +2,14 @@
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
 import java.sql.Timestamp;
+import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.PretDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
@@ -33,9 +36,11 @@ public class PretService extends Services {
 
     private static final long serialVersionUID = 1L;
 
-    private LivreDAO livreDAO;
+    private PretDAO pretDAO;
 
     private MembreDAO membreDAO;
+
+    private LivreDAO livreDAO;
 
     private ReservationDAO reservationDAO;
 
@@ -49,13 +54,122 @@ public class PretService extends Services {
      * @param reservationDAO
      * @throws ServiceException
      */
-    public PretService(LivreDAO livreDAO,
+    public PretService(PretDAO pretDAO,
         MembreDAO membreDAO,
+        LivreDAO livreDAO,
         ReservationDAO reservationDAO) throws ServiceException {
 
-        setLivreDAO(livreDAO);
+        setPretDAO(pretDAO);
         setMembreDAO(membreDAO);
+        setLivreDAO(livreDAO);
         setReservationDAO(reservationDAO);
+    }
+
+    /**
+     *
+     * Ajoute une nouveau prêt.
+     *
+     * @param PretDTO La réservation à ajouter.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
+     */
+    public void add(PretDTO pretDTO) throws ServiceException {
+
+        try {
+            getPretDAO().add(pretDTO);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
+
+    }
+
+    /**
+     *
+     * Lit une prêt
+     *
+     * @param idpret L'ID du pret à lire.
+     * @return Le prêt qui correspond au ID reçu.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
+     */
+    public PretDTO read(int idPret) throws ServiceException {
+
+        try {
+            return getPretDAO().read(idPret);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
+
+    }
+
+    /**
+     *
+     * Met à jour un prêt.
+     *
+     * @param pretDTO Mettre à jour le prêt.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
+     */
+    public void update(PretDTO pretDTO) throws ServiceException {
+
+        try {
+            getPretDAO().update(pretDTO);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
+
+    /**
+     *
+     * Supprime un prêt.
+     *
+     * @param pretDTO Le prêt à supprimer.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
+     */
+    public void delete(PretDTO pretDTO) throws ServiceException {
+
+        try {
+            getPretDAO().delete(pretDTO);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
+
+    }
+
+    // End Opérations CRUD
+
+    // Region Opérations de recherche
+
+    /**
+     *
+     * Trouve toutes les réservations.
+     *
+     * @return La liste des réservations ; une liste vide sinon.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
+     */
+    public List<ReservationDTO> getAll() throws ServiceException {
+
+        try {
+            return getReservationDAO().getAll();
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
+
+    }
+
+    /**
+     *
+     * Trouve les réservations à partir d'un livre.
+     *
+     * @param livreDTO Le livre à utiliser
+     * @return La liste des réservations correspondantes, triée par date de réservation croissante ; une liste vide sinon.
+     * @throws ServiceException S'il y a une erreur avec la base de données.
+     */
+    public List<ReservationDTO> findByLivre(LivreDTO livreDTO) throws ServiceException {
+
+        try {
+            return getReservationDAO().findByLivre(getLivreDAO().read(livreDTO.getIdLivre()));
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        }
+
     }
 
     /**
@@ -295,4 +409,23 @@ public class PretService extends Services {
     private void setReservationDAO(ReservationDAO reservation) {
         this.reservationDAO = reservation;
     }
+
+    /**
+     * Getter de la variable d'instance <code>this.pretDAO</code>.
+     *
+     * @return La variable d'instance <code>this.pretDAO</code>
+     */
+    public PretDAO getPretDAO() {
+        return this.pretDAO;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.pretDAO</code>.
+     *
+     * @param pret La valeur à utiliser pour la variable d'instance <code>this.pretDAO</code>
+     */
+    public void setPretDAO(PretDAO pretDAO) {
+        this.pretDAO = pretDAO;
+    }
+
 }
