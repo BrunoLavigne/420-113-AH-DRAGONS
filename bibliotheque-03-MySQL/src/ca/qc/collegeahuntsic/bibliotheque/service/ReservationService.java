@@ -6,6 +6,12 @@ package ca.qc.collegeahuntsic.bibliotheque.service;
 
 import java.sql.Timestamp;
 import java.util.List;
+import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
