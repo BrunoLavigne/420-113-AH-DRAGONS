@@ -23,7 +23,7 @@ public class MembreDAO extends DAO {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String INSERT_REQUEST = "INSERT INTO membre (idMembre, nom, telephone, limitePret, nbPret) VALUES (?, ?, ?, ?, ?)";
+    private static final String ADD_REQUEST = "INSERT INTO membre (nom, telephone, limitePret, nbPret) VALUES (?, ?, ?, 0)";
 
     private static final String READ_REQUEST = "SELECT idMembre, nom, telephone, limitePret, nbPret "
         + "FROM membre "
@@ -59,17 +59,13 @@ public class MembreDAO extends DAO {
     public void add(MembreDTO membreDTO) throws DAOException {
 
         try(
-            PreparedStatement addPreparedStatement = getConnection().prepareStatement(INSERT_REQUEST)) {
-            addPreparedStatement.setInt(1,
-                membreDTO.getIdMembre());
-            addPreparedStatement.setString(2,
+            PreparedStatement addPreparedStatement = getConnection().prepareStatement(ADD_REQUEST)) {
+            addPreparedStatement.setString(1,
                 membreDTO.getNom());
-            addPreparedStatement.setLong(3,
+            addPreparedStatement.setLong(2,
                 membreDTO.getTelephone());
-            addPreparedStatement.setInt(4,
+            addPreparedStatement.setInt(3,
                 membreDTO.getLimitePret());
-            addPreparedStatement.setInt(5,
-                membreDTO.getNbPret());
             addPreparedStatement.execute();
         } catch(SQLException sqlException) {
             throw new DAOException(Integer.toString(sqlException.getErrorCode()),
