@@ -57,5 +57,17 @@ public class DAO implements Serializable {
     protected Connection getConnection() {
         return getConnexion().getConnection();
     }
+    
+    /**
+     * 
+     * TODO Auto-generated method javadoc
+     *
+     * @return
+     * @throws DAOException
+     */
+    protected int getPrimaryKey() throws DAOException  {
+        
+        // PreparedStatement createPreparedStatement = getConnection().prepareStatement(sql)
+    }
 
 }
