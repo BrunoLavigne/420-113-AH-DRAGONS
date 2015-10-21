@@ -23,8 +23,8 @@ CREATE TABLE livre (
 
 CREATE TABLE pret (
 	idPret 		INTEGER(3) 	AUTO_INCREMENT 	CHECK (idPret > 0),
-	idMembre 	INTEGER(3)  CHECK (idMembre > 0),
-	idLivre 	INTEGER(3) 	CHECK (idLivre > 0),
+	idMembre 	INTEGER(3)  NOT NULL CHECK (idMembre > 0),
+	idLivre 	INTEGER(3) 	NOT NULL CHECK (idLivre > 0),
 	datePret 	TIMESTAMP(3),
 	dateRetour 	TIMESTAMP(3) 		NULL,
 	CONSTRAINT 	clePrimairePret 	PRIMARY KEY (idPret),
