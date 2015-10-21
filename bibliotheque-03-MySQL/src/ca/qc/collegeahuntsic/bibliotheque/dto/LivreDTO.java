@@ -6,6 +6,7 @@ package ca.qc.collegeahuntsic.bibliotheque.dto;
 
 import java.sql.Timestamp;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * DTO de la table <code>livre</code>.
@@ -24,26 +25,6 @@ public class LivreDTO extends DTO {
     private String auteur;
 
     private Timestamp dateAcquisition;
-
-    public LivreDTO() {
-        super();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        boolean equals = this == obj;
-        if(!equals) {
-            equals = obj != null
-                && obj instanceof LivreDTO;
-            if(equals) {
-                LivreDTO livreDTO = (LivreDTO) obj;
-                EqualsBuilder equalBuilder = new EqualsBuilder();
-                equalBuilder.appendSuper(super.equals(livreDTO));
-                //...
-                //...
-            }
-        }
-    }
 
     // Region Getters and Setters
     /**
@@ -120,4 +101,37 @@ public class LivreDTO extends DTO {
     }
 
     // EndRegion Getters and Setters
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        boolean equals = this == obj;
+        if(!equals) {
+            equals = obj != null
+                && obj instanceof LivreDTO;
+            if(equals) {
+                LivreDTO livreDTO = (LivreDTO) obj;
+                EqualsBuilder equalsBuilder = new EqualsBuilder();
+                equalsBuilder.appendSuper(super.equals(livreDTO));
+                equalsBuilder.append(getIdLivre(),
+                    livreDTO.getIdLivre());
+                equals = equalsBuilder.isEquals();
+            }
+        }
+        return equals;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        HashCodeBuilder hashCodeBuilder = new HashCodeBuilder(459,
+            449);
+        hashCodeBuilder.appendSuper(super.hashCode());
+        hashCodeBuilder.append(getIdLivre());
+        return hashCodeBuilder.toHashCode();
+    }
+
 }

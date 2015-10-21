@@ -4,6 +4,9 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.dto;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * DTO de la table <code>membre</code>.
  *
@@ -24,10 +27,7 @@ public class MembreDTO extends DTO {
 
     private int nbPret;
 
-    public MembreDTO() {
-        super();
-    }
-
+    // Region Getters and Setters
     /**
      * Getter de la variable d'instance <code>this.idMembre</code>.
      *
@@ -116,5 +116,39 @@ public class MembreDTO extends DTO {
      */
     public void setNbPret(int nbPret) {
         this.nbPret = nbPret;
+    }
+
+    // EndRegion Getters and Setters
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        boolean equals = this == obj;
+        if(!equals) {
+            equals = obj != null
+                && obj instanceof MembreDTO;
+            if(equals) {
+                MembreDTO membreDTO = (MembreDTO) obj;
+                EqualsBuilder equalsBuilder = new EqualsBuilder();
+                equalsBuilder.appendSuper(super.equals(membreDTO));
+                equalsBuilder.append(getIdMembre(),
+                    membreDTO.getIdMembre());
+                equals = equalsBuilder.isEquals();
+            }
+        }
+        return equals;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        HashCodeBuilder hashCodeBuilder = new HashCodeBuilder(461,
+            451);
+        hashCodeBuilder.appendSuper(super.hashCode());
+        hashCodeBuilder.append(getIdMembre());
+        return hashCodeBuilder.toHashCode();
     }
 }

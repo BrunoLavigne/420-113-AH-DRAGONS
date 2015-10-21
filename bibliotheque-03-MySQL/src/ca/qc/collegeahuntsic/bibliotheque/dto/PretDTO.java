@@ -5,6 +5,8 @@
 package ca.qc.collegeahuntsic.bibliotheque.dto;
 
 import java.sql.Timestamp;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * DTO de la table <code>pret</code>.
@@ -22,6 +24,10 @@ public class PretDTO extends DTO {
     private LivreDTO livreDTO;
 
     private Timestamp datePret;
+
+    private Timestamp dateRetour;
+
+    // Region Getters and Setters
 
     /**
      * Getter de la variable d'instance <code>this.idPret</code>.
@@ -113,10 +119,38 @@ public class PretDTO extends DTO {
         this.dateRetour = dateRetour;
     }
 
-    private Timestamp dateRetour;
+    // EndRegion Getters and Setters
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        boolean equals = this == obj;
+        if(!equals) {
+            equals = obj != null
+                && obj instanceof PretDTO;
+            if(equals) {
+                PretDTO pretDTO = (PretDTO) obj;
+                EqualsBuilder equalsBuilder = new EqualsBuilder();
+                equalsBuilder.appendSuper(super.equals(pretDTO));
+                equalsBuilder.append(getIdPret(),
+                    pretDTO.getIdPret());
+                equals = equalsBuilder.isEquals();
+            }
+        }
+        return equals;
+    }
 
-    public PretDTO() {
-        super();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        HashCodeBuilder hashCodeBuilder = new HashCodeBuilder(23,
+            13);
+        hashCodeBuilder.appendSuper(super.hashCode());
+        hashCodeBuilder.append(getIdPret());
+        return hashCodeBuilder.toHashCode();
     }
 
 }
