@@ -6,12 +6,6 @@ package ca.qc.collegeahuntsic.bibliotheque.service;
 
 import java.sql.Timestamp;
 import java.util.List;
-import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
@@ -200,6 +194,12 @@ public class ReservationService extends Services {
 
         try {
 
+            // Membre null // Livre null // pret du livre. pretDAO.findbylivre (si pret.isEmpty() faire une reservation puisqu'il n'est pas prêté // )
+            // extra: Le livre est prêté List(pretDTO) // boolean false // foreach pret in listPret // a ete emprunterParMembre = unMembreDTO.equals(pretDTO.).
+            //
+            // reservationDTO.setDateREservation(new Timestamp(System.currentTimeMillis()));
+            // add(reservationDTO);
+
             // Si la réservation existe déjà
 
             if(getReservationDAO().read(reservationDTO.getIdReservation()) != null) {
@@ -304,6 +304,17 @@ public class ReservationService extends Services {
 
         try {
 
+            // reservation existe // membre existe // livre existe // premier dans liste des reservation // le livre n'est pas prêter //
+            // nombre d'emprunt maximum ?
+            // annuler(uneReservationDTO);
+            // unMembreDTO.setNbPret(unMebreDTO.getNbPret()+1)
+            // getMembreDAO().update(unMembreDTO)
+            // PretDTO unPretDTO = new PretDTO()
+            // unPretDTO.setMembreDTO(unMembreDTO)
+            // unPretDTO.setLivreDTO(unLivreDTO)
+            // unPretDTO.setDate.................
+            // getPretDAO.add(unPretDTO)
+
             // Si la réservation existe déjà
 
             ReservationDTO uneReservationDTO;
@@ -399,6 +410,8 @@ public class ReservationService extends Services {
     public void annuler(ReservationDTO reservationDTO) throws ServiceException {
 
         try {
+
+            // reservation existe
 
             // Si la réservation existe
 

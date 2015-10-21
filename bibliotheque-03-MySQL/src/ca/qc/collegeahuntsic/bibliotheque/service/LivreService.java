@@ -8,9 +8,9 @@ import java.util.Date;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.PretDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
@@ -29,6 +29,8 @@ public class LivreService extends Services {
     private MembreDAO membreDAO;
 
     private ReservationDAO reservationDAO;
+
+    private PretDAO pretDAO;
 
     /**
      *
@@ -146,22 +148,6 @@ public class LivreService extends Services {
 
     /**
      *
-     * Trouve les livres à partir d'un membre.
-     *
-     * @param membreDTO - Le membre à utiliser.
-     * @return La liste des livres correspondants ; une liste vide sinon.
-     * @throws ServiceException S'il y a une erreur avec la base de données.
-     */
-    public List<LivreDTO> findByMembre(MembreDTO membreDTO) throws ServiceException {
-        try {
-            return getLivreDAO().findByMembre(membreDTO);
-        } catch(DAOException daoexception) {
-            throw new ServiceException(daoexception);
-        }
-    }
-
-    /**
-     *
      * Acquiert un livre.
      *
      * @param livreDTO - Le livre à ajouter.
@@ -179,36 +165,6 @@ public class LivreService extends Services {
             }
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
-        }
-    }
-
-    /**
-     *
-     * Emprunte un livre.
-     *
-     * @param livreDTO - Le livre à emprunter.
-     * @throws ServiceException S'il y a une erreur avec la base de données.
-     */
-    public void emprunter(LivreDTO livreDTO) throws ServiceException {
-        try {
-            getLivreDAO().emprunter(livreDTO);
-        } catch(DAOException daoexception) {
-            throw new ServiceException(daoexception);
-        }
-    }
-
-    /**
-     *
-     * Retourne un livre.
-     *
-     * @param livreDTO - Le livre à retourner.
-     * @throws ServiceException S'il y a une erreur avec la base de données.
-     */
-    public void retourner(LivreDTO livreDTO) throws ServiceException {
-        try {
-            getLivreDAO().retourner(livreDTO);
-        } catch(DAOException daoexception) {
-            throw new ServiceException(daoexception);
         }
     }
 
@@ -234,6 +190,12 @@ public class LivreService extends Services {
             unLivreDTO = getLivreDAO().read(livreDTO.getIdLivre());
 
             // Vérifie si le livre passé en paramètre est prêté à un membre.
+
+            // TODO chercher si le livre a des prêt
+            // FIND BY LIVRE sur pretDAO
+
+            // si le livre existe // pretDAO find by livre, si != null il est deja prêter // si pas prêter est-il reserver // sinnon vendre le livre
+
             if(getMembreDAO().read(unLivreDTO.getIdMembre()) != null) {
                 System.err.println("Le livre "
                     + livreDTO.getTitre()
@@ -241,6 +203,7 @@ public class LivreService extends Services {
                     + livreDTO.getIdMembre());
                 return;
             }
+
             // Vérifie si le livre passé en paramètre est réservé par un membre.
             if(getReservationDAO().read(livreDTO.getIdLivre()) != null) {
                 System.err.println("Le livre "
@@ -331,5 +294,23 @@ public class LivreService extends Services {
      */
     private void setReservationDAO(ReservationDAO reservationDAO) {
         this.reservationDAO = reservationDAO;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.pretDAO</code>.
+     *
+     * @return La variable d'instance <code>this.pretDAO</code>
+     */
+    public PretDAO getPretDAO() {
+        return this.pretDAO;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.pretDAO</code>.
+     *
+     * @param pretDAO La valeur à utiliser pour la variable d'instance <code>this.pretDAO</code>
+     */
+    public void setPretDAO(PretDAO pretDAO) {
+        this.pretDAO = pretDAO;
     }
 }
