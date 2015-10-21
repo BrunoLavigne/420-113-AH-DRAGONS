@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
@@ -81,7 +82,16 @@ public class ReservationDAO extends DAO {
                 reservationDTO.getLivreDTO().getIdLivre());
             addPreparedStatement.setInt(3,
                 reservationDTO.getMembreDTO().getIdMembre());
+
+            // TODO confirm this
+            Date date = new Date();
+            Timestamp timestamp = new Timestamp(date.getTime());
+
+            addPreparedStatement.setTimestamp(4,
+                timestamp);
+
             addPreparedStatement.executeUpdate();
+
         } catch(SQLException sqlException) {
             throw new DAOException(Integer.toString(sqlException.getErrorCode()),
                 sqlException);
