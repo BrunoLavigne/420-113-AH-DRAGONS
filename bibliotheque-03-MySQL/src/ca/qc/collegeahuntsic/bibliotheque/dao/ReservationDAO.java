@@ -311,8 +311,15 @@ public class ReservationDAO extends DAO {
                 if(rset.next()) {
                     ReservationDTO reservationDTO = new ReservationDTO();
                     reservationDTO.setIdReservation(rset.getInt(1));
-                    reservationDTO.getLivreDTO().setIdLivre(rset.getInt(2));
-                    reservationDTO.getMembreDTO().setIdMembre(rset.getInt(3));
+
+                    LivreDTO unLivreDTO = new LivreDTO();
+                    unLivreDTO.setIdLivre(rset.getInt(2));
+                    reservationDTO.setLivreDTO(unLivreDTO);
+
+                    MembreDTO unMembreDTO = new MembreDTO();
+                    unMembreDTO.setIdMembre(rset.getInt(3));
+                    reservationDTO.setMembreDTO(unMembreDTO);
+
                     reservationDTO.setDateReservation(rset.getTimestamp(4));
                     listeReservations.add(reservationDTO);
                     //listIsEmpty = false;
