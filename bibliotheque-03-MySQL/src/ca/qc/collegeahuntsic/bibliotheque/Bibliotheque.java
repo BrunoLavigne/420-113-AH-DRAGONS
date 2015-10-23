@@ -207,7 +207,6 @@ public class Bibliotheque {
             } else if("preter".startsWith(command)) {
 
                 // TRANSACTION PRETER ( <idPret> )
-
                 PretDTO pretDTO = new PretDTO();
                 pretDTO.setIdPret(readInt(tokenizer));
 
@@ -215,9 +214,12 @@ public class Bibliotheque {
 
             } else if("renouveler".startsWith(command)) {
 
-                // TRANSACTION RENOUVELER ( <idLivre> )
+                // TRANSACTION RENOUVELER ( <idPret> )
 
-                getGestionBiblio().getPretService().renouveler(readInt(tokenizer));
+                PretDTO pretDTO = new PretDTO();
+                pretDTO.setIdPret(readInt(tokenizer));
+
+                getGestionBiblio().getPretService().renouveler(pretDTO);
 
             } else if("retourner".startsWith(command)) {
 
