@@ -45,13 +45,13 @@ public class PretService extends Services {
     private ReservationDAO reservationDAO;
 
     /**
-     * Création d'une instance.
-     * La connection de l'instance de livre et de membre doit être la même que cx,
-     * afin d'assurer l'intégrité des transactions.
      *
-     * @param livreDAO
-     * @param membreDAO
-     * @param reservationDAO
+     * Crée le service de la table <code>pret</code>.
+     *
+     * @param pretDAO - Le DAO de la table <code>pret</code>
+     * @param membreDAO - Le DAO de la table <code>membre</code>
+     * @param livreDAO - Le DAO de la table <code>livre</code>
+     * @param reservationDAO - Le DAO de la table <code>reservation</code>
      * @throws ServiceException
      */
     public PretService(PretDAO pretDAO,
@@ -66,11 +66,10 @@ public class PretService extends Services {
     }
 
     /**
+     * Ajoute un nouveau prêt.
      *
-     * Ajoute une nouveau prêt.
-     *
-     * @param PretDTO La réservation à ajouter.
-     * @throws ServiceException S'il y a une erreur avec la base de données.
+     * @param pretDTO - Le prêt à ajouter
+     * @throws ServiceException - S'il y a une erreur avec la base de données
      */
     public void add(PretDTO pretDTO) throws ServiceException {
 
@@ -83,12 +82,11 @@ public class PretService extends Services {
     }
 
     /**
+     * Lit un prêt.
      *
-     * Lit une prêt
-     *
-     * @param idpret L'ID du pret à lire.
-     * @return Le prêt qui correspond au ID reçu.
-     * @throws ServiceException S'il y a une erreur avec la base de données.
+     * @param idPret - L'ID du prêt à lire
+     * @return
+     * @throws ServiceException - L'ID du prêt à lire
      */
     public PretDTO read(int idPret) throws ServiceException {
 
@@ -101,11 +99,10 @@ public class PretService extends Services {
     }
 
     /**
-     *
      * Met à jour un prêt.
      *
-     * @param pretDTO Mettre à jour le prêt.
-     * @throws ServiceException S'il y a une erreur avec la base de données.
+     * @param pretDTO - Le prêt à mettre à jour
+     * @throws ServiceException - S'il y a une erreur avec la base de données
      */
     public void update(PretDTO pretDTO) throws ServiceException {
 
@@ -117,11 +114,10 @@ public class PretService extends Services {
     }
 
     /**
-     *
      * Supprime un prêt.
      *
-     * @param pretDTO Le prêt à supprimer.
-     * @throws ServiceException S'il y a une erreur avec la base de données.
+     * @param pretDTO - Le prêt à supprimer
+     * @throws ServiceException - S'il y a une erreur avec la base de données
      */
     public void delete(PretDTO pretDTO) throws ServiceException {
 
@@ -138,11 +134,10 @@ public class PretService extends Services {
     // Region Opérations de recherche
 
     /**
+     * Trouve tous les prêts.
      *
-     * Trouve toutes les prêts.
-     *
-     * @return La liste des prêts ; une liste vide sinon.
-     * @throws ServiceException S'il y a une erreur avec la base de données.
+     * @return La liste des prêts ; une liste vide sinon
+     * @throws ServiceException - S'il y a une erreur avec la base de données
      */
     public List<PretDTO> getAll() throws ServiceException {
 
@@ -155,12 +150,11 @@ public class PretService extends Services {
     }
 
     /**
-     *
      * Trouve les prêts non terminés d'un membre.
      *
      * @param idMembre - L'ID du membre à trouver
      * @return La liste des prêts correspondants ; une liste vide sinon
-     * @throws ServiceException S'il y a une erreur avec la base de données.
+     * @throws ServiceException - S'il y a une erreur avec la base de données
      */
     public List<PretDTO> findByMembre(int idMembre) throws ServiceException {
 
@@ -173,12 +167,11 @@ public class PretService extends Services {
     }
 
     /**
-     *
      * Trouve les livres en cours d'emprunt.
      *
      * @param idLivre - L'ID du livre à trouver
      * @return La liste des prêts correspondants ; une liste vide sinon
-     * @throws ServiceException S'il y a une erreur avec la base de données.
+     * @throws ServiceException - S'il y a une erreur avec la base de données
      */
     public List<PretDTO> findByLivre(int idLivre) throws ServiceException {
 
@@ -191,12 +184,11 @@ public class PretService extends Services {
     }
 
     /**
+     * Trouve les prêts à partir d'une date de prêt.
      *
-     * TODO Auto-generated method javadoc
-     *
-     * @param datePret La date de prêt à trouver
+     * @param datePret - La date de prêt à trouver
      * @return La liste des prêts correspondants ; une liste vide sinon
-     * @throws ServiceException
+     * @throws ServiceException - S'il y a une erreur avec la base de données
      */
     public List<PretDTO> findByDatePret(Timestamp datePret) throws ServiceException {
 
@@ -209,12 +201,11 @@ public class PretService extends Services {
     }
 
     /**
+     * Trouve les prêts à partir d'une date de retour.
      *
-     * TODO Auto-generated method javadoc
-     *
-     * @param datePret La date de prêt à trouver
+     * @param datePret - La date de retour à trouver
      * @return La liste des prêts correspondants ; une liste vide sinon
-     * @throws ServiceException
+     * @throws ServiceException - S'il y a une erreur avec la base de données
      */
     public List<PretDTO> findByDateRetour(Timestamp datePret) throws ServiceException {
 
@@ -229,9 +220,9 @@ public class PretService extends Services {
     /**
      * Renouvelle le prêt d'un livre.
      *
-     * @param pretDTO
+     * @param pretDTO - Le prêt à renouveler
      * @throws ServiceException
-     * Si le prêt n'existe pas,
+     * - Si le prêt n'existe pas,
      * si le membre n'existe pas,
      * si le livre n'existe pas,
      * si le livre n'a pas encore été prêté,
@@ -309,11 +300,11 @@ public class PretService extends Services {
     }
 
     /**
-     * Le prêt à commencer
+     * Commence un prêt.
      *
-     * @param pretDTO
+     * @param pretDTO - Le prêt à commencer
      * @throws ServiceException
-     * Si le membre n'existe pas,
+     * - Si le membre n'existe pas,
      * si le livre n'existe pas,
      * si le livre a été prêté,
      * si le livre a été réservé,
@@ -390,7 +381,7 @@ public class PretService extends Services {
     /**
      * Retourne un livre.
      *
-     * @param pretDTO
+     * @param pretDTO - Le prêt à terminer
      * @throws ServiceException
      * Si le prêt n'existe pas,
      * si le membre n'existe pas,
