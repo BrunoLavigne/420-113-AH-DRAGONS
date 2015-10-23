@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
@@ -33,8 +32,8 @@ public class ReservationDAO extends DAO {
         + "FROM reservation "
         + "WHERE idReservation = ?";
 
-    private final static String ADD_REQUEST = "INSERT INTO RESERVATION (idReservation, idlivre, idMembre, dateReservation) "
-        + "VALUES (?, ?, ?, ?)";
+    private final static String ADD_REQUEST = "INSERT INTO RESERVATION (idlivre, idMembre, dateReservation) "
+        + "VALUES (?, ?, ?)";
 
     private static final String DELETE_REQUEST = "DELETE FROM RESERVATION "
         + "WHERE idReservation = ?";
@@ -76,19 +75,13 @@ public class ReservationDAO extends DAO {
     public void add(ReservationDTO reservationDTO) throws DAOException {
         try(
             PreparedStatement addPreparedStatement = getConnection().prepareStatement(ReservationDAO.ADD_REQUEST)) {
+
             addPreparedStatement.setInt(1,
-                reservationDTO.getIdReservation());
-            addPreparedStatement.setInt(2,
                 reservationDTO.getLivreDTO().getIdLivre());
-            addPreparedStatement.setInt(3,
+            addPreparedStatement.setInt(2,
                 reservationDTO.getMembreDTO().getIdMembre());
-
-            // TODO confirm this
-            Date date = new Date();
-            Timestamp timestamp = new Timestamp(date.getTime());
-
             addPreparedStatement.setTimestamp(4,
-                timestamp);
+                reservationDTO.getDateReservation());
 
             addPreparedStatement.executeUpdate();
 

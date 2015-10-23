@@ -289,7 +289,6 @@ public class ReservationService extends Services {
 
             laReservationDTO.setLivreDTO(unLivreDTO);
             laReservationDTO.setMembreDTO(unMembreDTO);
-            laReservationDTO.setIdReservation(reservationDTO.getIdReservation());
             laReservationDTO.setDateReservation(new Timestamp(System.currentTimeMillis()));
 
             add(laReservationDTO);
