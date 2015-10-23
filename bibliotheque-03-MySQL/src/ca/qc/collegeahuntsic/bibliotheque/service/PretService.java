@@ -296,7 +296,7 @@ public class PretService extends Services {
                 return;
             }
 
-            pretDTO.setDateRetour(new Timestamp(System.currentTimeMillis()));
+            pretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
             update(pretDTO);
 
         } catch(DAOException daoException) {
@@ -308,7 +308,7 @@ public class PretService extends Services {
     }
 
     /**
-     * Renouvelle le prêt d'un livre.
+     * Retourne un livre.
      *
      * @param pretDTO
      * @throws ServiceException
@@ -316,8 +316,7 @@ public class PretService extends Services {
      * si le membre n'existe pas,
      * si le livre n'existe pas,
      * si le livre n'a pas encore été prêté,
-     * si le livre a été prêté à quelqu'un d'autre,
-     * si le livre a été réservé ou s'il y a une erreur avec la base de données.
+     * si le livre a été prêté à quelqu'un d'autre ou s'il y a une erreur avec la base de données
      */
     public void retourner(PretDTO pretDTO) throws ServiceException {
 
