@@ -308,6 +308,84 @@ public class PretService extends Services {
     }
 
     /**
+     * Le prêt à commencer
+     *
+     * @param pretDTO
+     * @throws ServiceException
+     * Si le membre n'existe pas,
+     * si le livre n'existe pas,
+     * si le livre a été prêté,
+     * si le livre a été réservé,
+     * si le membre a atteint sa limite de prêt ou s'il y a une erreur avec la base de données
+     */
+    public void commencer(PretDTO pretDTO) throws ServiceException {
+
+        try {
+
+            // Si le membre n'existe pas
+            MembreDTO unMembreDTO;
+            if(getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre()) == null) {
+                System.err.println("Le membre : "
+                    + pretDTO.getMembreDTO().getIdMembre()
+                    + " n'existe pas");
+                return;
+            }
+            unMembreDTO = getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre());
+
+            LivreDTO unLivreDTO;
+            // Si le livre n'existe pas
+            if(getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre()) == null) {
+                System.err.println("Le livre est inexistant: "
+                    + pretDTO.getLivreDTO().getIdLivre());
+                return;
+            }
+            unLivreDTO = getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre());
+
+            // Si le livre a été prêté
+            List<PretDTO> listeDesPrets = getPretDAO().findByLivre(unLivreDTO);
+            if(!listeDesPrets.isEmpty()) {
+                System.err.println("Le livre : "
+                    + unLivreDTO.getIdLivre()
+                    + " a été prêté.");
+                return;
+            }
+
+            // Si le livre a été réservé
+            if(getReservationDAO().read(unLivreDTO.getIdLivre()) != null) {
+                System.err.println("Le livre : "
+                    + unLivreDTO.getIdLivre()
+                    + " est déjà prêté");
+                return;
+            }
+
+            // Si le membre a atteint sa limite de prêt
+            if(unMembreDTO.getLimitePret() == unMembreDTO.getLimitePret()) {
+                System.err.println("Le membre  : "
+                    + unMembreDTO.getIdMembre()
+                    + " a atteint sa limite de prêt");
+                return;
+            }
+
+            //Création du pret
+
+            PretDTO lePretDTO = new PretDTO();
+
+            lePretDTO.setLivreDTO(unLivreDTO);
+            lePretDTO.setMembreDTO(unMembreDTO);
+            lePretDTO.setIdPret(pretDTO.getIdPret());
+            lePretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
+
+            add(lePretDTO);
+
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
+        } catch(NullPointerException nullPointerException) {
+            throw new ServiceException(nullPointerException);
+        }
+
+    }
+
+    /**
      * Retourne un livre.
      *
      * @param pretDTO
