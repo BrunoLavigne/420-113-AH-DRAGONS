@@ -296,10 +296,9 @@ public class PretService extends Services {
                 return;
             }
 
-            unMembreDTO.setNbPret(unMembreDTO.getNbPret() - 1);
-            getMembreDAO().update(unMembreDTO);
-            pretDTO.setDateRetour(new Timestamp(System.currentTimeMillis()));
-            update(pretDTO);
+            PretDTO unPretDTO = new PretDTO();
+            unPretDTO.setDateRetour(new Timestamp(System.currentTimeMillis()));
+            getPretDAO().update(unPretDTO);
 
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
@@ -333,6 +332,49 @@ public class PretService extends Services {
                 return;
             }
             getPretDAO().read(pretDTO.getIdPret());
+
+            // Si le membre n'existe pas
+            MembreDTO unMembreDTO;
+            if(getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre()) == null) {
+                System.err.println("Le membre : "
+                    + pretDTO.getMembreDTO().getIdMembre()
+                    + " n'existe pas");
+                return;
+            }
+            unMembreDTO = getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre());
+
+            LivreDTO unLivreDTO;
+            // Si le livre n'existe pas
+            if(getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre()) == null) {
+                System.err.println("Le livre est inexistant: "
+                    + pretDTO.getLivreDTO().getIdLivre());
+                return;
+            }
+            unLivreDTO = getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre());
+
+            // Si le livre n'a pas encore été prêté
+            List<PretDTO> listeDesPrets = getPretDAO().findByLivre(unLivreDTO);
+            if(listeDesPrets.isEmpty()) {
+                System.err.println("Le livre : "
+                    + unLivreDTO.getIdLivre()
+                    + " n'a pas été prêté encore.");
+                return;
+            }
+
+            // Si le livre a été prêté à quelqu'un d'autre
+            for(PretDTO unPretDTO : listeDesPrets) {
+                if(!unMembreDTO.equals(unPretDTO.getMembreDTO())) {
+                    System.err.println("Le livre : "
+                        + unLivreDTO.getIdLivre()
+                        + " est déjà prêté au membre : "
+                        + unMembreDTO.getIdMembre());
+                    return;
+                }
+            }
+
+            PretDTO unPretDTO = new PretDTO();
+            unPretDTO.setLivreDTO(unLivreDTO);
+            getPretDAO().update(unPretDTO);
 
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
