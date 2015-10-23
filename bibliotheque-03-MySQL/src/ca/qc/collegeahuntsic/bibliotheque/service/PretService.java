@@ -10,6 +10,7 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
@@ -310,7 +311,6 @@ public class PretService extends Services {
     /**
      * Le prêt à commencer
      *
-     *
      * @param pretDTO
      * @throws ServiceException
      * Si le membre n'existe pas,
@@ -352,15 +352,16 @@ public class PretService extends Services {
             }
 
             // Si le livre a été réservé
-            if(getReservationDAO().read(unLivreDTO.getIdLivre()) != null) {
+            List<ReservationDTO> listeDesReservations = getReservationDAO().findByLivre(unLivreDTO);
+            if(!listeDesReservations.isEmpty()) {
                 System.err.println("Le livre : "
                     + unLivreDTO.getIdLivre()
-                    + " est déjà prêté");
+                    + " a été réservé.");
                 return;
             }
 
             // Si le membre a atteint sa limite de prêt
-            if(unMembreDTO.getLimitePret() == unMembreDTO.getLimitePret()) {
+            if(unMembreDTO.getNbPret() == unMembreDTO.getLimitePret()) {
                 System.err.println("Le membre  : "
                     + unMembreDTO.getIdMembre()
                     + " a atteint sa limite de prêt");
@@ -434,7 +435,7 @@ public class PretService extends Services {
             if(listeDesPrets.isEmpty()) {
                 System.err.println("Le livre : "
                     + unLivreDTO.getIdLivre()
-                    + " n'a pas été prêté encore.");
+                    + " n'a pas encore été prêté.");
                 return;
             }
 
@@ -449,7 +450,7 @@ public class PretService extends Services {
                 }
             }
 
-            pretDTO.getLivreDTO().getIdLivre();
+            pretDTO.setDateRetour(new Timestamp(System.currentTimeMillis()));
             update(pretDTO);
 
         } catch(DAOException daoException) {
