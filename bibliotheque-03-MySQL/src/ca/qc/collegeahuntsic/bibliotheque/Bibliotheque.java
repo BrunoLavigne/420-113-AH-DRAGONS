@@ -12,9 +12,6 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.StringTokenizer;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
@@ -226,7 +223,6 @@ public class Bibliotheque {
                 // TRANSACTION RENOUVELER ( <idPret> )
 
                 PretDTO pretDTO = new PretDTO();
-                pretDTO.setIdPret(readInt(tokenizer));
 
                 getGestionBiblio().getPretService().renouveler(pretDTO);
 
@@ -271,15 +267,11 @@ public class Bibliotheque {
                 Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
                 reservationDTO.setDateReservation(currentTimestamp);
 
-                //À FAIRE
                 getGestionBiblio().getReservationService().reserver(reservationDTO);
 
             } else if("utiliser".startsWith(command)) {
 
                 // TRANSACTION UTILISER ( <idReservation> <idLivre> <idMembre> )
-
-                ReservationDTO reservationDTO = new ReservationDTO();
-                reservationDTO.setIdReservation(readInt(tokenizer));
 
                 LivreDTO livreDTO = new LivreDTO();
                 livreDTO.setIdLivre(readInt(tokenizer));
@@ -287,9 +279,12 @@ public class Bibliotheque {
                 MembreDTO membreDTO = new MembreDTO();
                 membreDTO.setIdMembre(readInt(tokenizer));
 
-                getGestionBiblio().getReservationService().utiliser(reservationDTO,
-                    membreDTO,
-                    livreDTO);
+                ReservationDTO reservationDTO = new ReservationDTO();
+
+                reservationDTO.setLivreDTO(livreDTO);
+                reservationDTO.setMembreDTO(membreDTO);
+
+                getGestionBiblio().getReservationService().utiliser(reservationDTO);
 
             } else if("annuler".startsWith(command)) {
 
@@ -308,7 +303,9 @@ public class Bibliotheque {
 
                 getGestionBiblio().getLivreDAO().findByTitre(readString(tokenizer) /* mot */);
 
-            } else if("listerPretsEnRetard".startsWith(command)) {
+            }
+            /*
+             * else if("listerPretsEnRetard".startsWith(command)) {
 
                 GregorianCalendar calendrier = new GregorianCalendar();
                 calendrier.add(Calendar.WEEK_OF_MONTH,
@@ -329,7 +326,10 @@ public class Bibliotheque {
                     }
                 }
 
-            } else if("--".startsWith(command)) {
+            }
+             * */
+
+            else if("--".startsWith(command)) {
 
                 // TODO empty block
             }// ne rien faire; c'est un commentaire
