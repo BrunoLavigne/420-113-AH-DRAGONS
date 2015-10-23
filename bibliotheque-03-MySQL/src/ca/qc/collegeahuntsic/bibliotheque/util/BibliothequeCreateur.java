@@ -6,6 +6,7 @@ package ca.qc.collegeahuntsic.bibliotheque.util;
 
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.PretDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
@@ -31,6 +32,8 @@ public class BibliothequeCreateur {
 
     private MembreDAO membreDAO;
 
+    private PretDAO pretDAO;
+
     private ReservationDAO reservationDAO;
 
     private LivreService livreService;
@@ -44,11 +47,11 @@ public class BibliothequeCreateur {
     /**
      * Crée les services nécessaires à l'application bibliothèque.
      *
-     * @param typeServeur Type de serveur SQL de la BD
-     * @param schema Nom du schéma de la base de données
-     * @param nomUtilisateur Nom d'utilisateur sur le serveur SQL
-     * @param motPasse Mot de passe sur le serveur SQL
-     * @throws BibliothequeException S'il y a une erreur avec la base de données
+     * @param typeServeur - Type de serveur SQL de la BD
+     * @param schema - Nom du schéma de la base de données
+     * @param nomUtilisateur - Nom d'utilisateur sur le serveur SQL
+     * @param motPasse - Mot de passe sur le serveur SQL
+     * @throws BibliothequeException - S'il y a une erreur avec la base de données
      *
      */
     public BibliothequeCreateur(String typeServeur,
@@ -69,24 +72,29 @@ public class BibliothequeCreateur {
             LivreDAO unLivreDAO = new LivreDAO(getConnexion());
             //System.out.println(livreDAO.getConnection().toString());
             MembreDAO unMembreDAO = new MembreDAO(getConnexion());
+            PretDAO unPretDAO = new PretDAO(getConnexion());
             ReservationDAO uneReservationDAO = new ReservationDAO(getConnexion());
 
             setLivreDAO(unLivreDAO);
             setMembreDAO(unMembreDAO);
+            setPretDAO(unPretDAO);
             setReservationDAO(uneReservationDAO);
 
             setLivreService(new LivreService(getLivreDAO(),
                 getMembreDAO(),
+                getPretDAO(),
                 getReservationDAO()));
             setMembreService(new MembreService(getMembreDAO(),
                 getLivreDAO(),
                 getReservationDAO()));
-            setPretService(new PretService(getLivreDAO(),
+            setPretService(new PretService(getPretDAO(),
                 getMembreDAO(),
+                getLivreDAO(),
                 getReservationDAO()));
             setReservationService(new ReservationService(getLivreDAO(),
                 getMembreDAO(),
-                getReservationDAO()));
+                getReservationDAO(),
+                getPretDAO()));
 
         } catch(ServiceException serviceException) {
             throw new BibliothequeException(serviceException);
@@ -168,6 +176,14 @@ public class BibliothequeCreateur {
      */
     public void setMembreDAO(MembreDAO membreDAO) {
         this.membreDAO = membreDAO;
+    }
+
+    public PretDAO getPretDAO() {
+        return this.pretDAO;
+    }
+
+    public void setPretDAO(PretDAO pretDAO) {
+        this.pretDAO = pretDAO;
     }
 
     /**
