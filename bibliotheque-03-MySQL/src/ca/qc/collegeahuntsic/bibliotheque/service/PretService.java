@@ -448,9 +448,8 @@ public class PretService extends Services {
                 }
             }
 
-            PretDTO unPretDTO = new PretDTO();
-            unPretDTO.setLivreDTO(unLivreDTO);
-            getPretDAO().update(unPretDTO);
+            pretDTO.getLivreDTO().getIdLivre();
+            update(pretDTO);
 
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
