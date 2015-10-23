@@ -296,9 +296,8 @@ public class PretService extends Services {
                 return;
             }
 
-            PretDTO unPretDTO = new PretDTO();
-            unPretDTO.setDateRetour(new Timestamp(System.currentTimeMillis()));
-            getPretDAO().update(unPretDTO);
+            pretDTO.setDateRetour(new Timestamp(System.currentTimeMillis()));
+            update(pretDTO);
 
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
