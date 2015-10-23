@@ -46,8 +46,8 @@ public class FormatteurDate {
      * @throws ParseException Si le Timestamp n'est pas formaté correctement
      */
     public static String stringValue(Timestamp timestamp) throws ParseException {
-        // TODO to be added
-        return null;
-    }
 
+        return FormatteurDate.SIMPLE_DATE_FORMAT.format(timestamp);
+
+    }
 }
