@@ -7,6 +7,7 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.PretDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
@@ -291,16 +292,21 @@ public class PretService extends Services {
     }
 
     /**
-     * Retourner un livre prêté
-     * Le livre doit être prêté.
+     * Renouvelle le prêt d'un livre.
      *
-     * @param idLivre
-     * @param dateRetour
+     * @param pretDTO
      * @throws ServiceException
+     * Si le prêt n'existe pas,
+     * si le membre n'existe pas,
+     * si le livre n'existe pas,
+     * si le livre n'a pas encore été prêté,
+     * si le livre a été prêté à quelqu'un d'autre,
+     * si le livre a été réservé ou s'il y a une erreur avec la base de données.
      */
     public void retourner(PretDTO pretDTO) throws ServiceException {
 
         try {
+            // Si le prêt n'existe pas
             if(getPretDAO().read(pretDTO.getIdPret()) == null) {
                 System.err.println("Le pret : "
                     + pretDTO.getIdPret()
@@ -309,7 +315,7 @@ public class PretService extends Services {
             }
             getPretDAO().read(pretDTO.getIdPret());
 
-            // Verifie si le membre existe déjà
+            // Si le membre n'existe pas
             MembreDTO unMembreDTO;
             if(getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre()) == null) {
                 System.err.println("Le membre : "
@@ -319,21 +325,42 @@ public class PretService extends Services {
             }
             unMembreDTO = getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre());
 
-            //verifie si le livre existe
+            LivreDTO unLivreDTO;
+            // Si le livre n'existe pas
             if(getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre()) == null) {
                 System.err.println("Le livre est inexistant: "
                     + pretDTO.getLivreDTO().getIdLivre());
                 return;
             }
+            unLivreDTO = getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre());
 
-            //  Si le membre n'existe pas
-
-            if(getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre()) == null) {
-                System.err.println("Membre inexistant: "
-                    + pretDTO.getMembreDTO().getIdMembre());
+            // Si le livre n'a pas encore été prêté
+            List<PretDTO> listeDesPrets = getPretDAO().findByLivre(unLivreDTO);
+            if(listeDesPrets.isEmpty()) {
+                System.err.println("Le livre : "
+                    + unLivreDTO.getIdLivre()
+                    + " n'a pas été prêté encore.");
                 return;
             }
-            unMembreDTO = getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre());
+
+            // Si le livre a été prêté à quelqu'un d'autre
+            for(PretDTO unPretDTO : listeDesPrets) {
+                if(!unMembreDTO.equals(unPretDTO.getMembreDTO())) {
+                    System.err.println("Le livre : "
+                        + unLivreDTO.getIdLivre()
+                        + " est déjà prêté au membre : "
+                        + unMembreDTO.getIdMembre());
+                    return;
+                }
+            }
+
+            // Si le livre a été réservé
+            if(getReservationDAO().read(unLivreDTO.getIdLivre()) != null) {
+                System.err.println("Le livre : "
+                    + unLivreDTO.getIdLivre()
+                    + " est déjà prêté");
+                return;
+            }
 
             unMembreDTO.setNbPret(unMembreDTO.getNbPret() - 1);
             getMembreDAO().update(unMembreDTO);
@@ -342,6 +369,8 @@ public class PretService extends Services {
 
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
+        } catch(NullPointerException nullPointerException) {
+            throw new ServiceException(nullPointerException);
         }
 
     }
