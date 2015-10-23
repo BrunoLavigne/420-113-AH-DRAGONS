@@ -361,7 +361,7 @@ public class PretService extends Services {
                 return;
             }
 
-            // Si le livre a été prêté à quelqu'un d'autre
+            // Si le livre a été prêteé à quelqu'un d'autre
             for(PretDTO unPretDTO : listeDesPrets) {
                 if(!unMembreDTO.equals(unPretDTO.getMembreDTO())) {
                     System.err.println("Le livre : "
