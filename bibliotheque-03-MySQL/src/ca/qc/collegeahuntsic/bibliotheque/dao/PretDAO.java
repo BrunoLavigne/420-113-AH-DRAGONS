@@ -62,9 +62,9 @@ public class PretDAO extends DAO {
 
     /**
      *
-     * Ajoute un nouveau pret.
+     * Ajoute un nouveau prêt.
      *
-     * @param pretDTO - Le pret a ajouter.
+     * @param pretDTO - Le prêt à ajouter.
      * @throws DAOException - S'il y a une erreur avec la base de données.
      */
     public void add(PretDTO pretDTO) throws DAOException {
@@ -88,12 +88,13 @@ public class PretDAO extends DAO {
 
     /**
      *
-     * Lit un pret.
+     * Lit un prêt.
      *
-     * @param idPret - L'ID du livre à lire.
-     * @return Le pret ou <code>null</code> si le pret n'existe pas
+     * @param idPret - L'ID du prêt à lire.
+     * @return Le prêt ou <code>null</code> si le prêt n'existe pas
      * @throws DAOException - S'il y a une erreur avec la base de données
      */
+    // TODO: check javadoc: retirer le @return ?
     public PretDTO read(int idPret) throws DAOException {
         PretDTO tempPret = null;
         try(
@@ -126,9 +127,9 @@ public class PretDAO extends DAO {
 
     /**
      *
-     * Met à jour un pret.
+     * Met à jour un prêt.
      *
-     * @param pretDTO - Le pret à mettre à jour.
+     * @param pretDTO - Le prêt à mettre à jour.
      * @throws DAOException - S'il y a une erreur avec la base de données
      */
     public void update(PretDTO pretDTO) throws DAOException {
@@ -154,9 +155,9 @@ public class PretDAO extends DAO {
 
     /**
      *
-     * Supprime un pret.
+     * Supprime un prêt.
      *
-     * @param pretDTO - Le pret à supprimer.
+     * @param pretDTO - Le prêt à supprimer.
      * @throws DAOException - S'il y a une erreur avec la base de données.
      */
     public void delete(PretDTO pretDTO) throws DAOException {
@@ -173,9 +174,9 @@ public class PretDAO extends DAO {
 
     /**
      *
-     * Trouve tous les prets.
+     * Trouve tous les prêts.
      *
-     * @return La liste des prets ; une liste vide sinon.
+     * @return La liste des prêts ; une liste vide sinon.
      *
      * @throws DAOException - S'il y a une erreur avec la base de données.
      */
@@ -216,10 +217,10 @@ public class PretDAO extends DAO {
 
     /**
      *
-     * Trouve les prets en cours à partir d'un membre.
+     * Trouve les prêts non terminés d'un membre.
      *
      * @param membreDTO - Le membre à utiliser
-     * @return La liste des prets correspondants ; une liste vide sinon.
+     * @return La liste des prêts correspondants ; une liste vide sinon.
      * @throws DAOException - S'il y a une erreur avec la base de données.
      */
     public List<PretDTO> findByMembre(MembreDTO membreDTO) throws DAOException {
@@ -250,10 +251,10 @@ public class PretDAO extends DAO {
 
     /**
      *
-     * Trouve les prets en cours à partir d'un livre.
+     * Trouve les livres en cours d'emprunt.
      *
      * @param livreDTO - Le livre à utiliser
-     * @return La liste des prets correspondants ; une liste vide sinon.
+     * @return La liste des prêts correspondants ; une liste vide sinon.
      * @throws DAOException - S'il y a une erreur avec la base de données.
      */
     public List<PretDTO> findByLivre(LivreDTO livreDTO) throws DAOException {
@@ -283,22 +284,22 @@ public class PretDAO extends DAO {
     }
 
     /**
-    *
-    * Trouve les prets en cours à partir d'une date de pret.
-    *
-    * @param timestampPret - La date à utiliser
-    * @return La liste des prets correspondants ; une liste vide sinon.
-    * @throws DAOException - S'il y a une erreur avec la base de données.
-    */
-    public List<PretDTO> findByDatePret(Timestamp timestampPret) throws DAOException {
+     *
+     * Trouve les prêts à partir d'une date de prêt.
+     *
+     * @param datePret - La date de prêt à trouver.
+     * @return La liste des prêts correspondants ; une liste vide sinon.
+     * @throws DAOException - S'il y a une erreur avec la base de données.
+     */
+    public List<PretDTO> findByDatePret(Timestamp datePret) throws DAOException {
         List<PretDTO> liste = Collections.<PretDTO> emptyList();
         try(
             // TODO passer d'un timestamp exact à une date???
-            PreparedStatement stmtGetPretsByDatePret = (getConnection().prepareStatement(PretDAO.FIND_BY_DATE_PRET));) {
-            stmtGetPretsByDatePret.setTimestamp(1,
-                timestampPret);
+            PreparedStatement statementGetPretsByDatePret = (getConnection().prepareStatement(PretDAO.FIND_BY_DATE_PRET));) {
+            statementGetPretsByDatePret.setTimestamp(1,
+                datePret);
             try(
-                ResultSet rset = stmtGetPretsByDatePret.executeQuery()) {
+                ResultSet rset = statementGetPretsByDatePret.executeQuery()) {
                 liste = new ArrayList<>();
                 while(rset.next()) {
                     PretDTO tempPret = new PretDTO();
@@ -318,22 +319,22 @@ public class PretDAO extends DAO {
     }
 
     /**
-    *
-    * Trouve les prets en cours à partir d'une date de retour.
-    *
-    * @param timestampRetour - La date à utiliser
-    * @return La liste des prets correspondants ; une liste vide sinon.
-    * @throws DAOException - S'il y a une erreur avec la base de données.
-    */
-    public List<PretDTO> findByDateRetour(Timestamp timestampRetour) throws DAOException {
+     *
+     * Trouve les prêts à partir d'une date de retour.
+     *
+     * @param dateRetour - La date de retour à trouver.
+     * @return La liste des prêts correspondants ; une liste vide sinon.
+     * @throws DAOException - S'il y a une erreur avec la base de données.
+     */
+    public List<PretDTO> findByDateRetour(Timestamp dateRetour) throws DAOException {
         List<PretDTO> liste = Collections.<PretDTO> emptyList();
         try(
             // TODO passer d'un timestamp exact à une date???
-            PreparedStatement stmtGetPretsByDateReour = (getConnection().prepareStatement(PretDAO.FIND_BY_DATE_RETOUR));) {
-            stmtGetPretsByDateReour.setTimestamp(1,
-                timestampRetour);
+            PreparedStatement statementGetPretsByDateReour = (getConnection().prepareStatement(PretDAO.FIND_BY_DATE_RETOUR));) {
+            statementGetPretsByDateReour.setTimestamp(1,
+                dateRetour);
             try(
-                ResultSet rset = stmtGetPretsByDateReour.executeQuery()) {
+                ResultSet rset = statementGetPretsByDateReour.executeQuery()) {
                 liste = new ArrayList<>();
                 while(rset.next()) {
                     PretDTO tempPret = new PretDTO();
