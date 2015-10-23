@@ -19,6 +19,7 @@ import java.util.StringTokenizer;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
@@ -205,16 +206,12 @@ public class Bibliotheque {
 
             } else if("preter".startsWith(command)) {
 
-                // TRANSACTION PRETER ( <idMembre> <idLivre> )
+                // TRANSACTION PRETER ( <idPret> )
 
-                LivreDTO livreDTO = new LivreDTO();
-                livreDTO.setIdLivre(readInt(tokenizer));
+                PretDTO pretDTO = new PretDTO();
+                pretDTO.setIdPret(readInt(tokenizer));
 
-                MembreDTO membreDTO = new MembreDTO();
-                membreDTO.setIdMembre(readInt(tokenizer));
-
-                getGestionBiblio().getMembreService().emprunter(membreDTO,
-                    livreDTO);
+                getGestionBiblio().getPretService().commencer(pretDTO);
 
             } else if("renouveler".startsWith(command)) {
 
