@@ -199,7 +199,10 @@ public class Bibliotheque {
 
             } else if("vendre".startsWith(command)) {
 
-                getGestionBiblio().getLivreService().vendre(getGestionBiblio().getLivreService().read(readInt(tokenizer)));
+                LivreDTO livreDTO = new LivreDTO();
+                livreDTO.setIdLivre(readInt(tokenizer));
+
+                getGestionBiblio().getLivreService().vendre(livreDTO);
 
             } else if("preter".startsWith(command)) {
 
@@ -223,6 +226,7 @@ public class Bibliotheque {
                 // TRANSACTION RENOUVELER ( <idPret> )
 
                 PretDTO pretDTO = new PretDTO();
+                pretDTO.setIdPret(readInt(tokenizer));
 
                 getGestionBiblio().getPretService().renouveler(pretDTO);
 
@@ -247,7 +251,7 @@ public class Bibliotheque {
             } else if("desinscrire".startsWith(command)) {
 
                 MembreDTO membreDTO = new MembreDTO();
-                membreDTO = getGestionBiblio().getMembreService().read(readInt(tokenizer));
+                membreDTO.setIdMembre(readInt(tokenizer));
 
                 getGestionBiblio().getMembreService().desinscrire(membreDTO);
 

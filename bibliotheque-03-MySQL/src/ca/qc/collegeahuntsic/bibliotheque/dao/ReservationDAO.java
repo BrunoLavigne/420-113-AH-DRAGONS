@@ -80,7 +80,7 @@ public class ReservationDAO extends DAO {
                 reservationDTO.getLivreDTO().getIdLivre());
             addPreparedStatement.setInt(2,
                 reservationDTO.getMembreDTO().getIdMembre());
-            addPreparedStatement.setTimestamp(4,
+            addPreparedStatement.setTimestamp(3,
                 reservationDTO.getDateReservation());
 
             addPreparedStatement.executeUpdate();
@@ -114,8 +114,15 @@ public class ReservationDAO extends DAO {
                 if(resultSet.next()) {
                     readReservationDTO = new ReservationDTO();
                     readReservationDTO.setIdReservation(resultSet.getInt(1));
-                    readReservationDTO.getLivreDTO().setIdLivre(resultSet.getInt(2));
-                    readReservationDTO.getMembreDTO().setIdMembre(resultSet.getInt(3));
+
+                    LivreDTO livreDTO = new LivreDTO();
+                    livreDTO.setIdLivre(resultSet.getInt(2));
+
+                    MembreDTO membreDTO = new MembreDTO();
+                    membreDTO.setIdMembre(resultSet.getInt(3));
+
+                    readReservationDTO.setLivreDTO(livreDTO);
+                    readReservationDTO.setMembreDTO(membreDTO);
                     readReservationDTO.setDateReservation(resultSet.getTimestamp(4));
                 }
                 /*else {
