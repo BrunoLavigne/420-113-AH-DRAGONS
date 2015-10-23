@@ -65,9 +65,10 @@ public class DAO implements Serializable {
      * @return
      * @throws DAOException
      */
-    protected int getPrimaryKey() throws DAOException  {
+  /*  protected int getPrimaryKey() throws DAOException  {
         
         // PreparedStatement createPreparedStatement = getConnection().prepareStatement(sql)
     }
+    */
 
 }

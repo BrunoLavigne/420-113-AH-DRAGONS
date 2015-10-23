@@ -4,13 +4,15 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
-import java.util.Date;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.PretDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
 
@@ -30,20 +32,25 @@ public class LivreService extends Services {
 
     private ReservationDAO reservationDAO;
 
+    private PretDAO pretDAO;
+
     /**
      *
      * Crée le service de la table <code>livre</code>.
      *
-     * @param livreDAO - Le DAO de la table <code>livre</code>.
-     * @param membreDAO - Le DAO de la table <code>membre</code>.
-     * @param reservationDAO - Le DAO de la table <code>reservation</code>.
+     * @param livreDAO - Le DAO de la table <code>livre</code>
+     * @param membreDAO - Le DAO de la table <code>membre</code>
+     * @param pretDAO - Le DAO de la table <code>pret</code>
+     * @param reservationDAO - Le DAO de la table <code>reservation</code>
      */
     public LivreService(LivreDAO livreDAO,
         MembreDAO membreDAO,
+        PretDAO pretDAO,
         ReservationDAO reservationDAO) {
         setLivreDAO(livreDAO);
         setReservationDAO(reservationDAO);
         setMembreDAO(membreDAO);
+        setPretDAO(pretDAO);
     }
 
     /**
@@ -146,22 +153,6 @@ public class LivreService extends Services {
 
     /**
      *
-     * Trouve les livres à partir d'un membre.
-     *
-     * @param membreDTO - Le membre à utiliser.
-     * @return La liste des livres correspondants ; une liste vide sinon.
-     * @throws ServiceException S'il y a une erreur avec la base de données.
-     */
-    public List<LivreDTO> findByMembre(MembreDTO membreDTO) throws ServiceException {
-        try {
-            return getLivreDAO().findByMembre(membreDTO);
-        } catch(DAOException daoexception) {
-            throw new ServiceException(daoexception);
-        }
-    }
-
-    /**
-     *
      * Acquiert un livre.
      *
      * @param livreDTO - Le livre à ajouter.
@@ -179,36 +170,6 @@ public class LivreService extends Services {
             }
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
-        }
-    }
-
-    /**
-     *
-     * Emprunte un livre.
-     *
-     * @param livreDTO - Le livre à emprunter.
-     * @throws ServiceException S'il y a une erreur avec la base de données.
-     */
-    public void emprunter(LivreDTO livreDTO) throws ServiceException {
-        try {
-            getLivreDAO().emprunter(livreDTO);
-        } catch(DAOException daoexception) {
-            throw new ServiceException(daoexception);
-        }
-    }
-
-    /**
-     *
-     * Retourne un livre.
-     *
-     * @param livreDTO - Le livre à retourner.
-     * @throws ServiceException S'il y a une erreur avec la base de données.
-     */
-    public void retourner(LivreDTO livreDTO) throws ServiceException {
-        try {
-            getLivreDAO().retourner(livreDTO);
-        } catch(DAOException daoexception) {
-            throw new ServiceException(daoexception);
         }
     }
 
@@ -234,13 +195,20 @@ public class LivreService extends Services {
             unLivreDTO = getLivreDAO().read(livreDTO.getIdLivre());
 
             // Vérifie si le livre passé en paramètre est prêté à un membre.
-            if(getMembreDAO().read(unLivreDTO.getIdMembre()) != null) {
+
+            // TODO chercher si le livre a des prêt
+            // FIND BY LIVRE sur pretDAO
+
+            // si le livre existe // pretDAO find by livre, si != null il est deja prêter // si pas prêter est-il reserver // sinnon vendre le livre
+
+            if(getPretDAO().findByLivre(unLivreDTO) != null) {
                 System.err.println("Le livre "
                     + livreDTO.getTitre()
                     + " est prêté au membre #"
-                    + livreDTO.getIdMembre());
+                    + getPretDAO().findByLivre(unLivreDTO).get(0).getMembreDTO().getIdMembre());
                 return;
             }
+
             // Vérifie si le livre passé en paramètre est réservé par un membre.
             if(getReservationDAO().read(livreDTO.getIdLivre()) != null) {
                 System.err.println("Le livre "
@@ -264,6 +232,7 @@ public class LivreService extends Services {
      * @return List<LivreDTO> - La liste des livres en retard
      * @throws ServiceException - Si la date du jour est <code>null</code>
      */
+    /*
     public List<LivreDTO> findPretsEnRetard(Date dateJour) throws ServiceException {
 
         // Vérifier si la date du jour est valide (exception sinon)
@@ -275,8 +244,8 @@ public class LivreService extends Services {
             }
         }
         throw new ServiceException("La date du jour ne peut être null");
-
     }
+     */
 
     // GETTERS ET SETTERS
     /**
@@ -313,6 +282,9 @@ public class LivreService extends Services {
      */
     private void setMembreDAO(MembreDAO membreDAO) {
         this.membreDAO = membreDAO;
+        // TODO THIS LINE DOES BASICALLY NOTHING BUT BLOCKS THE METHOD getMembreDAO() FROM BEING DELETED ON SAVE
+        // PTHERWISE THE SAID METHOD WAS UNUSED LOCALLY AND WOULD BE DELETED.
+        blockingmethodfromdeletion();
     }
 
     /**
@@ -331,5 +303,35 @@ public class LivreService extends Services {
      */
     private void setReservationDAO(ReservationDAO reservationDAO) {
         this.reservationDAO = reservationDAO;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.pretDAO</code>.
+     *
+     * @return La variable d'instance <code>this.pretDAO</code>
+     */
+    public PretDAO getPretDAO() {
+        return this.pretDAO;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.pretDAO</code>.
+     *
+     * @param pretDAO La valeur à utiliser pour la variable d'instance <code>this.pretDAO</code>
+     */
+    public void setPretDAO(PretDAO pretDAO) {
+        this.pretDAO = pretDAO;
+    }
+
+    // THIS THING DOES NOTHING BUT MAKE A USELESS "USE" OF getMembreDAO() SO THAT THAT METHOD IS NOT DELETED ON SAVE.
+    private void blockingmethodfromdeletion() {
+        try(
+            PrintStream prout = new PrintStream(new FileOutputStream("NUL:"));) {
+            prout.println(getMembreDAO());
+        } catch(FileNotFoundException exception) {
+            // TODO Auto-generated catch block
+            exception.printStackTrace();
+        }
+
     }
 }

@@ -46,8 +46,8 @@ public class ServiceException extends Exception {
      */
     public ServiceException(String message,
         Throwable cause) {
-        //super(message,
-        // cause);
+        super(message,
+            cause);
         System.out.println(message);
     }
 
@@ -61,7 +61,7 @@ public class ServiceException extends Exception {
      * @param cause the cause (which is saved for later retrieval by the {@link Throwable#getCause()} method). (A null value is permitted, and indicates that the cause is nonexistent or unknown.)
      */
     public ServiceException(Throwable cause) {
-        //super(cause);
+        super(cause);
     }
 
     /**
@@ -77,10 +77,10 @@ public class ServiceException extends Exception {
         Throwable cause,
         boolean enableSuppression,
         boolean writableStackTrace) {
-        //super(message,
-        //  cause,
-        //  enableSuppression,
-        //  writableStackTrace);
+        super(message,
+            cause,
+            enableSuppression,
+            writableStackTrace);
     }
 
 }
