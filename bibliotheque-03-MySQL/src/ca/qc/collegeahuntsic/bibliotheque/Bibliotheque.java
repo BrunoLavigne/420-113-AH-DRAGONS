@@ -223,9 +223,12 @@ public class Bibliotheque {
 
             } else if("retourner".startsWith(command)) {
 
-                // TRANSACTION RETOURNER ( <idLivre> )
+                // TRANSACTION RETOURNER ( <idPret> )
 
-                getGestionBiblio().getPretService().retourner(readInt(tokenizer)); /* idLivre */
+                PretDTO pretDTO = new PretDTO();
+                pretDTO.setIdPret(readInt(tokenizer));
+
+                getGestionBiblio().getPretService().retourner(pretDTO); /* idLivre */
 
             } else if("inscrire".startsWith(command)) {
 
