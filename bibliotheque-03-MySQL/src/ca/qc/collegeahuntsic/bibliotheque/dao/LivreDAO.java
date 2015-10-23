@@ -279,7 +279,7 @@ public class LivreDAO extends DAO {
     public List<LivreDTO> findPretsEnRetard(Date dateJour) throws DAOException {
 
         // La liste contenant les livres en retard
-        List<LivreDTO> livresRetard = Collections.EMPTY_LIST;
+        List<LivreDTO> livresRetard = Collections.<LivreDTO> emptyList();
 
         try(
             PreparedStatement statementGetAllLivresRetard = (getConnection().prepareStatement(LivreDAO.FIND_PRETS_EN_RETARD));) {

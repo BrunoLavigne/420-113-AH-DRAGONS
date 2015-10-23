@@ -4,7 +4,9 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.service;
 
-import java.util.Date;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
@@ -36,16 +38,19 @@ public class LivreService extends Services {
      *
      * Crée le service de la table <code>livre</code>.
      *
-     * @param livreDAO - Le DAO de la table <code>livre</code>.
-     * @param membreDAO - Le DAO de la table <code>membre</code>.
-     * @param reservationDAO - Le DAO de la table <code>reservation</code>.
+     * @param livreDAO - Le DAO de la table <code>livre</code>
+     * @param membreDAO - Le DAO de la table <code>membre</code>
+     * @param pretDAO - Le DAO de la table <code>pret</code>
+     * @param reservationDAO - Le DAO de la table <code>reservation</code>
      */
     public LivreService(LivreDAO livreDAO,
         MembreDAO membreDAO,
+        PretDAO pretDAO,
         ReservationDAO reservationDAO) {
         setLivreDAO(livreDAO);
         setReservationDAO(reservationDAO);
         setMembreDAO(membreDAO);
+        setPretDAO(pretDAO);
     }
 
     /**
@@ -196,11 +201,11 @@ public class LivreService extends Services {
 
             // si le livre existe // pretDAO find by livre, si != null il est deja prêter // si pas prêter est-il reserver // sinnon vendre le livre
 
-            if(getMembreDAO().read(unLivreDTO.getIdMembre()) != null) {
+            if(getPretDAO().findByLivre(unLivreDTO) != null) {
                 System.err.println("Le livre "
                     + livreDTO.getTitre()
                     + " est prêté au membre #"
-                    + livreDTO.getIdMembre());
+                    + getPretDAO().findByLivre(unLivreDTO).get(0).getMembreDTO().getIdMembre());
                 return;
             }
 
@@ -227,6 +232,7 @@ public class LivreService extends Services {
      * @return List<LivreDTO> - La liste des livres en retard
      * @throws ServiceException - Si la date du jour est <code>null</code>
      */
+    /*
     public List<LivreDTO> findPretsEnRetard(Date dateJour) throws ServiceException {
 
         // Vérifier si la date du jour est valide (exception sinon)
@@ -238,8 +244,8 @@ public class LivreService extends Services {
             }
         }
         throw new ServiceException("La date du jour ne peut être null");
-
     }
+     */
 
     // GETTERS ET SETTERS
     /**
@@ -276,6 +282,9 @@ public class LivreService extends Services {
      */
     private void setMembreDAO(MembreDAO membreDAO) {
         this.membreDAO = membreDAO;
+        // TODO THIS LINE DOES BASICALLY NOTHING BUT BLOCKS THE METHOD getMembreDAO() FROM BEING DELETED ON SAVE
+        // PTHERWISE THE SAID METHOD WAS UNUSED LOCALLY AND WOULD BE DELETED.
+        blockingmethodfromdeletion();
     }
 
     /**
@@ -312,5 +321,17 @@ public class LivreService extends Services {
      */
     public void setPretDAO(PretDAO pretDAO) {
         this.pretDAO = pretDAO;
+    }
+
+    // THIS THING DOES NOTHING BUT MAKE A USELESS "USE" OF getMembreDAO() SO THAT THAT METHOD IS NOT DELETED ON SAVE.
+    private void blockingmethodfromdeletion() {
+        try(
+            PrintStream prout = new PrintStream(new FileOutputStream("NUL:"));) {
+            prout.println(getMembreDAO());
+        } catch(FileNotFoundException exception) {
+            // TODO Auto-generated catch block
+            exception.printStackTrace();
+        }
+
     }
 }
