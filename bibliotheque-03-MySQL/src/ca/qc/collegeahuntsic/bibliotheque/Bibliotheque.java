@@ -206,9 +206,18 @@ public class Bibliotheque {
 
             } else if("preter".startsWith(command)) {
 
-                // TRANSACTION PRETER ( <idPret> )
+                // TRANSACTION PRETER ( <idPret> <idLivre> <idMembre> )
+
+                LivreDTO livreDTO = new LivreDTO();
+                livreDTO.setIdLivre(readInt(tokenizer));
+
+                MembreDTO membreDTO = new MembreDTO();
+                membreDTO.setIdMembre(readInt(tokenizer));
+
                 PretDTO pretDTO = new PretDTO();
                 pretDTO.setIdPret(readInt(tokenizer));
+                pretDTO.setLivreDTO(livreDTO);
+                pretDTO.setMembreDTO(membreDTO);
 
                 getGestionBiblio().getPretService().commencer(pretDTO);
 
@@ -262,10 +271,8 @@ public class Bibliotheque {
                 Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
                 reservationDTO.setDateReservation(currentTimestamp);
 
-                getGestionBiblio().getReservationService().reserver(reservationDTO,
-                    livreDTO,
-                    membreDTO,
-                    currentTimestamp);
+                //À FAIRE
+                getGestionBiblio().getReservationService().reserver(reservationDTO);
 
             } else if("utiliser".startsWith(command)) {
 
