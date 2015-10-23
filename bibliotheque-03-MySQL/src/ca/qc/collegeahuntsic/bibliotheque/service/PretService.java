@@ -242,23 +242,21 @@ public class PretService extends Services {
             getPretDAO().read(pretDTO.getIdPret());
 
             // Si le membre n'existe pas
-            MembreDTO unMembreDTO;
-            if(getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre()) == null) {
+            MembreDTO unMembreDTO = getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre());
+            if(unMembreDTO == null) {
                 System.err.println("Le membre : "
                     + pretDTO.getMembreDTO().getIdMembre()
                     + " n'existe pas");
                 return;
             }
-            unMembreDTO = getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre());
 
-            LivreDTO unLivreDTO;
+            LivreDTO unLivreDTO = getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre());
             // Si le livre n'existe pas
-            if(getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre()) == null) {
+            if(unLivreDTO == null) {
                 System.err.println("Le livre est inexistant: "
                     + pretDTO.getLivreDTO().getIdLivre());
                 return;
             }
-            unLivreDTO = getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre());
 
             // Si le livre n'a pas encore été prêté
             List<PretDTO> listeDesPrets = getPretDAO().findByLivre(unLivreDTO);
@@ -315,23 +313,21 @@ public class PretService extends Services {
         try {
 
             // Si le membre n'existe pas
-            MembreDTO unMembreDTO;
-            if(getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre()) == null) {
+            MembreDTO unMembreDTO = getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre());
+            if(unMembreDTO == null) {
                 System.err.println("Le membre : "
                     + pretDTO.getMembreDTO().getIdMembre()
                     + " n'existe pas");
                 return;
             }
-            unMembreDTO = getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre());
 
-            LivreDTO unLivreDTO;
+            LivreDTO unLivreDTO = getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre());
             // Si le livre n'existe pas
-            if(getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre()) == null) {
+            if(unLivreDTO == null) {
                 System.err.println("Le livre est inexistant: "
                     + pretDTO.getLivreDTO().getIdLivre());
                 return;
             }
-            unLivreDTO = getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre());
 
             // Si le livre a été prêté
             List<PretDTO> listeDesPrets = getPretDAO().findByLivre(unLivreDTO);
@@ -403,23 +399,21 @@ public class PretService extends Services {
             getPretDAO().read(pretDTO.getIdPret());
 
             // Si le membre n'existe pas
-            MembreDTO unMembreDTO;
-            if(getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre()) == null) {
+            MembreDTO unMembreDTO = getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre());
+            if(unMembreDTO == null) {
                 System.err.println("Le membre : "
                     + pretDTO.getMembreDTO().getIdMembre()
                     + " n'existe pas");
                 return;
             }
-            unMembreDTO = getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre());
 
-            LivreDTO unLivreDTO;
+            LivreDTO unLivreDTO = getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre());
             // Si le livre n'existe pas
-            if(getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre()) == null) {
+            if(unLivreDTO == null) {
                 System.err.println("Le livre est inexistant: "
                     + pretDTO.getLivreDTO().getIdLivre());
                 return;
             }
-            unLivreDTO = getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre());
 
             // Si le livre n'a pas encore été prêté
             List<PretDTO> listeDesPrets = getPretDAO().findByLivre(unLivreDTO);
