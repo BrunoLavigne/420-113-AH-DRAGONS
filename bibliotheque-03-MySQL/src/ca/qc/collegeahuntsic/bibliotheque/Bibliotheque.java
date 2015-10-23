@@ -209,13 +209,9 @@ public class Bibliotheque {
                 // TRANSACTION PRETER ( <idPret> <idLivre> <idMembre> )
 
                 LivreDTO livreDTO = new LivreDTO();
-                livreDTO.setIdLivre(readInt(tokenizer));
-
                 MembreDTO membreDTO = new MembreDTO();
-                membreDTO.setIdMembre(readInt(tokenizer));
-
                 PretDTO pretDTO = new PretDTO();
-                pretDTO.setIdPret(readInt(tokenizer));
+
                 pretDTO.setLivreDTO(livreDTO);
                 pretDTO.setMembreDTO(membreDTO);
 
