@@ -14,8 +14,8 @@ import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
-import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
 
 /**
  *

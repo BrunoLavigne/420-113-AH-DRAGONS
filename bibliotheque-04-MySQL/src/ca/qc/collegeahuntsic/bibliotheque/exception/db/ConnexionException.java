@@ -2,7 +2,7 @@
 // Auteur : Dragons Vicieux
 // Date de création : 2015-09-21
 
-package ca.qc.collegeahuntsic.bibliotheque.exception;
+package ca.qc.collegeahuntsic.bibliotheque.exception.db;
 
 import java.security.PrivilegedActionException;
 

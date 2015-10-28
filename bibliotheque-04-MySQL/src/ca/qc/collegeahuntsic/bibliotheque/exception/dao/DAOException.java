@@ -1,16 +1,15 @@
-// Fichier FacadeException.java
+// Fichier DAOException.java
 // Auteur : Dragons Vicieux
 // Date de création : 2015-09-21
 
-package ca.qc.collegeahuntsic.bibliotheque.exception;
+package ca.qc.collegeahuntsic.bibliotheque.exception.dao;
 
 /**
- * Cette exception est utilisée en cas de problème avec l'object {@link ca.qc.collegeahuntsic.bibliotheque.facade.Facade}.
+ * Cette exception est utilisée en cas de problème avec l'object {@link ca.qc.collegeahuntsic.bibliotheque.dao.DAO}.
  *
  * @author Dragons Vicieux
  */
-public class FacadeException extends Exception {
-
+public class DAOException extends Exception {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -20,7 +19,7 @@ public class FacadeException extends Exception {
      * {@link Throwable#initCause(java.lang.Throwable)}.
      *
      */
-    public FacadeException() {
+    public DAOException() {
         super();
     }
 
@@ -31,7 +30,7 @@ public class FacadeException extends Exception {
      *
      * @param message  the detail message. The detail message is saved for later retrieval by the {@link java.lang.Throwable#getMessage()} method.
      */
-    public FacadeException(String message) {
+    public DAOException(String message) {
         super(message);
     }
 
@@ -40,10 +39,10 @@ public class FacadeException extends Exception {
      * Constructs a new exception with the specified detail message and cause.
      * Note that the detail message associated with cause is not automatically incorporated in this exception's detail message.
      *
-     * @param message the detail message. The detail message is saved for later retrieval by the {@link Throwable#getMessage()} method.
+     * @param message The detail message. The detail message is saved for later retrieval by the {@link Throwable#getMessage()} method.
      * @param cause  The cause (which is saved for later retrieval by the {@link Throwable#getCause()} method). A null value is permitted, and indicates that the cause is nonexistent or unknown.
      */
-    public FacadeException(String message,
+    public DAOException(String message,
         Throwable cause) {
         super(message,
             cause);
@@ -56,9 +55,9 @@ public class FacadeException extends Exception {
      * detail message of cause). This constructor is useful for exceptions that are
      * little more than wrappers for other throwables (for example, PrivilegedActionException).
      *
-     * @param cause The cause (which is saved for later retrieval by the {@link Throwable#getCause()} method). A null value is permitted, and indicates that the cause is nonexistent or unknown.
+     * @param cause the cause (which is saved for later retrieval by the {@link Throwable#getCause()} method). (A null value is permitted, and indicates that the cause is nonexistent or unknown.)
      */
-    public FacadeException(Throwable cause) {
+    public DAOException(Throwable cause) {
         super(cause);
     }
 
@@ -66,12 +65,12 @@ public class FacadeException extends Exception {
      *
      * Constructs a new exception with the specified detail message, cause, suppression enabled or disabled, and writable stack trace enabled or disabled.
      *
-     * @param message The detail message.
+     * @param message the detail message.
      * @param cause the cause. A null value is permitted, and indicates that the cause is nonexistent or unknown.
-     * @param enableSuppression Whether or not suppression is enabled or disabled
-     * @param writableStackTrace Whether or not the stack trace should be writable
+     * @param enableSuppression whether or not suppression is enabled or disabled
+     * @param writableStackTrace whether or not the stack trace should be writable
      */
-    protected FacadeException(String message,
+    protected DAOException(String message,
         Throwable cause,
         boolean enableSuppression,
         boolean writableStackTrace) {

@@ -18,9 +18,9 @@ import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.ServiceException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.db.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
 import ca.qc.collegeahuntsic.bibliotheque.util.BibliothequeCreateur;
 import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
 

@@ -9,7 +9,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.db.ConnexionException;
 
 /**
  * Cette classe encapsule une connexion JDBC en fonction d'un type et d'une instance de base de données.

@@ -12,7 +12,7 @@ import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
-import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
 
 public class PretDAO extends DAO {
 

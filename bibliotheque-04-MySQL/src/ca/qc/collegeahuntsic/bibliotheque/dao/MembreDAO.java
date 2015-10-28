@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
 
 /**
  * Permet d'effectuer les accès à la table membre. Cette classe gère tous les

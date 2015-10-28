@@ -16,7 +16,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
 
 /**
  *

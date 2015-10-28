@@ -1,15 +1,15 @@
-// Fichier DAOException.java
+// Fichier InvalidPrimaryKeyException.java
 // Auteur : Dragons Vicieux
-// Date de création : 2015-09-21
+// Date de création : 2015-10-28
 
-package ca.qc.collegeahuntsic.bibliotheque.exception;
+package ca.qc.collegeahuntsic.bibliotheque.exception.dao;
 
 /**
  * Cette exception est utilisée en cas de problème avec l'object {@link ca.qc.collegeahuntsic.bibliotheque.dao.DAO}.
  *
  * @author Dragons Vicieux
  */
-public class DAOException extends Exception {
+public class InvalidPrimaryKeyException extends Exception {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -19,7 +19,7 @@ public class DAOException extends Exception {
      * {@link Throwable#initCause(java.lang.Throwable)}.
      *
      */
-    public DAOException() {
+    public InvalidPrimaryKeyException() {
         super();
     }
 
@@ -30,7 +30,7 @@ public class DAOException extends Exception {
      *
      * @param message  the detail message. The detail message is saved for later retrieval by the {@link java.lang.Throwable#getMessage()} method.
      */
-    public DAOException(String message) {
+    public InvalidPrimaryKeyException(String message) {
         super(message);
     }
 
@@ -42,7 +42,7 @@ public class DAOException extends Exception {
      * @param message The detail message. The detail message is saved for later retrieval by the {@link Throwable#getMessage()} method.
      * @param cause  The cause (which is saved for later retrieval by the {@link Throwable#getCause()} method). A null value is permitted, and indicates that the cause is nonexistent or unknown.
      */
-    public DAOException(String message,
+    public InvalidPrimaryKeyException(String message,
         Throwable cause) {
         super(message,
             cause);
@@ -57,7 +57,7 @@ public class DAOException extends Exception {
      *
      * @param cause the cause (which is saved for later retrieval by the {@link Throwable#getCause()} method). (A null value is permitted, and indicates that the cause is nonexistent or unknown.)
      */
-    public DAOException(Throwable cause) {
+    public InvalidPrimaryKeyException(Throwable cause) {
         super(cause);
     }
 
@@ -70,7 +70,7 @@ public class DAOException extends Exception {
      * @param enableSuppression whether or not suppression is enabled or disabled
      * @param writableStackTrace whether or not the stack trace should be writable
      */
-    protected DAOException(String message,
+    protected InvalidPrimaryKeyException(String message,
         Throwable cause,
         boolean enableSuppression,
         boolean writableStackTrace) {

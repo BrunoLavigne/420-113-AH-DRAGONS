@@ -7,8 +7,8 @@ package ca.qc.collegeahuntsic.bibliotheque.util;
 import java.sql.SQLException;
 import java.sql.Statement;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
-import ca.qc.collegeahuntsic.bibliotheque.exception.BDCreateurException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.db.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.util.BDCreateurException;
 
 /**
  *
