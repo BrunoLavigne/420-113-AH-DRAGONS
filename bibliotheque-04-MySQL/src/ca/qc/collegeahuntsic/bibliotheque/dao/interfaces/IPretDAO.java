@@ -14,8 +14,7 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidHibernateSessionE
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidSortByPropertyException;
 
 /**
- * Interface de base pour tous les DAOs.<br/>
- * Toutes les interfaces de DAO devraient en hériter
+ * Interface DAO pour manipuler les prêts dans la base de données
  *
  * @author Dragons Vicieux
  */
@@ -27,7 +26,7 @@ public interface IPretDAO extends IDAO {
      * @param connexion La connexion à utiliser
      * @param idMembre L'ID du membre à trouver
      * @param SortByPropretyName Le nom de la propriété à utiliser pour classer
-     * @return La liste des prêts correspondants ; une liste vide sinon
+     * @return La liste des prêts correspondants ; une {@link List} vide sinon
      * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
      * @throws InvalidCriterionException Si l'ID du membre est <code>null</code>
      * @throws InvalidSortByPropertyException Si la propriété à utiliser pour classer est <code>null</code>

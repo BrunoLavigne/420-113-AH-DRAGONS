@@ -13,24 +13,23 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidHibernateSessionE
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidSortByPropertyException;
 
 /**
- * Interface pour LivreDAO
+ * Interface DAO pour manipuler les livres dans la base de données
  *
  * @author Dragons Vicieux
  */
 public interface ILivreDAO extends IDAO {
 
     /**
+     * Trouve les livres à partir d'un titre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun livre n'est trouvé, une {@link List} vide est retournée.
      *
-     * TODO Auto-generated method javadoc
-     *
-     * @param connexion
-     * @param titre
-     * @param sortByPropertyName
-     * @return La listedes livres correspondants ; une liste de livre vide
-     * @throws InvalidHibernateSessionException
-     * @throws InvalidCriterionException
-     * @throws InvalidSortByPropertyException
-     * @throws DAOException
+     * @param connexion - La connexion à utiliser
+     * @param titre - Le titre à trouver
+     * @param sortByPropertyName - Le nom de la propriété à utiliser pour classer
+     * @return La liste des livres correspondants ; une liste vide sinon
+     * @throws InvalidHibernateSessionException - Si la connexion est <code>null</code>
+     * @throws InvalidCriterionException - Si le nom est <code>null</code>
+     * @throws InvalidSortByPropertyException - Si la propriété à utiliser pour classer est <code>null</code>
+     * @throws DAOException - S'il y a une erreur avec la base de données
      */
     List<LivreDTO> findByTitre(Connexion connexion,
         String titre,

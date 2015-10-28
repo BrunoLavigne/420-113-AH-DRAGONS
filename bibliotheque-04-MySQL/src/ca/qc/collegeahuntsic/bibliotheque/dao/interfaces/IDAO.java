@@ -18,6 +18,7 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
 /**
  * Interface de base pour les DAOs.
  * Toutes les interfaces de DAO devraient en hériter.
+ *
  * @author Dragons Vicieux
  */
 public interface IDAO {
@@ -93,7 +94,7 @@ public interface IDAO {
         DAOException;
 
     /**
-     * Trouve tous les DTOs de la base de données. La liste est classée par ordre croissant sur sortByPropertyName. Si aucun DTO n'est trouvé, une List vide est retournée.
+     * Trouve tous les DTOs de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun DTO n'est trouvé, une {@link List} vide est retournée.
      *
      * @param connexion - La connexion à utiliser
      * @param sortByPropertyName - Le nom de la propriété à utiliser pour classer
