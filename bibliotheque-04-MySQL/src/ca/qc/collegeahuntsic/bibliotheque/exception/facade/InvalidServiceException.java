@@ -1,4 +1,4 @@
-// Fichier FacadeException.java
+// Fichier InvalidServiceException.java
 // Auteur : Dragons Vicieux
 // Date de création : 2015-10-28
 
