@@ -214,7 +214,11 @@ public class ReservationService extends Services {
 
             // Si la réservation existe déjà
 
-            if(read(reservationDTO.getIdReservation()) != null) {
+            ReservationDTO uneReservationDTO = read(reservationDTO.getIdReservation());
+            MembreDTO unMembreDTO = getMembreDAO().read(reservationDTO.getMembreDTO().getIdMembre());
+            LivreDTO unLivreDTO = getLivreDAO().read(reservationDTO.getLivreDTO().getIdLivre());
+
+            if(uneReservationDTO != null) {
                 System.err.println("La réservation : "
                     + reservationDTO.getIdReservation()
                     + " existe déjà");
@@ -223,27 +227,19 @@ public class ReservationService extends Services {
 
             //  Si le membre n'existe pas
 
-            MembreDTO unMembreDTO;
-
-            if(getMembreDAO().read(reservationDTO.getMembreDTO().getIdMembre()) == null) {
+            if(unMembreDTO == null) {
                 System.err.println("Membre inexistant: "
                     + reservationDTO.getMembreDTO().getIdMembre());
                 return;
             }
 
-            unMembreDTO = getMembreDAO().read(reservationDTO.getMembreDTO().getIdMembre());
-
             // Vérification sur le livre
 
-            LivreDTO unLivreDTO;
-
-            if(getLivreDAO().read(reservationDTO.getLivreDTO().getIdLivre()) == null) {
+            if(unLivreDTO == null) {
                 System.err.println("Livre inexistant: "
                     + reservationDTO.getLivreDTO().getIdLivre());
                 return;
             }
-
-            unLivreDTO = getLivreDAO().read(reservationDTO.getLivreDTO().getIdLivre());
 
             // Si le livre n'a pas encore été prêté,
 
@@ -323,44 +319,38 @@ public class ReservationService extends Services {
 
             // Si la réservation existe déjà
 
-            ReservationDTO uneReservationDTO;
+            ReservationDTO uneReservationDTO = getReservationDAO().read(reservationDTO.getIdReservation());
 
-            if(getReservationDAO().read(reservationDTO.getIdReservation()) == null) {
+            if(uneReservationDTO == null) {
                 System.err.println("La réservation : "
                     + reservationDTO.getIdReservation()
                     + " n'existe pas");
                 return;
             }
 
-            uneReservationDTO = getReservationDAO().read(reservationDTO.getIdReservation());
+            MembreDTO unMembreDTO = getMembreDAO().read(uneReservationDTO.getMembreDTO().getIdMembre());
 
             //  Si le membre n'existe pas
 
-            MembreDTO unMembreDTO;
-
-            if(getMembreDAO().read(reservationDTO.getMembreDTO().getIdMembre()) == null) {
+            if(unMembreDTO == null) {
                 System.err.println("Membre inexistant: "
                     + reservationDTO.getMembreDTO().getIdMembre());
                 return;
             }
 
-            unMembreDTO = getMembreDAO().read(reservationDTO.getMembreDTO().getIdMembre());
+            LivreDTO unLivreDTO = getLivreDAO().read(uneReservationDTO.getLivreDTO().getIdLivre());
 
             // Vérification sur le livre
 
-            LivreDTO unLivreDTO;
-
-            if(getLivreDAO().read(reservationDTO.getLivreDTO().getIdLivre()) == null) {
+            if(unLivreDTO == null) {
                 System.err.println("Livre inexistant: "
                     + reservationDTO.getLivreDTO().getIdLivre());
                 return;
             }
 
-            unLivreDTO = getLivreDAO().read(reservationDTO.getLivreDTO().getIdLivre());
-
             // Si la réservation n'est pas la première de la liste
 
-            List<ReservationDTO> listReservations = findByLivre(getLivreDAO().read(reservationDTO.getLivreDTO().getIdLivre()));
+            List<ReservationDTO> listReservations = findByLivre(unLivreDTO);
 
             if(listReservations.get(0) != null) {
 
@@ -376,7 +366,7 @@ public class ReservationService extends Services {
 
             // Si le livre est déjà prété
 
-            List<PretDTO> listeDesPret = getPretDAO().findByLivre(reservationDTO.getLivreDTO());
+            List<PretDTO> listeDesPret = getPretDAO().findByLivre(unLivreDTO);
 
             if(!listeDesPret.isEmpty()) {
 
@@ -408,6 +398,7 @@ public class ReservationService extends Services {
             // getPretDAO.add(unPretDTO)
 
             // Éliminer la réservation.
+            System.out.println("starting the utiliser fonctions");
             annuler(uneReservationDTO);
             unMembreDTO.setNbPret(unMembreDTO.getNbPret() + 1);
             getMembreDAO().update(unMembreDTO);

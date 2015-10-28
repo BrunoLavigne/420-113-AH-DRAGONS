@@ -253,31 +253,26 @@ public class Bibliotheque {
                 ReservationDTO reservationDTO = new ReservationDTO();
                 //reservationDTO.setIdReservation(readInt(tokenizer));
 
-                LivreDTO livreDTO = new LivreDTO();
-                livreDTO.setIdLivre(readInt(tokenizer));
-
                 MembreDTO membreDTO = new MembreDTO();
                 membreDTO.setIdMembre(readInt(tokenizer));
 
+                LivreDTO livreDTO = new LivreDTO();
+                livreDTO.setIdLivre(readInt(tokenizer));
+
                 Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+
+                reservationDTO.setLivreDTO(livreDTO);
+                reservationDTO.setMembreDTO(membreDTO);
                 reservationDTO.setDateReservation(currentTimestamp);
 
                 getGestionBiblio().getReservationService().reserver(reservationDTO);
 
             } else if("utiliser".startsWith(command)) {
 
-                // TRANSACTION UTILISER ( <idReservation> <idLivre> <idMembre> )
-
-                LivreDTO livreDTO = new LivreDTO();
-                livreDTO.setIdLivre(readInt(tokenizer));
-
-                MembreDTO membreDTO = new MembreDTO();
-                membreDTO.setIdMembre(readInt(tokenizer));
+                // TRANSACTION UTILISER ( <idReservation> )
 
                 ReservationDTO reservationDTO = new ReservationDTO();
-
-                reservationDTO.setLivreDTO(livreDTO);
-                reservationDTO.setMembreDTO(membreDTO);
+                reservationDTO.setIdReservation(readInt(tokenizer));
 
                 getGestionBiblio().getReservationService().utiliser(reservationDTO);
 
