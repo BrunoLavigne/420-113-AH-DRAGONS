@@ -1,4 +1,4 @@
-// Fichier ServiceException.java
+// Fichier ExistingReservationException.java
 // Auteur : Dragons Vicieux
 // Date de création : 2015-10-28
 
