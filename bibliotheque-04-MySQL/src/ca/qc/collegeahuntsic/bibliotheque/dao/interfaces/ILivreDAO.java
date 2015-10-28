@@ -17,7 +17,7 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidSortByPropertyExc
  *
  * @author Dragons Vicieux
  */
-public interface ILivreDAO {
+public interface ILivreDAO extends IDAO {
 
     /**
      *
