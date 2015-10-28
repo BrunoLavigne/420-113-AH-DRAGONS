@@ -4,19 +4,27 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.dao;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.DAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
+import ca.qc.collegeahuntsic.bibliotheque.dto.DTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidCriterionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidHibernateSessionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidPrimaryKeyException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidSortByPropertyException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOClassException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
 
 /**
  *
@@ -25,9 +33,7 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
  * @author Dragons Vicieux
  */
 
-public class ReservationDAO extends DAO {
-
-    private static final long serialVersionUID = 1L;
+public class ReservationDAO extends DAO implements IReservationDAO {
 
     private static final String READ_REQUEST = "SELECT idReservation, idLivre, idMembre, dateReservation "
         + "FROM reservation "
@@ -56,30 +62,40 @@ public class ReservationDAO extends DAO {
         + "WHERE idMembre = ?";
 
     /**
-     *
-     * Crée un DAO à partir d'une connexion à la base de données.
-     *
-     * @param connexion La connexion à utiliser
+     * @param reservationDTOClass - Crée le DAO de la table reservation
+     * @throws InvalidDTOClassException - Cette exception est utilisée en cas de problème avec la classe d'un objet <code>DTO</code>.
      */
-    public ReservationDAO(Connexion connexion) {
-        super(connexion);
+    public ReservationDAO(Class<ReservationDTO> reservationDTOClass) throws InvalidDTOClassException { // TODO changer la visibilité a package quand nous aurons la version avec Spring
+        super(reservationDTOClass);
     }
 
     /**
-     *
-     * Ajoute une nouvelle réservation.
-     *
-     * @param reservationDTO La réservation à ajouter
-     * @throws DAOException S'il y a une erreur avec la base de données
+     * {@inheritDoc}
      */
 
-    public void add(ReservationDTO reservationDTO) throws DAOException {
+    @Override
+    public void add(Connexion connexion,
+        DTO dto) throws DAOException,
+        InvalidHibernateSessionException,
+        InvalidDTOException,
+        InvalidDTOClassException {
+        if(connexion == null) {
+            throw new InvalidHibernateSessionException("La connexion ne peut être null");
+        }
+        if(dto == null) {
+            throw new InvalidDTOException("Le DTO ne peut être null");
+        }
+        if(!dto.getClass().equals(getDtoClass())) {
+            throw new InvalidDTOClassException("Le DTO doit être de la classe "
+                + getDtoClass().getName());
+        }
+        ReservationDTO reservationDTO = (ReservationDTO) dto;
         try(
-            PreparedStatement addPreparedStatement = getConnection().prepareStatement(ReservationDAO.ADD_REQUEST)) {
+            PreparedStatement addPreparedStatement = connexion.getConnection().prepareStatement(ReservationDAO.ADD_REQUEST)) {
 
-            addPreparedStatement.setInt(1,
+            addPreparedStatement.setString(1,
                 reservationDTO.getLivreDTO().getIdLivre());
-            addPreparedStatement.setInt(2,
+            addPreparedStatement.setString(2,
                 reservationDTO.getMembreDTO().getIdMembre());
             addPreparedStatement.setTimestamp(3,
                 reservationDTO.getDateReservation());
@@ -95,20 +111,26 @@ public class ReservationDAO extends DAO {
     }
 
     /**
-     *
-     * Lit une réservation.
-     *
-     * @param idReservation La réservation à lire
-     * @return La réservation voulue
-     * @throws DAOException S'il y a une erreur avec la base de données
+     * {@inheritDoc}
      */
-    public ReservationDTO read(int idReservation) throws DAOException {
+    @Override
+    public ReservationDTO get(Connexion connexion,
+        Serializable primaryKey) throws DAOException,
+        InvalidHibernateSessionException,
+        InvalidPrimaryKeyException {
+        if(connexion == null) {
+            throw new InvalidHibernateSessionException("La connexion ne peut être null");
+        }
+        if(primaryKey == null) {
+            throw new InvalidPrimaryKeyException("La clef primaire ne peut pas être null");
+        }
 
+        String idReservation = (String) primaryKey;
         ReservationDTO readReservationDTO = null;
 
         try(
-            PreparedStatement readPreparedStatement = getConnection().prepareStatement(ReservationDAO.READ_REQUEST)) {
-            readPreparedStatement.setInt(1,
+            PreparedStatement readPreparedStatement = connexion.getConnection().prepareStatement(ReservationDAO.READ_REQUEST)) {
+            readPreparedStatement.setString(1,
                 idReservation);
 
             try(
@@ -116,13 +138,13 @@ public class ReservationDAO extends DAO {
 
                 if(resultSet.next()) {
                     readReservationDTO = new ReservationDTO();
-                    readReservationDTO.setIdReservation(resultSet.getInt(1));
+                    readReservationDTO.setIdReservation(resultSet.getString(1));
 
                     LivreDTO livreDTO = new LivreDTO();
-                    livreDTO.setIdLivre(resultSet.getInt(2));
+                    livreDTO.setIdLivre(resultSet.getString(2));
 
                     MembreDTO membreDTO = new MembreDTO();
-                    membreDTO.setIdMembre(resultSet.getInt(3));
+                    membreDTO.setIdMembre(resultSet.getString(3));
 
                     readReservationDTO.setLivreDTO(livreDTO);
                     readReservationDTO.setMembreDTO(membreDTO);
@@ -143,26 +165,35 @@ public class ReservationDAO extends DAO {
     }
 
     /**
-     *
-     * Met à jour une réservation.
-     *
-     * @param reservationDTO La réservation à mettre à jour
-     * @param dateReservation La date de la réservation
-     * @throws DAOException S'il y a une erreur avec la base de données
+     * {@inheritDoc}
      */
-    public void update(ReservationDTO reservationDTO,
-        Timestamp dateReservation) throws DAOException {
-
+    @Override
+    public void update(Connexion connexion,
+        DTO dto) throws DAOException,
+        InvalidHibernateSessionException,
+        InvalidDTOException,
+        InvalidDTOClassException {
+        if(connexion == null) {
+            throw new InvalidHibernateSessionException("La connexion ne peut être null");
+        }
+        if(dto == null) {
+            throw new InvalidDTOException("Le DTO ne peut être null");
+        }
+        if(!dto.getClass().equals(getDtoClass())) {
+            throw new InvalidDTOClassException("Le DTO doit être de la classe "
+                + getDtoClass().getName());
+        }
+        ReservationDTO reservationDTO = (ReservationDTO) dto;
         try(
-            PreparedStatement updatePreparedStatement = getConnection().prepareStatement(ReservationDAO.UPDATE_REQUEST)) {
+            PreparedStatement updatePreparedStatement = connexion.getConnection().prepareStatement(ReservationDAO.UPDATE_REQUEST)) {
 
-            updatePreparedStatement.setInt(1,
+            updatePreparedStatement.setString(1,
                 reservationDTO.getLivreDTO().getIdLivre());
-            updatePreparedStatement.setInt(2,
+            updatePreparedStatement.setString(2,
                 reservationDTO.getMembreDTO().getIdMembre());
             updatePreparedStatement.setTimestamp(3,
-                dateReservation);
-            updatePreparedStatement.setInt(4,
+                reservationDTO.getDateReservation());
+            updatePreparedStatement.setString(4,
                 reservationDTO.getLivreDTO().getIdLivre());
             updatePreparedStatement.executeUpdate();
 
@@ -175,18 +206,30 @@ public class ReservationDAO extends DAO {
     }
 
     /**
-     *
-     * Supprime une réservation.
-     *
-     * @param reservationDTO La réservation à supprimer
-     * @throws DAOException S'il y a une erreur avec la base de données
+     * {@inheritDoc}
      */
-    public void delete(ReservationDTO reservationDTO) throws DAOException {
+    @Override
+    public void delete(Connexion connexion,
+        DTO dto) throws DAOException,
+        InvalidHibernateSessionException,
+        InvalidDTOException,
+        InvalidDTOClassException {
+        if(connexion == null) {
+            throw new InvalidHibernateSessionException("La connexion ne peut être null");
+        }
+        if(dto == null) {
+            throw new InvalidDTOException("Le DTO ne peut être null");
+        }
+        if(!dto.getClass().equals(getDtoClass())) {
+            throw new InvalidDTOClassException("Le DTO doit être de la classe "
+                + getDtoClass().getName());
+        }
+        ReservationDTO reservationDTO = (ReservationDTO) dto;
 
         try(
-            PreparedStatement deletePreparedStatement = getConnection().prepareStatement(ReservationDAO.DELETE_REQUEST)) {
+            PreparedStatement deletePreparedStatement = connexion.getConnection().prepareStatement(ReservationDAO.DELETE_REQUEST)) {
 
-            deletePreparedStatement.setInt(1,
+            deletePreparedStatement.setString(1,
                 reservationDTO.getIdReservation());
             deletePreparedStatement.executeUpdate();
 
@@ -200,18 +243,24 @@ public class ReservationDAO extends DAO {
     }
 
     /**
-     *
-     * Trouve toutes les réservations.
-     *
-     * @return La liste des réservations ; une liste vide sinon
-     * @throws DAOException S'il y a une erreur avec la base de données
+     * {@inheritDoc}
      */
-    public List<ReservationDTO> getAll() throws DAOException {
+    @Override
+    public List<ReservationDTO> getAll(Connexion connexion,
+        String sortByPropertyName) throws DAOException,
+        InvalidHibernateSessionException,
+        InvalidSortByPropertyException {
+        if(connexion == null) {
+            throw new InvalidHibernateSessionException("La connexion ne peut être null");
+        }
+        if(sortByPropertyName == null) {
+            throw new InvalidSortByPropertyException("La propriété ne peut être null");
+        }
 
         List<ReservationDTO> listeReservations = Collections.<ReservationDTO> emptyList();
 
         try(
-            PreparedStatement stmtGetAllReservation = (getConnection().prepareStatement(ReservationDAO.GET_ALL_REQUEST))) {
+            PreparedStatement stmtGetAllReservation = connexion.getConnection().prepareStatement(ReservationDAO.GET_ALL_REQUEST)) {
 
             try(
                 ResultSet resultSet = stmtGetAllReservation.executeQuery()) {
@@ -221,13 +270,13 @@ public class ReservationDAO extends DAO {
                 while(resultSet.next()) {
 
                     ReservationDTO reservationDTO = new ReservationDTO();
-                    reservationDTO.setIdReservation(resultSet.getInt(1));
+                    reservationDTO.setIdReservation(resultSet.getString(1));
 
                     LivreDTO livre = new LivreDTO();
-                    livre.setIdLivre(resultSet.getInt(2));
+                    livre.setIdLivre(resultSet.getString(2));
 
                     MembreDTO membre = new MembreDTO();
-                    membre.setIdMembre(resultSet.getInt(3));
+                    membre.setIdMembre(resultSet.getString(3));
 
                     reservationDTO.setLivreDTO(livre);
                     reservationDTO.setMembreDTO(membre);
@@ -248,23 +297,23 @@ public class ReservationDAO extends DAO {
     }
 
     /**
-     *
-     * Trouve les réservations à partir d'un livre.
-     *
-     * @param livreDTO Le livre à utiliser
-     * @return liste La liste des réservations correspondantes, triée par date de réservation croissante ; une liste vide sinon
-     * @throws DAOException S'il y a une erreur avec la base de données
+     * {@inheritDoc}
      */
-
-    public List<ReservationDTO> findByLivre(LivreDTO livreDTO) throws DAOException {
+    @Override
+    public List<ReservationDTO> findByLivre(Connexion connexion,
+        String idLivre,
+        String SortByPropretyName) throws InvalidHibernateSessionException,
+        InvalidCriterionException,
+        InvalidSortByPropertyException,
+        DAOException {
 
         List<ReservationDTO> listeReservations = Collections.<ReservationDTO> emptyList();
 
         try(
-            PreparedStatement findByLivreStmt = (getConnection().prepareStatement(ReservationDAO.FIND_BY_LIVRE));) {
+            PreparedStatement findByLivreStmt = connexion.getConnection().prepareStatement(ReservationDAO.FIND_BY_LIVRE);) {
 
-            findByLivreStmt.setInt(1,
-                livreDTO.getIdLivre());
+            findByLivreStmt.setString(1,
+                idLivre);
             try(
                 ResultSet rset = findByLivreStmt.executeQuery()) {
 
@@ -273,13 +322,13 @@ public class ReservationDAO extends DAO {
                 while(rset.next()) {
 
                     ReservationDTO reservationDTO = new ReservationDTO();
-                    reservationDTO.setIdReservation(rset.getInt(1));
+                    reservationDTO.setIdReservation(rset.getString(1));
 
                     LivreDTO unlivreDTO = new LivreDTO();
-                    unlivreDTO.setIdLivre(rset.getInt(2));
+                    unlivreDTO.setIdLivre(rset.getString(2));
 
                     MembreDTO unMembreDTO = new MembreDTO();
-                    unMembreDTO.setIdMembre(rset.getInt(3));
+                    unMembreDTO.setIdMembre(rset.getString(3));
 
                     reservationDTO.setLivreDTO(unlivreDTO);
                     reservationDTO.setMembreDTO(unMembreDTO);
@@ -299,23 +348,23 @@ public class ReservationDAO extends DAO {
     }
 
     /**
-     *
-     * Trouve les réservations à partir d'un membre.
-     *
-     * @param membreDTO Le membre à utiliser
-     * @return La liste des réservations correspondantes ; une liste vide sinon
-     * @throws DAOException S'il y a une erreur avec la base de données
+     * {@inheritDoc}
      */
-
-    public List<ReservationDTO> findByMembre(MembreDTO membreDTO) throws DAOException {
+    @Override
+    public List<ReservationDTO> findByMembre(Connexion connexion,
+        String idMembre,
+        String sortByPropertyName) throws InvalidHibernateSessionException,
+        InvalidCriterionException,
+        InvalidSortByPropertyException,
+        DAOException {
 
         List<ReservationDTO> listeReservations = Collections.<ReservationDTO> emptyList();
 
         try(
-            PreparedStatement findByMembreStmt = (getConnection().prepareStatement(ReservationDAO.FIND_BY_MEMBRE));) {
+            PreparedStatement findByMembreStmt = connexion.getConnection().prepareStatement(ReservationDAO.FIND_BY_MEMBRE);) {
 
-            findByMembreStmt.setInt(1,
-                membreDTO.getIdMembre());
+            findByMembreStmt.setString(1,
+                idMembre);
 
             try(
                 ResultSet rset = findByMembreStmt.executeQuery();) {
@@ -325,13 +374,13 @@ public class ReservationDAO extends DAO {
                 while(rset.next()) {
 
                     ReservationDTO reservationDTO = new ReservationDTO();
-                    reservationDTO.setIdReservation(rset.getInt(1));
+                    reservationDTO.setIdReservation(rset.getString(1));
 
                     LivreDTO unLivreDTO = new LivreDTO();
-                    unLivreDTO.setIdLivre(rset.getInt(2));
+                    unLivreDTO.setIdLivre(rset.getString(2));
 
                     MembreDTO unMembreDTO = new MembreDTO();
-                    unMembreDTO.setIdMembre(rset.getInt(3));
+                    unMembreDTO.setIdMembre(rset.getString(3));
 
                     reservationDTO.setLivreDTO(unLivreDTO);
                     reservationDTO.setMembreDTO(unMembreDTO);

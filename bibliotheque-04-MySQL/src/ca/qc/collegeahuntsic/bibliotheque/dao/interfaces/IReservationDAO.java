@@ -13,42 +13,38 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidHibernateSessionE
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidSortByPropertyException;
 
 /**
- * Interface de base pour tous les DAOs.<br/>
- * Toutes les interfaces de DAO devraient en hériter
+ * Interface DAO pour manipuler les réservations dans la base de données.
  *
  * @author Dragons Vicieux
  */
 public interface IReservationDAO extends IDAO {
 
     /**
-     *
-     *a
-     * @param connexion
-     * @param idMembre
-     * @param SortByPropretyName
-     * @return
-     * @throws InvalidHibernateSessionException
-     * @throws InvalidCriterionException
-     * @throws InvalidSortByPropertyException
-     * @throws DAOException
+     * @param connexion - La connexion à utiliser
+     * @param idLivre - L'ID du livre à trouver
+     * @param SortByPropretyName - Le nom de la propriété à utiliser pour classer
+     * @return - La liste des réservations correspondantes ; une liste vide sinon
+     * @throws InvalidHibernateSessionException - Si la connexion est null
+     * @throws InvalidCriterionException - Si l'ID du livre est null
+     * @throws InvalidSortByPropertyException - Si la propriété à utiliser pour classer est null
+     * @throws DAOException - S'il y a une erreur avec la base de données
      */
     List<ReservationDTO> findByLivre(Connexion connexion,
-        String idMembre,
+        String idLivre,
         String SortByPropretyName) throws InvalidHibernateSessionException,
         InvalidCriterionException,
         InvalidSortByPropertyException,
         DAOException;
 
     /**
-     *
-     * @param connexion
-     * @param idMembre
-     * @param SortByPropretyName
-     * @return
-     * @throws InvalidHibernateSessionException
-     * @throws InvalidCriterionException
-     * @throws InvalidSortByPropertyException
-     * @throws DAOException
+     * @param connexion - La connexion à utiliser
+     * @param idLivre - L'ID du membre à trouver
+     * @param SortByPropretyName - Le nom de la propriété à utiliser pour classer
+     * @return - La liste des réservations correspondantes ; une liste vide sinon
+     * @throws InvalidHibernateSessionException - Si la connexion est null
+     * @throws InvalidCriterionException - Si l'ID du livre est null
+     * @throws InvalidSortByPropertyException - Si la propriété à utiliser pour classer est null
+     * @throws DAOException - S'il y a une erreur avec la base de données
      */
     List<ReservationDTO> findByMembre(Connexion connexion,
         String idMembre,
