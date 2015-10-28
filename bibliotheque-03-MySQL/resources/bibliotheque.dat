@@ -28,30 +28,30 @@ annuler 2
 -- *** Livres ***
 --
 -- livre existe déjà
--- acquerir 1 t1 a1 1999-01-03
+-- IMPOSSIBLE -> AUTO-INCREMENT
 --
 --
 -- *** Membres ***
 --
 -- membre existe déjà
--- inscrire 1 n1 8198218001 1
+-- IMPOSSIBLE -> AUTO-INCREMENT
 --
 --
 -- *** Prêts ***
 --
--- erreur : livre inexistant
+-- erreur : membre id 999 inexistant
 preter 1 999
 --
--- erreur : membre inexistant
+-- erreur : livre id 999 inexistant
 preter 999 1
 --
--- création d'un prêt
+-- création d'un prêt (NOT ANYMORE: retourner 1)
 preter 1 1
 --
 -- erreur : livre en cours de prêt
 vendre 1
 --
--- erreur : livre déjà prété
+-- erreur : livre déjà prêté (NOT ANYMORE: retourner 2)
 preter 2 1
 --
 -- erreur : limite de prêt atteinte
@@ -62,7 +62,7 @@ reserver 2 1
 reserver 3 1
 --
 -- retour du livre 1
-retourner 3
+retourner 1
 --
 -- erreur : livre réservé
 preter 3 1
@@ -76,7 +76,7 @@ retourner 3
 -- erreur : livre inexistant
 reserver 2 998
 --
--- créer un pret
+-- pret sur des livres déjà prêtés
 preter 2 2
 preter 2 3
 --

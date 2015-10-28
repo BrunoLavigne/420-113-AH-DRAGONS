@@ -110,11 +110,6 @@ public class Bibliotheque {
                 " ");
             if(tokenizer.hasMoreTokens()) {
                 try {
-                    try {
-                        Thread.sleep(300); //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
                     executerTransaction(tokenizer);
                     transaction = lireTransaction(reader);
                 } catch(BibliothequeException bibliothequeException) {
@@ -181,7 +176,7 @@ public class Bibliotheque {
 
             } else if("acquerir".startsWith(command)) {
 
-                // TRANSACTION ACQUERIR ( <idLivre> <titre> <auteur> <dateAcquisition> )
+                // TRANSACTION ACQUERIR ( <titre> <auteur> )
 
                 LivreDTO livreDTO = new LivreDTO();
 
@@ -199,7 +194,7 @@ public class Bibliotheque {
 
             } else if("preter".startsWith(command)) {
 
-                // TRANSACTION PRETER ( <idPret> <idLivre> <idMembre> )
+                // TRANSACTION PRETER ( <idLivre> <idMembre> )
 
                 LivreDTO livreDTO = getGestionBiblio().getLivreDAO().read(readInt(tokenizer));
                 MembreDTO membreDTO = getGestionBiblio().getMembreDAO().read(readInt(tokenizer));
@@ -241,7 +236,7 @@ public class Bibliotheque {
 
             } else if("reserver".startsWith(command)) {
 
-                // TRANSACTION RESERVER ( <idReservation> <idLivre> <idMembre> )
+                // TRANSACTION RESERVER ( <idMembre> <idLivre> )
 
                 ReservationDTO reservationDTO = new ReservationDTO();
                 //reservationDTO.setIdReservation(readInt(tokenizer));
@@ -350,15 +345,15 @@ public class Bibliotheque {
         System.out.println("Les transactions sont:");
         System.out.println("  aide");
         System.out.println("  exit");
-        System.out.println("  acquerir <idLivre> <titre> <auteur> <dateAcquisition>");
+        System.out.println("  acquerir <titre> <auteur>");
         System.out.println("  preter <idLivre> <idMembre>");
-        System.out.println("  renouveler <idLivre>");
-        System.out.println("  retourner <idLivre>");
+        System.out.println("  renouveler <idPret>");
+        System.out.println("  retourner <idPret>");
         System.out.println("  vendre <idLivre>");
-        System.out.println("  inscrire <idMembre> <nom> <telephone> <limitePret>");
+        System.out.println("  inscrire <nom> <telephone> <limitePret>");
         System.out.println("  desinscrire <idMembre>");
-        System.out.println("  reserver <idReservation> <idLivre> <idMembre> ");
-        System.out.println("  utiliser <idReservation> <dateEmprunt>");
+        System.out.println("  reserver <idMembre> <idLivre> ");
+        System.out.println("  utiliser <idReservation>");
         System.out.println("  annuler <idReservation>");
 
     }
