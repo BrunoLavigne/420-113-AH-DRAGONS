@@ -16,7 +16,7 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidSortByPropertyExc
  *
  * TODO Auto-generated class javadoc
  *
- * @author Gilles Bénichou
+ * @author Dragons Vicieux
  */
 public interface IMembreDAO extends IDAO {
 
