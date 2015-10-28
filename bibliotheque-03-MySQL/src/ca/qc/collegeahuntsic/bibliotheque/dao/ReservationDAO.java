@@ -205,20 +205,29 @@ public class ReservationDAO extends DAO {
         List<ReservationDTO> listeReservations = Collections.<ReservationDTO> emptyList();
 
         try(
-            PreparedStatement stmtGetAllReservation = (getConnection().prepareStatement(ReservationDAO.GET_ALL_REQUEST));
-            ResultSet results = stmtGetAllReservation.executeQuery()) {
+            PreparedStatement stmtGetAllReservation = (getConnection().prepareStatement(ReservationDAO.GET_ALL_REQUEST))) {
 
-            listeReservations = new ArrayList<>();
             //boolean listIsEmpty = true;
             try(
                 ResultSet resultSet = stmtGetAllReservation.executeQuery()) {
 
+                listeReservations = new ArrayList<>();
+
                 while(resultSet.next()) {
+
                     ReservationDTO reservationDTO = new ReservationDTO();
                     reservationDTO.setIdReservation(resultSet.getInt(1));
-                    reservationDTO.getLivreDTO().setIdLivre(resultSet.getInt(2));
-                    reservationDTO.getMembreDTO().setIdMembre(resultSet.getInt(3));
+
+                    LivreDTO livre = new LivreDTO();
+                    livre.setIdLivre(resultSet.getInt(2));
+
+                    MembreDTO membre = new MembreDTO();
+                    membre.setIdMembre(resultSet.getInt(3));
+
+                    reservationDTO.setLivreDTO(livre);
+                    reservationDTO.setMembreDTO(membre);
                     reservationDTO.setDateReservation(resultSet.getTimestamp(4));
+
                     listeReservations.add(reservationDTO);
                     //listIsEmpty = false;
                 }
@@ -260,6 +269,7 @@ public class ReservationDAO extends DAO {
                 ResultSet rset = findByLivreStmt.executeQuery()) {
 
                 listeReservations = new ArrayList<>();
+
                 while(rset.next()) {
 
                     ReservationDTO reservationDTO = new ReservationDTO();
@@ -310,24 +320,28 @@ public class ReservationDAO extends DAO {
             findByMembreStmt.setInt(1,
                 membreDTO.getIdMembre());
 
-            listeReservations = new ArrayList<>();
             //boolean listIsEmpty = true;
+
             try(
                 ResultSet rset = findByMembreStmt.executeQuery();) {
 
-                if(rset.next()) {
+                listeReservations = new ArrayList<>();
+
+                while(rset.next()) {
+
                     ReservationDTO reservationDTO = new ReservationDTO();
                     reservationDTO.setIdReservation(rset.getInt(1));
 
                     LivreDTO unLivreDTO = new LivreDTO();
                     unLivreDTO.setIdLivre(rset.getInt(2));
-                    reservationDTO.setLivreDTO(unLivreDTO);
 
                     MembreDTO unMembreDTO = new MembreDTO();
                     unMembreDTO.setIdMembre(rset.getInt(3));
-                    reservationDTO.setMembreDTO(unMembreDTO);
 
+                    reservationDTO.setLivreDTO(unLivreDTO);
+                    reservationDTO.setMembreDTO(unMembreDTO);
                     reservationDTO.setDateReservation(rset.getTimestamp(4));
+
                     listeReservations.add(reservationDTO);
                     //listIsEmpty = false;
                 }

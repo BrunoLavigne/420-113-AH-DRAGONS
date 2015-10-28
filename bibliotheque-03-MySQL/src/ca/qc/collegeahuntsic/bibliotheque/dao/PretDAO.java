@@ -197,17 +197,23 @@ public class PretDAO extends DAO {
                 if(resultSet.next()) {
                     prets = new ArrayList<>();
                     do {
+
                         pretDTO = new PretDTO();
                         pretDTO.setIdPret(resultSet.getInt(1));
+
                         MembreDTO membre = new MembreDTO();
                         membre.setIdMembre(resultSet.getInt(2));
-                        pretDTO.setMembreDTO(membre);
+
                         LivreDTO livre = new LivreDTO();
-                        membre.setIdMembre(resultSet.getInt(3));
+                        livre.setIdLivre(resultSet.getInt(3));
+
+                        pretDTO.setMembreDTO(membre);
                         pretDTO.setLivreDTO(livre);
                         pretDTO.setDatePret(resultSet.getTimestamp(4));
                         pretDTO.setDateRetour(resultSet.getTimestamp(5));
+
                         prets.add(pretDTO);
+
                     } while(resultSet.next());
                 }
                 return prets;
@@ -242,13 +248,23 @@ public class PretDAO extends DAO {
             try(
                 ResultSet rset = stmtGetPretsByMembre.executeQuery()) {
                 liste = new ArrayList<>();
+
                 while(rset.next()) {
+
                     PretDTO tempPret = new PretDTO();
                     tempPret.setIdPret(rset.getInt(1));
-                    tempPret.setIdPret(rset.getInt(2));
-                    tempPret.setIdPret(rset.getInt(3));
+
+                    MembreDTO membre = new MembreDTO();
+                    membre.setIdMembre(rset.getInt(2));
+
+                    LivreDTO livre = new LivreDTO();
+                    livre.setIdLivre(rset.getInt(3));
+
+                    tempPret.setMembreDTO(membre);
+                    tempPret.setLivreDTO(livre);
                     tempPret.setDatePret(rset.getTimestamp(4));
                     tempPret.setDateRetour(rset.getTimestamp(5));
+
                     liste.add(tempPret);
                 }
             }
@@ -277,15 +293,24 @@ public class PretDAO extends DAO {
                 livreDTO.getIdLivre());
             try(
                 ResultSet rset = stmtGetPretsByLivre.executeQuery()) {
+
                 liste = new ArrayList<>();
+
                 while(rset.next()) {
+
                     PretDTO tempPret = new PretDTO();
                     tempPret.setIdPret(rset.getInt(1));
-                    tempPret.setIdPret(rset.getInt(2));
-                    tempPret.setIdPret(rset.getInt(3));
+
+                    MembreDTO membre = new MembreDTO();
+                    membre.setIdMembre(rset.getInt(2));
+
+                    LivreDTO livre = new LivreDTO();
+                    livre.setIdLivre(rset.getInt(3));
+
+                    tempPret.setMembreDTO(membre);
+                    tempPret.setLivreDTO(livre);
                     tempPret.setDatePret(rset.getTimestamp(4));
                     tempPret.setDateRetour(rset.getTimestamp(5));
-                    liste.add(tempPret);
                 }
             }
         } catch(SQLException sqlException) {
@@ -314,15 +339,25 @@ public class PretDAO extends DAO {
                 datePret);
             try(
                 ResultSet rset = statementGetPretsByDatePret.executeQuery()) {
+
                 liste = new ArrayList<>();
+
                 while(rset.next()) {
+
                     PretDTO tempPret = new PretDTO();
                     tempPret.setIdPret(rset.getInt(1));
-                    tempPret.setIdPret(rset.getInt(2));
-                    tempPret.setIdPret(rset.getInt(3));
+
+                    MembreDTO membre = new MembreDTO();
+                    membre.setIdMembre(rset.getInt(2));
+
+                    LivreDTO livre = new LivreDTO();
+                    livre.setIdLivre(rset.getInt(3));
+
+                    tempPret.setMembreDTO(membre);
+                    tempPret.setLivreDTO(livre);
                     tempPret.setDatePret(rset.getTimestamp(4));
                     tempPret.setDateRetour(rset.getTimestamp(5));
-                    liste.add(tempPret);
+
                 }
             }
         } catch(SQLException sqlException) {
@@ -353,13 +388,21 @@ public class PretDAO extends DAO {
                 ResultSet rset = statementGetPretsByDateReour.executeQuery()) {
                 liste = new ArrayList<>();
                 while(rset.next()) {
+
                     PretDTO tempPret = new PretDTO();
                     tempPret.setIdPret(rset.getInt(1));
-                    tempPret.setIdPret(rset.getInt(2));
-                    tempPret.setIdPret(rset.getInt(3));
+
+                    MembreDTO membre = new MembreDTO();
+                    membre.setIdMembre(rset.getInt(2));
+
+                    LivreDTO livre = new LivreDTO();
+                    livre.setIdLivre(rset.getInt(3));
+
+                    tempPret.setMembreDTO(membre);
+                    tempPret.setLivreDTO(livre);
                     tempPret.setDatePret(rset.getTimestamp(4));
                     tempPret.setDateRetour(rset.getTimestamp(5));
-                    liste.add(tempPret);
+
                 }
             }
         } catch(SQLException sqlException) {
