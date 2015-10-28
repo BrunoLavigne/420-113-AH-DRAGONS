@@ -336,7 +336,7 @@ public class ReservationService extends Services {
             }
 
             // Éliminer la réservation.
-            unMembreDTO.setNbPret(reservationDTO.getMembreDTO().getNbPret() + 1);
+            unMembreDTO.setNbPret(unMembreDTO.getNbPret() + 1);
             getMembreDAO().update(unMembreDTO);
 
             PretDTO unPretDTO = new PretDTO();
