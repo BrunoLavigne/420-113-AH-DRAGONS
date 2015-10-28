@@ -243,7 +243,7 @@ public class LivreDAO extends DAO implements ILivreDAO {
                         livreDTO.setIdLivre(resultSet.getString(1));
                         livreDTO.setTitre(resultSet.getString(2));
                         livreDTO.setAuteur(resultSet.getString(3));
-                        //livreDTO.setDateAquisition(resultSet.getTimestamp(4));
+                        livreDTO.setDateAcquisition(resultSet.getTimestamp(4));
                         livres.add(livreDTO);
                     } while(resultSet.next());
                 }
@@ -296,6 +296,7 @@ public class LivreDAO extends DAO implements ILivreDAO {
                     tempLivre.setIdLivre(rset.getString(1));
                     tempLivre.setTitre(rset.getString(2));
                     tempLivre.setAuteur(rset.getString(3));
+                    tempLivre.setDateAcquisition(rset.getTimestamp(4));
                     liste.add(tempLivre);
                 }
             }
