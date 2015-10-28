@@ -1,4 +1,4 @@
-// Fichier IDAO.java
+// Fichier IPretDAO.java
 // Auteur : Dragons Vicieux
 // Date de création : 2015-10-28
 
