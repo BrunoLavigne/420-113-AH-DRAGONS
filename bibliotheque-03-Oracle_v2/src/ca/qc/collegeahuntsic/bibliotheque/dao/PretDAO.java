@@ -18,8 +18,8 @@ public class PretDAO extends DAO {
 
     private static final long serialVersionUID = 1L;
 
-    private final static String ADD_REQUEST = "INSERT INTO pret (idMembre, idLivre, datePret, dateRetour) "
-        + "VALUES (?,?,?, NULL)";
+    private final static String ADD_REQUEST = "INSERT INTO pret (idPret, idMembre, idLivre, datePret, dateRetour) "
+        + "VALUES (SEQ_ID_PRET.NEXTVAL,?,?,?, NULL)";
 
     private final static String READ_REQUEST = "SELECT idPret, idMembre, idLivre, datePret, dateRetour "
         + "FROM pret "
