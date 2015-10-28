@@ -7,6 +7,8 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.PretDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.ReservationDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.DAOException;
@@ -380,6 +382,21 @@ public class PretService extends Services {
                     throw new ServiceException("Le livre est déjà prêté");
                 }
             }
+
+            MembreDTO unMembreDTO = new MembreDTO();
+            unMembreDTO = getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre());
+
+            LivreDTO unLivreDTO = new LivreDTO();
+            unLivreDTO = getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre());
+
+            pretDTO.setLivreDTO(unLivreDTO);
+            pretDTO.setMembreDTO(unMembreDTO);
+            pretDTO.setDateRetour(new Timestamp(System.currentTimeMillis()));
+
+            update(pretDTO);
+
+            unMembreDTO.setNbPret(unMembreDTO.getNbPret() - 1);
+            getMembreDAO().update(unMembreDTO);
 
             pretDTO.setDateRetour(new Timestamp(System.currentTimeMillis()));
             update(pretDTO);

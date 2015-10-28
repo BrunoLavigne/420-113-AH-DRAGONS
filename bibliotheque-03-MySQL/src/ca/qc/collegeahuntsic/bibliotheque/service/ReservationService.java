@@ -292,13 +292,16 @@ public class ReservationService extends Services {
                 throw new ServiceException("La réservation n'existe pas");
             }
 
+            MembreDTO unMembreDTO = getMembreDAO().read(reservationDTO.getMembreDTO().getIdMembre());
+            LivreDTO unLivreDTO = getLivreDAO().read(reservationDTO.getLivreDTO().getIdLivre());
+
             //  Si le membre n'existe pas
-            if(getMembreDAO().read(reservationDTO.getMembreDTO().getIdMembre()) == null) {
+            if(unMembreDTO == null) {
                 throw new ServiceException("Membre inexistant");
             }
 
             // Vérification sur le livre
-            if(getLivreDAO().read(reservationDTO.getLivreDTO().getIdLivre()) == null) {
+            if(unLivreDTO == null) {
                 throw new ServiceException("Livre inexistant");
             }
 
@@ -326,18 +329,19 @@ public class ReservationService extends Services {
             }
 
             // Si le membre a atteint sa limite de prêt
-            if(reservationDTO.getMembreDTO().getNbPret() >= reservationDTO.getMembreDTO().getLimitePret()) {
+            if(unMembreDTO.getNbPret() >= unMembreDTO.getLimitePret()) {
                 throw new ServiceException("Limite de prêt du membre "
                     + reservationDTO.getMembreDTO().getIdMembre()
                     + " atteinte");
             }
 
             // Éliminer la réservation.
-            reservationDTO.getMembreDTO().setNbPret(reservationDTO.getMembreDTO().getNbPret() + 1);
-            getMembreDAO().update(reservationDTO.getMembreDTO());
+            unMembreDTO.setNbPret(reservationDTO.getMembreDTO().getNbPret() + 1);
+            getMembreDAO().update(unMembreDTO);
+
             PretDTO unPretDTO = new PretDTO();
-            unPretDTO.setMembreDTO(reservationDTO.getMembreDTO());
-            unPretDTO.setLivreDTO(reservationDTO.getLivreDTO());
+            unPretDTO.setMembreDTO(unMembreDTO);
+            unPretDTO.setLivreDTO(unLivreDTO);
             unPretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
             getPretDAO().add(unPretDTO);
             annuler(reservationDTO);
