@@ -41,7 +41,6 @@ public interface IPretDAO extends IDAO {
 
     /**
      *
-     *
      * @param connexion
      * @param idLivre
      * @param SortByPropretyName
@@ -59,15 +58,24 @@ public interface IPretDAO extends IDAO {
         DAOException;
 
     /**
-     List<PretDTO> findByDatePret(Connexion connexion,
-         Timestamp datePret,
-         String SortByPropretyName) throws InvalidHibernateSessionException,
-         InvalidCriterionException,
-         InvalidSortByPropertyException,
-         DAOException;
-
-     /**
      *
+     * @param connexion
+     * @param datePret
+     * @param SortByPropretyName
+     * @return
+     * @throws InvalidHibernateSessionException
+     * @throws InvalidCriterionException
+     * @throws InvalidSortByPropertyException
+     * @throws DAOException
+     */
+    List<PretDTO> findByDatePret(Connexion connexion,
+        Timestamp datePret,
+        String SortByPropretyName) throws InvalidHibernateSessionException,
+        InvalidCriterionException,
+        InvalidSortByPropertyException,
+        DAOException;
+
+    /**
      *
      * @param connexion
      * @param dateRetour
