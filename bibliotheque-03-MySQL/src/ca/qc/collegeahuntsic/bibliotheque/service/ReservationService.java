@@ -158,7 +158,7 @@ public class ReservationService extends Services {
     public List<ReservationDTO> findByLivre(LivreDTO livreDTO) throws ServiceException {
 
         try {
-            return getReservationDAO().findByLivre(getLivreDAO().read(livreDTO.getIdLivre()));
+            return getReservationDAO().findByLivre(livreDTO);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
@@ -176,7 +176,7 @@ public class ReservationService extends Services {
     public List<ReservationDTO> findByMembre(MembreDTO membreDTO) throws ServiceException {
 
         try {
-            return getReservationDAO().findByMembre(getMembreDAO().read(membreDTO.getIdMembre()));
+            return getReservationDAO().findByMembre(membreDTO);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
@@ -348,13 +348,15 @@ public class ReservationService extends Services {
                 return;
             }
 
+            System.out.println("vers les listes");
+
             // Si la réservation n'est pas la première de la liste
 
-            List<ReservationDTO> listReservations = findByLivre(unLivreDTO);
+            List<ReservationDTO> listeReservations = findByLivre(unLivreDTO);
 
-            if(listReservations.get(0) != null) {
+            if(!listeReservations.isEmpty()) {
 
-                ReservationDTO firstReservationDTO = listReservations.get(0);
+                ReservationDTO firstReservationDTO = listeReservations.get(0);
 
                 if(!reservationDTO.equals(firstReservationDTO)) {
                     System.err.println("La réservation n'est pas la première de la liste "
@@ -378,6 +380,8 @@ public class ReservationService extends Services {
                     + pretDTO.getMembreDTO().getIdMembre());
                 return;
             }
+
+            System.out.println("limite de pret");
 
             // Si le membre a atteint sa limite de prêt
 

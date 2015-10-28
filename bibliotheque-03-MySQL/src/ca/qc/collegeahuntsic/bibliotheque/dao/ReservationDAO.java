@@ -255,17 +255,24 @@ public class ReservationDAO extends DAO {
             findByLivreStmt.setInt(1,
                 livreDTO.getIdLivre());
 
-            listeReservations = new ArrayList<>();
             //boolean listIsEmpty = true;
             try(
-                ResultSet rset = findByLivreStmt.executeQuery();) {
+                ResultSet rset = findByLivreStmt.executeQuery()) {
 
-                if(rset.next()) {
+                listeReservations = new ArrayList<>();
+                while(rset.next()) {
 
                     ReservationDTO reservationDTO = new ReservationDTO();
                     reservationDTO.setIdReservation(rset.getInt(1));
-                    reservationDTO.getLivreDTO().setIdLivre(rset.getInt(2));
-                    reservationDTO.getMembreDTO().setIdMembre(rset.getInt(3));
+
+                    LivreDTO unlivreDTO = new LivreDTO();
+                    unlivreDTO.setIdLivre(rset.getInt(2));
+
+                    MembreDTO unMembreDTO = new MembreDTO();
+                    unMembreDTO.setIdMembre(rset.getInt(3));
+
+                    reservationDTO.setLivreDTO(unlivreDTO);
+                    reservationDTO.setMembreDTO(unMembreDTO);
                     reservationDTO.setDateReservation(rset.getTimestamp(4));
                     listeReservations.add(reservationDTO);
                     //listIsEmpty = false;
