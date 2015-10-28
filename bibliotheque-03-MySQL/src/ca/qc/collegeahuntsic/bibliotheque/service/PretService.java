@@ -240,6 +240,19 @@ public class PretService extends Services {
      */
     public void renouveler(PretDTO pretDTO) throws ServiceException {
 
+        System.err.println("NORM RENOUVELER TEST BLOCK START");
+        System.out.println("Pret ID:");
+        System.out.println(pretDTO.getIdPret());
+        System.out.println("Pret DatePret:");
+        System.out.println(pretDTO.getDatePret());
+        System.out.println("Pret DateRetour:");
+        System.out.println(pretDTO.getDateRetour());
+        System.out.println("Pret LivreDTO:");
+        System.out.println(pretDTO.getLivreDTO());
+        System.out.println("Pret MembreDTO:");
+        System.out.println(pretDTO.getMembreDTO());
+        System.err.println("NORM RENOUVELER TEST BLOCK END");
+
         try {
             // Si le prêt n'existe pas
             if(getPretDAO().read(pretDTO.getIdPret()) == null) {
