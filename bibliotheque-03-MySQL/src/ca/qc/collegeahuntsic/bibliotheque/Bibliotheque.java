@@ -331,7 +331,6 @@ public class Bibliotheque {
                 connexionException.printStackTrace();
                 return;
             }
-            // exception.printStackTrace();
             throw new BibliothequeException(exception.getMessage(),
                 exception);
         }

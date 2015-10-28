@@ -327,7 +327,7 @@ public class ReservationService extends Services {
 
             // Si le membre a atteint sa limite de prêt
             if(reservationDTO.getMembreDTO().getNbPret() >= reservationDTO.getMembreDTO().getLimitePret()) {
-                System.err.println("Limite de prêt du membre "
+                throw new ServiceException("Limite de prêt du membre "
                     + reservationDTO.getMembreDTO().getIdMembre()
                     + " atteinte");
             }
@@ -343,7 +343,8 @@ public class ReservationService extends Services {
             annuler(reservationDTO);
 
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
     }
 

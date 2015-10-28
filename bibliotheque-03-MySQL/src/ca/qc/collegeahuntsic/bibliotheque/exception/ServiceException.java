@@ -32,8 +32,7 @@ public class ServiceException extends Exception {
      * @param message  the detail message. The detail message is saved for later retrieval by the {@link java.lang.Throwable#getMessage()} method.
      */
     public ServiceException(String message) {
-        //super(message);
-        System.out.println(message);
+        super(message);
     }
 
     /**
@@ -48,7 +47,6 @@ public class ServiceException extends Exception {
         Throwable cause) {
         super(message,
             cause);
-        System.out.println(message);
     }
 
     /**
