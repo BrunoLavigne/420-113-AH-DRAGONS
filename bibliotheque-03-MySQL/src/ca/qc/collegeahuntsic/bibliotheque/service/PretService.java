@@ -76,7 +76,8 @@ public class PretService extends Services {
         try {
             getPretDAO().add(pretDTO);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
 
     }
@@ -93,7 +94,8 @@ public class PretService extends Services {
         try {
             return getPretDAO().read(idPret);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
 
     }
@@ -109,7 +111,8 @@ public class PretService extends Services {
         try {
             getPretDAO().update(pretDTO);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
     }
 
@@ -124,7 +127,8 @@ public class PretService extends Services {
         try {
             getPretDAO().delete(pretDTO);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
 
     }
@@ -144,7 +148,8 @@ public class PretService extends Services {
         try {
             return getPretDAO().getAll();
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
 
     }
@@ -161,7 +166,8 @@ public class PretService extends Services {
         try {
             return getPretDAO().findByMembre(getMembreDAO().read(idMembre));
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
 
     }
@@ -178,7 +184,8 @@ public class PretService extends Services {
         try {
             return getPretDAO().findByLivre(getLivreDAO().read(idLivre));
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
 
     }
@@ -195,7 +202,8 @@ public class PretService extends Services {
         try {
             return getPretDAO().findByDatePret(datePret);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
 
     }
@@ -212,7 +220,8 @@ public class PretService extends Services {
         try {
             return getPretDAO().findByDateRetour(datePret);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
 
     }
@@ -234,65 +243,49 @@ public class PretService extends Services {
         try {
             // Si le prêt n'existe pas
             if(getPretDAO().read(pretDTO.getIdPret()) == null) {
-                System.err.println("Le pret : "
-                    + pretDTO.getIdPret()
-                    + " n'existe pas");
-                return;
+                throw new ServiceException("Le pret n'existe pas");
             }
             getPretDAO().read(pretDTO.getIdPret());
 
             // Si le membre n'existe pas
             MembreDTO unMembreDTO = getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre());
             if(unMembreDTO == null) {
-                System.err.println("Le membre : "
-                    + pretDTO.getMembreDTO().getIdMembre()
-                    + " n'existe pas");
-                return;
+                throw new ServiceException("Le membre n'existe pas");
             }
 
             LivreDTO unLivreDTO = getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre());
             // Si le livre n'existe pas
             if(unLivreDTO == null) {
-                System.err.println("Le livre est inexistant: "
-                    + pretDTO.getLivreDTO().getIdLivre());
-                return;
+                throw new ServiceException("Le livre n'existe pas");
             }
 
             // Si le livre n'a pas encore été prêté
             List<PretDTO> listeDesPrets = getPretDAO().findByLivre(unLivreDTO);
             if(listeDesPrets.isEmpty()) {
-                System.err.println("Le livre : "
-                    + unLivreDTO.getIdLivre()
-                    + " n'a pas été prêté encore.");
-                return;
+                throw new ServiceException("Le livre n'a pas été prêté encore.");
             }
 
             // Si le livre a été prêté à quelqu'un d'autre
             for(PretDTO unPretDTO : listeDesPrets) {
                 if(!unMembreDTO.equals(unPretDTO.getMembreDTO())) {
-                    System.err.println("Le livre : "
-                        + unLivreDTO.getIdLivre()
-                        + " est déjà prêté au membre : "
-                        + unMembreDTO.getIdMembre());
-                    return;
+                    throw new ServiceException("Le livre est déjà prêté");
                 }
             }
 
             // Si le livre a été réservé
             if(getReservationDAO().read(unLivreDTO.getIdLivre()) != null) {
-                System.err.println("Le livre : "
-                    + unLivreDTO.getIdLivre()
-                    + " est déjà prêté");
-                return;
+                throw new ServiceException("Le livre est déjà réservé");
             }
 
             pretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
             update(pretDTO);
 
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         } catch(NullPointerException nullPointerException) {
-            throw new ServiceException(nullPointerException);
+            throw new ServiceException(nullPointerException.getMessage(),
+                nullPointerException);
         }
 
     }
@@ -315,44 +308,30 @@ public class PretService extends Services {
             // Si le membre n'existe pas
             MembreDTO unMembreDTO = getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre());
             if(unMembreDTO == null) {
-                System.err.println("Le membre : "
-                    + pretDTO.getMembreDTO().getIdMembre()
-                    + " n'existe pas");
-                return;
+                throw new ServiceException("Le membre n'existe pas");
             }
 
             LivreDTO unLivreDTO = getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre());
             // Si le livre n'existe pas
             if(unLivreDTO == null) {
-                System.err.println("Le livre est inexistant: "
-                    + pretDTO.getLivreDTO().getIdLivre());
-                return;
+                throw new ServiceException("Le livre est inexistant");
             }
 
             // Si le livre a été prêté
             List<PretDTO> listeDesPrets = getPretDAO().findByLivre(unLivreDTO);
             if(!listeDesPrets.isEmpty()) {
-                System.err.println("Le livre : "
-                    + unLivreDTO.getIdLivre()
-                    + " a été prêté.");
-                return;
+                throw new ServiceException("Le livre a été prêté.");
             }
 
             // Si le livre a été réservé
             List<ReservationDTO> listeDesReservations = getReservationDAO().findByLivre(unLivreDTO);
             if(!listeDesReservations.isEmpty()) {
-                System.err.println("Le livre : "
-                    + unLivreDTO.getIdLivre()
-                    + " a été réservé.");
-                return;
+                throw new ServiceException("Le livre a été réservé.");
             }
 
             // Si le membre a atteint sa limite de prêt
             if(unMembreDTO.getNbPret() == unMembreDTO.getLimitePret()) {
-                System.err.println("Le membre  : "
-                    + unMembreDTO.getIdMembre()
-                    + " a atteint sa limite de prêt");
-                return;
+                throw new ServiceException("Le membre a atteint sa limite de prêt");
             }
 
             //Création du pret
@@ -367,9 +346,11 @@ public class PretService extends Services {
             add(lePretDTO);
 
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         } catch(NullPointerException nullPointerException) {
-            throw new ServiceException(nullPointerException);
+            throw new ServiceException(nullPointerException.getMessage(),
+                nullPointerException);
         }
 
     }
@@ -391,47 +372,32 @@ public class PretService extends Services {
 
             // Si le prêt n'existe pas
             if(getPretDAO().read(pretDTO.getIdPret()) == null) {
-                System.err.println("Le pret : "
-                    + pretDTO.getIdPret()
-                    + " n'existe pas");
-                return;
+                throw new ServiceException("Le pret n'existe pas");
             }
             getPretDAO().read(pretDTO.getIdPret());
 
             // Si le membre n'existe pas
             MembreDTO unMembreDTO = getMembreDAO().read(pretDTO.getMembreDTO().getIdMembre());
             if(unMembreDTO == null) {
-                System.err.println("Le membre : "
-                    + pretDTO.getMembreDTO().getIdMembre()
-                    + " n'existe pas");
-                return;
+                throw new ServiceException("Le membre n'existe pas");
             }
 
             LivreDTO unLivreDTO = getLivreDAO().read(pretDTO.getLivreDTO().getIdLivre());
             // Si le livre n'existe pas
             if(unLivreDTO == null) {
-                System.err.println("Le livre est inexistant: "
-                    + pretDTO.getLivreDTO().getIdLivre());
-                return;
+                throw new ServiceException("Le livre est inexistant");
             }
 
             // Si le livre n'a pas encore été prêté
             List<PretDTO> listeDesPrets = getPretDAO().findByLivre(unLivreDTO);
             if(listeDesPrets.isEmpty()) {
-                System.err.println("Le livre : "
-                    + unLivreDTO.getIdLivre()
-                    + " n'a pas encore été prêté.");
-                return;
+                throw new ServiceException("Le livre n'a pas encore été prêté.");
             }
 
             // Si le livre a été prêteé à quelqu'un d'autre
             for(PretDTO unPretDTO : listeDesPrets) {
                 if(!unMembreDTO.equals(unPretDTO.getMembreDTO())) {
-                    System.err.println("Le livre : "
-                        + unLivreDTO.getIdLivre()
-                        + " est déjà prêté au membre : "
-                        + unMembreDTO.getIdMembre());
-                    return;
+                    throw new ServiceException("Le livre est déjà prêté");
                 }
             }
 
@@ -439,9 +405,11 @@ public class PretService extends Services {
             update(pretDTO);
 
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         } catch(NullPointerException nullPointerException) {
-            throw new ServiceException(nullPointerException);
+            throw new ServiceException(nullPointerException.getMessage(),
+                nullPointerException);
         }
 
     }

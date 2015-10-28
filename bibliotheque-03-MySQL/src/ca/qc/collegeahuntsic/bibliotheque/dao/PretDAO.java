@@ -81,7 +81,7 @@ public class PretDAO extends DAO {
             statementAdd.executeUpdate();
 
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(sqlException.getMessage(),
                 sqlException);
         }
     }
@@ -119,7 +119,9 @@ public class PretDAO extends DAO {
                 }
             }
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
         return tempPret;
@@ -148,7 +150,9 @@ public class PretDAO extends DAO {
 
             updatePreparedStatement.executeUpdate();
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
     }
@@ -167,7 +171,9 @@ public class PretDAO extends DAO {
                 pretDTO.getIdPret());
             statementDelete.executeUpdate();
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
     }
@@ -206,11 +212,15 @@ public class PretDAO extends DAO {
                 }
                 return prets;
             } catch(SQLException sqlException) {
-                throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+                throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                    + " "
+                    + sqlException.getMessage(),
                     sqlException);
             }
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
     }
@@ -243,7 +253,9 @@ public class PretDAO extends DAO {
                 }
             }
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
         return liste;
@@ -277,7 +289,9 @@ public class PretDAO extends DAO {
                 }
             }
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
         return liste;
@@ -312,7 +326,9 @@ public class PretDAO extends DAO {
                 }
             }
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
         return liste;
@@ -347,7 +363,9 @@ public class PretDAO extends DAO {
                 }
             }
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
         return liste;

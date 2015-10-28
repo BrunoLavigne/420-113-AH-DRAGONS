@@ -113,7 +113,7 @@ public class Bibliotheque {
                     executerTransaction(tokenizer);
                     transaction = lireTransaction(reader);
                 } catch(BibliothequeException bibliothequeException) {
-                    // TODO Auto-generated catch block
+                    System.err.println(bibliothequeException.getMessage());
                     transaction = lireTransaction(reader);
                     continue;
                 }
@@ -345,44 +345,9 @@ public class Bibliotheque {
                 connexionException.printStackTrace();
                 return;
             }
-            /*
-            try(
-                BufferedReader reader = new BufferedReader(new InputStreamReader(Bibliotheque.class.getResourceAsStream("/messagesFile.dat")))) {
-                String line = reader.readLine();
-                boolean handled = false;
-                while(line != null) {
-                    String[] lineParts = line.split(";");
-                    if(line.startsWith("#")) {
-                        line = reader.readLine();
-                        continue;
-                    }
-                    if(lineParts[0].equals(exception.getMessage())) {
-                        handled = true;
-                        if(lineParts[1].equals("ERROR")) {
-                            System.err.println(lineParts[1]
-                                + " "
-                                + lineParts[0]
-                                + ": "
-                                + lineParts[2]);
-                        } else {
-                            System.out.println(lineParts[1]
-                                + " "
-                                + lineParts[0]
-                                + ": "
-                                + lineParts[2]);
-                        }
-                    }
-                    line = reader.readLine();
-                }
-                if(!handled) {
-                    System.err.println(exception.getMessage());
-                }
-            } catch(IOException ioException) {
-                throw new BibliothequeException(ioException);
-            }
-             */
             // exception.printStackTrace();
-            throw new BibliothequeException(exception);
+            throw new BibliothequeException(exception.getMessage(),
+                exception);
         }
     }
 
