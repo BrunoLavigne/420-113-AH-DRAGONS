@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.StringTokenizer;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
@@ -184,17 +183,8 @@ public class Bibliotheque {
                 //livreDTO.setIdLivre(readInt(tokenizer));
                 livreDTO.setTitre(readString(tokenizer));
                 livreDTO.setAuteur(readString(tokenizer));
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+                livreDTO.setDateAcquisition(new Timestamp(System.currentTimeMillis()));
 
-                Timestamp date;
-
-                try {
-                    date = new Timestamp(format.parse(readDate(tokenizer)).getTime());
-                } catch(ParseException exception) {
-                    throw new BibliothequeException("Erreur de parsing dans le format de date lors de la création d'un objet livre.");
-                }
-
-                livreDTO.setDateAcquisition(date);
                 getGestionBiblio().getLivreService().acquerir(livreDTO);
 
             } else if("vendre".startsWith(command)) {
@@ -246,6 +236,7 @@ public class Bibliotheque {
                 membreDTO.setNom(readString(tokenizer));
                 membreDTO.setTelephone(readLong(tokenizer));
                 membreDTO.setLimitePret(readInt(tokenizer));
+
                 getGestionBiblio().getMembreService().inscrire(membreDTO);
 
             } else if("desinscrire".startsWith(command)) {

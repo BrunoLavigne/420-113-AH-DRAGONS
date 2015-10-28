@@ -34,8 +34,8 @@ public class LivreDAO extends DAO {
         + "FROM livre "
         + "WHERE idlivre = ?";
 
-    private final static String ADD_REQUEST = "INSERT into livre (idLivre, titre, auteur, dateAcquisition) "
-        + "VALUES (?,?,?,?)";
+    private final static String ADD_REQUEST = "INSERT into livre (titre, auteur, dateAcquisition) "
+        + "VALUES (?,?,?)";
 
     private final static String UPDATE_REQUEST = "UPDATE livre set titre = ?, auteur = ?, dateAcquisition = ? "
         + "WHERE idLivre = ?";
@@ -76,13 +76,12 @@ public class LivreDAO extends DAO {
     public void add(LivreDTO livreDTO) throws DAOException {
         try(
             PreparedStatement stmtAdd = (getConnection().prepareStatement(LivreDAO.ADD_REQUEST))) {
-            stmtAdd.setInt(1,
-                livreDTO.getIdLivre());
-            stmtAdd.setString(2,
+
+            stmtAdd.setString(1,
                 livreDTO.getTitre());
-            stmtAdd.setString(3,
+            stmtAdd.setString(2,
                 livreDTO.getAuteur());
-            stmtAdd.setTimestamp(4,
+            stmtAdd.setTimestamp(3,
                 livreDTO.getDateAcquisition());
             stmtAdd.executeUpdate();
 

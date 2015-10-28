@@ -171,14 +171,7 @@ public class MembreService extends Services {
 
         }
         // S'il n'existe pas, on en crée un nouveau
-        MembreDTO nouveauMembre = new MembreDTO();
-
-        nouveauMembre.setIdMembre(membreDTO.getIdMembre());
-        nouveauMembre.setNom(membreDTO.getNom());
-        nouveauMembre.setTelephone(membreDTO.getTelephone());
-        nouveauMembre.setLimitePret(membreDTO.getLimitePret());
-
-        add(nouveauMembre);
+        add(membreDTO);
 
     }
 
