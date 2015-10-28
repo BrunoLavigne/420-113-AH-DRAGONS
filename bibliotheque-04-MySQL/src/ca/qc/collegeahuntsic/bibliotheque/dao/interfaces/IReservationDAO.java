@@ -24,9 +24,9 @@ public interface IReservationDAO extends IDAO {
      * @param idLivre - L'ID du livre à trouver
      * @param SortByPropretyName - Le nom de la propriété à utiliser pour classer
      * @return - La liste des réservations correspondantes ; une liste vide sinon
-     * @throws InvalidHibernateSessionException - Si la connexion est null
-     * @throws InvalidCriterionException - Si l'ID du livre est null
-     * @throws InvalidSortByPropertyException - Si la propriété à utiliser pour classer est null
+     * @throws InvalidHibernateSessionException - Si la connexion est <code>null</code>
+     * @throws InvalidCriterionException - Si l'ID du livre est <code>null</code>
+     * @throws InvalidSortByPropertyException - Si la propriété à utiliser pour classer est <code>null</code>
      * @throws DAOException - S'il y a une erreur avec la base de données
      */
     List<ReservationDTO> findByLivre(Connexion connexion,
@@ -41,9 +41,9 @@ public interface IReservationDAO extends IDAO {
      * @param idLivre - L'ID du membre à trouver
      * @param SortByPropretyName - Le nom de la propriété à utiliser pour classer
      * @return - La liste des réservations correspondantes ; une liste vide sinon
-     * @throws InvalidHibernateSessionException - Si la connexion est null
-     * @throws InvalidCriterionException - Si l'ID du livre est null
-     * @throws InvalidSortByPropertyException - Si la propriété à utiliser pour classer est null
+     * @throws InvalidHibernateSessionException - Si la connexion est <code>null</code>
+     * @throws InvalidCriterionException - Si l'ID du livre est <code>null</code>
+     * @throws InvalidSortByPropertyException - Si la propriété à utiliser pour classer est <code>null</code>
      * @throws DAOException - S'il y a une erreur avec la base de données
      */
     List<ReservationDTO> findByMembre(Connexion connexion,

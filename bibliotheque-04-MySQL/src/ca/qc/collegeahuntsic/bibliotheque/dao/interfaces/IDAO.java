@@ -16,23 +16,21 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOClassException
 import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
 
 /**
- *
- * TODO Auto-generated class javadoc
- *
- * @author Gilles Bénichou
+ * Interface de base pour les DAOs.
+ * Toutes les interfaces de DAO devraient en hériter.
+ * @author Dragons Vicieux
  */
 public interface IDAO {
 
     /**
+     * Ajoute un nouveau DTO dans la base de donnée
      *
-     * ajoute un nouveau DTO dans la base de donnée
-     *
-     * @param connexion
-     * @param dto
-     * @throws InvalidHibernateSessionException
-     * @throws InvalidDTOException
-     * @throws InvalidDTOClassException
-     * @throws DAOException
+     * @param connexion - La connexion à utiliser
+     * @param dto - Le DTO à ajouter
+     * @throws InvalidHibernateSessionException - Si la connexion est <code>null</code>
+     * @throws InvalidDTOException - Si le DTO est <code>null</code>
+     * @throws InvalidDTOClassException - Si la classe du DTO n'est pas celle que prend en charge le DAO
+     * @throws DAOException - S'il y a une erreur avec la base de données
      */
     void add(Connexion connexion,
         DTO dto) throws InvalidHibernateSessionException,
@@ -41,15 +39,14 @@ public interface IDAO {
         DAOException;
 
     /**
+     *Lit un DTO à partir de la base de données
      *
-     * TODO Auto-generated method javadoc
-     *
-     * @param connexion
-     * @param primaryKey
-     * @return
-     * @throws InvalidHibernateSessionException
-     * @throws InvalidPrimaryKeyException
-     * @throws DAOException
+     * @param connexion - La connexion à utiliser
+     * @param primaryKey - La clef primaire du DTO à lire
+     * @return Le livre
+     * @throws InvalidHibernateSessionException - Si la connexion est <code>null</code>
+     * @throws InvalidPrimaryKeyException - Si la clef primaire du DTO est <code>null</code>
+     * @throws DAOException - S'il y a une erreur avec la base de données
      */
     DTO get(Connexion connexion,
         Serializable primaryKey) throws InvalidHibernateSessionException,
@@ -57,16 +54,14 @@ public interface IDAO {
         DAOException;
 
     /**
+     * Met à jour un DTO dans la base de donnée
      *
-     * TODO Auto-generated method javadoc
-     *
-     * @param connexion
-     * @param dto
-     * @throws InvalidHibernateSessionException
-     * @throws InvalidDTOException
-     * @throws InvalidDTOClassException
-     * @throws InvalidDTOClassException
-     * @throws DAOException
+     * @param connexion - La connexion à utiliser
+     * @param dto - Le DTO à mettre à jour
+     * @throws InvalidHibernateSessionException - Si la connexion est <code>null</code>
+     * @throws InvalidDTOException - Si le DTO est <code>null</code>
+     * @throws InvalidDTOClassException - Si la classe du DTO n'est pas celle que prend en charge le DAO
+     * @throws DAOException - S'il y a une erreur avec la base de données
      */
     void update(Connexion connexion,
         DTO dto) throws InvalidHibernateSessionException,
@@ -80,16 +75,16 @@ public interface IDAO {
              InvalidDTOClassException,
              DAOException;
      */
+
     /**
+     * Supprime un DTO de la base de données
      *
-     * TODO Auto-generated method javadoc
-     *
-     * @param connexion
-     * @param dto
-     * @throws InvalidHibernateSessionException
-     * @throws InvalidDTOException
-     * @throws InvalidDTOClassException
-     * @throws DAOException
+     * @param connexion - La connexion à utiliser
+     * @param dto - Le DTO à supprimer
+     * @throws InvalidHibernateSessionException - Si la connexion est <code>null</code>
+     * @throws InvalidDTOException - Si le DTO est <code>null</code>
+     * @throws InvalidDTOClassException - Si la classe du DTO n'est pas celle que prend en charge le DAO
+     * @throws DAOException - S'il y a une erreur avec la base de données
      */
     void delete(Connexion connexion,
         DTO dto) throws InvalidHibernateSessionException,
@@ -98,15 +93,14 @@ public interface IDAO {
         DAOException;
 
     /**
+     * Trouve tous les DTOs de la base de données. La liste est classée par ordre croissant sur sortByPropertyName. Si aucun DTO n'est trouvé, une List vide est retournée.
      *
-     * Auto-generated method javadoc
-     *
-     * @param connexion
-     * @param sortByPropertyName
-     * @return
-     * @throws InvalidHibernateSessionException
-     * @throws InvalidSortByPropertyException
-     * @throws DAOException
+     * @param connexion - La connexion à utiliser
+     * @param sortByPropertyName - Le nom de la propriété à utiliser pour classer
+     * @return La liste de tous les DTOs ; une liste vide sinon
+     * @throws InvalidHibernateSessionException - Si la connexion est <code>null</code>
+     * @throws InvalidSortByPropertyException - Si la propriété à utiliser pour classer est <code>null</code>
+     * @throws DAOException - S'il y a une erreur avec la base de données
      */
     List<? extends DTO> getAll(Connexion connexion,
         String sortByPropertyName) throws InvalidHibernateSessionException,
