@@ -6,7 +6,7 @@ package ca.qc.collegeahuntsic.bibliotheque.exception.dto;
 
 /**
  * TODO
- * Cette exception est utilisée en cas de duplicat d'un objet {@link ca.qc.collegeahuntsic.bibliotheque.dao.DAO}.
+ * Cette exception est utilisée en cas de duplicat d'un objet {@link ca.qc.collegeahuntsic.bibliotheque.dao.implementations.DAO}.
  *
  * @author Dragons Vicieux
  */
