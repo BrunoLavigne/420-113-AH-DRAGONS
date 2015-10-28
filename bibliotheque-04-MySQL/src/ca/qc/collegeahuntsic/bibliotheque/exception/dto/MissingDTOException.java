@@ -1,4 +1,4 @@
-// Fichier InvalidCriterionException.java
+// Fichier MissingDTOException.java
 // Auteur : Dragons Vicieux
 // Date de création : 2015-10-28
 
@@ -6,7 +6,7 @@ package ca.qc.collegeahuntsic.bibliotheque.exception.dto;
 
 /**
  * TODO
- * Cette exception est utilisée en cas de problème avec l'object {@link ca.qc.collegeahuntsic.bibliotheque.dao.DAO}.
+ * Cette exception est utilisée en cas de manque d'un objet {@link ca.qc.collegeahuntsic.bibliotheque.dao.DAO}.
  *
  * @author Dragons Vicieux
  */
