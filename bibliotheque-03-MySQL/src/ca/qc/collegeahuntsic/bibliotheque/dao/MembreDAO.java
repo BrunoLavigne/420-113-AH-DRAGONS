@@ -72,7 +72,9 @@ public class MembreDAO extends DAO {
                 membreDTO.getLimitePret());
             addPreparedStatement.execute();
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
     }
@@ -104,12 +106,11 @@ public class MembreDAO extends DAO {
                     membreDTO.setNbPret(resultSet.getInt(5));
                     resultSet.close();
                 }
-                /*
-                 * else { throw new DAOException("DAO-0008"); }
-                 */
             }
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
         return membreDTO;
@@ -140,7 +141,9 @@ public class MembreDAO extends DAO {
                 membreDTO.getIdMembre());
             updatePreparedStatement.execute();
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
     }
@@ -162,7 +165,9 @@ public class MembreDAO extends DAO {
                 membreDTO.getIdMembre());
             deletePreparedStatement.execute();
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
     }
@@ -178,7 +183,6 @@ public class MembreDAO extends DAO {
     public List<MembreDTO> getAll() throws DAOException {
 
         List<MembreDTO> liste = new ArrayList<>();
-        // boolean listIsEmpty = true;
         try(
             PreparedStatement stmtGetAllMembres = (getConnection().prepareStatement(MembreDAO.GET_ALL_REQUEST));
             ResultSet results = stmtGetAllMembres.executeQuery()) {
@@ -192,15 +196,13 @@ public class MembreDAO extends DAO {
                     tempMembre.setLimitePret(resultSet.getInt(4));
                     tempMembre.setNbPret(resultSet.getInt(5));
                     liste.add(tempMembre);
-                    // listIsEmpty = false;
                 }
-                /*
-                 * if(listIsEmpty) { throw new DAOException("DAO-0009"); }
-                 */
             }
             return liste;
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
     }

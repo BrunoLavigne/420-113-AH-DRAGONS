@@ -232,9 +232,8 @@ public class ReservationService extends Services {
 
             // Si le livre n'a pas encore été prêté,
             List<PretDTO> listeDesPrets = getPretDAO().findByLivre(reservationDTO.getLivreDTO());
-
             if(listeDesPrets.isEmpty()) {
-                throw new ServiceException("Le livre : "
+                System.out.println("Le livre : "
                     + reservationDTO.getLivreDTO().getIdLivre()
                     + " n'a pas été prêté encore. Faire un emprunt au lieu d'un réservation");
             }
@@ -303,7 +302,6 @@ public class ReservationService extends Services {
                 throw new ServiceException("Livre inexistant");
             }
 
-            System.out.println("vers les listes");
             // Si la réservation n'est pas la première de la liste
             List<ReservationDTO> listeReservations = findByLivre(reservationDTO.getLivreDTO());
 
@@ -321,14 +319,12 @@ public class ReservationService extends Services {
             List<PretDTO> listeDesPret = getPretDAO().findByLivre(reservationDTO.getLivreDTO());
             if(!listeDesPret.isEmpty()) {
                 PretDTO pretDTO = listeDesPret.get(0);
-                System.out.println(listeDesPret);
                 throw new ServiceException("Livre "
                     + reservationDTO.getLivreDTO().getIdLivre()
                     + " déjà prêté à "
                     + pretDTO.getMembreDTO().getIdMembre());
             }
 
-            System.out.println("limite de pret");
             // Si le membre a atteint sa limite de prêt
             if(reservationDTO.getMembreDTO().getNbPret() >= reservationDTO.getMembreDTO().getLimitePret()) {
                 System.err.println("Limite de prêt du membre "
@@ -337,7 +333,6 @@ public class ReservationService extends Services {
             }
 
             // Éliminer la réservation.
-            System.out.println("starting the utiliser fonctions");
             reservationDTO.getMembreDTO().setNbPret(reservationDTO.getMembreDTO().getNbPret() + 1);
             getMembreDAO().update(reservationDTO.getMembreDTO());
             PretDTO unPretDTO = new PretDTO();

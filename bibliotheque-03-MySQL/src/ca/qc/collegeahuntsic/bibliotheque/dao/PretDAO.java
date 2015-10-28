@@ -311,6 +311,7 @@ public class PretDAO extends DAO {
                     tempPret.setLivreDTO(livre);
                     tempPret.setDatePret(rset.getTimestamp(4));
                     tempPret.setDateRetour(rset.getTimestamp(5));
+                    liste.add(tempPret);
                 }
             }
         } catch(SQLException sqlException) {

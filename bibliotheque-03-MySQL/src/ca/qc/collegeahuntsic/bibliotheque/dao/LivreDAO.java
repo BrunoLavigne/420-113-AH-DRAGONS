@@ -86,7 +86,9 @@ public class LivreDAO extends DAO {
             stmtAdd.executeUpdate();
 
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
     }
@@ -115,13 +117,11 @@ public class LivreDAO extends DAO {
                     tempLivre.setDateAcquisition(rset.getTimestamp(4));
                     rset.close();
                 }
-                /*else {
-                    throw new DAOException("DAO-0001");
-                }
-                 */
             }
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
         return tempLivre;
@@ -149,7 +149,9 @@ public class LivreDAO extends DAO {
 
             updatePreparedStatement.executeUpdate();
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
     }
@@ -168,7 +170,9 @@ public class LivreDAO extends DAO {
                 livreDTO.getIdLivre());
             stmtDelete.executeUpdate();
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
     }
@@ -199,17 +203,17 @@ public class LivreDAO extends DAO {
                         livres.add(livreDTO);
                     } while(resultSet.next());
                 }
-                /*else {
-                    throw new DAOException("DAO-0002");
-                }
-                 */
                 return livres;
             } catch(SQLException sqlException) {
-                throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+                throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                    + " "
+                    + sqlException.getMessage(),
                     sqlException);
             }
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
     }
@@ -233,23 +237,18 @@ public class LivreDAO extends DAO {
             try(
                 ResultSet rset = stmtGetLivresByTitre.executeQuery()) {
                 liste = new ArrayList<>();
-                //boolean listIsEmpty = true;
                 while(rset.next()) {
                     LivreDTO tempLivre = new LivreDTO();
                     tempLivre.setIdLivre(rset.getInt(1));
                     tempLivre.setTitre(rset.getString(2));
                     tempLivre.setAuteur(rset.getString(3));
                     liste.add(tempLivre);
-                    //listIsEmpty = false;
                 }
-                /*
-                if(listIsEmpty) {
-                    throw new DAOException("DAO-0003");
-                }
-                 */
             }
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
         return liste;
@@ -310,7 +309,9 @@ public class LivreDAO extends DAO {
                 }
             }
         } catch(SQLException sqlException) {
-            throw new DAOException(Integer.toString(sqlException.getErrorCode()),
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
                 sqlException);
         }
 

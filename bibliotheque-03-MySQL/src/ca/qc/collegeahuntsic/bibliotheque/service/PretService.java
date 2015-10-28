@@ -262,7 +262,7 @@ public class PretService extends Services {
 
             // Si le livre a été prêté à quelqu'un d'autre
             for(PretDTO unPretDTO : listeDesPrets) {
-                if(!pretDTO.getLivreDTO().equals(unPretDTO.getLivreDTO())) {
+                if(!(pretDTO.getMembreDTO().getIdMembre() == unPretDTO.getMembreDTO().getIdMembre())) {
                     throw new ServiceException("Le livre est déjà prêté");
                 }
             }
@@ -376,7 +376,7 @@ public class PretService extends Services {
 
             // Si le livre a été prêteé à quelqu'un d'autre
             for(PretDTO unPretDTO : listeDesPrets) {
-                if(pretDTO.getLivreDTO().equals(unPretDTO.getLivreDTO())) {
+                if(!(pretDTO.getMembreDTO().getIdMembre() == unPretDTO.getMembreDTO().getIdMembre())) {
                     throw new ServiceException("Le livre est déjà prêté");
                 }
             }

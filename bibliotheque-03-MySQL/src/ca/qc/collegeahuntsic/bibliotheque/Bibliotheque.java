@@ -110,6 +110,11 @@ public class Bibliotheque {
                 " ");
             if(tokenizer.hasMoreTokens()) {
                 try {
+                    try {
+                        Thread.sleep(300); //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
                     executerTransaction(tokenizer);
                     transaction = lireTransaction(reader);
                 } catch(BibliothequeException bibliothequeException) {
