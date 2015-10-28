@@ -18,7 +18,7 @@ public class LivreDTO extends DTO {
 
     private static final long serialVersionUID = 1L;
 
-    private int idLivre;
+    private String idLivre;
 
     private String titre;
 
@@ -32,7 +32,7 @@ public class LivreDTO extends DTO {
      *
      * @return La variable d'instance <code>this.idLivre</code>
      */
-    public int getIdLivre() {
+    public String getIdLivre() {
         return this.idLivre;
     }
 
@@ -41,7 +41,7 @@ public class LivreDTO extends DTO {
      *
      * @param idLivre La valeur à utiliser pour la variable d'instance <code>this.idLivre</code>
      */
-    public void setIdLivre(int idLivre) {
+    public void setIdLivre(String idLivre) {
         this.idLivre = idLivre;
     }
 
