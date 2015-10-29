@@ -1,5 +1,5 @@
 
-package ca.qc.collegeahuntsic.bibliotheque.dao;
+package ca.qc.collegeahuntsic.bibliotheque.dao.implementations;
 
 import java.io.Serializable;
 import java.sql.PreparedStatement;
@@ -9,7 +9,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.DAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IPretDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.DTO;

@@ -2,7 +2,7 @@
 // Auteur : Dragons Vicieux
 // Date de création : 2015-09-18
 
-package ca.qc.collegeahuntsic.bibliotheque.dao;
+package ca.qc.collegeahuntsic.bibliotheque.dao.implementations;
 
 import java.io.Serializable;
 import java.sql.PreparedStatement;
@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.DAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.ILivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.DTO;
