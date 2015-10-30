@@ -97,7 +97,8 @@ public class LivreService extends Services implements ILivreService {
             getLivreDAO().add(connexion,
                 livreDTO);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
     }
 
@@ -142,8 +143,9 @@ public class LivreService extends Services implements ILivreService {
         try {
             getLivreDAO().update(connexion,
                 livreDTO);
-        } catch(DAOException daoexception) {
-            throw new ServiceException(daoexception);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
     }
 
@@ -166,7 +168,8 @@ public class LivreService extends Services implements ILivreService {
             getLivreDAO().delete(connexion,
                 livreDTO);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
     }
 
@@ -188,8 +191,9 @@ public class LivreService extends Services implements ILivreService {
         try {
             return (List<LivreDTO>) getLivreDAO().getAll(connexion,
                 sortByPropertyName);
-        } catch(DAOException daoexception) {
-            throw new ServiceException(daoexception);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
     }
 
@@ -216,8 +220,9 @@ public class LivreService extends Services implements ILivreService {
             return getLivreDAO().findByTitre(connexion,
                 titre,
                 sortByPropertyName);
-        } catch(DAOException daoexception) {
-            throw new ServiceException(daoexception);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
     }
 
@@ -240,7 +245,8 @@ public class LivreService extends Services implements ILivreService {
             getLivreDAO().add(connexion,
                 livreDTO);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
     }
 
@@ -266,31 +272,40 @@ public class LivreService extends Services implements ILivreService {
             throw new InvalidDTOException("La connexion ne peut être null.");
         }
         try {
+            // Vérifie si le livre passé en paramètre existe.
+            if(get(connexion,
+                livreDTO.getIdLivre()) == null) {
+                throw new MissingDTOException();
+            }
+            LivreDTO livreDTO2 = get(connexion,
+                livreDTO.getIdLivre());
+
             // Vérifie si le livre passé en paramètre est prêté à un membre.
             if(!getPretDAO().findByLivre(connexion,
-                livreDTO.getTitre(),
+                livreDTO2.getTitre(),
                 LivreDTO.TITRE_COLUMN_NAME).isEmpty()) {
                 throw new ExistingLoanException("Le livre "
-                    + livreDTO.getTitre()
+                    + livreDTO2.getTitre()
                     + " est prêté au membre #"
                     + getPretDAO().findByLivre(connexion,
-                        livreDTO.getTitre(),
+                        livreDTO2.getTitre(),
                         LivreDTO.TITRE_COLUMN_NAME).get(0).getMembreDTO().getIdMembre());
             }
 
             // Vérifie si le livre passé en paramètre est réservé par un membre.
             if(getReservationDAO().get(connexion,
-                livreDTO.getIdLivre()) != null) {
+                livreDTO2.getIdLivre()) != null) {
                 throw new ExistingReservationException("Le livre "
-                    + livreDTO.getTitre()
+                    + livreDTO2.getTitre()
                     + " est réservé.");
             }
             // Sinon, suppression du livre de la base de données.
             getLivreDAO().delete(connexion,
-                livreDTO);
+                livreDTO2);
 
-        } catch(DAOException daoexception) {
-            throw new ServiceException(daoexception);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
     }
 
