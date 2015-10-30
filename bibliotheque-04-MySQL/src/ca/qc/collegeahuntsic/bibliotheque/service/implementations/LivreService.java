@@ -12,8 +12,12 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.PretDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.ReservationDAO;
+import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidHibernateSessionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOClassException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
 
 /**
@@ -60,9 +64,14 @@ public class LivreService extends Services {
      * @param livreDTO - Le livre à ajouter.
      * @throws ServiceException S'il y a une erreur avec la base de données.
      */
-    public void add(LivreDTO livreDTO) throws ServiceException {
+    public void add(Connexion connexion,
+        LivreDTO livreDTO) throws InvalidHibernateSessionException,
+        InvalidDTOException,
+        InvalidDTOClassException,
+        ServiceException {
         try {
-            getLivreDAO().add(livreDTO);
+            getLivreDAO().add(connexion,
+                livreDTO);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
