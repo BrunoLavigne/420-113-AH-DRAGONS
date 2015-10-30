@@ -8,15 +8,32 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.PretDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.ReservationDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.ILivreDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IMembreDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IPretDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
+import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.db.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
+import ca.qc.collegeahuntsic.bibliotheque.facade.implementations.LivreFacade;
+import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.ILivreFacade;
+import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.IMembreFacade;
+import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.IPretFacade;
+import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.IReservationFacade;
 import ca.qc.collegeahuntsic.bibliotheque.service.implementations.LivreService;
 import ca.qc.collegeahuntsic.bibliotheque.service.implementations.MembreService;
 import ca.qc.collegeahuntsic.bibliotheque.service.implementations.PretService;
 import ca.qc.collegeahuntsic.bibliotheque.service.implementations.ReservationService;
+import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.ILivreService;
+import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IMembreService;
+import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IPretService;
+import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IReservationService;
 
 /**
  *
@@ -28,21 +45,29 @@ public class BibliothequeCreateur {
 
     private Connexion connexion;
 
-    private LivreDAO livreDAO;
+    private ILivreDAO livreDAO;
 
-    private MembreDAO membreDAO;
+    private IMembreDAO membreDAO;
 
-    private PretDAO pretDAO;
+    private IPretDAO pretDAO;
 
-    private ReservationDAO reservationDAO;
+    private IReservationDAO reservationDAO;
 
-    private LivreService livreService;
+    private ILivreService livreService;
 
-    private MembreService membreService;
+    private IMembreService membreService;
 
-    private PretService pretService;
+    private IPretService pretService;
 
-    private ReservationService reservationService;
+    private IReservationService reservationService;
+    
+    private ILivreFacade livreFacade;
+    
+    private IMembreFacade membreFacade;
+    
+    private IPretFacade pretFacade;
+    
+    private IReservationFacade reservationFacade;
 
     /**
      * Crée les services nécessaires à l'application bibliothèque.
@@ -69,28 +94,33 @@ public class BibliothequeCreateur {
             setConnexion(connection);
             //System.out.println(connexion.toString());
 
-            LivreDAO unLivreDAO = new LivreDAO(getConnexion());
+            ILivreDAO unLivreDAO = new LivreDAO(LivreDTO.class);
             //System.out.println(livreDAO.getConnection().toString());
-            MembreDAO unMembreDAO = new MembreDAO(getConnexion());
-            PretDAO unPretDAO = new PretDAO(getConnexion());
-            ReservationDAO uneReservationDAO = new ReservationDAO(getConnexion());
+            IMembreDAO unMembreDAO = new MembreDAO(MembreDTO.class);
+            IPretDAO unPretDAO = new PretDAO(PretDTO.class);
+            IReservationDAO uneReservationDAO = new ReservationDAO(ReservationDTO.class);
 
             setLivreDAO(unLivreDAO);
             setMembreDAO(unMembreDAO);
             setPretDAO(unPretDAO);
             setReservationDAO(uneReservationDAO);
-
-            setLivreService(new LivreService(getLivreDAO(),
-                getMembreDAO(),
-                getPretDAO(),
-                getReservationDAO()));
-            setMembreService(new MembreService(getMembreDAO(),
-                getReservationDAO()));
-            setPretService(new PretService(getPretDAO(),
-                getMembreDAO(),
-                getLivreDAO(),
-                getReservationDAO()));
-            setReservationService(new ReservationService(getLivreDAO(),
+            
+            ILivreService unLivreService = new LivreService(getLivreDAO(), getMembreDAO(), getPretDAO(), getReservationDAO()); 
+            IMembreService unMembreService = new MembreService(getMembreDAO(), getReservationDAO());
+            IPretService unPretService = new PretService(getPretDAO(), getMembreDAO(), getLivreDAO(), getReservationDAO());
+            //IReservation unReservationService = new ReservationService()
+           
+            
+            setLivreService(unLivreService);
+            
+            
+            ILivreFacade unLivreFacade = new LivreFacade(getLivreService());
+            
+            setLivreFacade(unLivreFacade);
+            
+            setMembreService(getMembreService());
+            setPretService(getPretService());
+            setReservationService( new ReservationService(getLivreDAO(),
                 getMembreDAO(),
                 getReservationDAO(),
                 getPretDAO()));
@@ -137,7 +167,7 @@ public class BibliothequeCreateur {
      *
      * @param connexion La valeur à utiliser pour la variable d'instance <code>this.connexion</code>
      */
-    public void setConnexion(Connexion connexion) {
+    private void setConnexion(Connexion connexion) {
         this.connexion = connexion;
     }
 
@@ -146,7 +176,7 @@ public class BibliothequeCreateur {
      *
      * @return La variable d'instance <code>this.livreDAO</code>
      */
-    public LivreDAO getLivreDAO() {
+    private ILivreDAO getLivreDAO() {
         return this.livreDAO;
     }
 
@@ -155,7 +185,7 @@ public class BibliothequeCreateur {
      *
      * @param livreDAO La valeur à utiliser pour la variable d'instance <code>this.livreDAO</code>
      */
-    public void setLivreDAO(LivreDAO livreDAO) {
+    private void setLivreDAO(ILivreDAO livreDAO) {
         this.livreDAO = livreDAO;
     }
 
@@ -164,7 +194,7 @@ public class BibliothequeCreateur {
      *
      * @return La variable d'instance <code>this.membreDAO</code>
      */
-    public MembreDAO getMembreDAO() {
+    private IMembreDAO getMembreDAO() {
         return this.membreDAO;
     }
 
@@ -173,15 +203,15 @@ public class BibliothequeCreateur {
      *
      * @param membreDAO La valeur à utiliser pour la variable d'instance <code>this.membreDAO</code>
      */
-    public void setMembreDAO(MembreDAO membreDAO) {
+    private void setMembreDAO(IMembreDAO membreDAO) {
         this.membreDAO = membreDAO;
     }
 
-    public PretDAO getPretDAO() {
+    private IPretDAO getPretDAO() {
         return this.pretDAO;
     }
 
-    public void setPretDAO(PretDAO pretDAO) {
+    private void setPretDAO(IPretDAO pretDAO) {
         this.pretDAO = pretDAO;
     }
 
@@ -190,7 +220,7 @@ public class BibliothequeCreateur {
      *
      * @return La variable d'instance <code>this.reservationDAO</code>
      */
-    public ReservationDAO getReservationDAO() {
+    private IReservationDAO getReservationDAO() {
         return this.reservationDAO;
     }
 
@@ -199,7 +229,7 @@ public class BibliothequeCreateur {
      *
      * @param reservationDAO La valeur à utiliser pour la variable d'instance <code>this.reservationDAO</code>
      */
-    public void setReservationDAO(ReservationDAO reservationDAO) {
+    private void setReservationDAO(IReservationDAO reservationDAO) {
         this.reservationDAO = reservationDAO;
     }
 
@@ -208,7 +238,7 @@ public class BibliothequeCreateur {
      *
      * @return La variable d'instance <code>this.livreService</code>
      */
-    public LivreService getLivreService() {
+    private ILivreService getLivreService() {
         return this.livreService;
     }
 
@@ -217,7 +247,7 @@ public class BibliothequeCreateur {
      *
      * @param livreService La valeur à utiliser pour la variable d'instance <code>this.livreService</code>
      */
-    public void setLivreService(LivreService livreService) {
+    private void setLivreService(ILivreService livreService) {
         this.livreService = livreService;
     }
 
@@ -226,7 +256,7 @@ public class BibliothequeCreateur {
      *
      * @return La variable d'instance <code>this.membreService</code>
      */
-    public MembreService getMembreService() {
+    private IMembreService getMembreService() {
         return this.membreService;
     }
 
@@ -235,7 +265,7 @@ public class BibliothequeCreateur {
      *
      * @param membreService La valeur à utiliser pour la variable d'instance <code>this.membreService</code>
      */
-    public void setMembreService(MembreService membreService) {
+    private void setMembreService(IMembreService membreService) {
         this.membreService = membreService;
     }
 
@@ -244,7 +274,7 @@ public class BibliothequeCreateur {
      *
      * @return La variable d'instance <code>this.pretService</code>
      */
-    public PretService getPretService() {
+    private IPretService getPretService() {
         return this.pretService;
     }
 
@@ -253,7 +283,7 @@ public class BibliothequeCreateur {
      *
      * @param pretService La valeur à utiliser pour la variable d'instance <code>this.pretService</code>
      */
-    public void setPretService(PretService pretService) {
+    private void setPretService(IPretService pretService) {
         this.pretService = pretService;
     }
 
@@ -262,7 +292,7 @@ public class BibliothequeCreateur {
      *
      * @return La variable d'instance <code>this.reservationService</code>
      */
-    public ReservationService getReservationService() {
+    private IReservationService getReservationService() {
         return this.reservationService;
     }
 
@@ -271,7 +301,81 @@ public class BibliothequeCreateur {
      *
      * @param reservationService La valeur à utiliser pour la variable d'instance <code>this.reservationService</code>
      */
-    public void setReservationService(ReservationService reservationService) {
+    private void setReservationService(IReservationService reservationService) {
         this.reservationService = reservationService;
     }
+
+    /**
+     * Getter de la variable d'instance <code>this.livreFacade</code>.
+     *
+     * @return La variable d'instance <code>this.livreFacade</code>
+     */
+    private ILivreFacade getLivreFacade() {
+        return this.livreFacade;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.livreFacade</code>.
+     *
+     * @param livreFacade La valeur à utiliser pour la variable d'instance <code>this.livreFacade</code>
+     */
+    private void setLivreFacade(ILivreFacade livreFacade) {
+        this.livreFacade = livreFacade;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.membreFacade</code>.
+     *
+     * @return La variable d'instance <code>this.membreFacade</code>
+     */
+    private IMembreFacade getMembreFacade() {
+        return this.membreFacade;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.membreFacade</code>.
+     *
+     * @param membreFacade La valeur à utiliser pour la variable d'instance <code>this.membreFacade</code>
+     */
+    private void setMembreFacade(IMembreFacade membreFacade) {
+        this.membreFacade = membreFacade;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.pretFacade</code>.
+     *
+     * @return La variable d'instance <code>this.pretFacade</code>
+     */
+    private IPretFacade getPretFacade() {
+        return this.pretFacade;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.pretFacade</code>.
+     *
+     * @param pretFacade La valeur à utiliser pour la variable d'instance <code>this.pretFacade</code>
+     */
+    private void setPretFacade(IPretFacade pretFacade) {
+        this.pretFacade = pretFacade;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.reservationFacade</code>.
+     *
+     * @return La variable d'instance <code>this.reservationFacade</code>
+     */
+    private IReservationFacade getReservationFacade() {
+        return this.reservationFacade;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.reservationFacade</code>.
+     *
+     * @param reservationFacade La valeur à utiliser pour la variable d'instance <code>this.reservationFacade</code>
+     */
+    private void setReservationFacade(IReservationFacade reservationFacade) {
+        this.reservationFacade = reservationFacade;
+    }
+    
+    
 }
