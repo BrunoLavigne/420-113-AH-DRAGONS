@@ -185,19 +185,19 @@ public class Bibliotheque {
                 livreDTO.setAuteur(readString(tokenizer));
                 livreDTO.setDateAcquisition(new Timestamp(System.currentTimeMillis()));
 
-                getGestionBiblio().getLivreService().acquerir(livreDTO);
+                getGestionBiblio().getLivreService().acquerir(getGestionBiblio().getConnexion(), livreDTO);
 
             } else if("vendre".startsWith(command)) {
 
-                LivreDTO livreDTO = getGestionBiblio().getLivreDAO().read(readInt(tokenizer));
-                getGestionBiblio().getLivreService().vendre(livreDTO);
+                LivreDTO livreDTO = getGestionBiblio().getLivreDAO().get(getGestionBiblio().getConnexion(), readString(tokenizer));
+                getGestionBiblio().getLivreService().vendre(getGestionBiblio().getConnexion(), livreDTO);
 
             } else if("preter".startsWith(command)) {
 
                 // TRANSACTION PRETER ( <idLivre> <idMembre> )
 
-                LivreDTO livreDTO = getGestionBiblio().getLivreDAO().read(readInt(tokenizer));
-                MembreDTO membreDTO = getGestionBiblio().getMembreDAO().read(readInt(tokenizer));
+                LivreDTO livreDTO = getGestionBiblio().getLivreDAO().get(getGestionBiblio().getConnexion(), readString(tokenizer));
+                MembreDTO membreDTO = getGestionBiblio().getMembreDAO().get(getGestionBiblio().getConnexion(), readString(tokenizer));
 
                 PretDTO pretDTO = new PretDTO();
                 pretDTO.setLivreDTO(livreDTO);
@@ -210,15 +210,15 @@ public class Bibliotheque {
 
                 // TRANSACTION RENOUVELER ( <idPret> )
 
-                PretDTO pretDTO = getGestionBiblio().getPretDAO().read(readInt(tokenizer));
-                getGestionBiblio().getPretService().renouveler(pretDTO);
+                PretDTO pretDTO = getGestionBiblio().getPretDAO().get(getGestionBiblio().getConnexion(), readString(tokenizer));
+                getGestionBiblio().getPretService().renouveler(getGestionBiblio().getConnexion(), pretDTO);
 
             } else if("retourner".startsWith(command)) {
 
                 // TRANSACTION RETOURNER ( <idPret> )
 
-                PretDTO pretDTO = getGestionBiblio().getPretDAO().read(readInt(tokenizer));
-                getGestionBiblio().getPretService().retourner(pretDTO); /* idLivre */
+                PretDTO pretDTO = getGestionBiblio().getPretDAO().get(getGestionBiblio().getConnexion(), readString(tokenizer));
+                getGestionBiblio().getPretService().retourner(getGestionBiblio().getConnexion(), pretDTO); /* idLivre */
 
             } else if("inscrire".startsWith(command)) {
 
@@ -227,12 +227,12 @@ public class Bibliotheque {
                 membreDTO.setNom(readString(tokenizer));
                 membreDTO.setTelephone(readLong(tokenizer));
                 membreDTO.setLimitePret(readInt(tokenizer));
-                getGestionBiblio().getMembreService().inscrire(membreDTO);
+                getGestionBiblio().getMembreService().inscrire(getGestionBiblio().getConnexion(), membreDTO);
 
             } else if("desinscrire".startsWith(command)) {
 
-                MembreDTO membreDTO = getGestionBiblio().getMembreDAO().read(readInt(tokenizer));
-                getGestionBiblio().getMembreService().desinscrire(membreDTO);
+                MembreDTO membreDTO = getGestionBiblio().getMembreDAO().get(getGestionBiblio().getConnexion(), readString(tokenizer));
+                getGestionBiblio().getMembreService().desinscrire(getGestionBiblio().getConnexion(), membreDTO);
 
             } else if("reserver".startsWith(command)) {
 
@@ -241,8 +241,8 @@ public class Bibliotheque {
                 ReservationDTO reservationDTO = new ReservationDTO();
                 //reservationDTO.setIdReservation(readInt(tokenizer));
 
-                MembreDTO membreDTO = getGestionBiblio().getMembreDAO().read(readInt(tokenizer));
-                LivreDTO livreDTO = getGestionBiblio().getLivreDAO().read(readInt(tokenizer));
+                MembreDTO membreDTO = getGestionBiblio().getMembreDAO().get(getGestionBiblio().getConnexion(), readString(tokenizer));
+                LivreDTO livreDTO = getGestionBiblio().getLivreDAO().get(getGestionBiblio().getConnexion(), readString(tokenizer));
 
                 Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
 
@@ -250,29 +250,29 @@ public class Bibliotheque {
                 reservationDTO.setMembreDTO(membreDTO);
                 reservationDTO.setDateReservation(currentTimestamp);
 
-                getGestionBiblio().getReservationService().reserver(reservationDTO);
+                getGestionBiblio().getReservationService().reserver(getGestionBiblio().getConnexion(), reservationDTO);
 
             } else if("utiliser".startsWith(command)) {
 
                 // TRANSACTION UTILISER ( <idReservation> )
 
-                ReservationDTO reservationDTO = getGestionBiblio().getReservationDAO().read(readInt(tokenizer));
-                getGestionBiblio().getReservationService().utiliser(reservationDTO);
+                ReservationDTO reservationDTO = getGestionBiblio().getReservationDAO().get(getGestionBiblio().getConnexion(), readString(tokenizer));
+                getGestionBiblio().getReservationService().utiliser(getGestionBiblio().getConnexion(), reservationDTO);
 
             } else if("annuler".startsWith(command)) {
 
                 // TRANSACTION ANNULER ( <idReservation> )
 
-                ReservationDTO reservationDTO = getGestionBiblio().getReservationDAO().read(readInt(tokenizer));
-                getGestionBiblio().getReservationService().annuler(reservationDTO);
+                ReservationDTO reservationDTO = getGestionBiblio().getReservationDAO().get(getGestionBiblio().getConnexion(), readString(tokenizer));
+                getGestionBiblio().getReservationService().annuler(getGestionBiblio().getConnexion(), reservationDTO);
 
             } else if("listerLivres".startsWith(command)) {
 
-                getGestionBiblio().getLivreDAO().getAll();
+                getGestionBiblio().getLivreDAO().getAll(getGestionBiblio().getConnexion(), LivreDTO.ID_COLUMN_NAME);
 
             } else if("listerLivresTitre".startsWith(command)) {
 
-                getGestionBiblio().getLivreDAO().findByTitre(readString(tokenizer) /* mot */);
+                getGestionBiblio().getLivreDAO().findByTitre(getGestionBiblio().getConnexion(), readString(tokenizer), LivreDTO.TITRE_COLUMN_NAME);
 
             }
             /*
