@@ -7,9 +7,13 @@ package ca.qc.collegeahuntsic.bibliotheque.service.implementations;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.ReservationDAO;
+import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidHibernateSessionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOClassException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
 
 /**
@@ -57,15 +61,22 @@ public class MembreService extends Services {
      *
      * Ajoute un nouveau membre
      *
-     * @param membreDTO
-     *            Le membre à ajouter
-     * @throws ServiceException
-     *             S'il y a une erreur avec la base de données
+     * @param connexion
+     * @param membreDTO Le membre à ajouter
+     * @throws InvalidHibernateSessionException
+     * @throws InvalidDTOException
+     * @throws InvalidDTOClassException
+     * @throws ServiceException S'il y a une erreur avec la base de données
      */
-    public void add(MembreDTO membreDTO) throws ServiceException {
+    public void add(Connexion connexion,
+        MembreDTO membreDTO) throws InvalidHibernateSessionException,
+        InvalidDTOException,
+        InvalidDTOClassException,
+        ServiceException {
 
         try {
-            getMembreDAO().add(membreDTO);
+            getMembreDAO().add(connexion,
+                membreDTO);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
