@@ -53,9 +53,10 @@ public class LivreDAO extends DAO implements ILivreDAO {
 
     /**
      *
-     * Crée un DAO à partir d'une connexion à la base de données.
+     * Crée le DAO de la table <code>livre</code>
      *
-     * @param connexion - La connexion à utiliser.
+     * @param livreDTOClass - La classe de livre DTO à utiliser
+     * @throws InvalidDTOClassException - Si la classe de DTO est <code>null</code>
      */
     public LivreDAO(Class<LivreDTO> livreDTOClass) throws InvalidDTOClassException { // TODO changer la visibilité a package quand nous aurons la version avec Spring
         super(livreDTOClass);

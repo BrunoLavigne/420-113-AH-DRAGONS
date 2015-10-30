@@ -40,7 +40,7 @@ public interface IDAO {
         DAOException;
 
     /**
-     *Lit un DTO à partir de la base de données
+     *Lit un DTO à partir de la base de données.
      *
      * @param connexion - La connexion à utiliser
      * @param primaryKey - La clef primaire du DTO à lire
@@ -55,7 +55,7 @@ public interface IDAO {
         DAOException;
 
     /**
-     * Met à jour un DTO dans la base de donnée
+     * Met à jour un DTO dans la base de données.
      *
      * @param connexion - La connexion à utiliser
      * @param dto - Le DTO à mettre à jour
@@ -78,7 +78,7 @@ public interface IDAO {
      */
 
     /**
-     * Supprime un DTO de la base de données
+     * Supprime un DTO de la base de données.
      *
      * @param connexion - La connexion à utiliser
      * @param dto - Le DTO à supprimer
