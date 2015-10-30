@@ -150,6 +150,7 @@ public class ReservationService extends Services implements IReservationService 
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @Override
     public List<ReservationDTO> getAll(Connexion connexion,
         String sortByPropertyName) throws InvalidHibernateSessionException,
@@ -157,7 +158,7 @@ public class ReservationService extends Services implements IReservationService 
         ServiceException {
 
         try {
-            return getReservationDAO().getAll(connexion,
+            return (List<ReservationDTO>) getReservationDAO().getAll(connexion,
                 sortByPropertyName);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
