@@ -31,12 +31,6 @@ import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IReservationService
 public class ReservationFacade extends Facade implements IReservationFacade {
     private IReservationService reservationService;
 
-    /**
-     * Crée la façade de la table <code>reservation</code>.
-     *
-     * @param reservationService Le service de la table <code>reservation</code>
-     * @throws InvalidServiceException Si le service de réservations est <code>null</code>
-     */
     public ReservationFacade(IReservationService reservationService) throws InvalidServiceException { // TODO: Change to package when switching to Spring
         super();
         if(reservationService == null) {
