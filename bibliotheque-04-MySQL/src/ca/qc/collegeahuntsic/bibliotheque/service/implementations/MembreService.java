@@ -12,6 +12,8 @@ import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidHibernateSessionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidPrimaryKeyException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidSortByPropertyException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOClassException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
@@ -59,13 +61,13 @@ public class MembreService extends Services {
 
     /**
      *
-     * Ajoute un nouveau membre
+     * Ajoute un nouveau membre dans la base de données.
      *
-     * @param connexion
+     * @param connexion La connexion à utiliser
      * @param membreDTO Le membre à ajouter
-     * @throws InvalidHibernateSessionException
-     * @throws InvalidDTOException
-     * @throws InvalidDTOClassException
+     * @throws InvalidHibernateSessionException Si la connexion est null
+     * @throws InvalidDTOException Si le membre est null
+     * @throws InvalidDTOClassException Si la classe du membre n'est pas celle que prend en charge le DAO
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
     public void add(Connexion connexion,
@@ -86,16 +88,18 @@ public class MembreService extends Services {
      *
      * Lit un membre.
      *
-     * @param idMembre
-     *            L'ID du membre à lire
+     * @param idMembre L'ID du membre à lire
      * @return MembreDTO Le membre à lire
-     * @throws ServiceException
-     *             S'il y a une erreur avec la base de données
+     * @throws ServiceException S'il y a une erreur avec la base de données
      */
-    public MembreDTO read(int idMembre) throws ServiceException {
+    public MembreDTO get(Connexion connexion,
+        String idMembre) throws InvalidHibernateSessionException,
+        InvalidPrimaryKeyException,
+        ServiceException {
 
         try {
-            return getMembreDAO().read(idMembre);
+            return getMembreDAO().get(connexion,
+                idMembre);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
@@ -109,11 +113,19 @@ public class MembreService extends Services {
      *            Le membre à mettre à jour
      * @throws ServiceException
      *             S'il y a une erreur avec la base de données
+     * @throws InvalidDTOClassException
+     * @throws InvalidDTOException
+     * @throws InvalidHibernateSessionException
      */
-    public void update(MembreDTO membreDTO) throws ServiceException {
+    public void update(Connexion connexion,
+        MembreDTO membreDTO) throws ServiceException,
+        InvalidHibernateSessionException,
+        InvalidDTOException,
+        InvalidDTOClassException {
 
         try {
-            getMembreDAO().update(membreDTO);
+            getMembreDAO().update(connexion,
+                membreDTO);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
@@ -121,18 +133,24 @@ public class MembreService extends Services {
 
     /**
      *
-     * Supprime un membre
+     * Supprime un membre de la base de données.
      *
-     * @param membreDTO
-     *            Le membre à supprimer
-     * @throws ServiceException
-     *             Si le membre a encore des prêts, s'il a des réservations ou
-     *             s'il y a une erreur avec la base de données
+     * @param connexion La connexion à utiliser
+     * @param membreDTO Le membre à supprimer
+     * @throws InvalidHibernateSessionException Si la connexion est null
+     * @throws InvalidDTOException Si le membre est null
+     * @throws InvalidDTOClassException Si la classe du membre n'est pas celle que prend en charge le DAO
+     * @throws ServiceException S'il y a une erreur avec la base de données
      */
-    public void delete(MembreDTO membreDTO) throws ServiceException {
+    public void delete(Connexion connexion,
+        MembreDTO membreDTO) throws InvalidHibernateSessionException,
+        InvalidDTOException,
+        InvalidDTOClassException,
+        ServiceException {
 
         try {
-            getMembreDAO().delete(membreDTO);
+            getMembreDAO().delete(connexion,
+                membreDTO);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
@@ -145,13 +163,18 @@ public class MembreService extends Services {
      * Trouve tous les membres
      *
      * @return List<MembreDTO> La liste des membres; une liste vide sinon
-     * @throws ServiceException
-     *             S'il y a une erreur avec la base de données
+     * @throws ServiceException S'il y a une erreur avec la base de données
+     * @throws InvalidSortByPropertyException
+     * @throws InvalidHibernateSessionException
      */
-    public List<MembreDTO> getAll() throws ServiceException {
+    public List<MembreDTO> getAll(Connexion connexion,
+        String sortByPropertyName) throws ServiceException,
+        InvalidHibernateSessionException,
+        InvalidSortByPropertyException {
 
         try {
-            return getMembreDAO().getAll();
+            return getMembreDAO().getAll(connexion,
+                sortByPropertyName);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
@@ -163,16 +186,25 @@ public class MembreService extends Services {
      *
      * Inscrit un membre.
      *
-     * @param membreDTO
-     *            Le membre à ajouter
-     * @throws ServiceException
-     *             Si le membre existe déjà ou s'il y a une erreur avec la base
-     *             de données
+     * @param membreDTO Le membre à ajouter
+     * @throws ServiceException Si le membre existe déjà ou s'il y a une erreur avec la base de données
+     * @throws InvalidDTOClassException
+     * @throws InvalidDTOException
+     * @throws InvalidHibernateSessionException
+     * @throws DAOException
+     * @throws InvalidPrimaryKeyException
      */
-    public void inscrire(MembreDTO membreDTO) throws ServiceException {
+    public void inscrire(Connexion connexion,
+        MembreDTO membreDTO) throws ServiceException,
+        DAOException,
+        InvalidHibernateSessionException,
+        InvalidDTOException,
+        InvalidDTOClassException,
+        InvalidPrimaryKeyException {
 
         // Vérifier si le membre existe déjà
-        if(read(membreDTO.getIdMembre()) != null) {
+        if(get(connexion,
+            membreDTO.getIdMembre().toString()) != null) {
 
             System.err.println("Un membre avec l'id "
                 + membreDTO.getIdMembre()
@@ -181,8 +213,10 @@ public class MembreService extends Services {
             // throw new ServiceException("SRV-0003");
 
         }
+
         // S'il n'existe pas, on en crée un nouveau
-        add(membreDTO);
+        getMembreDAO().add(connexion,
+            membreDTO);
 
     }
 
@@ -197,12 +231,14 @@ public class MembreService extends Services {
      *             s'il a des réservations ou s'il y a une erreur avec la base
      *             de données
      */
-    public void desinscrire(MembreDTO membreDTO) throws ServiceException {
+    public void desinscrire(Connexion connexion,
+        MembreDTO membreDTO) throws ServiceException {
 
         try {
 
             // Si le membre n'existe pas
-            if(!existe(membreDTO.getIdMembre())) {
+            if(get(connexion,
+                membreDTO.getIdMembre()) != null) {
                 System.err.println("Le membre avec l'ID "
                     + membreDTO.getIdMembre()
                     + " n'existe pas.");
@@ -232,46 +268,26 @@ public class MembreService extends Services {
             // Si le membre a encore des réservations
 
             // Obtenir la liste de réservations du membre
-            List<ReservationDTO> listeReservations = getReservationDAO().findByMembre(membreDTO);
+            List<ReservationDTO> listeReservations = getReservationDAO().get(connexion, membreDTO.getIdMembre())
 
-            if(listeReservations.size() > 0) {
-                System.err.println("Le membre avec l'ID "
-                    + membreDTO.getIdMembre()
-                    + " a encore "
-                    + listeReservations.size()
-                    + " réservations.");
-                return;
-                /*
-                 * throw new ServiceException("Le membre avec l'ID " +
-                 * membreDTO.getIdMembre() + " a encore " +
-                 * listeReservations.size() + " réservations.");
-                 */
-            }
+                if(listeReservations.size() > 0) {
+                    System.err.println("Le membre avec l'ID "
+                        + membreDTO.getIdMembre()
+                        + " a encore "
+                        + listeReservations.size()
+                        + " réservations.");
+                    return;
+                    /*
+                     * throw new ServiceException("Le membre avec l'ID " +
+                     * membreDTO.getIdMembre() + " a encore " +
+                     * listeReservations.size() + " réservations.");
+                     */
+                }
 
             // On peut supprimer le membre
-            delete(membreDTO);
+            getMembreDAO().delete(connexion,
+                membreDTO);
 
-        } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
-        }
-    }
-
-    /**
-     *
-     * Vérifie si un membre existe.
-     *
-     * @param idMembre
-     *            L'ID du membre recherché
-     * @return boolean <code>true</code> si le membre existe, <code>false</code>
-     *         si ce n'est pas le cas.
-     * @throws ServiceException
-     *             En cas d'erreur d'appel au DAO, une exception est levée
-     */
-    public boolean existe(int idMembre) throws ServiceException {
-
-        // Un membre est-il trouvé? Si null, non: donc false
-        try {
-            return getMembreDAO().read(idMembre) != null ? true : false;
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
