@@ -38,7 +38,7 @@ public class PretDTO extends DTO {
 
     private Timestamp dateRetour;
 
-    // Region Getters and Setters
+    // Region Getters and Setter
 
     /**
      * Getter de la variable d'instance <code>this.idPret</code>.
