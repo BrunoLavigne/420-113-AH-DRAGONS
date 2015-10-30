@@ -22,6 +22,7 @@ public class Services implements Serializable {
      *
      */
     public Services() {
+        super();
     }
 
 }
