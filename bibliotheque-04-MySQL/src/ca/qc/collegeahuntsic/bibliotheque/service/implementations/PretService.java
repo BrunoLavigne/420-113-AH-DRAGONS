@@ -3,10 +3,6 @@ package ca.qc.collegeahuntsic.bibliotheque.service.implementations;
 
 import java.sql.Timestamp;
 import java.util.List;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.LivreDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.MembreDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.PretDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.ILivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IMembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IPretDAO;
@@ -31,7 +27,6 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.service.InvalidLoanLimitExce
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.MissingLoanException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
 import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IPretService;
-import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IService;
 
 /**
  * Gestion des transactions reliées aux prêts de livres
@@ -266,21 +261,11 @@ public class PretService extends Services implements IPretService {
     }
 
     /**
-     * Renouvelle le prêt d'un livre.
-     *
-     * @param pretDTO - Le prêt à renouveler
-     * @throws ServiceException
-     * - Si le prêt n'existe pas,
-     * si le membre n'existe pas,
-     * si le livre n'existe pas,
-     * si le livre n'a pas encore été prêté,
-     * si le livre a été prêté à quelqu'un d'autre,
-     * si le livre a été réservé ou s'il y a une erreur avec la base de données.
+     * {@inheritDoc}
      */
     @Override
     public void renouveler(Connexion connexion,
-        PretDTO pretDTO)
-            throws InvalidHibernateSessionException,
+        PretDTO pretDTO) throws InvalidHibernateSessionException,
             InvalidDTOException,
             InvalidPrimaryKeyException,
             MissingDTOException,
@@ -290,28 +275,52 @@ public class PretService extends Services implements IPretService {
             ExistingLoanException,
             ExistingReservationException,
             InvalidDTOClassException,
-            ServiceException{
-
-
-
+            ServiceException {
         try {
+
+            // Si la connexion est null
+            if(connexion == null) {
+                throw new InvalidHibernateSessionException("La connexion ne peut être null.");
+            }
             // Si le prêt n'existe pas
             if(pretDTO == null) {
-                throw new ServiceException("Le pret n'existe pas");
+                throw new InvalidDTOClassException("Le pret  ne peut être null.");
             }
+            // Si la clef primaire du prêt est null
+            if(pretDTO.getIdPret() == null) {
+                throw new InvalidPrimaryKeyException("La clef ne peut être null.");
+            }
+            // Si la clef primaire du membre est null
+            if(pretDTO.getMembreDTO().getIdMembre() == null) {
+                throw new InvalidPrimaryKeyException("La clef ne peut être null.");
+            }
+            // Si la clef primaire du livre est null
+            if(pretDTO.getLivreDTO().getIdLivre() == null) {
+                throw new InvalidPrimaryKeyException("La clef ne peut être null.");
+            }
+
+            // Si le prêt n'existe pas
 
             // Si le membre n'existe pas
             if(pretDTO.getMembreDTO() == null) {
-                throw new ServiceException("Le membre n'existe pas");
+                throw new MissingDTOException("Le membre n'existe pas");
             }
 
             // Si le livre n'existe pas
             if(pretDTO.getLivreDTO() == null) {
-                throw new ServiceException("Le livre n'existe pas");
+                throw new MissingDTOException("Le livre n'existe pas");
             }
 
+            // Si l'ID du membre est null 
+
+            // Si l'ID du livre est null
+
+            // Si la propriété à utiliser pour classer est null
+
             // Si le livre n'a pas encore été prêté
-            List<PretDTO> listeDesPrets = getPretDAO().findByLivre(connexion, livreDTO., LivreDTO.ID_COLUMN_NAME);
+            List<PretDTO> listeDesPrets = getPretDAO().findByLivre(connexion,
+                pretDTO.getLivreDTO().getIdLivre(),
+                PretDTO.ID_LIVRE_COLUMN_NAME);
             if(listeDesPrets.isEmpty()) {
                 throw new ServiceException("Le livre n'a pas été prêté encore.");
             }
@@ -324,12 +333,18 @@ public class PretService extends Services implements IPretService {
             }
 
             // Si le livre a été réservé
-            if(getReservationDAO().read(pretDTO.getLivreDTO().getIdLivre()) != null) {
+            if(getReservationDAO().get(connexion,
+                pretDTO.getLivreDTO().getIdLivre()) != null) {
                 throw new ServiceException("Le livre est déjà réservé");
             }
 
+            // Si la classe du membre n'est pas celle que prend en charge le DAO
+
+            // Si la classe du prêt n'est pas celle que prend en charge le DAO
+
             pretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
-            update(pretDTO);
+            update(connexion,
+                pretDTO);
 
         } catch(DAOException daoException) {
             throw new ServiceException(daoException.getMessage(),
