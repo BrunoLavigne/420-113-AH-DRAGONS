@@ -446,7 +446,7 @@ public class PretService extends Services implements IPretService {
                     + " a atteint sa limite de prêt");
             }
 
-            //Création du pret
+            //Creation du pret
 
             pretDTO.getMembreDTO().setNbPret(pretDTO.getMembreDTO().getNbPret() + 1);
             getMembreDAO().update(connexion,
