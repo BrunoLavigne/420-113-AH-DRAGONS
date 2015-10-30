@@ -16,6 +16,7 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dto.MissingDTOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ExistingLoanException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ExistingReservationException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.service.InvalidLoanLimitException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.MissingLoanException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
 
@@ -143,10 +144,11 @@ public interface IReservationService extends IService {
         ServiceException;
 
     /**
+     *
      * Place une réservation.
      *
      * @param connexion La connexion à utiliser
-     * @param reservationDTO La réservation à placer
+     * @param reservationDTO  La réservation à placer
      * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
      * @throws InvalidDTOException Si la réservation est <code>null</code>
      * @throws InvalidPrimaryKeyException Si la clef primaire du membre est <code>null</code> ou si la clef primaire du livre est <code>null</code>
@@ -159,7 +161,7 @@ public interface IReservationService extends IService {
      * @throws InvalidDTOClassException Si la classe de la réservation n'est pas celle que prend en charge le DAO
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
-    void reserver(Connexion connexion,
+    void placer(Connexion connexion,
         ReservationDTO reservationDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         InvalidPrimaryKeyException,
@@ -171,4 +173,58 @@ public interface IReservationService extends IService {
         ExistingReservationException,
         InvalidDTOClassException,
         ServiceException;
+
+    /**
+     *
+     * Utilise une réservation.
+     *
+     * @param connexion La connexion à utiliser
+     * @param reservationDTO  La réservation à placer
+     * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
+     * @throws InvalidDTOException Si la réservation est <code>null</code>
+     * @throws InvalidPrimaryKeyException Si la clef primaire du membre est <code>null</code> ou si la clef primaire du livre est <code>null</code>
+     * @throws MissingDTOException Si le membre n'existe pas ou si le livre n'existe pas
+     * @throws InvalidCriterionException Si l'ID du livre est <code>null</code>
+     * @throws InvalidSortByPropertyException Si la propriété à utiliser pour classer est <code>null</code>
+     * @throws MissingLoanException Si le livre n'a pas encore été prêté
+     * @throws ExistingLoanException Si le livre est déjà prêté au membre
+     * @throws InvalidLoanLimitException Si le membre a atteint sa limite de prêt
+     * @throws ExistingReservationException Si la réservation n'est pas la première de la liste
+     * @throws InvalidDTOClassException Si la classe de la réservation n'est pas celle que prend en charge le DAO
+     * @throws ServiceException S'il y a une erreur avec la base de données
+     */
+    void utiliser(Connexion connexion,
+        ReservationDTO reservationDTO) throws InvalidHibernateSessionException,
+        InvalidDTOException,
+        InvalidPrimaryKeyException,
+        MissingDTOException,
+        InvalidCriterionException,
+        InvalidSortByPropertyException,
+        ExistingReservationException,
+        ExistingLoanException,
+        InvalidLoanLimitException,
+        InvalidDTOClassException,
+        ServiceException;
+
+    /**
+     *
+     * Annule une réservation.
+     *
+     * @param connexion La connexion à utiliser
+     * @param reservationDTO Le reservation à annuler
+     * @throws InvalidHibernateSessionException Si la connexion est null
+     * @throws InvalidDTOException Si la réservation est null
+     * @throws InvalidPrimaryKeyException  Si la clef primaire de la réservation est null
+     * @throws MissingDTOException  Si la réservation n'existe pas, si le membre n'existe pas ou si le livre n'existe pas
+     * @throws InvalidDTOClassException Si la classe de la réservation n'est pas celle que prend en charge le DAO
+     * @throws ServiceException S'il y a une erreur avec la base de données
+     */
+    void annuler(Connexion connexion,
+        ReservationDTO reservationDTO) throws InvalidHibernateSessionException,
+        InvalidDTOException,
+        InvalidPrimaryKeyException,
+        MissingDTOException,
+        InvalidDTOClassException,
+        ServiceException;
+
 }
