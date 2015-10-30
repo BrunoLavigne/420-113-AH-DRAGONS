@@ -135,5 +135,4 @@ public class ReservationFacade extends Facade implements IReservationFacade {
         }
     }
 
-    //TODO ajouterGetAll
 }
