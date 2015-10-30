@@ -56,7 +56,7 @@ public class LivreService extends Services implements ILivreService {
      * @param reservationDAO - Le DAO de la table <code>reservation</code>
      * @throws InvalidDAOException - Si le DAO de livre est <code>null</code>, si le DAO de membre est <code>null</code>, si le DAO de prêt est <code>null</code> ou si le DAO de réservation est <code>null</code>
      */
-    protected LivreService(ILivreDAO livreDAO,
+    public LivreService(ILivreDAO livreDAO, // TODO passer a protected quand les facades seront prêtes
         IMembreDAO membreDAO,
         IPretDAO pretDAO,
         IReservationDAO reservationDAO) throws InvalidDAOException {
@@ -110,10 +110,10 @@ public class LivreService extends Services implements ILivreService {
         InvalidPrimaryKeyException,
         ServiceException {
         if(connexion == null) {
-            throw new InvalidHibernateSessionException("La connexion n'existe pas.");
+            throw new InvalidHibernateSessionException("La connexion ne peut être null.");
         }
         if(idLivre == null) {
-            throw new InvalidPrimaryKeyException("La clé de recherche est null");
+            throw new InvalidPrimaryKeyException("La clé ne peut être null.");
         }
         try {
             return (LivreDTO) getLivreDAO().get(connexion,
@@ -260,14 +260,13 @@ public class LivreService extends Services implements ILivreService {
         ExistingReservationException,
         ServiceException {
         if(connexion == null) {
-            throw new InvalidHibernateSessionException("La connexion n'existe pas.");
+            throw new InvalidHibernateSessionException("La connexion ne peut être null.");
         }
         if(livreDTO == null) {
-            throw new InvalidDTOException("Le livre n'existe pas.");
+            throw new InvalidDTOException("La connexion ne peut être null.");
         }
         try {
             // Vérifie si le livre passé en paramètre est prêté à un membre.
-
             if(!getPretDAO().findByLivre(connexion,
                 livreDTO.getTitre(),
                 LivreDTO.TITRE_COLUMN_NAME).isEmpty()) {
