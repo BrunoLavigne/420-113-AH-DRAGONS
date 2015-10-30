@@ -13,11 +13,15 @@ import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidHibernateSessionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidPrimaryKeyException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidSortByPropertyException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOClassException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dto.MissingDTOException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.service.ExistingLoanException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.service.ExistingReservationException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
 
 /**
@@ -171,65 +175,53 @@ public class MembreService extends Services {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void desinscrire(Connexion connexion,
-        MembreDTO membreDTO) throws ServiceException {
+        MembreDTO membreDTO) throws InvalidHibernateSessionException,
+        InvalidDTOException,
+        InvalidDTOClassException,
+        InvalidPrimaryKeyException,
+        MissingDTOException,
+        ExistingLoanException,
+        InvalidCriterionException,
+        InvalidSortByPropertyException,
+        ExistingReservationException,
+        ServiceException {
+
+        // Vérifier si la connexion est null
+        if(connexion == null) {
+            throw new InvalidHibernateSessionException("La connexion est null");
+        }
+
+        // Vérifier si le membre est null
+        if(membreDTO == null) {
+            throw new InvalidDTOException("Le membre est null");
+        }
 
         try {
 
             // Si le membre n'existe pas
             if(get(connexion,
-                membreDTO.getIdMembre()) != null) {
-                System.err.println("Le membre avec l'ID "
-                    + membreDTO.getIdMembre()
-                    + " n'existe pas.");
-                return;
-                // throw new ServiceException("Le membre avec l'ID " +
-                // membreDTO.getIdMembre() + " n'existe pas.");
+                membreDTO.getIdMembre()) == null) {
+                throw new MissingDTOException("Le membre n'existe pas");
             }
 
             // Si le membre a encore des prêts
-            if(membreDTO.getNbPret() > 0) {
-                System.err.println("Le membre avec l'ID"
-                    + membreDTO.getIdMembre()
-                    + " a encore "
-                    + membreDTO.getNbPret()
-                    + " prêts."
-                    + "\nVeuillez retourner les livres avant de supprimer le compte.");
-                return;
-                /*
-                 * throw new ServiceException( "Le membre avec l'ID" +
-                 * membreDTO.getIdMembre() + " a encore " +
-                 * membreDTO.getNbPret() + " prêts." +
-                 * "\nVeuillez retourner les livres avant de supprimer le compte."
-                 * );
-                 */
+            if(get(connexion,
+                membreDTO.getIdMembre()).getNbPret() > 0) {
+                throw new ExistingLoanException("Le membre a encore des prêts");
             }
 
             // Si le membre a encore des réservations
-
-            // Obtenir la liste de réservations du membre
-            ReservationDTO reservation = getReservationDAO().get(connexion,
-                membreDTO.getIdMembre());
-
-            if(reservation != null) {
-                System.err.println("Le membre avec l'ID "
-                    + membreDTO.getIdMembre()
-                    + " a encore "
-                    + listeReservations.size()
-                    + " réservations.");
-                return;
-                /*
-                 * throw new ServiceException("Le membre avec l'ID " +
-                 * membreDTO.getIdMembre() + " a encore " +
-                 * listeReservations.size() + " réservations.");
-                 */
+            // vérif. pour membreDTO.getIdMembre() dans...faut-il faire un autre get()?
+            // TODCHANGER LE NOM DE COLONNE (AVANT HIBERNATE) POUR 3ÈME ARG DE FINDBYMEMBRE...pour l'instant sert à rien
+            if(!getReservationDAO().findByMembre(connexion,
+                membreDTO.getIdMembre(),
+                ReservationDTO.ID_RESERVATION_COLUMN_NAME).isEmpty()) {
+                throw new ExistingReservationException("Le membre a encore des réservations");
             }
 
             // On peut supprimer le membre
-            getMembreDAO().delete(connexion,
+            delete(connexion,
                 membreDTO);
 
         } catch(DAOException daoException) {
