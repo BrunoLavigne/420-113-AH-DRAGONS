@@ -207,7 +207,8 @@ public class Bibliotheque {
                 pretDTO.setMembreDTO(membreDTO);
                 pretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
 
-                getGestionBiblio().getPretService().commencer(pretDTO);
+                getGestionBiblio().getPretService().commencer(getGestionBiblio().getConnexion(),
+                    pretDTO);
 
             } else if("renouveler".startsWith(command)) {
 
@@ -262,7 +263,7 @@ public class Bibliotheque {
                 reservationDTO.setMembreDTO(membreDTO);
                 reservationDTO.setDateReservation(currentTimestamp);
 
-                getGestionBiblio().getReservationService().reserver(getGestionBiblio().getConnexion(),
+                getGestionBiblio().getReservationService().placer(getGestionBiblio().getConnexion(),
                     reservationDTO);
 
             } else if("utiliser".startsWith(command)) {
