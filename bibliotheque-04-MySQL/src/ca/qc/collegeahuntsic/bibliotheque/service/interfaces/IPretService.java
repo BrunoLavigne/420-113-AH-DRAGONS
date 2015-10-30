@@ -228,20 +228,20 @@ public interface IPretService extends IService {
      * @throws ExistingLoanException - Si le livre a été prêté à quelqu'un d'autre
      * @throws ExistingReservationException - Si le livre a été réservé
      * @throws InvalidDTOClassException - Si la classe du prêt n'est pas celle que prend en charge le DAO
-     * @throws ServiceException - S'il y a une erreur avec la base de données
+     * @throws ServiceException - S'il y a une erreur avec la base de données.
      */
     void renouveler(Connexion connexion,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
-            InvalidDTOException,
-            InvalidPrimaryKeyException,
-            MissingDTOException,
-            InvalidCriterionException,
-            InvalidSortByPropertyException,
-            MissingLoanException,
-            ExistingLoanException,
-            ExistingReservationException,
-            InvalidDTOClassException,
-            ServiceException;
+        InvalidDTOException,
+        InvalidPrimaryKeyException,
+        MissingDTOException,
+        InvalidCriterionException,
+        InvalidSortByPropertyException,
+        MissingLoanException,
+        ExistingLoanException,
+        ExistingReservationException,
+        InvalidDTOClassException,
+        ServiceException;
 
     /**
      *
@@ -262,13 +262,13 @@ public interface IPretService extends IService {
      */
     void terminer(Connexion connexion,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
-            InvalidDTOException,
-            InvalidPrimaryKeyException,
-            MissingDTOException,
-            InvalidCriterionException,
-            InvalidSortByPropertyException,
-            MissingLoanException,
-            ExistingLoanException,
-            InvalidDTOClassException,
-            ServiceException;
+        InvalidDTOException,
+        InvalidPrimaryKeyException,
+        MissingDTOException,
+        InvalidCriterionException,
+        InvalidSortByPropertyException,
+        MissingLoanException,
+        ExistingLoanException,
+        InvalidDTOClassException,
+        ServiceException;
 }
