@@ -64,7 +64,7 @@ public class MembreFacade extends Facade implements IMembreFacade {
         this.membreService = membreService;
     }
 
-    /*
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -81,7 +81,7 @@ public class MembreFacade extends Facade implements IMembreFacade {
         }
     }
 
-    /*
+    /**
      * {@inheritDoc}
      */
     @Override
