@@ -19,7 +19,7 @@ public class PretDTO extends DTO {
     private static final long serialVersionUID = 1L;
 
     private String idPret;
-    
+
     public static final String ID_PRET_COLUMN_NAME = "idPret";
 
     private MembreDTO membreDTO;
