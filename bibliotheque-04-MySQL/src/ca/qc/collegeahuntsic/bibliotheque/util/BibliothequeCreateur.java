@@ -13,10 +13,10 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.db.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
-import ca.qc.collegeahuntsic.bibliotheque.service.LivreService;
-import ca.qc.collegeahuntsic.bibliotheque.service.MembreService;
-import ca.qc.collegeahuntsic.bibliotheque.service.PretService;
-import ca.qc.collegeahuntsic.bibliotheque.service.ReservationService;
+import ca.qc.collegeahuntsic.bibliotheque.service.implementations.LivreService;
+import ca.qc.collegeahuntsic.bibliotheque.service.implementations.MembreService;
+import ca.qc.collegeahuntsic.bibliotheque.service.implementations.PretService;
+import ca.qc.collegeahuntsic.bibliotheque.service.implementations.ReservationService;
 
 /**
  *

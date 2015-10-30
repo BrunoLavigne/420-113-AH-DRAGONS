@@ -1,5 +1,5 @@
 
-package ca.qc.collegeahuntsic.bibliotheque.service;
+package ca.qc.collegeahuntsic.bibliotheque.service.implementations;
 
 import java.sql.Timestamp;
 import java.util.List;

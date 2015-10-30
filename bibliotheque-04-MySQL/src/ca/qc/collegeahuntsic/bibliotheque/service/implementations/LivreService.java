@@ -2,7 +2,7 @@
 // Auteur : Dragons Vicieux
 // Date de création : 2015-09-18
 
-package ca.qc.collegeahuntsic.bibliotheque.service;
+package ca.qc.collegeahuntsic.bibliotheque.service.implementations;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
