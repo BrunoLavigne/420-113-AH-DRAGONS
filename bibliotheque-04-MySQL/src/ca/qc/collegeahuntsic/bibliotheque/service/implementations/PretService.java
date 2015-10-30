@@ -266,16 +266,16 @@ public class PretService extends Services implements IPretService {
     @Override
     public void renouveler(Connexion connexion,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
-            InvalidDTOException,
-            InvalidPrimaryKeyException,
-            MissingDTOException,
-            InvalidCriterionException,
-            InvalidSortByPropertyException,
-            MissingLoanException,
-            ExistingLoanException,
-            ExistingReservationException,
-            InvalidDTOClassException,
-            ServiceException {
+        InvalidDTOException,
+        InvalidPrimaryKeyException,
+        MissingDTOException,
+        InvalidCriterionException,
+        InvalidSortByPropertyException,
+        MissingLoanException,
+        ExistingLoanException,
+        ExistingReservationException,
+        InvalidDTOClassException,
+        ServiceException {
         try {
 
             // Si la connexion est null
@@ -311,7 +311,7 @@ public class PretService extends Services implements IPretService {
                 throw new MissingDTOException("Le livre n'existe pas");
             }
 
-            // Si l'ID du membre est null 
+            // Si l'ID du membre est null
 
             // Si l'ID du livre est null
 
