@@ -12,17 +12,9 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.PretDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.ReservationDAO;
-import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidCriterionException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidHibernateSessionException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidSortByPropertyException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOClassException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.dto.MissingDTOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
-import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.ILivreService;
 
 /**
  * Service de la table <code>livre</code>.
@@ -30,7 +22,7 @@ import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.ILivreService;
  * @author Dragons Vicieux
  *
  */
-public class LivreService extends Services implements ILivreService {
+public class LivreService extends Services {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,11 +43,10 @@ public class LivreService extends Services implements ILivreService {
      * @param pretDAO - Le DAO de la table <code>pret</code>
      * @param reservationDAO - Le DAO de la table <code>reservation</code>
      */
-    public LivreService(LivreDAO livreDAO, // TODO protéger le constructeur
+    public LivreService(LivreDAO livreDAO,
         MembreDAO membreDAO,
         PretDAO pretDAO,
         ReservationDAO reservationDAO) {
-        // TODO check des DAOs
         setLivreDAO(livreDAO);
         setReservationDAO(reservationDAO);
         setMembreDAO(membreDAO);
@@ -68,19 +59,10 @@ public class LivreService extends Services implements ILivreService {
      *
      * @param livreDTO - Le livre à ajouter.
      * @throws ServiceException S'il y a une erreur avec la base de données.
-     * @throws InvalidDTOClassException
-     * @throws InvalidDTOException
-     * @throws InvalidHibernateSessionException
      */
-    @Override
-    public void add(Connexion connexion,
-        LivreDTO livreDTO) throws InvalidHibernateSessionException,
-        InvalidDTOException,
-        InvalidDTOClassException,
-        ServiceException {
+    public void add(LivreDTO livreDTO) throws ServiceException {
         try {
-            getLivreDAO().add(connexion,
-                livreDTO);
+            getLivreDAO().add(livreDTO);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
@@ -94,11 +76,9 @@ public class LivreService extends Services implements ILivreService {
      * @return Le livre.
      * @throws ServiceException S'il y a une erreur avec la base de données.
      */
-    public LivreDTO get(Connexion connexion,
-        int idLivre) throws ServiceException {
+    public LivreDTO read(int idLivre) throws ServiceException {
         try {
-            return getLivreDAO().get(connexion,
-                idLivre);
+            return getLivreDAO().read(idLivre);
         } catch(DAOException daoexception) {
             throw new ServiceException(daoexception);
         }
@@ -111,17 +91,15 @@ public class LivreService extends Services implements ILivreService {
      * @param livreDTO - Le livre à mettre à jour.
      * @throws ServiceException S'il y a une erreur avec la base de données.
      */
-    @Override
-    public void update(Connexion connexion,
-        LivreDTO livreDTO) throws ServiceException {
+    public void update(LivreDTO livreDTO) throws ServiceException {
         try {
             if(getLivreDAO().checkLivreExist(livreDTO.getIdLivre())) {
-                throw new InvalidDTOException("Livre inexistant dans la base de données: "
+                System.err.println("Livre inexistant dans la base de données: "
                     + livreDTO.getTitre());
                 return;
+                //throw new ServiceException("SRV-0001");
             }
-            getLivreDAO().update(connexion,
-                livreDTO);
+            getLivreDAO().update(livreDTO);
         } catch(DAOException daoexception) {
             throw new ServiceException(daoexception);
         }
@@ -133,19 +111,10 @@ public class LivreService extends Services implements ILivreService {
      *
      * @param livreDTO - Le livre à supprimer.
      * @throws ServiceException S'il y a une erreur avec la base de données.
-     * @throws InvalidDTOClassException
-     * @throws InvalidDTOException
-     * @throws InvalidHibernateSessionException
      */
-    @Override
-    public void delete(Connexion connexion,
-        LivreDTO livreDTO) throws InvalidHibernateSessionException,
-        InvalidDTOException,
-        InvalidDTOClassException,
-        ServiceException {
+    public void delete(LivreDTO livreDTO) throws ServiceException {
         try {
-            getLivreDAO().delete(connexion,
-                livreDTO);
+            getLivreDAO().delete(livreDTO);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
@@ -157,17 +126,10 @@ public class LivreService extends Services implements ILivreService {
      *
      * @return La liste des livres ; une liste vide sinon.
      * @throws ServiceException S'il y a une erreur avec la base de données.
-     * @throws InvalidSortByPropertyException
-     * @throws InvalidHibernateSessionException
      */
-    @Override
-    public List<LivreDTO> getAll(Connexion connexion,
-        String sortByPropertyName) throws InvalidHibernateSessionException,
-        InvalidSortByPropertyException,
-        ServiceException {
+    public List<LivreDTO> getAll() throws ServiceException {
         try {
-            return getLivreDAO().getAll(connexion,
-                sortByPropertyName);
+            return getLivreDAO().getAll();
         } catch(DAOException daoexception) {
             throw new ServiceException(daoexception);
         }
@@ -180,21 +142,10 @@ public class LivreService extends Services implements ILivreService {
      * @param titre - Le titre à utiliser.
      * @return La liste des livres correspondants ; une liste vide sinon.
      * @throws ServiceException S'il y a une erreur avec la base de données.
-     * @throws InvalidSortByPropertyException
-     * @throws InvalidCriterionException
-     * @throws InvalidHibernateSessionException
      */
-    @Override
-    public List<LivreDTO> findByTitre(Connexion connexion,
-        String titre,
-        String sortByPropertyName) throws InvalidHibernateSessionException,
-        InvalidCriterionException,
-        InvalidSortByPropertyException,
-        ServiceException {
+    public List<LivreDTO> findByTitre(String titre) throws ServiceException {
         try {
-            return getLivreDAO().findByTitre(connexion,
-                titre,
-                sortByPropertyName);
+            return getLivreDAO().findByTitre(titre);
         } catch(DAOException daoexception) {
             throw new ServiceException(daoexception);
         }
@@ -205,20 +156,11 @@ public class LivreService extends Services implements ILivreService {
      * Acquiert un livre.
      *
      * @param livreDTO - Le livre à ajouter.
-     * @throws InvalidDTOClassException
-     * @throws InvalidDTOException
-     * @throws InvalidHibernateSessionException
      * @throws ServiceException S'il y a une erreur avec la base de données.
      */
-    @Override
-    public void acquerir(Connexion connexion,
-        LivreDTO livreDTO) throws InvalidHibernateSessionException,
-        InvalidDTOException,
-        InvalidDTOClassException,
-        ServiceException {
+    public void acquerir(LivreDTO livreDTO) throws ServiceException {
         try {
-            getLivreDAO().add(connexion,
-                livreDTO);
+            getLivreDAO().add(livreDTO);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
@@ -231,18 +173,13 @@ public class LivreService extends Services implements ILivreService {
      * @param livreDTO - Le livre à vendre.
      * @throws ServiceException S'il y a une erreur avec la base de données.
      */
-    @Override
-    public void vendre(Connexion connexion,
-        LivreDTO livreDTO) throws ServiceException {
-        // TODO check de DTO
+    public void vendre(LivreDTO livreDTO) throws ServiceException {
         try {
 
             // Vérifie si le livre passé en paramètre existe dans la base de données.
             if(livreDTO == null) {
-                // TODO passer le read ici dans les Services
-                throw new MissingDTOException("Le livre n'existe pas.");
+                throw new ServiceException("Livre inexistant dans la base de données");
             }
-            //TODO connexion check missing Hibernate SEssion
             // Vérifie si le livre passé en paramètre est prêté à un membre.
             // si le livre existe // pretDAO find by livre, si != null il est deja prêter // si pas prêter est-il reserver // sinnon vendre le livre
 
@@ -254,15 +191,13 @@ public class LivreService extends Services implements ILivreService {
             }
 
             // Vérifie si le livre passé en paramètre est réservé par un membre.
-            if(getReservationDAO().get(connexion,
-                livreDTO.getIdLivre()) != null) {
+            if(getReservationDAO().read(livreDTO.getIdLivre()) != null) {
                 throw new ServiceException("Le livre "
                     + livreDTO.getTitre()
                     + " est réservé.");
             }
             // Sinon, suppression du livre de la base de données.
-            getLivreDAO().delete(connexion,
-                livreDTO);
+            getLivreDAO().delete(livreDTO);
 
         } catch(DAOException daoexception) {
             throw new ServiceException(daoexception);
