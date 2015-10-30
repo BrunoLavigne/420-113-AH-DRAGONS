@@ -64,7 +64,7 @@ public class LivreFacade extends Facade implements ILivreFacade {
         this.livreService = livreService;
     }
 
-    /**
+    /*
      * {@inheritDoc}
      */
     @Override
@@ -81,7 +81,7 @@ public class LivreFacade extends Facade implements ILivreFacade {
         }
     }
 
-    /**
+    /*
      * {@inheritDoc}
      */
     @Override
