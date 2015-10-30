@@ -20,6 +20,8 @@ public class PretDTO extends DTO {
 
     private String idPret;
 
+    public static final String ID_PRET_COLUMN_NAME = "idPret";
+
     private MembreDTO membreDTO;
 
     private LivreDTO livreDTO;

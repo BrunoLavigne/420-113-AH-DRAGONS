@@ -21,6 +21,8 @@ public class ReservationDTO extends DTO {
 
     private String idReservation;
 
+    public static final String ID_RESERVATION_COLUMN_NAME = "idReservation";
+
     private MembreDTO membreDTO;
 
     private LivreDTO livreDTO;
