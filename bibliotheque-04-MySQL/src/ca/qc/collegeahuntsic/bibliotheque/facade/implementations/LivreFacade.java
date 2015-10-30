@@ -38,7 +38,7 @@ public class LivreFacade extends Facade implements ILivreFacade {
      * @param livreService Le service de la table <code>livre</code>
      *@throws InvalidServiceException Si le service de livres est <code>null</code>
      */
-    public LivreFacade(ILivreService livreService) throws InvalidServiceException {// TODO changer la visibilité a package quand nous aurons la version avec Spring
+    public LivreFacade(ILivreService livreService) throws InvalidServiceException {
         super();
         if(livreService == null) {
             throw new InvalidServiceException("Le service des livres ne peut être null");

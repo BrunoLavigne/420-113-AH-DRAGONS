@@ -29,6 +29,11 @@ import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IPretService;
  * @author Dragons Vicieux
  */
 public class PretFacade extends Facade implements IPretFacade {
+    /**
+     * TODO Auto-generated field javadoc
+     */
+    private static final long serialVersionUID = 1L;
+
     private IPretService pretService;
 
     /**

@@ -29,6 +29,11 @@ import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IReservationService
  * @author Dragons Vicieux
  */
 public class ReservationFacade extends Facade implements IReservationFacade {
+    /**
+     * TODO Auto-generated field javadoc
+     */
+    private static final long serialVersionUID = 1L;
+
     private IReservationService reservationService;
 
     public ReservationFacade(IReservationService reservationService) throws InvalidServiceException { // TODO: Change to package when switching to Spring
