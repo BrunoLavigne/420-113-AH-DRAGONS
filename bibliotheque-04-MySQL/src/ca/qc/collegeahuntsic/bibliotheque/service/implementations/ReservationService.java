@@ -10,7 +10,12 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.LivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.PretDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.ReservationDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.ILivreDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IMembreDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IPretDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
+import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
@@ -39,13 +44,13 @@ public class ReservationService extends Services implements IReservationService 
 
     private static final long serialVersionUID = 1L;
 
-    private LivreDAO livreDAO;
+    private ILivreDAO livreDAO;
 
-    private MembreDAO membreDAO;
+    private IMembreDAO membreDAO;
 
-    private ReservationDAO reservationDAO;
+    private IReservationDAO reservationDAO;
 
-    private PretDAO pretDAO;
+    private IPretDAO pretDAO;
 
     /**
      *
@@ -98,7 +103,7 @@ public class ReservationService extends Services implements IReservationService 
         ServiceException {
 
         try {
-            return getReservationDAO().get(connexion,
+            return (ReservationDTO) getReservationDAO().get(connexion,
                 idReservation);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
@@ -341,9 +346,9 @@ public class ReservationService extends Services implements IReservationService 
                 throw new InvalidCriterionException("La réservation n'existe pas");
             }
 
-            reservationDTO.setMembreDTO(getMembreDAO().get(connexion,
+            reservationDTO.setMembreDTO((MembreDTO) getMembreDAO().get(connexion,
                 reservationDTO.getMembreDTO()));
-            reservationDTO.setLivreDTO(getLivreDAO().get(connexion,
+            reservationDTO.setLivreDTO((LivreDTO) getLivreDAO().get(connexion,
                 reservationDTO.getLivreDTO()));
 
             //  Si le membre n'existe pas
@@ -448,7 +453,7 @@ public class ReservationService extends Services implements IReservationService 
      *
      * @return La variable d'instance <code>this.livreDAO</code>
      */
-    private LivreDAO getLivreDAO() {
+    private ILivreDAO getLivreDAO() {
         return this.livreDAO;
     }
 
@@ -457,7 +462,7 @@ public class ReservationService extends Services implements IReservationService 
      *
      * @param livreDAO La valeur à utiliser pour la variable d'instance <code>this.livreDAO</code>
      */
-    private void setLivreDAO(LivreDAO livreDAO) {
+    private void setLivreDAO(ILivreDAO livreDAO) {
         this.livreDAO = livreDAO;
     }
 
@@ -466,7 +471,7 @@ public class ReservationService extends Services implements IReservationService 
      *
      * @return La variable d'instance <code>this.membreDAO</code>
      */
-    private MembreDAO getMembreDAO() {
+    private IMembreDAO getMembreDAO() {
         return this.membreDAO;
     }
 
@@ -475,7 +480,7 @@ public class ReservationService extends Services implements IReservationService 
      *
      * @param membreDAO La valeur à utiliser pour la variable d'instance <code>this.membreDAO</code>
      */
-    private void setMembreDAO(MembreDAO membreDAO) {
+    private void setMembreDAO(IMembreDAO membreDAO) {
         this.membreDAO = membreDAO;
     }
 
@@ -484,7 +489,7 @@ public class ReservationService extends Services implements IReservationService 
      *
      * @return La variable d'instance <code>this.reservationDAO</code>
      */
-    private ReservationDAO getReservationDAO() {
+    private IReservationDAO getReservationDAO() {
         return this.reservationDAO;
     }
 
@@ -493,7 +498,7 @@ public class ReservationService extends Services implements IReservationService 
      *
      * @param reservationDAO La valeur à utiliser pour la variable d'instance <code>this.reservationDAO</code>
      */
-    private void setReservationDAO(ReservationDAO reservationDAO) {
+    private void setReservationDAO(IReservationDAO reservationDAO) {
         this.reservationDAO = reservationDAO;
     }
 
@@ -502,7 +507,7 @@ public class ReservationService extends Services implements IReservationService 
      *
      * @return La variable d'instance <code>this.pretDAO</code>
      */
-    private PretDAO getPretDAO() {
+    private IPretDAO getPretDAO() {
         return this.pretDAO;
     }
 
