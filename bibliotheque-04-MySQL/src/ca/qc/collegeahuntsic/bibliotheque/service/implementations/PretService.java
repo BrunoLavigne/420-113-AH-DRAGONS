@@ -2,6 +2,7 @@
 package ca.qc.collegeahuntsic.bibliotheque.service.implementations;
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.ILivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IMembreDAO;
@@ -168,13 +169,14 @@ public class PretService extends Services implements IPretService {
         InvalidSortByPropertyException,
         ServiceException {
 
+        List<PretDTO> listeDesPrets = Collections.EMPTY_LIST;
         try {
-            return (List<PretDTO>) getPretDAO().getAll(connexion,
+            listeDesPrets = (List<PretDTO>) getPretDAO().getAll(connexion,
                 sortByPropertyName);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
-
+        return listeDesPrets;
     }
 
     /**
@@ -187,14 +189,17 @@ public class PretService extends Services implements IPretService {
         InvalidCriterionException,
         InvalidSortByPropertyException,
         ServiceException {
+
+        List<PretDTO> listeDesPrets = Collections.EMPTY_LIST;
+
         try {
-            return getPretDAO().findByMembre(connexion,
+            listeDesPrets = getPretDAO().findByMembre(connexion,
                 idMembre,
                 sortByPropertyName);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
-
+        return listeDesPrets;
     }
 
     /**
@@ -208,14 +213,16 @@ public class PretService extends Services implements IPretService {
         InvalidSortByPropertyException,
         ServiceException {
 
+        List<PretDTO> listeDesPrets = Collections.EMPTY_LIST;
+
         try {
-            return getPretDAO().findByLivre(connexion,
+            listeDesPrets = getPretDAO().findByLivre(connexion,
                 idLivre,
                 sortByPropertyName);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
-
+        return listeDesPrets;
     }
 
     /**
@@ -229,14 +236,16 @@ public class PretService extends Services implements IPretService {
         InvalidSortByPropertyException,
         ServiceException {
 
+        List<PretDTO> listeDesPrets = Collections.EMPTY_LIST;
+
         try {
-            return getPretDAO().findByDatePret(connexion,
+            listeDesPrets = getPretDAO().findByDatePret(connexion,
                 datePret,
                 sortByPropertyName);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
-
+        return listeDesPrets;
     }
 
     /**
@@ -250,14 +259,16 @@ public class PretService extends Services implements IPretService {
         InvalidSortByPropertyException,
         ServiceException {
 
+        List<PretDTO> listeDesPrets = Collections.EMPTY_LIST;
+
         try {
-            return getPretDAO().findByDateRetour(connexion,
+            listeDesPrets = getPretDAO().findByDateRetour(connexion,
                 dateRetour,
                 sortByPropertyName);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
-
+        return listeDesPrets;
     }
 
     /**
@@ -432,7 +443,7 @@ public class PretService extends Services implements IPretService {
             // Si le livre a été réservé
             List<ReservationDTO> listeDesReservations = getReservationDAO().findByLivre(connexion,
                 pretDTO.getLivreDTO().getIdLivre(),
-                ReservationDTO.ID_RESERVATION_COLUMN_NAME);
+                ReservationDTO.ID_LIVRE_COLUMN_NAME);
             if(!listeDesReservations.isEmpty()) {
                 throw new ServiceException("Le livre"
                     + pretDTO.getLivreDTO().getIdLivre()
@@ -456,8 +467,7 @@ public class PretService extends Services implements IPretService {
                 pretDTO);
 
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException.getMessage(),
-                daoException);
+            throw new ServiceException(daoException);
         }
     }
 
