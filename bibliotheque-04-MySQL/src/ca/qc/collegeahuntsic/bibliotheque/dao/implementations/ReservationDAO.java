@@ -245,7 +245,7 @@ public class ReservationDAO extends DAO implements IReservationDAO {
      * {@inheritDoc}
      */
     @Override
-    public List<ReservationDTO> getAll(Connexion connexion,
+    public List<? extends DTO> getAll(Connexion connexion,
         String sortByPropertyName) throws DAOException,
         InvalidHibernateSessionException,
         InvalidSortByPropertyException {
