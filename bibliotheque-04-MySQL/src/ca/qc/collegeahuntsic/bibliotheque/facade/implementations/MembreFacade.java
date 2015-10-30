@@ -2,7 +2,7 @@
 // Auteur : Dragons Vicieux
 // Date de création : 2015-09-21
 
-package ca.qc.collegeahuntsic.bibliotheque.facade;
+package ca.qc.collegeahuntsic.bibliotheque.facade.implementations;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ import java.io.Serializable;
  *
  * @author Dragons Vicieux
  */
-public class Facade implements Serializable {
+public class MembreFacade implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -19,7 +19,7 @@ public class Facade implements Serializable {
      * Crée une nouvelle Facade vide.
      *
      */
-    public Facade() {
+    public MembreFacade() {
 
     }
 
