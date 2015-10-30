@@ -18,6 +18,16 @@ public class MembreDTO extends DTO {
 
     private static final long serialVersionUID = 1L;
 
+    public static String ID_MEMBRE_COLUMN_NAME = "idMembre";
+
+    public static String NOM_COLUMN_NAME = "nom";
+
+    public static String TELEPHONE_COLUMN_NAME = "telephone";
+
+    public static String LIMITE_PRET_COLUMN_NAME = "limitePret";
+
+    public static String NB_PRET_COLUMN_NAME = "nbPret";
+
     private String idMembre;
 
     private String nom;

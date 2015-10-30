@@ -18,6 +18,14 @@ public class LivreDTO extends DTO {
 
     private static final long serialVersionUID = 1L;
 
+    public static String ID_COLUMN_NAME = "idLivre";
+
+    public static String TITRE_COLUMN_NAME = "titre";
+
+    public static String AUTEUR_COLUMN_NAME = "auteur";
+
+    public static String DATE_ACQUISITION_COLUMN_NAME = "dateAcquisition";
+
     private String idLivre;
 
     private String titre;
