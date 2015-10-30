@@ -364,7 +364,7 @@ public class PretService extends Services implements IPretService {
 
         try {
 
-            // Si le membre n'existe pas
+            //Si le membre n'existe pas
             if(pretDTO.getMembreDTO() == null) {
                 throw new ServiceException("Le membre"
                     + pretDTO.getMembreDTO().getIdMembre()
