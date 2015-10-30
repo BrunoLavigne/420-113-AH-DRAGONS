@@ -7,6 +7,8 @@ package ca.qc.collegeahuntsic.bibliotheque.service.implementations;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.MembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.ReservationDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IMembreDAO;
+import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
@@ -36,20 +38,17 @@ public class MembreService extends Services {
 
     private static final long serialVersionUID = 1L;
 
-    private MembreDAO membreDAO;
+    private IMembreDAO membreDAO;
 
-    private ReservationDAO reservationDAO;
+    private IReservationDAO reservationDAO;
 
     /**
      *
      * Crée le service de la table <code>membre</code>
      *
-     * @param membreDAO
-     *            Le DAO de la table <code>membre</code>
-     * @param livreDAO
-     *            Le DAO de la table <code>livre</code>
-     * @param reservationDAO
-     *            Le DAO de la table <code>reservation</code>
+     * @param membreDAO Le DAO de la table <code>membre</code>
+     * @param livreDAO Le DAO de la table <code>livre</code>
+     * @param reservationDAO Le DAO de la table <code>reservation</code>
      */
     public MembreService(MembreDAO membreDAO,
         ReservationDAO reservationDAO) {
@@ -60,15 +59,7 @@ public class MembreService extends Services {
     // Opérations CRUD
 
     /**
-     *
-     * Ajoute un nouveau membre dans la base de données.
-     *
-     * @param connexion La connexion à utiliser
-     * @param membreDTO Le membre à ajouter
-     * @throws InvalidHibernateSessionException Si la connexion est null
-     * @throws InvalidDTOException Si le membre est null
-     * @throws InvalidDTOClassException Si la classe du membre n'est pas celle que prend en charge le DAO
-     * @throws ServiceException S'il y a une erreur avec la base de données
+     * {@inheritDoc}
      */
     public void add(Connexion connexion,
         MembreDTO membreDTO) throws InvalidHibernateSessionException,
@@ -85,12 +76,7 @@ public class MembreService extends Services {
     }
 
     /**
-     *
-     * Lit un membre.
-     *
-     * @param idMembre L'ID du membre à lire
-     * @return MembreDTO Le membre à lire
-     * @throws ServiceException S'il y a une erreur avec la base de données
+     * {@inheritDoc}
      */
     public MembreDTO get(Connexion connexion,
         String idMembre) throws InvalidHibernateSessionException,
@@ -98,7 +84,7 @@ public class MembreService extends Services {
         ServiceException {
 
         try {
-            return getMembreDAO().get(connexion,
+            return (MembreDTO) getMembreDAO().get(connexion,
                 idMembre);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
@@ -106,16 +92,7 @@ public class MembreService extends Services {
     }
 
     /**
-     *
-     * Met à jour un membre.
-     *
-     * @param membreDTO
-     *            Le membre à mettre à jour
-     * @throws ServiceException
-     *             S'il y a une erreur avec la base de données
-     * @throws InvalidDTOClassException
-     * @throws InvalidDTOException
-     * @throws InvalidHibernateSessionException
+     * {@inheritDoc}
      */
     public void update(Connexion connexion,
         MembreDTO membreDTO) throws ServiceException,
@@ -132,15 +109,7 @@ public class MembreService extends Services {
     }
 
     /**
-     *
-     * Supprime un membre de la base de données.
-     *
-     * @param connexion La connexion à utiliser
-     * @param membreDTO Le membre à supprimer
-     * @throws InvalidHibernateSessionException Si la connexion est null
-     * @throws InvalidDTOException Si le membre est null
-     * @throws InvalidDTOClassException Si la classe du membre n'est pas celle que prend en charge le DAO
-     * @throws ServiceException S'il y a une erreur avec la base de données
+     * {@inheritDoc}
      */
     public void delete(Connexion connexion,
         MembreDTO membreDTO) throws InvalidHibernateSessionException,
@@ -159,21 +128,16 @@ public class MembreService extends Services {
     // Opérations de recherche
 
     /**
-     *
-     * Trouve tous les membres
-     *
-     * @return List<MembreDTO> La liste des membres; une liste vide sinon
-     * @throws ServiceException S'il y a une erreur avec la base de données
-     * @throws InvalidSortByPropertyException
-     * @throws InvalidHibernateSessionException
+     * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public List<MembreDTO> getAll(Connexion connexion,
         String sortByPropertyName) throws ServiceException,
         InvalidHibernateSessionException,
         InvalidSortByPropertyException {
 
         try {
-            return getMembreDAO().getAll(connexion,
+            return (List<MembreDTO>) getMembreDAO().getAll(connexion,
                 sortByPropertyName);
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
@@ -183,53 +147,32 @@ public class MembreService extends Services {
     // Méthodes métiers
 
     /**
-     *
-     * Inscrit un membre.
-     *
-     * @param membreDTO Le membre à ajouter
-     * @throws ServiceException Si le membre existe déjà ou s'il y a une erreur avec la base de données
-     * @throws InvalidDTOClassException
-     * @throws InvalidDTOException
-     * @throws InvalidHibernateSessionException
-     * @throws DAOException
-     * @throws InvalidPrimaryKeyException
+     * {@inheritDoc}
      */
     public void inscrire(Connexion connexion,
         MembreDTO membreDTO) throws ServiceException,
-        DAOException,
         InvalidHibernateSessionException,
         InvalidDTOException,
-        InvalidDTOClassException,
-        InvalidPrimaryKeyException {
+        InvalidDTOClassException {
 
-        // Vérifier si le membre existe déjà
-        if(get(connexion,
-            membreDTO.getIdMembre().toString()) != null) {
-
-            System.err.println("Un membre avec l'id "
-                + membreDTO.getIdMembre()
-                + " existe déjà.");
-            return;
-            // throw new ServiceException("SRV-0003");
-
+        // Vérifier si la connexion est null
+        if(connexion == null) {
+            throw new InvalidHibernateSessionException("La connexion est null");
         }
 
-        // S'il n'existe pas, on en crée un nouveau
-        getMembreDAO().add(connexion,
+        // Vérifier si le membre est null
+        if(membreDTO == null) {
+            throw new InvalidDTOException("Le membre est null");
+        }
+
+        // On peut ajouter le membre
+        add(connexion,
             membreDTO);
 
     }
 
     /**
-     *
-     * Désincrit un membre.
-     *
-     * @param membreDTO
-     *            Le membre à désinscrire
-     * @throws ServiceException
-     *             Si le membre n'existe pas, si le membre a encore des prêts,
-     *             s'il a des réservations ou s'il y a une erreur avec la base
-     *             de données
+     * {@inheritDoc}
      */
     public void desinscrire(Connexion connexion,
         MembreDTO membreDTO) throws ServiceException {
@@ -268,21 +211,22 @@ public class MembreService extends Services {
             // Si le membre a encore des réservations
 
             // Obtenir la liste de réservations du membre
-            List<ReservationDTO> listeReservations = getReservationDAO().get(connexion, membreDTO.getIdMembre())
+            ReservationDTO reservation = getReservationDAO().get(connexion,
+                membreDTO.getIdMembre());
 
-                if(listeReservations.size() > 0) {
-                    System.err.println("Le membre avec l'ID "
-                        + membreDTO.getIdMembre()
-                        + " a encore "
-                        + listeReservations.size()
-                        + " réservations.");
-                    return;
-                    /*
-                     * throw new ServiceException("Le membre avec l'ID " +
-                     * membreDTO.getIdMembre() + " a encore " +
-                     * listeReservations.size() + " réservations.");
-                     */
-                }
+            if(reservation != null) {
+                System.err.println("Le membre avec l'ID "
+                    + membreDTO.getIdMembre()
+                    + " a encore "
+                    + listeReservations.size()
+                    + " réservations.");
+                return;
+                /*
+                 * throw new ServiceException("Le membre avec l'ID " +
+                 * membreDTO.getIdMembre() + " a encore " +
+                 * listeReservations.size() + " réservations.");
+                 */
+            }
 
             // On peut supprimer le membre
             getMembreDAO().delete(connexion,
@@ -300,7 +244,7 @@ public class MembreService extends Services {
      *
      * @return La variable d'instance <code>this.membreDAO</code>
      */
-    private MembreDAO getMembreDAO() {
+    private IMembreDAO getMembreDAO() {
         return this.membreDAO;
     }
 
@@ -311,7 +255,7 @@ public class MembreService extends Services {
      *            La valeur à utiliser pour la variable d'instance
      *            <code>this.membreDAO</code>
      */
-    private void setMembreDAO(MembreDAO membreDAO) {
+    private void setMembreDAO(IMembreDAO membreDAO) {
         this.membreDAO = membreDAO;
     }
 
@@ -320,7 +264,7 @@ public class MembreService extends Services {
      *
      * @return La variable d'instance <code>this.reservationDAO</code>
      */
-    private ReservationDAO getReservationDAO() {
+    private IReservationDAO getReservationDAO() {
         return this.reservationDAO;
     }
 
@@ -331,7 +275,7 @@ public class MembreService extends Services {
      *            La valeur à utiliser pour la variable d'instance
      *            <code>this.reservationDAO</code>
      */
-    private void setReservationDAO(ReservationDAO reservationDAO) {
+    private void setReservationDAO(IReservationDAO reservationDAO) {
         this.reservationDAO = reservationDAO;
     }
 }
