@@ -6,10 +6,6 @@ package ca.qc.collegeahuntsic.bibliotheque.service.implementations;
 
 import java.sql.Timestamp;
 import java.util.List;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.LivreDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.MembreDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.PretDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.ILivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IMembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IPretDAO;
@@ -60,10 +56,10 @@ public class ReservationService extends Services implements IReservationService 
      * @param membreDAO Le DAO de la table <code>membre</code>
      * @param reservationDAO Le DAO de la table <code>reservation</code>
      */
-    public ReservationService(LivreDAO livreDAO,
-        MembreDAO membreDAO,
-        ReservationDAO reservationDAO,
-        PretDAO pretDAO) {
+    public ReservationService(ILivreDAO livreDAO,
+        IMembreDAO membreDAO,
+        IReservationDAO reservationDAO,
+        IPretDAO pretDAO) {
 
         super();
         setLivreDAO(livreDAO);
@@ -516,7 +512,7 @@ public class ReservationService extends Services implements IReservationService 
      *
      * @param pretDAO La valeur à utiliser pour la variable d'instance <code>this.pretDAO</code>
      */
-    private void setPretDAO(PretDAO pretDAO) {
+    private void setPretDAO(IPretDAO pretDAO) {
         this.pretDAO = pretDAO;
     }
 

@@ -5,8 +5,6 @@
 package ca.qc.collegeahuntsic.bibliotheque.service.implementations;
 
 import java.util.List;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.MembreDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.ReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IMembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
@@ -23,6 +21,7 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dto.MissingDTOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ExistingLoanException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ExistingReservationException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
+import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IMembreService;
 
 /**
  * Gestion des transactions reliées à la création et la suppression des membres
@@ -38,7 +37,7 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
  * <post> Post-condition: le programme effectue les *mises à jour* associées à
  * chaque transaction </post>
  */
-public class MembreService extends Services {
+public class MembreService extends Services implements IMembreService {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,8 +53,8 @@ public class MembreService extends Services {
      * @param livreDAO Le DAO de la table <code>livre</code>
      * @param reservationDAO Le DAO de la table <code>reservation</code>
      */
-    public MembreService(MembreDAO membreDAO,
-        ReservationDAO reservationDAO) {
+    public MembreService(IMembreDAO membreDAO,
+        IReservationDAO reservationDAO) {
         setMembreDAO(membreDAO);
         setReservationDAO(reservationDAO);
     }
@@ -65,6 +64,7 @@ public class MembreService extends Services {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void add(Connexion connexion,
         MembreDTO membreDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
@@ -82,6 +82,7 @@ public class MembreService extends Services {
     /**
      * {@inheritDoc}
      */
+    @Override
     public MembreDTO get(Connexion connexion,
         String idMembre) throws InvalidHibernateSessionException,
         InvalidPrimaryKeyException,
@@ -98,6 +99,7 @@ public class MembreService extends Services {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void update(Connexion connexion,
         MembreDTO membreDTO) throws ServiceException,
         InvalidHibernateSessionException,
@@ -115,6 +117,7 @@ public class MembreService extends Services {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void delete(Connexion connexion,
         MembreDTO membreDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
@@ -134,6 +137,7 @@ public class MembreService extends Services {
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<MembreDTO> getAll(Connexion connexion,
         String sortByPropertyName) throws ServiceException,
@@ -153,6 +157,7 @@ public class MembreService extends Services {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void inscrire(Connexion connexion,
         MembreDTO membreDTO) throws ServiceException,
         InvalidHibernateSessionException,
@@ -175,6 +180,7 @@ public class MembreService extends Services {
 
     }
 
+    @Override
     public void desinscrire(Connexion connexion,
         MembreDTO membreDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
@@ -269,5 +275,16 @@ public class MembreService extends Services {
      */
     private void setReservationDAO(IReservationDAO reservationDAO) {
         this.reservationDAO = reservationDAO;
+    }
+
+    @Override
+    public List<MembreDTO> findByNom(Connexion connexion,
+        String nom,
+        String sortByPropertyName) throws InvalidHibernateSessionException,
+        InvalidCriterionException,
+        InvalidSortByPropertyException,
+        ServiceException {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
