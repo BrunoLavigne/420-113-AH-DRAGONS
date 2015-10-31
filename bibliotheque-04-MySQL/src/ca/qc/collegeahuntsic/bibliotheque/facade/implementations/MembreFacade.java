@@ -77,7 +77,8 @@ public class MembreFacade extends Facade implements IMembreFacade {
             getMembreService().inscrire(connexion,
                 membreDTO);
         } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException);
+            throw new FacadeException(serviceException.getMessage(),
+                serviceException);
         }
     }
 
@@ -100,7 +101,8 @@ public class MembreFacade extends Facade implements IMembreFacade {
             getMembreService().desinscrire(connexion,
                 membreDTO);
         } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException);
+            throw new FacadeException(serviceException.getMessage(),
+                serviceException);
         }
     }
 

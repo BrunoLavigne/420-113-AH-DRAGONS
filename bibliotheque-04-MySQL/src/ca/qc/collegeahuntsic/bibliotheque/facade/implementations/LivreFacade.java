@@ -77,7 +77,8 @@ public class LivreFacade extends Facade implements ILivreFacade {
             getLivreService().acquerir(connexion,
                 livreDTO);
         } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException);
+            throw new FacadeException(serviceException.getMessage(),
+                serviceException);
         }
     }
 
@@ -100,7 +101,8 @@ public class LivreFacade extends Facade implements ILivreFacade {
             getLivreService().vendre(connexion,
                 livreDTO);
         } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException);
+            throw new FacadeException(serviceException.getMessage(),
+                serviceException);
         }
     }
 

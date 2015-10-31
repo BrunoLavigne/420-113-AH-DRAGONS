@@ -86,7 +86,8 @@ public class ReservationFacade extends Facade implements IReservationFacade {
             getReservationService().placer(connexion,
                 reservationDTO);
         } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException);
+            throw new FacadeException(serviceException.getMessage(),
+                serviceException);
         }
     }
 
@@ -111,7 +112,8 @@ public class ReservationFacade extends Facade implements IReservationFacade {
             getReservationService().utiliser(connexion,
                 reservationDTO);
         } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException);
+            throw new FacadeException(serviceException.getMessage(),
+                serviceException);
         }
     }
 
@@ -130,7 +132,8 @@ public class ReservationFacade extends Facade implements IReservationFacade {
             getReservationService().annuler(connexion,
                 reservationDTO);
         } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException);
+            throw new FacadeException(serviceException.getMessage(),
+                serviceException);
         }
     }
 

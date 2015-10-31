@@ -84,7 +84,8 @@ public class PretFacade extends Facade implements IPretFacade {
             getPretService().commencer(connexion,
                 pretDTO);
         } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException);
+            throw new FacadeException(serviceException.getMessage(),
+                serviceException);
         }
     }
 
@@ -107,7 +108,8 @@ public class PretFacade extends Facade implements IPretFacade {
             getPretService().terminer(connexion,
                 pretDTO);
         } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException);
+            throw new FacadeException(serviceException.getMessage(),
+                serviceException);
         }
 
     }
@@ -132,7 +134,8 @@ public class PretFacade extends Facade implements IPretFacade {
             getPretService().renouveler(connexion,
                 pretDTO);
         } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException);
+            throw new FacadeException(serviceException.getMessage(),
+                serviceException);
         }
     }
 
