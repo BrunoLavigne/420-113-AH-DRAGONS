@@ -25,6 +25,7 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dto.MissingDTOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ExistingLoanException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ExistingReservationException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.service.InvalidDAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.InvalidLoanLimitException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.MissingLoanException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
@@ -32,11 +33,11 @@ import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IReservationService
 
 /**
  *
- * Service de la table reservation.
+ * Service de la table <code>reservation</code>.
  *
  * @author Dragons Vicieux
  */
-public class ReservationService extends Services implements IReservationService {
+public class ReservationService extends Service implements IReservationService {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,17 +50,17 @@ public class ReservationService extends Services implements IReservationService 
     private IPretDAO pretDAO;
 
     /**
-     *
      * Crée le service de la table <code>reservation</code>.
      *
      * @param livreDAO Le DAO de la table <code>livre</code>
      * @param membreDAO Le DAO de la table <code>membre</code>
      * @param reservationDAO Le DAO de la table <code>reservation</code>
+     * @throws InvalidDAOException Si le DAO de réservation est <code>null</code>, si le DAO de membre est <code>null</code>, si le DAO de livre est <code>null</code> ou si le DAO de prêt est <code>null</code>
      */
     public ReservationService(ILivreDAO livreDAO,
         IMembreDAO membreDAO,
         IReservationDAO reservationDAO,
-        IPretDAO pretDAO) {
+        IPretDAO pretDAO) throws InvalidDAOException {
 
         super();
         setLivreDAO(livreDAO);

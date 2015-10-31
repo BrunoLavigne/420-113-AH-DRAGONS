@@ -29,7 +29,7 @@ public interface IMembreService extends IService {
      * Ajoute un nouveau membre dans la base de données.
      *
      * @param connexion La connexion à utiliser
-     * @param livreDTO Le membre à ajouter
+     * @param membreDTO Le membre à ajouter
      * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
      * @throws InvalidDTOException Si le membre est <code>null</code>
      * @throws InvalidDTOClassException Si la classe du membre n'est pas celle que prend en charge le DAO
@@ -45,7 +45,7 @@ public interface IMembreService extends IService {
      * Lit un membre à partir de la base de données.
      *
      * @param connexion La connexion à utiliser
-     * @param idLivre L'ID du membre  à lire
+     * @param idMembre L'ID du membre  à lire
      * @return Le membre
      * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
      * @throws InvalidPrimaryKeyException Si la clef primaire du membre  est <code>null</code>
@@ -60,7 +60,7 @@ public interface IMembreService extends IService {
      * Met à jour un membre dans la base de données.
      *
      * @param connexion La connexion à utiliser
-     * @param livreDTO Le membre à mettre à jour
+     * @param membreDTO Le membre à mettre à jour
      * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
      * @throws InvalidDTOException Si le membre est <code>null</code>
      * @throws InvalidDTOClassException Si la classe du membre n'est pas celle que prend en charge le DAO
@@ -76,7 +76,7 @@ public interface IMembreService extends IService {
      * Supprime un membre de la base de données.
      *
      * @param connexion La connexion à utiliser
-     * @param livreDTO Le membre à supprimer
+     * @param membreDTO Le membre à supprimer
      * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
      * @throws InvalidDTOException Si le membre est <code>null</code>
      * @throws InvalidDTOClassException Si la classe du membre n'est pas celle que prend en charge le DAO
@@ -89,7 +89,7 @@ public interface IMembreService extends IService {
         ServiceException;
 
     /**
-     * Trouve tous les membres de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun membre n'est trouvé, une List vide est retournée.
+     * Trouve tous les membres de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun membre n'est trouvé, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param sortByPropertyName Le nom de la propriété à utiliser pour classer
@@ -104,10 +104,10 @@ public interface IMembreService extends IService {
         ServiceException;
 
     /**
-     * Trouve les membres à partir d'un nom. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun membre n'est trouvé, une List vide est retournée.
+     * Trouve les membres à partir d'un nom. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun membre n'est trouvé, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
      *
      * @param connexion La connexion à utiliser
-     * @param titre Le nom à trouver
+     * @param nom Le nom à trouver
      * @param sortByPropertyName Le nom de la propriété à utiliser pour classer
      * @return La liste des membres correspondants ; une liste vide sinon
      * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
@@ -126,7 +126,7 @@ public interface IMembreService extends IService {
      * Inscrit un membre.
      *
      * @param connexion La connexion à utiliser
-     * @param livreDTO Le membre à inscrire
+     * @param membreDTO Le membre à inscrire
      * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
      * @throws InvalidDTOException Si le membre est <code>null</code>
      * @throws InvalidDTOClassException Si la classe du membre n'est pas celle que prend en charge le DAO

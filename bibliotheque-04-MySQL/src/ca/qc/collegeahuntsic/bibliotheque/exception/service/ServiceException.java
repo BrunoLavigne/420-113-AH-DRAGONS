@@ -5,7 +5,7 @@
 package ca.qc.collegeahuntsic.bibliotheque.exception.service;
 
 /**
- * Cette exception est utilisée en cas de problème avec l'object {@link ca.qc.collegeahuntsic.bibliotheque.service.implementations.Services}.
+ * Cette exception est utilisée en cas de problème avec l'object {@link ca.qc.collegeahuntsic.bibliotheque.service.implementations.Service}.
  *
  * @author Dragons Vicieux
  */

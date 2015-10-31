@@ -19,7 +19,8 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.service.ExistingReservationE
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
 
 /**
- * Interface DAO pour manipuler les prêts dans la base de données
+ * Interface de base pour les services.
+ * Toutes les interfaces de service devraient en hériter.
  *
  * @author Dragons Vicieux
  */
@@ -89,7 +90,7 @@ public interface ILivreService extends IService {
         ServiceException;
 
     /**
-     * Trouve tous les livres de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun livre n'est trouvé, une List vide est retournée.
+     * Trouve tous les livres de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun livre n'est trouvé, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param sortByPropertyName Le nom de la propriété à utiliser pour classer
@@ -104,7 +105,7 @@ public interface ILivreService extends IService {
         ServiceException;
 
     /**
-     * Trouve les livres à partir d'un titre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun livre n'est trouvé, une List vide est retournée.
+     * Trouve les livres à partir d'un titre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun livre n'est trouvé, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param titre Le titre à trouver

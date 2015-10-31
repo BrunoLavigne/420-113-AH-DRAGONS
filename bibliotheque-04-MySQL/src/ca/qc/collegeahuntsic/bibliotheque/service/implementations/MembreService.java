@@ -20,24 +20,14 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dto.MissingDTOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ExistingLoanException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ExistingReservationException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.service.InvalidDAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
 import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IMembreService;
 
 /**
- * Gestion des transactions reliées à la création et la suppression des membres
- * dans une bibliothèque.
- *
- * Ce programme permet de gérer les transactions reliées à la création et la
- * suppression des membres.
- *
- * <pre>
- * Pré-condition: la base de données de la bibliothèque doit exister
- * </pre>
- *
- * <post> Post-condition: le programme effectue les *mises à jour* associées à
- * chaque transaction </post>
+ * Service de la table <code>membre</code>.
  */
-public class MembreService extends Services implements IMembreService {
+public class MembreService extends Service implements IMembreService {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,15 +36,14 @@ public class MembreService extends Services implements IMembreService {
     private IReservationDAO reservationDAO;
 
     /**
-     *
      * Crée le service de la table <code>membre</code>
      *
      * @param membreDAO Le DAO de la table <code>membre</code>
-     * @param livreDAO Le DAO de la table <code>livre</code>
      * @param reservationDAO Le DAO de la table <code>reservation</code>
+     * @throws InvalidDAOException Si le DAO de membre est <code>null</code> ou si le DAO de réservation est <code>null</code>
      */
     public MembreService(IMembreDAO membreDAO,
-        IReservationDAO reservationDAO) {
+        IReservationDAO reservationDAO) throws InvalidDAOException {
         setMembreDAO(membreDAO);
         setReservationDAO(reservationDAO);
     }

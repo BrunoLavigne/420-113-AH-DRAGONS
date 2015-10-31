@@ -1,4 +1,4 @@
-// Fichier Services.java
+// Fichier Service.java
 // Auteur : Dragons Vicieux
 // Date de création : 2015-09-18
 
@@ -12,16 +12,15 @@ import java.io.Serializable;
  *
  * @author Dragons Vicieux
  */
-public class Services implements Serializable {
+public class Service implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     *
      * Crée un service.
      *
      */
-    public Services() {
+    public Service() {
         super();
     }
 

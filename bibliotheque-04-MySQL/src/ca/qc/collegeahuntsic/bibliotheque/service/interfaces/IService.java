@@ -5,7 +5,8 @@
 package ca.qc.collegeahuntsic.bibliotheque.service.interfaces;
 
 /**
- * Interface DAO pour manipuler les prêts dans la base de données
+ * Interface de base pour les services.
+ * Toutes les interfaces de service devraient en hériter.
  *
  * @author Dragons Vicieux
  */

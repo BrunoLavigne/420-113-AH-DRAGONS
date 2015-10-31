@@ -35,7 +35,7 @@ import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.ILivreService;
  * @author Dragons Vicieux
  *
  */
-public class LivreService extends Services implements ILivreService {
+public class LivreService extends Service implements ILivreService {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,11 +51,11 @@ public class LivreService extends Services implements ILivreService {
      *
      * Crée le service de la table <code>livre</code>.
      *
-     * @param livreDAO - Le DAO de la table <code>livre</code>
-     * @param membreDAO - Le DAO de la table <code>membre</code>
-     * @param pretDAO - Le DAO de la table <code>pret</code>
-     * @param reservationDAO - Le DAO de la table <code>reservation</code>
-     * @throws InvalidDAOException - Si le DAO de livre est <code>null</code>, si le DAO de membre est <code>null</code>, si le DAO de prêt est <code>null</code> ou si le DAO de réservation est <code>null</code>
+     * @param livreDAO Le DAO de la table <code>livre</code>
+     * @param membreDAO Le DAO de la table <code>membre</code>
+     * @param pretDAO Le DAO de la table <code>pret</code>
+     * @param reservationDAO Le DAO de la table <code>reservation</code>
+     * @throws InvalidDAOException Si le DAO de livre est <code>null</code>, si le DAO de membre est <code>null</code>, si le DAO de prêt est <code>null</code> ou si le DAO de réservation est <code>null</code>
      */
     public LivreService(ILivreDAO livreDAO, // TODO passer a protected quand les facades seront prêtes
         IMembreDAO membreDAO,

@@ -30,24 +30,10 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
 import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IPretService;
 
 /**
- * Gestion des transactions reliées aux prêts de livres
- * aux membres dans une bibliothèque.
- *
- * Ce programme permet de gérer les transactions prêtées,
- * rénouveller et retourner.
- *
- * <pre>
- * Pré-condition
- *   la base ded données de la bibliothèque doit exister
- * </pre>
- * <pos>
- * Post-condition
- *   le programme effectue les maj associées à chaque
- *   transaction
- * </pos>
+ * Service de la table <code>pret</code>.
  */
 
-public class PretService extends Services implements IPretService {
+public class PretService extends Service implements IPretService {
 
     private static final long serialVersionUID = 1L;
 
@@ -60,14 +46,13 @@ public class PretService extends Services implements IPretService {
     private IReservationDAO reservationDAO;
 
     /**
-     *
      * Crée le service de la table <code>pret</code>.
      *
-     * @param pretDAO - Le DAO de la table <code>pret</code>
-     * @param membreDAO - Le DAO de la table <code>membre</code>
-     * @param livreDAO - Le DAO de la table <code>livre</code>
-     * @param reservationDAO - Le DAO de la table <code>reservation</code>
-     * @throws InvalidDAOException -  Si le DAO de prêt est null, si le DAO de membre est null, si le DAO de livre est null ou si le DAO de réservation est null
+     * @param pretDAO Le DAO de la table <code>pret</code>
+     * @param membreDAO Le DAO de la table <code>membre</code>
+     * @param livreDAO Le DAO de la table <code>livre</code>
+     * @param reservationDAO Le DAO de la table <code>reservation</code>
+     * @throws InvalidDAOException  Si le DAO de prêt est <code>null</code>, si le DAO de membre est <code>null</code>, si le DAO de livre est <code>null</code> ou si le DAO de réservation est <code>null</code>
      */
     public PretService(IPretDAO pretDAO,
         IMembreDAO membreDAO,
