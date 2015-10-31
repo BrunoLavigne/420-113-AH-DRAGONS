@@ -89,11 +89,18 @@ public class PretService extends Services implements IPretService {
         InvalidDTOException,
         InvalidDTOClassException,
         ServiceException {
+        if(connexion == null) {
+            throw new InvalidHibernateSessionException("La connexion ne peut être null.");
+        }
+        if(pretDTO == null) {
+            throw new InvalidDTOException("Le pret ne peut être null.");
+        }
         try {
             getPretDAO().add(connexion,
                 pretDTO);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
 
     }
@@ -111,7 +118,8 @@ public class PretService extends Services implements IPretService {
             return (PretDTO) getPretDAO().get(connexion,
                 idPret);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
 
     }
@@ -174,7 +182,8 @@ public class PretService extends Services implements IPretService {
             listeDesPrets = (List<PretDTO>) getPretDAO().getAll(connexion,
                 sortByPropertyName);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
         return listeDesPrets;
     }
@@ -197,7 +206,8 @@ public class PretService extends Services implements IPretService {
                 idMembre,
                 sortByPropertyName);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
         return listeDesPrets;
     }
@@ -220,7 +230,8 @@ public class PretService extends Services implements IPretService {
                 idLivre,
                 sortByPropertyName);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
         return listeDesPrets;
     }
@@ -243,7 +254,8 @@ public class PretService extends Services implements IPretService {
                 datePret,
                 sortByPropertyName);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
         return listeDesPrets;
     }
@@ -266,7 +278,8 @@ public class PretService extends Services implements IPretService {
                 dateRetour,
                 sortByPropertyName);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
         return listeDesPrets;
     }
@@ -387,35 +400,39 @@ public class PretService extends Services implements IPretService {
         InvalidDTOClassException,
         ServiceException {
 
-        // Si la connexion est null
-        if(connexion == null) {
-            throw new InvalidHibernateSessionException("La connexion ne peut être null.");
-        }
-        // Si le prêt est null
-        if(pretDTO == null) {
-            throw new InvalidDTOClassException("Le pret  ne peut être null.");
-        }
-
-        // Si la clef primaire du membre est null
-        if(pretDTO.getMembreDTO().getIdMembre() == null) {
-            throw new InvalidPrimaryKeyException("La clef ne peut être null.");
-        }
-        // Si la clef primaire du livre est null
-        if(pretDTO.getLivreDTO().getIdLivre() == null) {
-            throw new InvalidPrimaryKeyException("La clef ne peut être null.");
-        }
-
-        // Si le membre n'existe pas
-        if(pretDTO.getMembreDTO() == null) {
-            throw new MissingDTOException("Le membre n'existe pas");
-        }
-
-        // Si le livre n'existe pas
-        if(pretDTO.getLivreDTO() == null) {
-            throw new MissingDTOException("Le livre n'existe pas");
-        }
-
         try {
+            // Si la connexion est null
+            if(connexion == null) {
+                throw new InvalidHibernateSessionException("La connexion ne peut être null.");
+            }
+            // Si le prêt est null
+            if(pretDTO == null) {
+                throw new InvalidDTOClassException("Le pret  ne peut être null.");
+            }
+
+            // Si la clef primaire du membre est null
+            if(pretDTO.getMembreDTO().getIdMembre() == null) {
+                throw new InvalidPrimaryKeyException("La clef ne peut être null.");
+            }
+            pretDTO.setMembreDTO((MembreDTO) getMembreDAO().get(connexion,
+                pretDTO.getMembreDTO().getIdMembre()));
+
+            // Si la clef primaire du livre est null
+            if(pretDTO.getLivreDTO().getIdLivre() == null) {
+                throw new InvalidPrimaryKeyException("La clef ne peut être null.");
+            }
+            pretDTO.setLivreDTO((LivreDTO) getLivreDAO().get(connexion,
+                pretDTO.getLivreDTO().getIdLivre()));
+
+            // Si le membre n'existe pas
+            if(pretDTO.getMembreDTO() == null) {
+                throw new MissingDTOException("Le membre n'existe pas");
+            }
+
+            // Si le livre n'existe pas
+            if(pretDTO.getLivreDTO() == null) {
+                throw new MissingDTOException("Le livre n'existe pas");
+            }
 
             //Si le membre n'existe pas
             if(pretDTO.getMembreDTO() == null) {
@@ -458,6 +475,7 @@ public class PretService extends Services implements IPretService {
             }
 
             // Si le membre a atteint sa limite de prêt
+            System.err.println(pretDTO.getMembreDTO());
             if(pretDTO.getMembreDTO().getNbPret() == pretDTO.getMembreDTO().getLimitePret()) {
                 throw new ServiceException("Le membre"
                     + pretDTO.getMembreDTO().getIdMembre()
@@ -474,7 +492,8 @@ public class PretService extends Services implements IPretService {
                 pretDTO);
 
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
     }
 
