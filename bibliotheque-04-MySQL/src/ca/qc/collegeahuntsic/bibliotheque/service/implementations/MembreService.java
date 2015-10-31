@@ -137,8 +137,8 @@ public class MembreService extends Services implements IMembreService {
     /**
      * {@inheritDoc}
      */
-    @Override
     @SuppressWarnings("unchecked")
+    @Override
     public List<MembreDTO> getAll(Connexion connexion,
         String sortByPropertyName) throws ServiceException,
         InvalidHibernateSessionException,
