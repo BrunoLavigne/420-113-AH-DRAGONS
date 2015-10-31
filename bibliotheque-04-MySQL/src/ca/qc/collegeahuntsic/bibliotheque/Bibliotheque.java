@@ -111,7 +111,7 @@ public class Bibliotheque {
                     transaction = lireTransaction(reader);
                 } catch(BibliothequeException bibliothequeException) {
                     System.err.println(bibliothequeException.getMessage());
-                    bibliothequeException.printStackTrace();
+                    //bibliothequeException.printStackTrace();
                     try {
                         Thread.sleep(300); //1000 milliseconds is one second.
                     } catch(InterruptedException ex) {

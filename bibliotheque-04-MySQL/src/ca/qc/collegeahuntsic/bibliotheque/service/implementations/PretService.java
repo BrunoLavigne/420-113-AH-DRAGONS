@@ -475,7 +475,6 @@ public class PretService extends Services implements IPretService {
             }
 
             // Si le membre a atteint sa limite de prêt
-            System.err.println(pretDTO.getMembreDTO());
             if(pretDTO.getMembreDTO().getNbPret() == pretDTO.getMembreDTO().getLimitePret()) {
                 throw new ServiceException("Le membre"
                     + pretDTO.getMembreDTO().getIdMembre()
