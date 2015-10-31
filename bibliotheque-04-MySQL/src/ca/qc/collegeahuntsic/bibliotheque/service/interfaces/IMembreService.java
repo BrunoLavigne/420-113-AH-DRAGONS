@@ -89,7 +89,7 @@ public interface IMembreService extends IService {
         ServiceException;
 
     /**
-     * Trouve tous les membres de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun membre n'est trouvé, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
+     * Trouve tous les membres de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun membre n'est trouvé, une <code>Link</code> vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param sortByPropertyName Le nom de la propriété à utiliser pour classer
@@ -104,7 +104,7 @@ public interface IMembreService extends IService {
         ServiceException;
 
     /**
-     * Trouve les membres à partir d'un nom. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun membre n'est trouvé, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
+     * Trouve les membres à partir d'un nom. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun membre n'est trouvé, une <code>Link</code> vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param nom Le nom à trouver

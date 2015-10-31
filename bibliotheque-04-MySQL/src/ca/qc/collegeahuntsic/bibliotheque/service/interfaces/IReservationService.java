@@ -91,7 +91,7 @@ public interface IReservationService extends IService {
         ServiceException;
 
     /**
-     * Trouve toutes les réservations de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucune réservation n'est trouvée, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
+     * Trouve toutes les réservations de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucune réservation n'est trouvée, une <code>Link</code> vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param sortByPropertyName Le nom de la propriété à utiliser pour classer
@@ -106,7 +106,7 @@ public interface IReservationService extends IService {
         ServiceException;
 
     /**
-     * Trouve les réservations à partir d'un membre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucune réservation n'est trouvée, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
+     * Trouve les réservations à partir d'un membre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucune réservation n'est trouvée, une <code>Link</code> vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param idMembre L'ID du membre à trouver
@@ -125,7 +125,7 @@ public interface IReservationService extends IService {
         ServiceException;
 
     /**
-     * Trouve les réservations à partir d'un livre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucune réservation n'est trouvée, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
+     * Trouve les réservations à partir d'un livre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucune réservation n'est trouvée, une <code>Link</code> vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param idLivre L'ID du livre à trouver

@@ -90,7 +90,7 @@ public interface ILivreService extends IService {
         ServiceException;
 
     /**
-     * Trouve tous les livres de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun livre n'est trouvé, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
+     * Trouve tous les livres de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun livre n'est trouvé, une <code>Link</code> vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param sortByPropertyName Le nom de la propriété à utiliser pour classer
@@ -105,7 +105,7 @@ public interface ILivreService extends IService {
         ServiceException;
 
     /**
-     * Trouve les livres à partir d'un titre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun livre n'est trouvé, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
+     * Trouve les livres à partir d'un titre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun livre n'est trouvé, une <code>Link</code> vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param titre Le titre à trouver

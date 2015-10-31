@@ -92,7 +92,7 @@ public interface IPretService extends IService {
         ServiceException;
 
     /**
-     * Trouve tous les prêts de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
+     * Trouve tous les prêts de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une <code>Link</code> vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param sortByPropertyName Le nom de la propriété à utiliser pour classer
@@ -107,7 +107,7 @@ public interface IPretService extends IService {
         ServiceException;
 
     /**
-     * Trouve les prêts à partir d'un membre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
+     * Trouve les prêts à partir d'un membre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une <code>Link</code> vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param idMembre L'ID du membre à trouver
@@ -126,7 +126,7 @@ public interface IPretService extends IService {
         ServiceException;
 
     /**
-     * Trouve les prêts à partir d'un livre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
+     * Trouve les prêts à partir d'un livre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une <code>Link</code> vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param idLivre L'ID du livre à trouver
@@ -145,7 +145,7 @@ public interface IPretService extends IService {
         ServiceException;
 
     /**
-     * Trouve les prêts à partir d'une date de prêt. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
+     * Trouve les prêts à partir d'une date de prêt. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une <code>Link</code> vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param datePret La date de prêt à trouver
@@ -164,7 +164,7 @@ public interface IPretService extends IService {
         ServiceException;
 
     /**
-     * Trouve les prêts à partir d'une date de retour. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une {@link ca.qc.collegeahuntsic.bibliotheque.service.interfaces.List} vide est retournée.
+     * Trouve les prêts à partir d'une date de retour. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une <code>Link</code> vide est retournée.
      *
      * @param connexion La connexion à utiliser
      * @param dateRetour La date de retour à trouver
