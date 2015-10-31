@@ -108,7 +108,8 @@ public class PretService extends Services implements IPretService {
             getPretDAO().add(connexion,
                 pretDTO);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
 
     }
@@ -126,7 +127,8 @@ public class PretService extends Services implements IPretService {
             return (PretDTO) getPretDAO().get(connexion,
                 idPret);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
 
     }
@@ -189,7 +191,8 @@ public class PretService extends Services implements IPretService {
             listeDesPrets = (List<PretDTO>) getPretDAO().getAll(connexion,
                 sortByPropertyName);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
         return listeDesPrets;
     }
@@ -212,7 +215,8 @@ public class PretService extends Services implements IPretService {
                 idMembre,
                 sortByPropertyName);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
         return listeDesPrets;
     }
@@ -235,7 +239,8 @@ public class PretService extends Services implements IPretService {
                 idLivre,
                 sortByPropertyName);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
         return listeDesPrets;
     }
@@ -258,7 +263,8 @@ public class PretService extends Services implements IPretService {
                 datePret,
                 sortByPropertyName);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
         return listeDesPrets;
     }
@@ -281,7 +287,8 @@ public class PretService extends Services implements IPretService {
                 dateRetour,
                 sortByPropertyName);
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
         return listeDesPrets;
     }
@@ -482,7 +489,8 @@ public class PretService extends Services implements IPretService {
                 pretDTO);
 
         } catch(DAOException daoException) {
-            throw new ServiceException(daoException);
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
         }
     }
 
