@@ -110,13 +110,15 @@ public class Bibliotheque {
                     executerTransaction(tokenizer);
                     transaction = lireTransaction(reader);
                 } catch(BibliothequeException bibliothequeException) {
-                    System.err.println(bibliothequeException.getMessage());
-                    //bibliothequeException.printStackTrace();
+                    //System.err.println(bibliothequeException.getMessage());
+                    bibliothequeException.printStackTrace();
+                    /*
                     try {
                         Thread.sleep(300); //1000 milliseconds is one second.
                     } catch(InterruptedException ex) {
                         Thread.currentThread().interrupt();
                     }
+                     */
                     transaction = lireTransaction(reader);
                     continue;
                 }
