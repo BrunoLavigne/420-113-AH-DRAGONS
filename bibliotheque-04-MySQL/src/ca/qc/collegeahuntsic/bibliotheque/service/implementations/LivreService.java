@@ -14,6 +14,7 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IPretDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidHibernateSessionException;
@@ -265,12 +266,14 @@ public class LivreService extends Services implements ILivreService {
         ExistingLoanException,
         ExistingReservationException,
         ServiceException {
+
         if(connexion == null) {
             throw new InvalidHibernateSessionException("La connexion ne peut être null.");
         }
         if(livreDTO == null) {
             throw new InvalidDTOException("La connexion ne peut être null.");
         }
+
         try {
             // Vérifie si le livre passé en paramètre existe.
             if(get(connexion,
@@ -280,16 +283,17 @@ public class LivreService extends Services implements ILivreService {
             LivreDTO livreDTO2 = get(connexion,
                 livreDTO.getIdLivre());
 
+            List<PretDTO> listeDesPrets = getPretDAO().findByLivre(connexion,
+                livreDTO2.getIdLivre(),
+                LivreDTO.TITRE_COLUMN_NAME);
+
             // Vérifie si le livre passé en paramètre est prêté à un membre.
-            if(!getPretDAO().findByLivre(connexion,
-                livreDTO2.getTitre(),
-                LivreDTO.TITRE_COLUMN_NAME).isEmpty()) {
+            if(!listeDesPrets.isEmpty()) {
+
                 throw new ExistingLoanException("Le livre "
                     + livreDTO2.getTitre()
                     + " est prêté au membre #"
-                    + getPretDAO().findByLivre(connexion,
-                        livreDTO2.getTitre(),
-                        LivreDTO.TITRE_COLUMN_NAME).get(0).getMembreDTO().getIdMembre());
+                    + listeDesPrets.get(0).getMembreDTO().getIdMembre());
             }
 
             // Vérifie si le livre passé en paramètre est réservé par un membre.
