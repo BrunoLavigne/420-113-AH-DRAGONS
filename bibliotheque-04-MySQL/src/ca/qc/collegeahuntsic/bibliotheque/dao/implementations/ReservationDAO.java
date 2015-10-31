@@ -61,8 +61,10 @@ public class ReservationDAO extends DAO implements IReservationDAO {
         + "WHERE idMembre = ?";
 
     /**
-     * @param reservationDTOClass - Crée le DAO de la table reservation
-     * @throws InvalidDTOClassException - Cette exception est utilisée en cas de problème avec la classe d'un objet <code>DTO</code>.
+     * Crée le DAO de la table <code>reservation</code>.
+     *
+     * @param livreDTOClass La classe de réservation DTO à utiliser
+     * @throws InvalidDTOClassException Si la classe de DTO est <code>null</code>
      */
     public ReservationDAO(Class<ReservationDTO> reservationDTOClass) throws InvalidDTOClassException { // TODO changer la visibilité a package quand nous aurons la version avec Spring
         super(reservationDTOClass);

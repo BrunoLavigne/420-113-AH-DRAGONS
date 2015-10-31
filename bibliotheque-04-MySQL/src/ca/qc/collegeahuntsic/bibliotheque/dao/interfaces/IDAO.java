@@ -24,7 +24,7 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
 public interface IDAO {
 
     /**
-     * Ajoute un nouveau DTO dans la base de donnée
+     * Ajoute un nouveau DTO dans la base de données
      *
      * @param connexion - La connexion à utiliser
      * @param dto - Le DTO à ajouter

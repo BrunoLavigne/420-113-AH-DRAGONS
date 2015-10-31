@@ -23,6 +23,12 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidSortByPropertyExc
 import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOClassException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
 
+/**
+ * DAO pour effectuer des CRUDs avec la table <code>pret</code>
+ *
+ * @author Dragons Vicieux
+ */
+
 public class PretDAO extends DAO implements IPretDAO {
 
     private final static String ADD_REQUEST = "INSERT INTO pret (idMembre, idLivre, datePret, dateRetour) "
@@ -50,9 +56,10 @@ public class PretDAO extends DAO implements IPretDAO {
 
     /**
      *
-     * Crée un DAO à partir d'une connexion à la base de données.
+     * Crée le DAO de la table <code>pret</code>.
      *
-     * @param connexion - La connexion à utiliser
+     * @param livreDTOClass La classe de pret DTO à utiliser
+     * @throws InvalidDTOClassException Si la classe de DTO est <code>null</code>
      */
     public PretDAO(Class<PretDTO> pretDTOClass) throws InvalidDTOClassException { // TODO changer la visibilité a package quand nous aurons la version avec Spring
         super(pretDTOClass);

@@ -24,8 +24,9 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOClassException
 import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
 
 /**
- * Permet d'effectuer les accès à la table membre. Cette classe gère tous les
- * accès à la table membre.
+ * DAO pour effectuer des CRUDs avec la table <code>membre</code>
+ *
+ * @author Dragons Vicieux
  */
 
 public class MembreDAO extends DAO implements IMembreDAO {
@@ -46,6 +47,10 @@ public class MembreDAO extends DAO implements IMembreDAO {
 
     private final static String GET_ALL_REQUEST = "SELECT idMembre, nom, telephone, limitePret, nbPret "
         + "FROM livre";
+
+    private static final String FIND_BY_NOM = "SELECT idMembre, nom, telephone, limitePret, nbPret "
+        + "FROM membre "
+        + "WHERE LOWER(nom) like %?%";
 
     /**
      * Crée le DAO de la table <code>membre</code>.
@@ -274,7 +279,47 @@ public class MembreDAO extends DAO implements IMembreDAO {
         InvalidCriterionException,
         InvalidSortByPropertyException,
         DAOException {
-        // TODO Auto-generated method stub
-        return null;
+        if(connexion == null) {
+            throw new InvalidHibernateSessionException("La connexion ne peut être null");
+        }
+        if(nom == null) {
+            throw new InvalidCriterionException("Le nom ne peut être null");
+        }
+        if(sortByPropertyName == null) {
+            throw new InvalidSortByPropertyException("La propriété ne peut être null");
+        }
+        List<MembreDTO> membres = Collections.<MembreDTO> emptyList();
+
+        try(
+            PreparedStatement statementFindByNom = (connexion.getConnection().prepareStatement(MembreDAO.FIND_BY_NOM))) {
+            try(
+                ResultSet resultSet = statementFindByNom.executeQuery()) {
+                MembreDTO membreDTO = null;
+
+                if(resultSet.next()) {
+                    membres = new ArrayList<>();
+                    do {
+                        membreDTO = new MembreDTO();
+                        membreDTO.setIdMembre(resultSet.getString(1));
+                        membreDTO.setNom(resultSet.getString(2));
+                        membreDTO.setTelephone(resultSet.getLong(3));
+                        membreDTO.setLimitePret(resultSet.getInt(4));
+                        membreDTO.setNbPret(resultSet.getInt(5));
+                        membres.add(membreDTO);
+                    } while(resultSet.next());
+                }
+                return membres;
+            } catch(SQLException sqlException) {
+                throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                    + " "
+                    + sqlException.getMessage(),
+                    sqlException);
+            }
+        } catch(SQLException sqlException) {
+            throw new DAOException(Integer.toString(sqlException.getErrorCode())
+                + " "
+                + sqlException.getMessage(),
+                sqlException);
+        }
     }
 }
