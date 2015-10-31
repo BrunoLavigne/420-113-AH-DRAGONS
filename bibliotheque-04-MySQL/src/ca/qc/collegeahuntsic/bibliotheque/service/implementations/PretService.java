@@ -436,7 +436,7 @@ public class PretService extends Services implements IPretService {
 
             //Si le membre n'existe pas
             if(pretDTO.getMembreDTO() == null) {
-                throw new ServiceException("Le membre"
+                throw new ServiceException("Le membre "
                     + pretDTO.getMembreDTO().getIdMembre()
                     + " n'existe pas");
             }
@@ -459,7 +459,7 @@ public class PretService extends Services implements IPretService {
                 pretDTO.getLivreDTO().getIdLivre(),
                 PretDTO.ID_LIVRE_COLUMN_NAME);
             if(!listeDesPrets.isEmpty()) {
-                throw new ServiceException("Le livre"
+                throw new ServiceException("Le livre "
                     + pretDTO.getLivreDTO().getIdLivre()
                     + " a été prêté.");
             }
@@ -469,14 +469,14 @@ public class PretService extends Services implements IPretService {
                 pretDTO.getLivreDTO().getIdLivre(),
                 ReservationDTO.ID_LIVRE_COLUMN_NAME);
             if(!listeDesReservations.isEmpty()) {
-                throw new ServiceException("Le livre"
+                throw new ServiceException("Le livre "
                     + pretDTO.getLivreDTO().getIdLivre()
                     + " a été réservé.");
             }
 
             // Si le membre a atteint sa limite de prêt
             if(pretDTO.getMembreDTO().getNbPret() == pretDTO.getMembreDTO().getLimitePret()) {
-                throw new ServiceException("Le membre"
+                throw new ServiceException("Le membre "
                     + pretDTO.getMembreDTO().getIdMembre()
                     + " a atteint sa limite de prêt");
             }

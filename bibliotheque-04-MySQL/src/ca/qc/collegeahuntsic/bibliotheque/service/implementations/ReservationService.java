@@ -247,13 +247,13 @@ public class ReservationService extends Services implements IReservationService 
 
             //  Si le membre n'existe pas
             if(reservationDTO.getMembreDTO() == null) {
-                throw new MissingDTOException("Le DTO du membre ne peut pas être null");
+                throw new MissingDTOException("Le membre n'existe pas");
             }
 
             // Vérification sur le livre
 
             if(reservationDTO.getLivreDTO() == null) {
-                throw new MissingDTOException("Le DTO du livre ne peut pas être null");
+                throw new MissingDTOException("Le livre n'existe pas.");
             }
 
             // Si le livre n'a pas encore été prêté,
