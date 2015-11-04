@@ -49,51 +49,61 @@ class BDCreateur {
             try(
                 Statement stmt = connexion.getConnection().createStatement()) {
 
-                stmt.executeUpdate("DROP TABLE IF EXISTS reservation CASCADE");
-                stmt.executeUpdate("DROP TABLE IF EXISTS pret       CASCADE");
-                stmt.executeUpdate("DROP TABLE IF EXISTS livre       CASCADE");
-                stmt.executeUpdate("DROP TABLE IF EXISTS membre      CASCADE");
+                stmt.executeUpdate("DROP    SEQUENCE SEQ_ID_RESERVATION");
+                stmt.executeUpdate("DROP    SEQUENCE SEQ_ID_PRET");
+                stmt.executeUpdate("DROP    SEQUENCE SEQ_ID_LIVRE");
+                stmt.executeUpdate("DROP    SEQUENCE SEQ_ID_MEMBRE");
 
-                stmt.executeUpdate("CREATE TABLE membre ( "
-                    + "idMembre        INTEGER(3)   AUTO_INCREMENT CHECK(idMembre > 0), "
-                    + "nom             VARCHAR(100)  NOT NULL, "
-                    + "telephone       BIGINT(32) , "
-                    + "limitePret      INTEGER(2)   CHECK           (limitePret > 0 AND limitePret <= 10) , "
-                    + "nbpret          INTEGER(2)   DEFAULT 0 CHECK (nbpret >= 0) , "
-                    + "CONSTRAINT      cleMembre    PRIMARY KEY     (idMembre), "
-                    + "CONSTRAINT      limiteNbPret CHECK           (nbpret <= limitePret) "
+                stmt.executeUpdate("DROP TABLE membre CASCADE CONSTRAINTS PURGE");
+                stmt.executeUpdate("DROP TABLE pret CASCADE CONSTRAINTS PURGE");
+                stmt.executeUpdate("DROP TABLE livre CASCADE CONSTRAINTS PURGE");
+                stmt.executeUpdate("DROP TABLE reservation CASCADE CONSTRAINTS PURGE");
+
+                stmt.executeUpdate("CREATE  SEQUENCE SEQ_ID_MEMBRE START WITH 1 INCREMENT BY 1");
+                stmt.executeUpdate("CREATE  SEQUENCE SEQ_ID_LIVRE START WITH 1 INCREMENT BY 1");
+                stmt.executeUpdate("CREATE  SEQUENCE SEQ_ID_PRET START WITH 1 INCREMENT BY 1");
+                stmt.executeUpdate("CREATE  SEQUENCE SEQ_ID_RESERVATION START WITH 1 INCREMENT BY 1");
+
+                stmt.executeUpdate("CREATE TABLE membre "
+                    + "("
+                    + "idMembre NUMBER(3) CHECK(idMembre > 0),"
+                    + "nom VARCHAR(100) NOT NULL,telephone NUMBER(10),"
+                    + "limitePret NUMBER(2) CHECK(limitePret > 0 AND limitePret <= 10),"
+                    + "nbpret NUMBER(2) DEFAULT 0 CHECK(nbpret >= 0),"
+                    + "CONSTRAINT cleMembre PRIMARY KEY (idMembre), "
+                    + "CONSTRAINT limiteNbPret check(nbpret <= limitePret)"
                     + ")");
 
-                stmt.executeUpdate("CREATE TABLE livre ( "
-                    + "idLivre         INTEGER(3)    AUTO_INCREMENT CHECK(idLivre > 0), "
-                    + "titre           VARCHAR(100)  NOT NULL, "
-                    + "auteur          VARCHAR(100)  NOT NULL, "
-                    + "dateAcquisition TIMESTAMP(3)  NOT NULL, "
-                    + "CONSTRAINT      cleLivre      PRIMARY KEY (idLivre) "
+                stmt.executeUpdate("CREATE TABLE livre "
+                    + "("
+                    + "idLivre NUMBER(3) CHECK(idLivre > 0), "
+                    + "titre VARCHAR(100) NOT NULL, "
+                    + "auteur VARCHAR(100) NOT NULL, "
+                    + "dateAcquisition TIMESTAMP NOT NULL, "
+                    + "CONSTRAINT cleLivre PRIMARY KEY (idLivre)"
                     + ")");
 
-                stmt.executeUpdate("CREATE TABLE pret ( "
-                    + "idPret    		INTEGER(3) 		AUTO_INCREMENT CHECK (idPret > 0), "
-                    + "idMembre         INTEGER(3) 	NOT NULL CHECK (idMembre > 0), "
-                    + "idLivre          INTEGER(3) 	NOT NULL CHECK (idLivre > 0), "
-                    + "datePret  		TIMESTAMP(3), "
-                    + "dateRetour		TIMESTAMP(3) NULL, "
-                    + "CONSTRAINT       cleprimairePret         PRIMARY KEY (idPret), "
-                    + "CONSTRAINT 	refPretMembre 		FOREIGN KEY (idMembre) 	REFERENCES membre (idMembre), "
-                    + "CONSTRAINT 	refPretLivre 		FOREIGN KEY (idLivre) 	REFERENCES livre (idLivre) "
+                stmt.executeUpdate("CREATE TABLE pret "
+                    + "("
+                    + "idPret NUMBER(3) CHECK(idPret > 0),"
+                    + "idMembre NUMBER(3) CHECK(idMembre > 0),"
+                    + "idLivre NUMBER(3) CHECK(idLivre > 0),"
+                    + "datePret TIMESTAMP(3),dateRetour TIMESTAMP(3),"
+                    + "CONSTRAINT clePrimairePret PRIMARY KEY (idPret),"
+                    + "CONSTRAINT refPretMembre FOREIGN KEY (idMembre) REFERENCES membre(idMembre),"
+                    + "CONSTRAINT refPretLivre FOREIGN KEY (idLivre) REFERENCES livre(idLivre)"
                     + ")");
 
-                stmt.executeUpdate("CREATE TABLE reservation ( "
-                    + "idReservation    INTEGER(3) 	AUTO_INCREMENT CHECK (idReservation > 0), "
-                    + "idMembre         INTEGER(3) 	NOT NULL CHECK (idMembre > 0), "
-                    + "idLivre          INTEGER(3) 	NOT NULL CHECK (idLivre > 0), "
-                    + "dateReservation  TIMESTAMP 	NOT NULL , "
-                    + "CONSTRAINT       clePrimaireReservation          PRIMARY KEY (idReservation) , "
-                    + "CONSTRAINT       cleEtrangereCandidateReservation UNIQUE      (idMembre,idLivre) , "
-                    + "CONSTRAINT       refReservationMembre    FOREIGN KEY (idMembre)  REFERENCES membre (idMembre) "
-                    + "  ON DELETE CASCADE , "
-                    + "CONSTRAINT       refReservationLivre     FOREIGN KEY (idLivre)   REFERENCES livre (idLivre) "
-                    + "  ON DELETE CASCADE "
+                stmt.executeUpdate("CREATE TABLE reservation "
+                    + "("
+                    + "idReservation NUMBER(3) CHECK(idReservation > 0), "
+                    + "idMembre NUMBER(3) CHECK(idMembre > 0), "
+                    + "idLivre NUMBER(3) CHECK(idLivre > 0), "
+                    + "dateReservation TIMESTAMP(3), "
+                    + "CONSTRAINT cleReservation PRIMARY KEY (idReservation), "
+                    + "CONSTRAINT cleCandidateReservation UNIQUE (idMembre,idLivre), "
+                    + "CONSTRAINT refReservationMembre FOREIGN KEY (idMembre) REFERENCES membre(idMembre) ON DELETE CASCADE, "
+                    + "CONSTRAINT refReservationLivre FOREIGN KEY (idLivre) REFERENCES livre(idLivre) ON DELETE CASCADE "
                     + ")");
 
                 stmt.close();
