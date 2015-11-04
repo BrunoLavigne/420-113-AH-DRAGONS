@@ -57,7 +57,7 @@ class BDCreateur {
                 stmt.executeUpdate("CREATE TABLE membre ( "
                     + "idMembre        INTEGER(3)   AUTO_INCREMENT CHECK(idMembre > 0), "
                     + "nom             VARCHAR(100)  NOT NULL, "
-                    + "telephone       BIGINT(32) , "
+                    + "telephone       BIGINT(10) , "
                     + "limitePret      INTEGER(2)   CHECK           (limitePret > 0 AND limitePret <= 10) , "
                     + "nbpret          INTEGER(2)   DEFAULT 0 CHECK (nbpret >= 0) , "
                     + "CONSTRAINT      cleMembre    PRIMARY KEY     (idMembre), "
