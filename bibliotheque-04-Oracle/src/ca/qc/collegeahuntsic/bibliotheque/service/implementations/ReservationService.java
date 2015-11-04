@@ -241,60 +241,65 @@ public class ReservationService extends Service implements IReservationService {
                 throw new InvalidDTOException("Le DTO de la réservation ne peut pas être null");
             }
 
-            reservationDTO.setLivreDTO((LivreDTO) getLivreDAO().get(connexion,
-                reservationDTO.getLivreDTO().getIdLivre()));
-            reservationDTO.setMembreDTO((MembreDTO) getMembreDAO().get(connexion,
-                reservationDTO.getMembreDTO().getIdMembre()));
+            MembreDTO unMembreDTO = (MembreDTO) getMembreDAO().get(connexion,
+                reservationDTO.getMembreDTO().getIdMembre());
 
             //  Si le membre n'existe pas
-            if(reservationDTO.getMembreDTO() == null) {
+            if(unMembreDTO == null) {
                 throw new MissingDTOException("Le membre n'existe pas");
             }
 
             // Vérification sur le livre
 
-            if(reservationDTO.getLivreDTO() == null) {
+            LivreDTO unLivreDTO = (LivreDTO) getLivreDAO().get(connexion,
+                reservationDTO.getLivreDTO().getIdLivre());
+
+            if(unLivreDTO == null) {
                 throw new MissingDTOException("Le livre n'existe pas.");
             }
 
             // Si le livre n'a pas encore été prêté,
             List<PretDTO> listeDesPrets = getPretDAO().findByLivre(connexion,
-                reservationDTO.getLivreDTO().getIdLivre(),
+                unLivreDTO.getIdLivre(),
                 PretDTO.ID_PRET_COLUMN_NAME);
 
             if(listeDesPrets.isEmpty()) {
                 throw new MissingLoanException("Le livre : "
-                    + reservationDTO.getLivreDTO().getIdLivre()
+                    + unLivreDTO.getIdLivre()
                     + " n'a pas été prêté encore. Faire un emprunt au lieu d'un réservation");
 
             }
 
             // Si le livre est déjà prêté au membre
             for(PretDTO unPretDTO : listeDesPrets) {
-                if(reservationDTO.getMembreDTO().equals(unPretDTO.getMembreDTO())) {
+                if(unMembreDTO.equals(unPretDTO.getMembreDTO())) {
                     throw new ExistingLoanException("Le livre est déjà prêté");
                 }
             }
 
             // si le membre a déjà réservé ce livre
             List<ReservationDTO> listeReservation = findByMembre(connexion,
-                reservationDTO.getMembreDTO().getIdMembre(),
+                unMembreDTO.getIdMembre(),
                 MembreDTO.ID_MEMBRE_COLUMN_NAME);
 
             for(ReservationDTO reservation : listeReservation) {
-                if(reservation.getLivreDTO().equals(reservationDTO.getLivreDTO())) {
+                if(reservation.getLivreDTO().equals(unLivreDTO)) {
                     throw new ExistingReservationException("Le livre : "
-                        + reservationDTO.getLivreDTO().getIdLivre()
+                        + unLivreDTO.getIdLivre()
                         + " a déjà été réservé par le membre : "
                         + reservation.getMembreDTO().getIdMembre());
                 }
             }
 
+            ReservationDTO uneReservationDTO = new ReservationDTO();
+
+            uneReservationDTO.setMembreDTO(unMembreDTO);
+            uneReservationDTO.setLivreDTO(unLivreDTO);
             //Création de la réservation
-            reservationDTO.setDateReservation(new Timestamp(System.currentTimeMillis()));
+            uneReservationDTO.setDateReservation(new Timestamp(System.currentTimeMillis()));
 
             add(connexion,
-                reservationDTO);
+                uneReservationDTO);
 
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);

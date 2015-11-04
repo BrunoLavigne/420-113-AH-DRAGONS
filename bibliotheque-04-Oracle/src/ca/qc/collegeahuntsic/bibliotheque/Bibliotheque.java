@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.StringTokenizer;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
@@ -192,6 +191,7 @@ public class Bibliotheque {
 
                 getGestionBiblio().getLivreFacade().acquerir(getGestionBiblio().getConnexion(),
                     livreDTO);
+                getGestionBiblio().getConnexion().commit();
 
             } else if("vendre".startsWith(command)) {
 
@@ -200,6 +200,7 @@ public class Bibliotheque {
 
                 getGestionBiblio().getLivreFacade().vendre(getGestionBiblio().getConnexion(),
                     livreDTO);
+                getGestionBiblio().getConnexion().commit();
 
             } else if("preter".startsWith(command)) {
 
@@ -218,6 +219,7 @@ public class Bibliotheque {
 
                 getGestionBiblio().getPretFacade().commencer(getGestionBiblio().getConnexion(),
                     pretDTO);
+                getGestionBiblio().getConnexion().commit();
 
             } else if("renouveler".startsWith(command)) {
 
@@ -228,6 +230,7 @@ public class Bibliotheque {
 
                 getGestionBiblio().getPretFacade().renouveler(getGestionBiblio().getConnexion(),
                     pretDTO);
+                getGestionBiblio().getConnexion().commit();
 
             } else if("retourner".startsWith(command)) {
 
@@ -238,6 +241,7 @@ public class Bibliotheque {
 
                 getGestionBiblio().getPretFacade().terminer(getGestionBiblio().getConnexion(),
                     pretDTO);
+                getGestionBiblio().getConnexion().commit();
 
             } else if("inscrire".startsWith(command)) {
 
@@ -251,6 +255,7 @@ public class Bibliotheque {
 
                 getGestionBiblio().getMembreFacade().inscrire(getGestionBiblio().getConnexion(),
                     membreDTO);
+                getGestionBiblio().getConnexion().commit();
 
             } else if("desinscrire".startsWith(command)) {
 
@@ -261,11 +266,13 @@ public class Bibliotheque {
 
                 getGestionBiblio().getMembreFacade().desinscrire(getGestionBiblio().getConnexion(),
                     membreDTO);
+                getGestionBiblio().getConnexion().commit();
 
             } else if("reserver".startsWith(command)) {
 
                 // TRANSACTION RESERVER ( <idMembre> <idLivre> )
 
+                Thread.sleep(1);
                 ReservationDTO reservationDTO = new ReservationDTO();
 
                 MembreDTO membreDTO = new MembreDTO();
@@ -274,14 +281,12 @@ public class Bibliotheque {
                 LivreDTO livreDTO = new LivreDTO();
                 livreDTO.setIdLivre(readString(tokenizer));
 
-                Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-
                 reservationDTO.setLivreDTO(livreDTO);
                 reservationDTO.setMembreDTO(membreDTO);
-                reservationDTO.setDateReservation(currentTimestamp);
 
                 getGestionBiblio().getReservationFacade().placer(getGestionBiblio().getConnexion(),
                     reservationDTO);
+                getGestionBiblio().getConnexion().commit();
 
             } else if("utiliser".startsWith(command)) {
 
@@ -292,6 +297,7 @@ public class Bibliotheque {
 
                 getGestionBiblio().getReservationFacade().utiliser(getGestionBiblio().getConnexion(),
                     reservationDTO);
+                getGestionBiblio().getConnexion().commit();
 
             } else if("annuler".startsWith(command)) {
 
@@ -302,6 +308,7 @@ public class Bibliotheque {
 
                 getGestionBiblio().getReservationFacade().annuler(getGestionBiblio().getConnexion(),
                     reservationDTO);
+                getGestionBiblio().getConnexion().commit();
 
             } else if("listerLivres".startsWith(command)) {
 
@@ -356,7 +363,6 @@ public class Bibliotheque {
                 System.out.println("  Transactions non reconnue.  Essayer \"aide\"");
             }
 
-            getGestionBiblio().getConnexion().commit();
             //System.out.println("TEST OUTPUT : commiting to database...");
 
         } catch(Exception exception) {
