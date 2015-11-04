@@ -35,8 +35,8 @@ public class LivreDAO extends DAO implements ILivreDAO {
         + "FROM livre "
         + "WHERE idlivre = ?";
 
-    private final static String ADD_REQUEST = "INSERT into livre (titre, auteur, dateAcquisition) "
-        + "VALUES (?,?,?)";
+    private final static String ADD_REQUEST = "INSERT into livre (idLivre, titre, auteur, dateAcquisition) "
+        + "VALUES (SEQ_ID_LIVRE.NEXTVAL, ?,?,?)";
 
     private final static String UPDATE_REQUEST = "UPDATE livre set titre = ?, auteur = ?, dateAcquisition = ? "
         + "WHERE idLivre = ?";

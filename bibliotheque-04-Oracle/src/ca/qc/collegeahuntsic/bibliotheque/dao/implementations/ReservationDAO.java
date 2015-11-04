@@ -38,8 +38,8 @@ public class ReservationDAO extends DAO implements IReservationDAO {
         + "FROM reservation "
         + "WHERE idReservation = ?";
 
-    private final static String ADD_REQUEST = "INSERT INTO RESERVATION (idlivre, idMembre, dateReservation) "
-        + "VALUES (?, ?, ?)";
+    private final static String ADD_REQUEST = "INSERT INTO RESERVATION (idReservation, idlivre, idMembre, dateReservation) "
+        + "VALUES (SEQ_ID_RESERVATION.NEXTVAL, ?, ?, ?)";
 
     private static final String DELETE_REQUEST = "DELETE FROM RESERVATION "
         + "WHERE idReservation = ?";
