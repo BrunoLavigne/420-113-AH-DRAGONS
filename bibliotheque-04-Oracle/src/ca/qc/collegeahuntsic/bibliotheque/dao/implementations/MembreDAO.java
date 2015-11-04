@@ -32,7 +32,7 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
 public class MembreDAO extends DAO implements IMembreDAO {
 
     private static final String ADD_REQUEST = "INSERT INTO membre (nom, telephone, limitePret, nbPret) "
-        + "VALUES (?, ?, ?, 0)";
+        + "VALUES (SEQ_ID_MEMBRE.NEXTVAL, ?, ?, 0)";
 
     private static final String READ_REQUEST = "SELECT idMembre, nom, telephone, limitePret, nbPret "
         + "FROM membre "
