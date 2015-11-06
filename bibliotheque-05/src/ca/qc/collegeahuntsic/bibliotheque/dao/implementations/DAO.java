@@ -4,8 +4,11 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.dao.implementations;
 
+import org.hibernate.Session;
 import ca.qc.collegeahuntsic.bibliotheque.dto.DTO;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidHibernateSessionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOClassException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOException;
 
 /**
  * Classe de base pour tous les DAOs.<br />
@@ -15,6 +18,19 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.dto.InvalidDTOClassException
  */
 public class DAO {
     private Class<? extends DTO> dtoClass;
+
+    public void add(Session session,
+        DTO dto) throws InvalidHibernateSessionException,
+        InvalidDTOException {
+
+        if(session == null) {
+            throw new InvalidHibernateSessionException("La session est invalide");
+        }
+        if(dto == null) {
+
+            throw new InvalidDTOException("Le DTO est invalide");
+        }
+    }
 
     /**
      *
