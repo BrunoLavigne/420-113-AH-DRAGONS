@@ -447,12 +447,32 @@ public class ReservationService extends Service implements IReservationService {
         InvalidDTOClassException,
         ServiceException {
 
-        if(reservationDTO == null) {
-            throw new InvalidDTOException("La réservation n'existe pas");
-        }
+        try {
 
-        delete(connexion,
-            reservationDTO);
+            if(connexion == null) {
+                throw new InvalidHibernateSessionException("La connexion na pas pu être établie");
+            }
+
+            if(reservationDTO == null) {
+                throw new InvalidDTOException("Le DTO de la réservation ne peut pas être null");
+            }
+
+            ReservationDTO uneReservationDTO = (ReservationDTO) getReservationDAO().get(connexion,
+                reservationDTO.getIdReservation());
+
+            if(uneReservationDTO == null) {
+                throw new InvalidDTOException("La réservation "
+                    + reservationDTO.getIdReservation()
+                    + " n'existe pas");
+            }
+
+            delete(connexion,
+                uneReservationDTO);
+
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException.getMessage(),
+                daoException);
+        }
 
     }
 

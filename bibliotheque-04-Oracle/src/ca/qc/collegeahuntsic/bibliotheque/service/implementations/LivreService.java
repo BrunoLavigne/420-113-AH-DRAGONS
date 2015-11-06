@@ -15,6 +15,7 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
+import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidHibernateSessionException;
@@ -275,37 +276,43 @@ public class LivreService extends Service implements ILivreService {
         }
 
         try {
+
             // Vérifie si le livre passé en paramètre existe.
-            if(get(connexion,
-                livreDTO.getIdLivre()) == null) {
-                throw new MissingDTOException();
-            }
-            LivreDTO livreDTO2 = get(connexion,
+            LivreDTO unLivreDTO = new LivreDTO();
+            unLivreDTO = get(connexion,
                 livreDTO.getIdLivre());
 
+            if(unLivreDTO == null) {
+                throw new MissingDTOException();
+            }
+
             List<PretDTO> listeDesPrets = getPretDAO().findByLivre(connexion,
-                livreDTO2.getIdLivre(),
+                unLivreDTO.getIdLivre(),
                 LivreDTO.TITRE_COLUMN_NAME);
 
             // Vérifie si le livre passé en paramètre est prêté à un membre.
             if(!listeDesPrets.isEmpty()) {
 
                 throw new ExistingLoanException("Le livre "
-                    + livreDTO2.getTitre()
+                    + unLivreDTO.getTitre()
                     + " est prêté au membre #"
                     + listeDesPrets.get(0).getMembreDTO().getIdMembre());
             }
 
             // Vérifie si le livre passé en paramètre est réservé par un membre.
-            if(getReservationDAO().get(connexion,
-                livreDTO2.getIdLivre()) != null) {
+            List<ReservationDTO> listeDesReservations = getReservationDAO().findByLivre(connexion,
+                unLivreDTO.getIdLivre(),
+                LivreDTO.TITRE_COLUMN_NAME);
+
+            if(!listeDesReservations.isEmpty()) {
                 throw new ExistingReservationException("Le livre "
-                    + livreDTO2.getTitre()
+                    + unLivreDTO.getTitre()
                     + " est réservé.");
             }
+
             // Sinon, suppression du livre de la base de données.
-            getLivreDAO().delete(connexion,
-                livreDTO2);
+            delete(connexion,
+                unLivreDTO);
 
         } catch(DAOException daoException) {
             throw new ServiceException(daoException.getMessage(),

@@ -194,30 +194,34 @@ public class MembreService extends Service implements IMembreService {
 
         try {
 
+            MembreDTO unMembreDTO = new MembreDTO();
+            unMembreDTO = get(connexion,
+                membreDTO.getIdMembre());
+
             // Si le membre n'existe pas
-            if(get(connexion,
-                membreDTO.getIdMembre()) == null) {
+            if(unMembreDTO == null) {
                 throw new MissingDTOException("Le membre n'existe pas");
             }
 
             // Si le membre a encore des prêts
-            if(get(connexion,
-                membreDTO.getIdMembre()).getNbPret() > 0) {
+            if(unMembreDTO.getNbPret() > 0) {
                 throw new ExistingLoanException("Le membre a encore des prêts");
             }
 
             // Si le membre a encore des réservations
             // vérif. pour membreDTO.getIdMembre() dans...faut-il faire un autre get()?
             // TODCHANGER LE NOM DE COLONNE (AVANT HIBERNATE) POUR 3ÈME ARG DE FINDBYMEMBRE...pour l'instant sert à rien
-            if(!getReservationDAO().findByMembre(connexion,
-                membreDTO.getIdMembre(),
-                ReservationDTO.ID_RESERVATION_COLUMN_NAME).isEmpty()) {
+            List<ReservationDTO> listeDesReservations = getReservationDAO().findByMembre(connexion,
+                unMembreDTO.getIdMembre(),
+                ReservationDTO.ID_MEMBRE_COLUMN_NAME);
+
+            if(!listeDesReservations.isEmpty()) {
                 throw new ExistingReservationException("Le membre a encore des réservations");
             }
 
             // On peut supprimer le membre
             delete(connexion,
-                membreDTO);
+                unMembreDTO);
 
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
