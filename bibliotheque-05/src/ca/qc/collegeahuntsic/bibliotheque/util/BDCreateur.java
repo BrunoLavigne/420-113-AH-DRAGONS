@@ -6,9 +6,12 @@ package ca.qc.collegeahuntsic.bibliotheque.util;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import ca.qc.collegeahuntsic.bibliotheque.Bibliotheque;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.exception.db.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.util.BDCreateurException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -17,6 +20,8 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.util.BDCreateurException;
  * @author Dragons Vicieux
  */
 class BDCreateur {
+
+    private static Log LOGGER = LogFactory.getLog(Bibliotheque.class);
 
     /**
      * Crée la base de données nécessaire à l'application bibliothèque.
@@ -36,7 +41,7 @@ class BDCreateur {
     public static void main(String args[]) throws BDCreateurException {
 
         if(args.length < 3) {
-            System.out.println("Usage: java CreerBD <serveur> <bd> <user> <password>");
+            BDCreateur.LOGGER.info("Usage: java CreerBD <serveur> <bd> <user> <password>");
             return;
         }
 
