@@ -372,8 +372,9 @@ public class Bibliotheque {
                 Bibliotheque.LOGGER.error("Erreur de connexion");
                 return;
             }
-            throw new BibliothequeException(exception.getMessage(),
-                exception);
+            Bibliotheque.LOGGER.error(exception.getMessage());
+            //throw new BibliothequeException(exception.getMessage(),
+            //  exception);
         }
     }
 
