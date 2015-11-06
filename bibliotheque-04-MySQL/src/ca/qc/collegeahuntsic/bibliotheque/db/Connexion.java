@@ -93,15 +93,20 @@ public class Connexion extends Object implements AutoCloseable {
                     + getConnection());
             }
         } catch(ClassNotFoundException classNotFoundException) {
-            throw new ConnexionException(classNotFoundException);
+            throw new ConnexionException(classNotFoundException.getMessage(),
+                classNotFoundException);
         } catch(SQLException sqlException) {
-            throw new ConnexionException(sqlException);
+            throw new ConnexionException(sqlException.getMessage(),
+                sqlException);
         } catch(IllegalArgumentException illegalArgumentException) {
-            throw new ConnexionException(illegalArgumentException);
+            throw new ConnexionException(illegalArgumentException.getMessage(),
+                illegalArgumentException);
         } catch(IllegalAccessException illegalAccessException) {
-            throw new ConnexionException(illegalAccessException);
+            throw new ConnexionException(illegalAccessException.getMessage(),
+                illegalAccessException);
         } catch(InstantiationException instantiationException) {
-            throw new ConnexionException(instantiationException);
+            throw new ConnexionException(instantiationException.getMessage(),
+                instantiationException);
         }
     }
 
@@ -120,7 +125,8 @@ public class Connexion extends Object implements AutoCloseable {
                 + " "
                 + getConnection());
         } catch(SQLException sqlException) {
-            throw new ConnexionException(sqlException);
+            throw new ConnexionException(sqlException.getMessage(),
+                sqlException);
         }
     }
 
@@ -134,7 +140,8 @@ public class Connexion extends Object implements AutoCloseable {
         try {
             getConnection().commit();
         } catch(SQLException sqlException) {
-            throw new ConnexionException(sqlException);
+            throw new ConnexionException(sqlException.getMessage(),
+                sqlException);
         }
     }
 
@@ -148,7 +155,8 @@ public class Connexion extends Object implements AutoCloseable {
         try {
             getConnection().rollback();
         } catch(SQLException sqlException) {
-            throw new ConnexionException(sqlException);
+            throw new ConnexionException(sqlException.getMessage(),
+                sqlException);
         }
     }
 
