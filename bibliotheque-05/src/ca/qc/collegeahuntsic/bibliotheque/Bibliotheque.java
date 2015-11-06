@@ -114,7 +114,8 @@ public class Bibliotheque {
                     executerTransaction(tokenizer);
                     transaction = lireTransaction(reader);
                 } catch(BibliothequeException bibliothequeException) {
-                    System.err.println(bibliothequeException.getMessage());
+                    Bibliotheque.LOGGER.error(bibliothequeException.getMessage());
+                    //System.err.println(bibliothequeException.getMessage());
                     //bibliothequeException.printStackTrace();
                     /*
                     try {
