@@ -21,6 +21,8 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.db.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.util.BibliothequeCreateur;
 import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -53,6 +55,8 @@ public class Bibliotheque {
 
     private static BibliothequeCreateur gestionBibliotheque;
 
+    private static Log LOGGER = LogFactory.getLog(Bibliotheque.class);
+
     /**
      *
      * Ouverture de la BD, traitement des transactions et fermeture de la BD.
@@ -61,8 +65,8 @@ public class Bibliotheque {
     public static void main(String argv[]) throws Exception {
         // validation du nombre de paramètres
         if(argv.length < 5) {
-            System.out.println("Usage: java Biblio <serveur> <bd> <user> <password> <fichier-transactions>");
-            System.out.println(Connexion.getServeursSupportes());
+            Bibliotheque.LOGGER.info("Usage: java Biblio <serveur> <bd> <user> <password> <fichier-transactions>");
+            Bibliotheque.LOGGER.info(Connexion.getServeursSupportes());
             return;
         }
 
@@ -145,11 +149,11 @@ public class Bibliotheque {
      */
     static String lireTransaction(BufferedReader reader) throws BibliothequeException {
         try {
-            System.out.print("> ");
+            Bibliotheque.LOGGER.info("> ");
             String transaction = reader.readLine();
 
             if(transaction != null) {
-                System.out.println(transaction);
+                Bibliotheque.LOGGER.info(transaction);
             }
 
             return transaction;
@@ -353,7 +357,7 @@ public class Bibliotheque {
             /* TRANSACTION NON RECONNUEE */
             /* ***********************   */
             else {
-                System.out.println("  Transactions non reconnue.  Essayer \"aide\"");
+                Bibliotheque.LOGGER.info("  Transactions non reconnue.  Essayer \"aide\"");
             }
 
             getGestionBiblio().getConnexion().commit();
@@ -364,7 +368,8 @@ public class Bibliotheque {
                 getGestionBiblio().getConnexion().rollback();
                 // System.err.println("TEST OUTPUT : Error! database rollback...");
             } catch(ConnexionException connexionException) {
-                connexionException.printStackTrace();
+                //connexionException.printStackTrace();
+                Bibliotheque.LOGGER.error("Erreur de connexion");
                 return;
             }
             throw new BibliothequeException(exception.getMessage(),
@@ -378,24 +383,24 @@ public class Bibliotheque {
      *
      */
     static void afficherAide() {
-        System.out.println();
-        System.out.println("Chaque transaction comporte un nom et une liste d'arguments");
-        System.out.println("separes par des espaces. La liste peut etre vide.");
-        System.out.println(" Les dates sont en format yyyy-mm-dd.");
-        System.out.println("");
-        System.out.println("Les transactions sont:");
-        System.out.println("  aide");
-        System.out.println("  exit");
-        System.out.println("  acquerir <titre> <auteur>");
-        System.out.println("  preter <idLivre> <idMembre>");
-        System.out.println("  renouveler <idPret>");
-        System.out.println("  retourner <idPret>");
-        System.out.println("  vendre <idLivre>");
-        System.out.println("  inscrire <nom> <telephone> <limitePret>");
-        System.out.println("  desinscrire <idMembre>");
-        System.out.println("  reserver <idMembre> <idLivre> ");
-        System.out.println("  utiliser <idReservation>");
-        System.out.println("  annuler <idReservation>");
+        Bibliotheque.LOGGER.info("");
+        Bibliotheque.LOGGER.info("Chaque transaction comporte un nom et une liste d'arguments");
+        Bibliotheque.LOGGER.info("separes par des espaces. La liste peut etre vide.");
+        Bibliotheque.LOGGER.info(" Les dates sont en format yyyy-mm-dd.");
+        Bibliotheque.LOGGER.info("");
+        Bibliotheque.LOGGER.info("Les transactions sont:");
+        Bibliotheque.LOGGER.info("  aide");
+        Bibliotheque.LOGGER.info("  exit");
+        Bibliotheque.LOGGER.info("  acquerir <titre> <auteur>");
+        Bibliotheque.LOGGER.info("  preter <idLivre> <idMembre>");
+        Bibliotheque.LOGGER.info("  renouveler <idPret>");
+        Bibliotheque.LOGGER.info("  retourner <idPret>");
+        Bibliotheque.LOGGER.info("  vendre <idLivre>");
+        Bibliotheque.LOGGER.info("  inscrire <nom> <telephone> <limitePret>");
+        Bibliotheque.LOGGER.info("  desinscrire <idMembre>");
+        Bibliotheque.LOGGER.info("  reserver <idMembre> <idLivre> ");
+        Bibliotheque.LOGGER.info("  utiliser <idReservation>");
+        Bibliotheque.LOGGER.info("  annuler <idReservation>");
 
     }
 
