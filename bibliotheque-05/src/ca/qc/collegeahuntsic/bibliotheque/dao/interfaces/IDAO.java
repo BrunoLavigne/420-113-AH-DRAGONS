@@ -33,7 +33,7 @@ public interface IDAO {
      * @throws InvalidDTOClassException - Si la classe du DTO n'est pas celle que prend en charge le DAO
      * @throws DAOException - S'il y a une erreur avec la base de données
      */
-    void add(Connexion connexion,
+    void add(Session session,
         DTO dto) throws InvalidHibernateSessionException,
         InvalidDTOException,
         InvalidDTOClassException,
