@@ -6,6 +6,7 @@ package ca.qc.collegeahuntsic.bibliotheque.dao.interfaces;
 
 import java.io.Serializable;
 import java.util.List;
+import org.hibernate.Session;
 import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.DTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
