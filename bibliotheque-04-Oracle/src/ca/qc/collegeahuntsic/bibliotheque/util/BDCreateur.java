@@ -54,24 +54,25 @@ class BDCreateur {
                 stmt.executeUpdate("DROP    SEQUENCE SEQ_ID_LIVRE");
                 stmt.executeUpdate("DROP    SEQUENCE SEQ_ID_MEMBRE");
 
-                stmt.executeUpdate("DROP TABLE membre CASCADE CONSTRAINTS PURGE");
-                stmt.executeUpdate("DROP TABLE pret CASCADE CONSTRAINTS PURGE");
-                stmt.executeUpdate("DROP TABLE livre CASCADE CONSTRAINTS PURGE");
-                stmt.executeUpdate("DROP TABLE reservation CASCADE CONSTRAINTS PURGE");
+                stmt.executeUpdate("DROP TABLE  membre      CASCADE CONSTRAINTS PURGE");
+                stmt.executeUpdate("DROP TABLE  pret        CASCADE CONSTRAINTS PURGE");
+                stmt.executeUpdate("DROP TABLE  livre       CASCADE CONSTRAINTS PURGE");
+                stmt.executeUpdate("DROP TABLE  reservation CASCADE CONSTRAINTS PURGE");
 
-                stmt.executeUpdate("CREATE  SEQUENCE SEQ_ID_MEMBRE START WITH 1 INCREMENT BY 1");
-                stmt.executeUpdate("CREATE  SEQUENCE SEQ_ID_LIVRE START WITH 1 INCREMENT BY 1");
-                stmt.executeUpdate("CREATE  SEQUENCE SEQ_ID_PRET START WITH 1 INCREMENT BY 1");
-                stmt.executeUpdate("CREATE  SEQUENCE SEQ_ID_RESERVATION START WITH 1 INCREMENT BY 1");
+                stmt.executeUpdate("CREATE  SEQUENCE SEQ_ID_MEMBRE      START WITH 1    INCREMENT BY 1");
+                stmt.executeUpdate("CREATE  SEQUENCE SEQ_ID_LIVRE       START WITH 1    INCREMENT BY 1");
+                stmt.executeUpdate("CREATE  SEQUENCE SEQ_ID_PRET        START WITH 1    INCREMENT BY 1");
+                stmt.executeUpdate("CREATE  SEQUENCE SEQ_ID_RESERVATION START WITH 1    INCREMENT BY 1");
 
                 stmt.executeUpdate("CREATE TABLE membre "
                     + "("
-                    + "idMembre     NUMBER(3)    CHECK(idMembre > 0),"
-                    + "nom          VARCHAR(100) NOT NULL,telephone NUMBER(10),"
-                    + "limitePret   NUMBER(2)    CHECK(limitePret > 0 AND limitePret <= 10),"
-                    + "nbpret       NUMBER(2)    DEFAULT 0 CHECK(nbpret >= 0),"
-                    + "CONSTRAINT   cleMembre    PRIMARY KEY (idMembre), "
-                    + "CONSTRAINT   limiteNbPret check(nbpret <= limitePret)"
+                    + "idMembre     NUMBER(3)       CHECK(idMembre > 0),"
+                    + "nom          VARCHAR(100)    NOT NULL,"
+                    + "telephone    NUMBER(10),"
+                    + "limitePret   NUMBER(2)       CHECK(limitePret > 0 AND limitePret <= 10),"
+                    + "nbpret       NUMBER(2)       DEFAULT 0 CHECK(nbpret >= 0),"
+                    + "CONSTRAINT   cleMembre       PRIMARY KEY (idMembre), "
+                    + "CONSTRAINT   limiteNbPret    check(nbpret <= limitePret)"
                     + ")");
 
                 stmt.executeUpdate("CREATE TABLE livre "

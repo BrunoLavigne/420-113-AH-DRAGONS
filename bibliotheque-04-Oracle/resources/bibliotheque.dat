@@ -17,7 +17,7 @@ reserver 2 1
 reserver 3 1
 retourner 1
 utiliser 1
-retourner 2
+retourner 1
 annuler 2
 --
 --

@@ -320,16 +320,6 @@ public class PretService extends Service implements IPretService {
                 throw new MissingDTOException("Le livre n'existe pas");
             }
 
-            // Si la clef primaire du membre est null
-            if(unMembreDTO.getIdMembre() == null) {
-                throw new InvalidCriterionException("La clef ne peut être null.");
-            }
-
-            // Si la clef primaire du livre est null
-            if(unLivreDTO.getIdLivre() == null) {
-                throw new InvalidCriterionException("La clef ne peut être null.");
-            }
-
             // Si le livre n'a pas encore été prêté
             List<PretDTO> listeDesPrets = getPretDAO().findByLivre(connexion,
                 unLivreDTO.getIdLivre(),
@@ -381,6 +371,7 @@ public class PretService extends Service implements IPretService {
         ServiceException {
 
         try {
+
             // Si la connexion est null
             if(connexion == null) {
                 throw new InvalidHibernateSessionException("La connexion ne peut être null.");
@@ -420,6 +411,7 @@ public class PretService extends Service implements IPretService {
             List<ReservationDTO> listeDesReservations = getReservationDAO().findByLivre(connexion,
                 unLivreDTO.getIdLivre(),
                 ReservationDTO.ID_LIVRE_COLUMN_NAME);
+
             if(!listeDesReservations.isEmpty()) {
                 throw new ExistingReservationException("Le livre "
                     + unLivreDTO.getIdLivre()
@@ -479,8 +471,24 @@ public class PretService extends Service implements IPretService {
                 throw new InvalidDTOClassException("Le pret  ne peut être null.");
             }
 
+            LivreDTO unLivreDTO = (LivreDTO) getLivreDAO().get(connexion,
+                pretDTO.getLivreDTO().getIdLivre());
+
+            // Si le livre n'existe pas
+            if(unLivreDTO == null) {
+                throw new MissingDTOException("Le livre est inexistant");
+            }
+
+            // Si le livre n'a pas encore été prêté
+            List<PretDTO> listeDesPrets = findByLivre(connexion,
+                unLivreDTO.getIdLivre(),
+                PretDTO.ID_PRET_COLUMN_NAME);
+            if(listeDesPrets.isEmpty()) {
+                throw new MissingLoanException("Le livre n'a pas encore été prêté.");
+            }
+
             PretDTO unPretDTO = (PretDTO) getPretDAO().get(connexion,
-                pretDTO.getIdPret());
+                listeDesPrets.get(0).getIdPret());
 
             // Si le prêt n'existe pas
             if(unPretDTO == null) {
@@ -495,27 +503,6 @@ public class PretService extends Service implements IPretService {
                 throw new MissingDTOException("Le membre n'existe pas");
             }
 
-            LivreDTO unLivreDTO = (LivreDTO) getLivreDAO().get(connexion,
-                unPretDTO.getLivreDTO().getIdLivre());
-
-            // Si le livre n'existe pas
-            if(unLivreDTO == null) {
-                throw new MissingDTOException("Le livre est inexistant");
-            }
-
-            // Si l'ID du membre est null
-
-            // Si l'ID du livre est null
-
-            // Si la propriété à utiliser pour classer est null
-
-            // Si le livre n'a pas encore été prêté
-            List<PretDTO> listeDesPrets = getPretDAO().findByLivre(connexion,
-                unLivreDTO.getIdLivre(),
-                PretDTO.ID_PRET_COLUMN_NAME);
-            if(listeDesPrets.isEmpty()) {
-                throw new MissingLoanException("Le livre n'a pas encore été prêté.");
-            }
             /*
                         // Si le livre a été prêté à quelqu'un d'autre
                         for(PretDTO emprunterDTO : listeDesPrets) {
@@ -525,16 +512,15 @@ public class PretService extends Service implements IPretService {
                         }
              */
 
-            // Si la classe du membre n'est pas celle que prend en charge le DAO
-
-            // Si la classe du prêt n'est pas celle que prend en charge le DAO
-
             unPretDTO.setMembreDTO(unMembreDTO);
             unPretDTO.setLivreDTO(unLivreDTO);
             unMembreDTO.setNbPret(unMembreDTO.getNbPret() - 1);
+
             getMembreDAO().update(connexion,
                 unMembreDTO);
+
             unPretDTO.setDateRetour(new Timestamp(System.currentTimeMillis()));
+
             update(connexion,
                 unPretDTO);
 

@@ -111,26 +111,18 @@ public class Bibliotheque {
                 } catch(BibliothequeException bibliothequeException) {
                     System.err.println(bibliothequeException.getMessage());
                     //bibliothequeException.printStackTrace();
-                    /*
+
                     try {
                         Thread.sleep(300); //1000 milliseconds is one second.
                     } catch(InterruptedException ex) {
                         Thread.currentThread().interrupt();
                     }
-                     */
+
                     transaction = lireTransaction(reader);
                     continue;
                 }
             }
-            /*
-             * TODO Big time, changer le tokenizer pour un split va prendre du temps;
-             * il faut modifier aussi la methodeexecuterTransaction...
-             *
-            String[] parts = transaction.split(" ");
-            for (int i=0; i<parts.length; i++){
-                executerTransaction(parts[i]);
-            }
-             */
+
         }
     }
 
@@ -237,7 +229,10 @@ public class Bibliotheque {
                 // TRANSACTION RETOURNER ( <idPret> )
 
                 PretDTO pretDTO = new PretDTO();
-                pretDTO.setIdPret(readString(tokenizer));
+                LivreDTO livreDTO = new LivreDTO();
+                livreDTO.setIdLivre(readString(tokenizer));
+
+                pretDTO.setLivreDTO(livreDTO);
 
                 getGestionBiblio().getPretFacade().terminer(getGestionBiblio().getConnexion(),
                     pretDTO);
