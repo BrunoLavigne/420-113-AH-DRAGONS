@@ -1,10 +1,13 @@
+// Fichier Constants.java
+// Auteur : Dragons Vicieux
+// Date de création : 2015-11-07
 
 package ca.qc.collegeahuntsic.bibliotheque;
 
 /**
  * Constants pour l'application Bibliothèque.
  *
- * @author Gilles Benichou
+ * @author Dragons Vicieux
  */
 public interface Constants {
     /**

@@ -1,6 +1,6 @@
 // Fichier DTO.java
 // Auteur : Dragons Vicieux
-// Date de création : 2015-09-18
+// Date de création : 2015-11-07
 
 package ca.qc.collegeahuntsic.bibliotheque.dto;
 
@@ -20,17 +20,16 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Classe de base pour tous les DTOs.
+ *
  * @author Dragons Vicieux
  */
-public class DTO extends Object implements Serializable {
-
+public class DTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     *
-     * Crée un nouveau DTO vide.
+     * Crée un DTO.
      */
-    public DTO() {
+    protected DTO() {
         super();
     }
 
@@ -170,5 +169,4 @@ public class DTO extends Object implements Serializable {
             + Constants.CLOSING_BRACE.toString();
         return string;
     }
-
 }
