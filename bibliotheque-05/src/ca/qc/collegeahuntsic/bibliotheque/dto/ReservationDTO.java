@@ -36,6 +36,7 @@ public class ReservationDTO extends DTO {
     private Timestamp dateReservation;
 
     public ReservationDTO() {
+        super();
 
     }
 

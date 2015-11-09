@@ -38,6 +38,10 @@ public class PretDTO extends DTO {
 
     private Timestamp dateRetour;
 
+    public PretDTO() {
+        super();
+    }
+
     // Region Getters and Setter
 
     /**

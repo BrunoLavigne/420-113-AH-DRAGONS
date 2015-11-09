@@ -1,0 +1,32 @@
+<?xml version="1.0"
+      encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+          "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<!--
+   - ReservationDTO mapping file.
+   -
+   - Author: Dragons Vicieux
+-->
+
+<hibernate-mapping>
+  <class name="ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO"
+         table="RESERVATION">
+         <id name="idReservation"
+             type="string">
+             <column name="IDRESERVATION">
+             </column>
+             <generator class="sequence">
+                        <param name="sequence">SEQ_ID_RESERVATION</param>
+             </generator>
+         </id>
+
+         <property name="dateReservation"
+         		   type="timestamp">
+         			<column name="DATERESERVATION">
+         			</column>
+         </property>
+  </class>
+</hibernate-mapping>

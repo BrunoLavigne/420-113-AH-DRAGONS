@@ -1,0 +1,37 @@
+<?xml version="1.0"
+      encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+          "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<!--
+   - PretDTO mapping file.
+   -
+   - Author: Dragons Vicieux
+-->
+
+<hibernate-mapping>
+  <class name="ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO"
+         table="PRET">
+         <id name="idPret"
+             type="string">
+             <column name="IDPRET">
+             </column>
+             <generator class="identity">
+             </generator>
+         </id>
+         
+         <property name="datePret"
+         		   type="timestamp">
+         			<column name="DATEPRET">
+         			</column>
+         </property>
+         
+         <property name="dateRetour"
+         		   type="timestamp">
+         			<column name="DATERETOUR">
+         			</column>
+         </property>
+  </class>
+</hibernate-mapping>
