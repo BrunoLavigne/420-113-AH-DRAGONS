@@ -35,8 +35,9 @@ public class ReservationDAO extends DAO implements IReservationDAO {
     }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @Override
     public List<ReservationDTO> findByLivre(Session session,
         String idLivre,
@@ -67,6 +68,7 @@ public class ReservationDAO extends DAO implements IReservationDAO {
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @Override
     public List<ReservationDTO> findByMembre(Session session,
         String idMembre,
