@@ -2,6 +2,7 @@
 package ca.qc.collegeahuntsic.bibliotheque.service.implementations;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.ILivreDAO;
@@ -450,23 +451,33 @@ public class PretService extends Service implements IPretService {
                 pretDTO.getLivreDTO().getIdLivre()));
 
             // Si le livre a été prêté
-            List<PretDTO> listeDesPrets = getPretDAO().findByLivre(session,
-                pretDTO.getLivreDTO().getIdLivre(),
-                PretDTO.ID_LIVRE_COLUMN_NAME);
-            if(!listeDesPrets.isEmpty()) {
-                throw new ServiceException("Le livre "
-                    + pretDTO.getLivreDTO().getIdLivre()
-                    + " a été prêté.");
+            List<PretDTO> listeDesPrets = new ArrayList<>(pretDTO.getLivreDTO().getPrets());
+            for(PretDTO unPretDTO : listeDesPrets) {
+                if(unPretDTO.getDateRetour() == null) {
+                    throw new ExistingLoanException("Le livre "
+                        + pretDTO.getLivreDTO().getTitre()
+                        + " (ID du livre: "
+                        + pretDTO.getLivreDTO().getIdLivre()
+                        + " ) a été prêté au membre "
+                        + pretDTO.getMembreDTO().getNom()
+                        + " (ID du membre: "
+                        + pretDTO.getMembreDTO().getIdMembre()
+                        + " ).");
+                }
             }
 
             // Si le livre a été réservé
-            List<ReservationDTO> listeDesReservations = getReservationDAO().findByLivre(session,
-                pretDTO.getLivreDTO().getIdLivre(),
-                ReservationDTO.ID_LIVRE_COLUMN_NAME);
+            List<ReservationDTO> listeDesReservations = new ArrayList<>(pretDTO.getLivreDTO().getReservations());
             if(!listeDesReservations.isEmpty()) {
-                throw new ServiceException("Le livre "
+                throw new ExistingLoanException("Le livre "
+                    + pretDTO.getLivreDTO().getTitre()
+                    + " (ID du livre: "
                     + pretDTO.getLivreDTO().getIdLivre()
-                    + " a été réservé.");
+                    + " ) a été réservé par le membre membre "
+                    + pretDTO.getMembreDTO().getNom()
+                    + " (ID du membre: "
+                    + pretDTO.getMembreDTO().getIdMembre()
+                    + " ).");
             }
 
             // Si le membre a atteint sa limite de prêt
