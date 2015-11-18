@@ -48,4 +48,16 @@ public class FormatteurDate {
         String dateFormatee = FormatteurDate.SIMPLE_DATE_FORMAT.format(date);
         return dateFormatee;
     }
+
+    /**
+     *
+     * Convertit une String du format YYYY-MM-DD en un objet de la classe Date.
+     *
+     * @param dateString La chaîne de caractères
+     * @return Date La date convertie
+     * @throws ParseException Si la chaîne de caractères n'est pas formatée correctement
+     */
+    public static Date convertirDate(String dateString) throws ParseException {
+        return FormatteurDate.SIMPLE_DATE_FORMAT.parse(dateString);
+    }
 }
