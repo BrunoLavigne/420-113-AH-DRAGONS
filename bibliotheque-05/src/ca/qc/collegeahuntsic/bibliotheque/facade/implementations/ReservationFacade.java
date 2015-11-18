@@ -155,5 +155,4 @@ public class ReservationFacade extends Facade implements IReservationFacade {
             throw new FacadeException(serviceException);
         }
     }
-
 }

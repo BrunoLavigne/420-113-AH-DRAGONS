@@ -56,7 +56,6 @@ public class PretService extends Service implements IPretService {
         IMembreDAO membreDAO,
         ILivreDAO livreDAO,
         IReservationDAO reservationDAO) throws InvalidDAOException {
-
         if(pretDAO == null) {
             throw new InvalidDAOException("Le DAO du prêt ne peut être null");
         }

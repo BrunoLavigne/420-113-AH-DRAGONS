@@ -38,6 +38,7 @@ public interface IPretService extends IService {
      * @throws InvalidDTOException Si le prêt est <code>null</code>
      * @throws InvalidDTOClassException Si la classe du prêt n'est pas celle que prend en charge le DAO
      * @throws ServiceException S'il y a une erreur avec la base de données
+     *
      */
     void addPret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,

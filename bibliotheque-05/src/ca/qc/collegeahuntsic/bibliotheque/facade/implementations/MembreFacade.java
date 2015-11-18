@@ -151,5 +151,4 @@ public class MembreFacade extends Facade implements IMembreFacade {
             throw new FacadeException(serviceException);
         }
     }
-
 }

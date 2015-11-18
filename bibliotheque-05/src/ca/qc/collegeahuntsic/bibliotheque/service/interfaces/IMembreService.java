@@ -34,6 +34,7 @@ public interface IMembreService extends IService {
      * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
      * @throws InvalidDTOException Si le membre est <code>null</code>
      * @throws ServiceException S'il y a une erreur avec la base de données
+     *
      */
     void addMembre(Session session,
         MembreDTO membreDTO) throws InvalidHibernateSessionException,

@@ -36,6 +36,7 @@ public interface IReservationService extends IService {
      * @throws InvalidHibernateSessionException Si la session Hibernate est <code>null</code>
      * @throws InvalidDTOException Si le livre est <code>null</code>
      * @throws ServiceException S'il y a une erreur avec la base de données
+     *
      */
     void addReservation(Session session,
         ReservationDTO reservationDTO) throws InvalidHibernateSessionException,

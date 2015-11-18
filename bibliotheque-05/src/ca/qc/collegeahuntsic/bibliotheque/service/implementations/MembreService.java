@@ -183,7 +183,6 @@ public class MembreService extends Service implements IMembreService {
         // On peut ajouter le membre
         addMembre(session,
             membreDTO);
-
     }
 
     @Override

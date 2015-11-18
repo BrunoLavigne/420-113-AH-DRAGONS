@@ -39,7 +39,6 @@ import org.hibernate.Session;
  * @author Dragons Vicieux
  */
 public class ReservationService extends Service implements IReservationService {
-    // test push
 
     private ILivreDAO livreDAO;
 
