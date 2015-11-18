@@ -12,13 +12,13 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.StringTokenizer;
-import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.db.ConnexionException;
+import ca.qc.collegeahuntsic.bibliotheque.exception.dto.MissingDTOException;
 import ca.qc.collegeahuntsic.bibliotheque.util.BibliothequeCreateur;
 import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
 import org.apache.commons.logging.Log;
@@ -36,13 +36,7 @@ import org.apache.commons.logging.LogFactory;
  * transactions traitées, voir la méthode afficherAide().
  *
  * Paramètres
- * <ul>
- * <li>0- Site du serveur SQL ("local" ou "distant")</li>
- * <li>1- Nom de la BD</li>
- * <li>2- User id pour établir une connexion avec le serveur SQL</li>
- * <li>3- Mot de passe pour le user id</li>
- * <li>4- Fichier de transaction</li>
- * </ul>
+ * 0 - Fichier de transaction
  *
  * Pré-condition
  *   La base de données de la bibliothèque doit exister
@@ -53,7 +47,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class Bibliotheque {
 
-    private static BibliothequeCreateur gestionBibliotheque;
+    private static BibliothequeCreateur bibliothequeCreateur;
 
     private static Log LOGGER = LogFactory.getLog(Bibliotheque.class);
 
@@ -62,32 +56,26 @@ public class Bibliotheque {
      * Ouverture de la BD, traitement des transactions et fermeture de la BD.
      * @throws Exception
      */
-    public static void main(String argv[]) throws Exception {
+    public static void main(String[] argv) throws Exception {
         // validation du nombre de paramètres
-        if(argv.length < 5) {
-            Bibliotheque.LOGGER.info("Usage: java Biblio <serveur> <bd> <user> <password> <fichier-transactions>");
-            Bibliotheque.LOGGER.info(Connexion.getServeursSupportes());
+        if(argv.length < 1) {
+            Bibliotheque.LOGGER.info("Usage: java Biblio <fichier-transactions>");
             return;
         }
 
         try(
-            InputStream sourceTransaction = Bibliotheque.class.getResourceAsStream("/"
-                + argv[4])) {
             // ouverture du fichier de transactions
+            InputStream sourceTransaction = Bibliotheque.class.getResourceAsStream("/"
+                + argv[0])) {
 
             try(
                 BufferedReader reader = new BufferedReader(new InputStreamReader(sourceTransaction))) {
-                setGestionBiblio(new BibliothequeCreateur(argv[0],
-                    argv[1],
-                    argv[2],
-                    argv[3]));
+                Bibliotheque.bibliothequeCreateur = new BibliothequeCreateur();
                 traiterTransactions(reader);
-                reader.close();
             }
         } catch(Exception exception) {
-            throw new BibliothequeException(exception);
-        } finally {
-            getGestionBiblio().getConnexion().close();
+            Bibliotheque.LOGGER.info(" **** "
+                + exception.getMessage());
         }
     }
 
@@ -105,8 +93,7 @@ public class Bibliotheque {
         transaction = lireTransaction(reader);
 
         while(!finTransaction(transaction)) {
-            /* découpage de la transaction en mots*/
-            // TODO Remplacer par un SPLIT. StringTokenizer est déprécier
+
             StringTokenizer tokenizer = new StringTokenizer(transaction,
                 " ");
             if(tokenizer.hasMoreTokens()) {
@@ -238,24 +225,30 @@ public class Bibliotheque {
 
                 // TRANSACTION RETOURNER ( <idPret> )
 
+                Bibliotheque.bibliothequeCreateur.beginTransaction();
                 PretDTO pretDTO = new PretDTO();
                 pretDTO.setIdPret(readString(tokenizer));
 
-                getGestionBiblio().getPretFacade().terminer(getGestionBiblio().getConnexion(),
+                Bibliotheque.bibliothequeCreateur.getPretFacade().terminerPret(Bibliotheque.bibliothequeCreateur.getSession(),
                     pretDTO);
+
+                Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("inscrire".startsWith(command)) {
 
                 // TRANSACTION INSCRIRE ( <nom> <telephone> <limitePret> )
 
+                Bibliotheque.bibliothequeCreateur.beginTransaction();
                 MembreDTO membreDTO = new MembreDTO();
-
                 membreDTO.setNom(readString(tokenizer));
                 membreDTO.setTelephone(readLong(tokenizer));
                 membreDTO.setLimitePret(readInt(tokenizer));
+                membreDTO.setNbPret(0);
 
-                getGestionBiblio().getMembreFacade().inscrire(getGestionBiblio().getConnexion(),
+                Bibliotheque.bibliothequeCreateur.getMembreFacade().inscrireMembre(Bibliotheque.bibliothequeCreateur.getSession(),
                     membreDTO);
+
+                Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("desinscrire".startsWith(command)) {
 
@@ -292,21 +285,40 @@ public class Bibliotheque {
 
                 // TRANSACTION UTILISER ( <idReservation> )
 
-                ReservationDTO reservationDTO = new ReservationDTO();
-                reservationDTO.setIdReservation(readString(tokenizer));
+                Bibliotheque.bibliothequeCreateur.beginTransaction();
+                String idReservation = readString(tokenizer);
 
-                getGestionBiblio().getReservationFacade().utiliser(getGestionBiblio().getConnexion(),
+                ReservationDTO reservationDTO = Bibliotheque.bibliothequeCreateur.getReservationFacade()
+                    .getReservation(Bibliotheque.bibliothequeCreateur.getSession(),
+                        idReservation);
+                if(reservationDTO == null) {
+                    throw new MissingDTOException("La reservation "
+                        + idReservation
+                        + " n'existe pas");
+                }
+
+                Bibliotheque.bibliothequeCreateur.getReservationFacade().utiliserReservation(Bibliotheque.bibliothequeCreateur.getSession(),
                     reservationDTO);
+
+                Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("annuler".startsWith(command)) {
 
-                // TRANSACTION ANNULER ( <idReservation> )
+                Bibliotheque.bibliothequeCreateur.beginTransaction();
+                String idReservation = readString(tokenizer);
 
-                ReservationDTO reservationDTO = new ReservationDTO();
-                reservationDTO.setIdReservation(readString(tokenizer));
-
-                getGestionBiblio().getReservationFacade().annuler(getGestionBiblio().getConnexion(),
+                ReservationDTO reservationDTO = Bibliotheque.bibliothequeCreateur.getReservationFacade()
+                    .getReservation(Bibliotheque.bibliothequeCreateur.getSession(),
+                        idReservation);
+                if(reservationDTO == null) {
+                    throw new MissingDTOException("La reservation "
+                        + idReservation
+                        + " n'existe pas");
+                }
+                Bibliotheque.bibliothequeCreateur.getReservationFacade().annulerReservation(Bibliotheque.bibliothequeCreateur.getSession(),
                     reservationDTO);
+
+                Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("listerLivres".startsWith(command)) {
 
@@ -366,8 +378,10 @@ public class Bibliotheque {
 
         } catch(Exception exception) {
             try {
-                getGestionBiblio().getConnexion().rollback();
-                // System.err.println("TEST OUTPUT : Error! database rollback...");
+                Bibliotheque.LOGGER.error(" **** "
+                    + exception.getMessage());
+                Bibliotheque.bibliothequeCreateur.rollbackTransaction();
+
             } catch(ConnexionException connexionException) {
                 //connexionException.printStackTrace();
                 Bibliotheque.LOGGER.error("Erreur de connexion");
@@ -515,30 +529,5 @@ public class Bibliotheque {
         }
         throw new BibliothequeException("autre paramètre attendu");
     }
-
-    /**
-     * Getter de la variable d'instance <code>gestionBiblio</code>.
-     *
-     * @return La variable d'instance <code>gestionBiblio</code>
-     */
-    private static BibliothequeCreateur getGestionBiblio() {
-        return gestionBibliotheque;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>Bibliotheque.gestionBiblio</code>.
-     *
-     * @param BibliothequeCreateur La valeur à utiliser pour la variable d'instance <code>Bibliotheque.gestionBiblio</code>
-     */
-    private static void setGestionBiblio(BibliothequeCreateur gestionBibliotheque) {
-        Bibliotheque.gestionBibliotheque = gestionBibliotheque;
-    }
-
-    /**
-     *
-     * Boolean de la variable lectureAuClavier
-     *
-     * @return <code>lectureAuClavier</code>
-     */
 
 }//class
