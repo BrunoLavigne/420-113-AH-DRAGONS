@@ -10,14 +10,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.StringTokenizer;
 import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.db.ConnexionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dto.MissingDTOException;
 import ca.qc.collegeahuntsic.bibliotheque.util.BibliothequeCreateur;
 import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
@@ -226,20 +224,38 @@ public class Bibliotheque {
             } else if("renouveler".startsWith(command)) {
 
                 // TRANSACTION RENOUVELER ( <idPret> )
+                Bibliotheque.bibliothequeCreateur.beginTransaction();
+                String idPret = readString(tokenizer);
 
-                PretDTO pretDTO = new PretDTO();
-                pretDTO.setIdPret(readString(tokenizer));
+                PretDTO pretDTO = Bibliotheque.bibliothequeCreateur.getPretFacade().getPret(Bibliotheque.bibliothequeCreateur.getSession(),
+                    idPret);
 
-                getGestionBiblio().getPretFacade().renouveler(getGestionBiblio().getConnexion(),
+                if(pretDTO == null) {
+                    throw new MissingDTOException("Le pret "
+                        + idPret
+                        + " n'existe pas");
+                }
+
+                Bibliotheque.bibliothequeCreateur.getPretFacade().renouvelerPret(Bibliotheque.bibliothequeCreateur.getSession(),
                     pretDTO);
+
+                Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("retourner".startsWith(command)) {
 
                 // TRANSACTION RETOURNER ( <idPret> )
 
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
-                PretDTO pretDTO = new PretDTO();
-                pretDTO.setIdPret(readString(tokenizer));
+
+                String idPret = readString(tokenizer);
+                PretDTO pretDTO = Bibliotheque.bibliothequeCreateur.getPretFacade().getPret(Bibliotheque.bibliothequeCreateur.getSession(),
+                    idPret);
+
+                if(pretDTO == null) {
+                    throw new MissingDTOException("Le pret "
+                        + idPret
+                        + " n'existe pas");
+                }
 
                 Bibliotheque.bibliothequeCreateur.getPretFacade().terminerPret(Bibliotheque.bibliothequeCreateur.getSession(),
                     pretDTO);
@@ -264,17 +280,26 @@ public class Bibliotheque {
 
             } else if("desinscrire".startsWith(command)) {
 
-                // TRANSACTION DESINSCRIRE ( <idMembre> )
+                Bibliotheque.bibliothequeCreateur.beginTransaction();
 
-                MembreDTO membreDTO = new MembreDTO();
-                membreDTO.setIdMembre(readString(tokenizer));
+                String idMembre = readString(tokenizer);
+                MembreDTO membreDTO = Bibliotheque.bibliothequeCreateur.getMembreFacade().getMembre(Bibliotheque.bibliothequeCreateur.getSession(),
+                    idMembre);
 
-                getGestionBiblio().getMembreFacade().desinscrire(getGestionBiblio().getConnexion(),
+                if(membreDTO == null) {
+                    throw new MissingDTOException("Le membre "
+                        + idMembre
+                        + " n'existe pas");
+                }
+
+                Bibliotheque.bibliothequeCreateur.getMembreFacade().desinscrireMembre(Bibliotheque.bibliothequeCreateur.getSession(),
                     membreDTO);
+
+                Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("reserver".startsWith(command)) {
 
-                // TRANSACTION RESERVER ( <idMembre> <idLivre> )
+                Bibliotheque.bibliothequeCreateur.beginTransaction();
 
                 ReservationDTO reservationDTO = new ReservationDTO();
 
@@ -284,14 +309,13 @@ public class Bibliotheque {
                 LivreDTO livreDTO = new LivreDTO();
                 livreDTO.setIdLivre(readString(tokenizer));
 
-                Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-
                 reservationDTO.setLivreDTO(livreDTO);
                 reservationDTO.setMembreDTO(membreDTO);
-                reservationDTO.setDateReservation(currentTimestamp);
 
-                getGestionBiblio().getReservationFacade().placer(getGestionBiblio().getConnexion(),
+                Bibliotheque.bibliothequeCreateur.getReservationFacade().placerReservation(Bibliotheque.bibliothequeCreateur.getSession(),
                     reservationDTO);
+
+                Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("utiliser".startsWith(command)) {
 
@@ -331,13 +355,6 @@ public class Bibliotheque {
                     reservationDTO);
 
                 Bibliotheque.bibliothequeCreateur.commitTransaction();
-
-            } else if("listerLivres".startsWith(command)) {
-
-                /*
-                 * getGestionBiblio().getLivreDAO().getAll(getGestionBiblio().getConnexion(),
-                 * LivreDTO.ID_COLUMN_NAME);
-                 */
 
             } else if("listerLivresTitre".startsWith(command)) {
 
@@ -385,20 +402,10 @@ public class Bibliotheque {
                 Bibliotheque.LOGGER.info("  Transactions non reconnue.  Essayer \"aide\"");
             }
 
-            getGestionBiblio().getConnexion().commit();
-            //System.out.println("TEST OUTPUT : commiting to database...");
-
         } catch(Exception exception) {
-            try {
-                Bibliotheque.LOGGER.error(" **** "
-                    + exception.getMessage());
-                Bibliotheque.bibliothequeCreateur.rollbackTransaction();
-
-            } catch(ConnexionException connexionException) {
-                //connexionException.printStackTrace();
-                Bibliotheque.LOGGER.error("Erreur de connexion");
-                return;
-            }
+            Bibliotheque.LOGGER.error(" **** "
+                + exception.getMessage());
+            Bibliotheque.bibliothequeCreateur.rollbackTransaction();
             Bibliotheque.LOGGER.error(exception.getMessage());
             //throw new BibliothequeException(exception.getMessage(),
             //  exception);
