@@ -44,5 +44,24 @@
                    </column>
          </property>
          
+		 <set name="prets"
+              order-by="DATEPRET ASC"
+              cascade="all">
+              <key>
+                <column name="IDLIVRE">
+                </column>
+              </key>
+              <one-to-many class="ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO"/>
+         </set>
+         <set name="reservations"
+              order-by="DATERESERVATION ASC"
+              cascade="all">
+              <key>
+                <column name="IDLIVRE">
+                </column>
+              </key>
+              <one-to-many class="ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO"/>
+         </set>
+         
   </class>
 </hibernate-mapping>

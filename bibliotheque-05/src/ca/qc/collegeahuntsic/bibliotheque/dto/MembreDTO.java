@@ -4,6 +4,7 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.dto;
 
+import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -37,6 +38,10 @@ public class MembreDTO extends DTO {
     private int limitePret;
 
     private int nbPret;
+
+    private Set<PretDTO> prets;
+
+    private Set<ReservationDTO> reservations;
 
     // Region Getters and Setters
     /**
@@ -127,6 +132,42 @@ public class MembreDTO extends DTO {
      */
     public void setNbPret(int nbPret) {
         this.nbPret = nbPret;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.prets</code>.
+     *
+     * @return La variable d'instance <code>this.prets</code>
+     */
+    public Set<PretDTO> getPrets() {
+        return this.prets;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.prets</code>.
+     *
+     * @param prets La valeur à utiliser pour la variable d'instance <code>this.prets</code>
+     */
+    public void setPrets(Set<PretDTO> prets) {
+        this.prets = prets;
+    }
+
+    /**
+     * Getter de la variable d'instance <code>this.reservations</code>.
+     *
+     * @return La variable d'instance <code>this.reservations</code>
+     */
+    public Set<ReservationDTO> getReservations() {
+        return this.reservations;
+    }
+
+    /**
+     * Setter de la variable d'instance <code>this.reservations</code>.
+     *
+     * @param reservations La valeur à utiliser pour la variable d'instance <code>this.reservations</code>
+     */
+    public void setReservations(Set<ReservationDTO> reservations) {
+        this.reservations = reservations;
     }
 
     // EndRegion Getters and Setters

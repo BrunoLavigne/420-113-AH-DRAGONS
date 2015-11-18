@@ -14,14 +14,29 @@
 <hibernate-mapping>
   <class name="ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO"
          table="RESERVATION">
+         
          <id name="idReservation"
              type="string">
              <column name="IDRESERVATION">
              </column>
              <generator class="identity">
              </generator>
-         </id>
+         </id>   
+              
+         <many-to-one name="membreDTO"
+         		      class="ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO" 
+         		      not-null="true">
+         			<column name="IDMEMBRE">
+         			</column>
+         </many-to-one>
          
+         <many-to-one name="livreDTO"
+         		      class="ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO" 
+         		      not-null="true">
+         			<column name="IDLIVRE">
+         			</column>
+         </many-to-one>
+                  
          <property name="dateReservation"
          		   type="timestamp">
          			<column name="DATERESERVATION">
