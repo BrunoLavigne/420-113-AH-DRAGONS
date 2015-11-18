@@ -172,43 +172,55 @@ public class Bibliotheque {
                 afficherAide();
 
             } else if("acquerir".startsWith(command)) {
-
                 // TRANSACTION ACQUERIR ( <titre> <auteur> )
 
                 LivreDTO livreDTO = new LivreDTO();
-
-                //livreDTO.setIdLivre(readInt(tokenizer));
                 livreDTO.setTitre(readString(tokenizer));
                 livreDTO.setAuteur(readString(tokenizer));
                 livreDTO.setDateAcquisition(new Timestamp(System.currentTimeMillis()));
-
-                getGestionBiblio().getLivreFacade().acquerir(getGestionBiblio().getConnexion(),
+                Bibliotheque.bibliothequeCreateur.getLivreFacade().acquerirLivre(Bibliotheque.bibliothequeCreateur.getSession(),
                     livreDTO);
 
             } else if("vendre".startsWith(command)) {
-
-                LivreDTO livreDTO = new LivreDTO();
-                livreDTO.setIdLivre(readString(tokenizer));
-
-                getGestionBiblio().getLivreFacade().vendre(getGestionBiblio().getConnexion(),
+                // TRANSACTION VENDRE ( <idLivre> )
+                String idLivre = readString(tokenizer);
+                LivreDTO livreDTO = Bibliotheque.bibliothequeCreateur.getLivreFacade().getLivre(Bibliotheque.bibliothequeCreateur.getSession(),
+                    idLivre);
+                if(livreDTO == null) {
+                    throw new MissingDTOException("Le livre "
+                        + idLivre
+                        + " n'existe pas");
+                }
+                Bibliotheque.bibliothequeCreateur.getLivreFacade().vendreLivre(Bibliotheque.bibliothequeCreateur.getSession(),
                     livreDTO);
 
             } else if("preter".startsWith(command)) {
 
                 // TRANSACTION PRETER ( <idLivre> <idMembre> )
-
-                LivreDTO livreDTO = new LivreDTO();
-                livreDTO.setIdLivre(readString(tokenizer));
-
-                MembreDTO membreDTO = new MembreDTO();
-                membreDTO.setIdMembre(readString(tokenizer));
-
+                // récupération du livre
+                String idLivre = readString(tokenizer);
+                LivreDTO livreDTO = Bibliotheque.bibliothequeCreateur.getLivreFacade().getLivre(Bibliotheque.bibliothequeCreateur.getSession(),
+                    idLivre);
+                if(livreDTO == null) {
+                    throw new MissingDTOException("Le livre "
+                        + idLivre
+                        + " n'existe pas");
+                }
+                // récupération du membre
+                String idMembre = readString(tokenizer);
+                MembreDTO membreDTO = Bibliotheque.bibliothequeCreateur.getMembreFacade().getMembre(Bibliotheque.bibliothequeCreateur.getSession(),
+                    idMembre);
+                if(membreDTO == null) {
+                    throw new MissingDTOException("Le membre "
+                        + idLivre
+                        + " n'existe pas");
+                }
+                // création du nouveau prêt
                 PretDTO pretDTO = new PretDTO();
                 pretDTO.setLivreDTO(livreDTO);
                 pretDTO.setMembreDTO(membreDTO);
                 pretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
-
-                getGestionBiblio().getPretFacade().commencer(getGestionBiblio().getConnexion(),
+                Bibliotheque.bibliothequeCreateur.getPretFacade().commencerPret(Bibliotheque.bibliothequeCreateur.getSession(),
                     pretDTO);
 
             } else if("renouveler".startsWith(command)) {
