@@ -39,7 +39,7 @@ public class PretFacade extends Facade implements IPretFacade {
      * @param pretService Le service de la table <code>pret</code>
      * @throws InvalidServiceException Si le service de pret est <code>null</code>
      */
-    public PretFacade(IPretService pretService) throws InvalidServiceException { // TODO: Change to package when switching to Spring
+    PretFacade(IPretService pretService) throws InvalidServiceException { // TODO: Change to package when switching to Spring
         super();
         if(pretService == null) {
             throw new InvalidServiceException("Le service de pret ne peut être null");

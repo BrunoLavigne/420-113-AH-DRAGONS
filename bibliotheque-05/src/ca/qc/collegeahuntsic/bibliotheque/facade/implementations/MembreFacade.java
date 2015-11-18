@@ -37,7 +37,7 @@ public class MembreFacade extends Facade implements IMembreFacade {
      * @param membreService Le service de la table <code>membre</code>
      *@throws InvalidServiceException Si le service de membres est <code>null</code>
      */
-    public MembreFacade(IMembreService membreService) throws InvalidServiceException {// TODO changer la visibilité a package quand nous aurons la version avec Spring
+    MembreFacade(IMembreService membreService) throws InvalidServiceException {// TODO changer la visibilité a package quand nous aurons la version avec Spring
         super();
         if(membreService == null) {
             throw new InvalidServiceException("Le service de membres ne peut être null");
