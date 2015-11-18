@@ -69,7 +69,7 @@ public interface IPretService extends IService {
      * @throws InvalidDTOClassException Si la classe du prêt n'est pas celle que prend en charge le DAO
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
-    void update(Session session,
+    void updatePret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         InvalidDTOClassException,
@@ -85,14 +85,15 @@ public interface IPretService extends IService {
      * @throws InvalidDTOClassException Si la classe du prêt n'est pas celle que prend en charge le DAO
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
-    void delete(Session session,
+    void deletePret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         InvalidDTOClassException,
         ServiceException;
 
     /**
-     * Trouve tous les prêts de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une <code>Link</code> vide est retournée.
+     * Trouve tous les prêts de la base de données. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt
+     * n'est trouvé, une {@link List} vide est retournée.
      *
      * @param session La session Hibernate à utiliser
      * @param sortByPropertyName Le nom de la propriété à utiliser pour classer
@@ -101,13 +102,14 @@ public interface IPretService extends IService {
      * @throws InvalidSortByPropertyException Si la propriété à utiliser pour classer est <code>null</code>
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
-    List<PretDTO> getAll(Session session,
+    List<PretDTO> getAllPrets(Session session,
         String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidSortByPropertyException,
         ServiceException;
 
     /**
-     * Trouve les prêts à partir d'un membre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une <code>Link</code> vide est retournée.
+     * Trouve les prêts à partir d'un membre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt
+     * n'est trouvé, une {@link List} vide est retournée.
      *
      * @param session La session Hibernate à utiliser
      * @param idMembre L'ID du membre à trouver
@@ -119,7 +121,7 @@ public interface IPretService extends IService {
      * @throws InvalidSortByPropertyException Si la propriété à utiliser pour classer est <code>null</code>
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
-    List<PretDTO> findByMembre(Session session,
+    List<PretDTO> findPretByMembre(Session session,
         String idMembre,
         String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidCriterionException,
@@ -128,7 +130,8 @@ public interface IPretService extends IService {
         ServiceException;
 
     /**
-     * Trouve les prêts à partir d'un livre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une <code>Link</code> vide est retournée.
+     * Trouve les prêts à partir d'un livre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt
+     * n'est trouvé, une {@link List} vide est retournée.
      *
      * @param session La session Hibernate à utiliser
      * @param idLivre L'ID du livre à trouver
@@ -140,7 +143,7 @@ public interface IPretService extends IService {
      * @throws InvalidSortByPropertyException Si la propriété à utiliser pour classer est <code>null</code>
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
-    List<PretDTO> findByLivre(Session session,
+    List<PretDTO> findPretByLivre(Session session,
         String idLivre,
         String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidCriterionException,
@@ -149,7 +152,8 @@ public interface IPretService extends IService {
         ServiceException;
 
     /**
-     * Trouve les prêts à partir d'une date de prêt. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une <code>Link</code> vide est retournée.
+     * Trouve les prêts à partir d'une date de prêt. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt
+     * n'est trouvé, une {@link List} vide est retournée.
      *
      * @param session La session Hibernate à utiliser
      * @param datePret La date de prêt à trouver
@@ -161,7 +165,7 @@ public interface IPretService extends IService {
      * @throws InvalidSortByPropertyException Si la propriété à utiliser pour classer est <code>null</code>
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
-    List<PretDTO> findByDatePret(Session session,
+    List<PretDTO> findPretByDatePret(Session session,
         Timestamp datePret,
         String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidCriterionException,
@@ -170,7 +174,8 @@ public interface IPretService extends IService {
         ServiceException;
 
     /**
-     * Trouve les prêts à partir d'une date de retour. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt n'est trouvé, une <code>Link</code> vide est retournée.
+     * Trouve les prêts à partir d'une date de retour. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun prêt
+     * n'est trouvé, une {@link List} vide est retournée.
      *
      * @param session La session Hibernate à utiliser
      * @param dateRetour La date de retour à trouver
@@ -182,7 +187,7 @@ public interface IPretService extends IService {
      * @throws InvalidSortByPropertyException Si la propriété à utiliser pour classer est <code>null</code>
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
-    List<PretDTO> findByDateRetour(Session session,
+    List<PretDTO> findPretByDateRetour(Session session,
         Timestamp dateRetour,
         String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidCriterionException,
@@ -208,7 +213,7 @@ public interface IPretService extends IService {
      * @throws InvalidDTOClassException Si la classe du membre n'est pas celle que prend en charge le DAO
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
-    void commencer(Session session,
+    void commencerPret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         InvalidPrimaryKeyException,
@@ -240,7 +245,7 @@ public interface IPretService extends IService {
      * @throws InvalidDTOClassException Si la classe du prêt n'est pas celle que prend en charge le DAO
      * @throws ServiceException S'il y a une erreur avec la base de données.
      */
-    void renouveler(Session session,
+    void renouvelerPret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         InvalidPrimaryKeyException,
@@ -271,7 +276,7 @@ public interface IPretService extends IService {
      * @throws InvalidDTOClassException Si la classe du membre n'est pas celle que prend en charge le DAO ou si la classe du prêt n'est pas celle que prend en charge le DAO
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
-    void terminer(Session session,
+    void terminerPret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         InvalidPrimaryKeyException,

@@ -117,7 +117,7 @@ public class PretService extends Service implements IPretService {
      * {@inheritDoc}
      */
     @Override
-    public void update(Session session,
+    public void updatePret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         InvalidDTOClassException,
@@ -136,7 +136,7 @@ public class PretService extends Service implements IPretService {
      * {@inheritDoc}
      */
     @Override
-    public void delete(Session session,
+    public void deletePret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         InvalidDTOClassException,
@@ -161,7 +161,7 @@ public class PretService extends Service implements IPretService {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public List<PretDTO> getAll(Session session,
+    public List<PretDTO> getAllPrets(Session session,
         String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidSortByPropertyException,
         ServiceException {
@@ -182,7 +182,7 @@ public class PretService extends Service implements IPretService {
      * @throws InvalidCriterionValueException
      */
     @Override
-    public List<PretDTO> findByMembre(Session session,
+    public List<PretDTO> findPretByMembre(Session session,
         String idMembre,
         String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidCriterionException,
@@ -207,7 +207,7 @@ public class PretService extends Service implements IPretService {
      * {@inheritDoc}
      */
     @Override
-    public List<PretDTO> findByLivre(Session session,
+    public List<PretDTO> findPretByLivre(Session session,
         String idLivre,
         String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidCriterionException,
@@ -232,7 +232,7 @@ public class PretService extends Service implements IPretService {
      * {@inheritDoc}
      */
     @Override
-    public List<PretDTO> findByDatePret(Session session,
+    public List<PretDTO> findPretByDatePret(Session session,
         Timestamp datePret,
         String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidCriterionException,
@@ -257,7 +257,7 @@ public class PretService extends Service implements IPretService {
      * {@inheritDoc}
      */
     @Override
-    public List<PretDTO> findByDateRetour(Session session,
+    public List<PretDTO> findPretByDateRetour(Session session,
         Timestamp dateRetour,
         String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidCriterionException,
@@ -282,7 +282,7 @@ public class PretService extends Service implements IPretService {
      * {@inheritDoc}
      */
     @Override
-    public void renouveler(Session session,
+    public void renouvelerPret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         InvalidPrimaryKeyException,
@@ -369,7 +369,7 @@ public class PretService extends Service implements IPretService {
             // Si la classe du prêt n'est pas celle que prend en charge le DAO
 
             unPretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
-            update(session,
+            updatePret(session,
                 unPretDTO);
 
         } catch(DAOException daoException) {
@@ -382,7 +382,7 @@ public class PretService extends Service implements IPretService {
      * {@inheritDoc}
      */
     @Override
-    public void commencer(Session session,
+    public void commencerPret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         InvalidPrimaryKeyException,
@@ -496,7 +496,7 @@ public class PretService extends Service implements IPretService {
      * {@inheritDoc}
      */
     @Override
-    public void terminer(Session session,
+    public void terminerPret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         InvalidPrimaryKeyException,
@@ -575,7 +575,7 @@ public class PretService extends Service implements IPretService {
             getMembreDAO().update(session,
                 unPretDTO.getMembreDTO());
             unPretDTO.setDateRetour(new Timestamp(System.currentTimeMillis()));
-            update(session,
+            updatePret(session,
                 unPretDTO);
 
         } catch(DAOException daoException) {

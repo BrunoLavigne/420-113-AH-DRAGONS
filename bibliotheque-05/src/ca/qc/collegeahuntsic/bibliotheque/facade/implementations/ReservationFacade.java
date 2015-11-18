@@ -4,7 +4,6 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.facade.implementations;
 
-import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidHibernateSessionException;
@@ -22,24 +21,27 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.service.MissingLoanException
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
 import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.IReservationFacade;
 import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IReservationService;
+import org.hibernate.Session;
 
 /**
- * Classe de base pour toutes les façades.
+ * Facade pour interagir avec le service de reservation.
  *
  * @author Dragons Vicieux
  */
 public class ReservationFacade extends Facade implements IReservationFacade {
-    /**
-     * TODO Auto-generated field javadoc
-     */
-    private static final long serialVersionUID = 1L;
 
     private IReservationService reservationService;
 
-    public ReservationFacade(IReservationService reservationService) throws InvalidServiceException { // TODO: Change to package when switching to Spring
+    /**
+     * Crée la façade de la table <code>reservation</code>.
+     *
+     * @param reservationService Le service de la table <code>reservation</code>
+     * @throws InvalidServiceException Si le service de reservation est <code>null</code>
+     */
+    ReservationFacade(IReservationService reservationService) throws InvalidServiceException { // TODO: Change to package when switching to Spring
         super();
         if(reservationService == null) {
-            throw new InvalidServiceException("Le service de réservations ne peut être null");
+            throw new InvalidServiceException("Le service de reservation ne peut être null");
         }
         setReservationService(reservationService);
     }
@@ -69,25 +71,41 @@ public class ReservationFacade extends Facade implements IReservationFacade {
      * {@inheritDoc}
      */
     @Override
-    public void placer(Connexion connexion,
+    public ReservationDTO getReservation(Session session,
+        String idReservation) throws InvalidHibernateSessionException,
+        InvalidPrimaryKeyException,
+        FacadeException {
+        try {
+            return getReservationService().getReservation(session,
+                idReservation);
+        } catch(ServiceException serviceException) {
+            throw new FacadeException(serviceException);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void placerReservation(Session session,
         ReservationDTO reservationDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
-        InvalidPrimaryKeyException,
-        MissingDTOException,
-        InvalidCriterionException,
-        InvalidSortByPropertyException,
         MissingLoanException,
         ExistingLoanException,
         ExistingReservationException,
-        InvalidDTOClassException,
-        InvalidPrimaryKeyException,
         FacadeException {
         try {
-            getReservationService().placer(connexion,
+            getReservationService().placerReservation(session,
                 reservationDTO);
-        } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException.getMessage(),
-                serviceException);
+        } catch(
+            ServiceException
+            | InvalidPrimaryKeyException
+            | MissingDTOException
+            | InvalidCriterionException
+            | InvalidSortByPropertyException
+            | InvalidDTOClassException serviceException) {
+            // TODO confirmer pourquoi il faut thrower toute ces exceptions ici
+            throw new FacadeException(serviceException);
         }
     }
 
@@ -95,25 +113,25 @@ public class ReservationFacade extends Facade implements IReservationFacade {
      * {@inheritDoc}
      */
     @Override
-    public void utiliser(Connexion connexion,
+    public void utiliserReservation(Session session,
         ReservationDTO reservationDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
-        InvalidPrimaryKeyException,
-        MissingDTOException,
-        InvalidCriterionException,
-        InvalidSortByPropertyException,
         ExistingReservationException,
         ExistingLoanException,
         InvalidLoanLimitException,
-        InvalidDTOClassException,
-        InvalidPrimaryKeyException,
         FacadeException {
         try {
-            getReservationService().utiliser(connexion,
+            getReservationService().utiliserReservation(session,
                 reservationDTO);
-        } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException.getMessage(),
-                serviceException);
+        } catch(
+            ServiceException
+            | InvalidPrimaryKeyException
+            | MissingDTOException
+            | InvalidCriterionException
+            | InvalidSortByPropertyException
+            | InvalidDTOClassException serviceException) {
+            // TODO confirmer pourquoi il faut thrower toute ces exceptions ici
+            throw new FacadeException(serviceException);
         }
     }
 
@@ -121,19 +139,20 @@ public class ReservationFacade extends Facade implements IReservationFacade {
      * {@inheritDoc}
      */
     @Override
-    public void annuler(Connexion connexion,
+    public void annulerReservation(Session session,
         ReservationDTO reservationDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
-        InvalidPrimaryKeyException,
-        MissingDTOException,
-        InvalidDTOClassException,
         FacadeException {
         try {
-            getReservationService().annuler(connexion,
+            getReservationService().annulerReservation(session,
                 reservationDTO);
-        } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException.getMessage(),
-                serviceException);
+        } catch(
+            ServiceException
+            | InvalidPrimaryKeyException
+            | MissingDTOException
+            | InvalidDTOClassException serviceException) {
+            // TODO confirmer pourquoi il faut thrower toute ces exceptions ici
+            throw new FacadeException(serviceException);
         }
     }
 

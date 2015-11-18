@@ -4,7 +4,7 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.facade.implementations;
 
-import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
+import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidHibernateSessionException;
@@ -20,15 +20,14 @@ import ca.qc.collegeahuntsic.bibliotheque.exception.service.ExistingReservationE
 import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
 import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.IMembreFacade;
 import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IMembreService;
+import org.hibernate.Session;
 
 /**
- * Classe de base pour toutes les façades.
+ * Facade pour interagir avec le service de membre.
  *
  * @author Dragons Vicieux
  */
 public class MembreFacade extends Facade implements IMembreFacade {
-
-    private static final long serialVersionUID = 1L;
 
     private IMembreService membreService;
 
@@ -64,45 +63,92 @@ public class MembreFacade extends Facade implements IMembreFacade {
         this.membreService = membreService;
     }
 
-    /*
+    /**
      * {@inheritDoc}
      */
     @Override
-    public void inscrire(Connexion connexion,
-        MembreDTO membreDTO) throws InvalidHibernateSessionException,
-        InvalidDTOException,
-        InvalidDTOClassException,
+    public MembreDTO getMembre(Session session,
+        String idMembre) throws InvalidHibernateSessionException,
+        InvalidPrimaryKeyException,
         FacadeException {
         try {
-            getMembreService().inscrire(connexion,
-                membreDTO);
+            return getMembreService().getMembre(session,
+                idMembre);
         } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException.getMessage(),
-                serviceException);
+            throw new FacadeException(serviceException);
         }
     }
 
-    /*
+    /**
      * {@inheritDoc}
      */
     @Override
-    public void desinscrire(Connexion connexion,
+    public void updateMembre(Session session,
         MembreDTO membreDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
-        InvalidDTOClassException,
-        InvalidPrimaryKeyException,
-        MissingDTOException,
-        ExistingLoanException,
-        InvalidCriterionException,
+        FacadeException {
+        try {
+            getMembreService().updateMembre(session,
+                membreDTO);
+        } catch(ServiceException serviceException) {
+            throw new FacadeException(serviceException);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<MembreDTO> getAllMembres(Session session,
+        String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidSortByPropertyException,
+        FacadeException {
+        try {
+            return getMembreService().getAllMembres(session,
+                sortByPropertyName);
+        } catch(ServiceException serviceException) {
+            throw new FacadeException(serviceException);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void inscrireMembre(Session session,
+        MembreDTO membreDTO) throws InvalidHibernateSessionException,
+        InvalidDTOException,
+        FacadeException {
+        try {
+            getMembreService().inscrireMembre(session,
+                membreDTO);
+        } catch(ServiceException serviceException) {
+            throw new FacadeException(serviceException);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void desinscrireMembre(Session session,
+        MembreDTO membreDTO) throws InvalidHibernateSessionException,
+        InvalidDTOException,
+        ExistingLoanException,
         ExistingReservationException,
         FacadeException {
         try {
-            getMembreService().desinscrire(connexion,
+            getMembreService().desinscrireMembre(session,
                 membreDTO);
-        } catch(ServiceException serviceException) {
-            throw new FacadeException(serviceException.getMessage(),
-                serviceException);
+        } catch(
+            ServiceException
+            | InvalidDTOClassException
+            | InvalidPrimaryKeyException
+            | MissingDTOException
+            | InvalidCriterionException
+            | InvalidSortByPropertyException serviceException) {
+            // TODO confirmer pourquoi il faut thrower toute ces exceptions ici
+            throw new FacadeException(serviceException);
         }
     }
 
