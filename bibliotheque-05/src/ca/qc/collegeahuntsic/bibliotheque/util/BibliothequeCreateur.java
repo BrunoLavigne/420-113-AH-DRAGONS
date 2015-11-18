@@ -4,39 +4,18 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.util;
 
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.LivreDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.MembreDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.PretDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.implementations.ReservationDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.ILivreDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IMembreDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IPretDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IReservationDAO;
-import ca.qc.collegeahuntsic.bibliotheque.db.Connexion;
-import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.db.ConnexionException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.service.ServiceException;
-import ca.qc.collegeahuntsic.bibliotheque.facade.implementations.LivreFacade;
-import ca.qc.collegeahuntsic.bibliotheque.facade.implementations.MembreFacade;
-import ca.qc.collegeahuntsic.bibliotheque.facade.implementations.PretFacade;
-import ca.qc.collegeahuntsic.bibliotheque.facade.implementations.ReservationFacade;
 import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.ILivreFacade;
 import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.IMembreFacade;
 import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.IPretFacade;
 import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.IReservationFacade;
-import ca.qc.collegeahuntsic.bibliotheque.service.implementations.LivreService;
-import ca.qc.collegeahuntsic.bibliotheque.service.implementations.MembreService;
-import ca.qc.collegeahuntsic.bibliotheque.service.implementations.PretService;
-import ca.qc.collegeahuntsic.bibliotheque.service.implementations.ReservationService;
-import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.ILivreService;
-import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IMembreService;
-import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IPretService;
-import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IReservationService;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -46,29 +25,25 @@ import ca.qc.collegeahuntsic.bibliotheque.service.interfaces.IReservationService
  */
 public class BibliothequeCreateur {
 
-    private Connexion connexion;
+    private static final String SPRING_CONFIGURATION_FILE_NAME = "applicationContext-MySQL.xml";
 
-    // DAO
+    private static final String SESSION_FACTORY_NAME = "sessionFactory";
 
-    private ILivreDAO livreDAO;
+    private static final String LIVRE_FACADE_NAME = "livreFacade";
 
-    private IMembreDAO membreDAO;
+    private static final String MEMBRE_FACADE_NAME = "membreFacade";
 
-    private IPretDAO pretDAO;
+    private static final String RESERVATION_FACADE_NAME = "reservationFacade";
 
-    private IReservationDAO reservationDAO;
+    private static final String PRET_FACADE_NAME = "pretFacade";
 
-    // Services
+    private static final ApplicationContext APPLICATION_CONTEXT = new ClassPathXmlApplicationContext(BibliothequeCreateur.SPRING_CONFIGURATION_FILE_NAME);
 
-    private ILivreService livreService;
+    private SessionFactory sessionFactory;
 
-    private IMembreService membreService;
+    private Session session;
 
-    private IPretService pretService;
-
-    private IReservationService reservationService;
-
-    // Facades
+    private Transaction transaction;
 
     private ILivreFacade livreFacade;
 
@@ -79,296 +54,151 @@ public class BibliothequeCreateur {
     private IReservationFacade reservationFacade;
 
     /**
-     * Crée les services nécessaires à l'application bibliothèque.
      *
-     * @param typeServeur - Type de serveur SQL de la BD
-     * @param schema - Nom du schéma de la base de données
-     * @param nomUtilisateur - Nom d'utilisateur sur le serveur SQL
-     * @param motPasse - Mot de passe sur le serveur SQL
-     * @throws BibliothequeException - S'il y a une erreur avec la base de données
+     * Crée le système transactionnel necessaire a l'application bibliotheque
      *
+     * @throws BibliothequeException S'il y a une erreur avec la base de donnée
      */
-    public BibliothequeCreateur(String typeServeur,
-        String schema,
-        String nomUtilisateur,
-        String motPasse) throws BibliothequeException {
-        // allocation des objets pour le traitement des transaction
-
-        try(
-
-            // Création des la connexion
-            Connexion connection = new Connexion(typeServeur,
-                schema,
-                nomUtilisateur,
-                motPasse)) {
-
-            // Setter de la connexion
-            setConnexion(connection);
-
-            // Création des DAO
-            ILivreDAO unLivreDAO = new LivreDAO(LivreDTO.class);
-            IMembreDAO unMembreDAO = new MembreDAO(MembreDTO.class);
-            IPretDAO unPretDAO = new PretDAO(PretDTO.class);
-            IReservationDAO uneReservationDAO = new ReservationDAO(ReservationDTO.class);
-
-            // Setter pour les DAO
-            setLivreDAO(unLivreDAO);
-            setMembreDAO(unMembreDAO);
-            setPretDAO(unPretDAO);
-            setReservationDAO(uneReservationDAO);
-
-            // Création des services
-            ILivreService unLivreService = new LivreService(getLivreDAO(),
-                getMembreDAO(),
-                getPretDAO(),
-                getReservationDAO());
-
-            IMembreService unMembreService = new MembreService(getMembreDAO(),
-                getReservationDAO());
-
-            IPretService unPretService = new PretService(getPretDAO(),
-                getMembreDAO(),
-                getLivreDAO(),
-                getReservationDAO());
-
-            IReservationService uneReservationService = new ReservationService(getLivreDAO(),
-                getMembreDAO(),
-                getReservationDAO(),
-                getPretDAO());
-
-            // Setter pour les services
-            setLivreService(unLivreService);
-            setMembreService(unMembreService);
-            setPretService(unPretService);
-            setReservationService(uneReservationService);
-
-            // Création des facades
-            ILivreFacade unLivreFacade = new LivreFacade(getLivreService());
-            IMembreFacade unMembreFacade = new MembreFacade(getMembreService());
-            IPretFacade unPretFacade = new PretFacade(getPretService());
-            IReservationFacade uneReservationFacade = new ReservationFacade(getReservationService());
-
-            // Setter des facades
-            setLivreFacade(unLivreFacade);
-            setMembreFacade(unMembreFacade);
-            setPretFacade(unPretFacade);
-            setReservationFacade(uneReservationFacade);
-
-        } catch(ServiceException serviceException) {
-            throw new BibliothequeException(serviceException);
-
-        } catch(ConnexionException connexionException) {
-            throw new BibliothequeException(connexionException);
-
-        } catch(DAOException daoException) {
-            throw new BibliothequeException(daoException);
-        } catch(Exception exception) {
-            throw new BibliothequeException(exception);
-        }
-
-    }
-
-    /**
-     *
-     * Effectue un commit sur la connexion.
-     *
-     * @throws BibliothequeException S'il y a une erreur avec la base de données
-     */
-    public void commit() throws BibliothequeException {
+    public BibliothequeCreateur() throws BibliothequeException {
+        super();
         try {
-            getConnexion().commit();
-        } catch(ConnexionException connexionException) {
-            throw new BibliothequeException(connexionException);
+            setSessionFactory((SessionFactory) BibliothequeCreateur.APPLICATION_CONTEXT.getBean(BibliothequeCreateur.SESSION_FACTORY_NAME));
+            setMembreFacade((IMembreFacade) BibliothequeCreateur.APPLICATION_CONTEXT.getBean(BibliothequeCreateur.MEMBRE_FACADE_NAME));
+            setLivreFacade((ILivreFacade) BibliothequeCreateur.APPLICATION_CONTEXT.getBean(BibliothequeCreateur.LIVRE_FACADE_NAME));
+            setPretFacade((IPretFacade) BibliothequeCreateur.APPLICATION_CONTEXT.getBean(BibliothequeCreateur.PRET_FACADE_NAME));
+            setReservationFacade((IReservationFacade) BibliothequeCreateur.APPLICATION_CONTEXT.getBean(BibliothequeCreateur.RESERVATION_FACADE_NAME));
+
+        } catch(BeansException beansException) {
+            throw new BibliothequeException(beansException);
         }
     }
 
     /**
      *
-     * Effectue un rollback sur la connexion.
+     * Ouvre une session
      *
-     * @throws BibliothequeException S'il y a une erreur avec la base de données
+     * @return La session Hibernate
+     * @throws BibliothequeException S'il y a une erreur
      */
-    public void rollback() throws BibliothequeException {
+    private Session openSession() throws BibliothequeException {
         try {
-            getConnexion().rollback();
-        } catch(ConnexionException connexionException) {
-            throw new BibliothequeException(connexionException);
+            setSession(getSessionFactory().openSession());
+        } catch(HibernateException hibernateException) {
+            throw new BibliothequeException(hibernateException);
         }
+        return getSession();
     }
 
     /**
-     * Ferme la connexion
      *
-     * @throws BibliothequeException S'il y a une erreur avec la base de données
+     * Ferme une session
+     *
+     * @throws BibliothequeException S'il y a une erreur
      */
-    public void close() throws BibliothequeException {
+    private void closeSession() throws BibliothequeException {
         try {
-            getConnexion().fermer();
-        } catch(ConnexionException connexionException) {
-            throw new BibliothequeException(connexionException);
+            getSession().close();
+        } catch(HibernateException hibernateException) {
+            throw new BibliothequeException(hibernateException);
         }
     }
 
     /**
-     * Getter de la variable d'instance <code>this.connexion</code>.
      *
-     * @return La variable d'instance <code>this.connexion</code>
+     * Démarre une transaction
+     *
+     * @throws BibliothequeException S'il y a une erreur
      */
-    public Connexion getConnexion() {
-        return this.connexion;
+    public void beginTransaction() throws BibliothequeException {
+        try {
+            setTransaction(openSession().beginTransaction());
+        } catch(HibernateException hibernateException) {
+            throw new BibliothequeException(hibernateException);
+        }
     }
 
     /**
-     * Setter de la variable d'instance <code>this.connexion</code>.
      *
-     * @param connexion La valeur à utiliser pour la variable d'instance <code>this.connexion</code>
+     * Commit une transaction
+     *
+     * @throws BibliothequeException S'il y a une erreur
      */
-    private void setConnexion(Connexion connexion) {
-        this.connexion = connexion;
+    public void commitTransaction() throws BibliothequeException {
+        try {
+            getTransaction().commit();
+            closeSession();
+        } catch(HibernateException hibernateException) {
+            throw new BibliothequeException(hibernateException);
+        }
     }
 
     /**
-     * Getter de la variable d'instance <code>this.livreDAO</code>.
      *
-     * @return La variable d'instance <code>this.livreDAO</code>
+     * Rollback une transaction
+     *
+     * @throws BibliothequeException S'il y a une erreur
      */
-    private ILivreDAO getLivreDAO() {
-        return this.livreDAO;
+    public void rollbackTransaction() throws BibliothequeException {
+        try {
+            getTransaction().rollback();
+            closeSession();
+        } catch(HibernateException hibernateException) {
+            throw new BibliothequeException(hibernateException);
+        }
     }
 
     /**
-     * Setter de la variable d'instance <code>this.livreDAO</code>.
+     * Getter de la variable d'instance <code>this.sessionFactory</code>.
      *
-     * @param livreDAO La valeur à utiliser pour la variable d'instance <code>this.livreDAO</code>
+     * @return La variable d'instance <code>this.sessionFactory</code>
      */
-    private void setLivreDAO(ILivreDAO livreDAO) {
-        this.livreDAO = livreDAO;
+    private SessionFactory getSessionFactory() {
+        return this.sessionFactory;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.membreDAO</code>.
+     * Setter de la variable d'instance <code>this.sessionFactory</code>.
      *
-     * @return La variable d'instance <code>this.membreDAO</code>
+     * @param sessionFactory La valeur à utiliser pour la variable d'instance <code>this.sessionFactory</code>
      */
-    private IMembreDAO getMembreDAO() {
-        return this.membreDAO;
+    private void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.membreDAO</code>.
+     * Getter de la variable d'instance <code>this.session</code>.
      *
-     * @param membreDAO La valeur à utiliser pour la variable d'instance <code>this.membreDAO</code>
+     * @return La variable d'instance <code>this.session</code>
      */
-    private void setMembreDAO(IMembreDAO membreDAO) {
-        this.membreDAO = membreDAO;
+    public Session getSession() {
+        return this.session;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.pretDAO</code>.
+     * Setter de la variable d'instance <code>this.session</code>.
      *
-     * @return La variable d'instance <code>this.pretDAO</code>
+     * @param session La valeur à utiliser pour la variable d'instance <code>this.session</code>
      */
-    private IPretDAO getPretDAO() {
-        return this.pretDAO;
+    private void setSession(Session session) {
+        this.session = session;
     }
 
     /**
-     * Setter de la variable d'instance <code>this.pretDAO</code>.
+     * Getter de la variable d'instance <code>this.transaction</code>.
      *
-     * @param pretDAO La valeur à utiliser pour la variable d'instance <code>this.pretDAO</code>
+     * @return La variable d'instance <code>this.transaction</code>
      */
-    private void setPretDAO(IPretDAO pretDAO) {
-        this.pretDAO = pretDAO;
+    private Transaction getTransaction() {
+        return this.transaction;
     }
 
     /**
-     * Getter de la variable d'instance <code>this.reservationDAO</code>.
+     * Setter de la variable d'instance <code>this.transaction</code>.
      *
-     * @return La variable d'instance <code>this.reservationDAO</code>
+     * @param transaction La valeur à utiliser pour la variable d'instance <code>this.transaction</code>
      */
-    private IReservationDAO getReservationDAO() {
-        return this.reservationDAO;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.reservationDAO</code>.
-     *
-     * @param reservationDAO La valeur à utiliser pour la variable d'instance <code>this.reservationDAO</code>
-     */
-    private void setReservationDAO(IReservationDAO reservationDAO) {
-        this.reservationDAO = reservationDAO;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.livreService</code>.
-     *
-     * @return La variable d'instance <code>this.livreService</code>
-     */
-    private ILivreService getLivreService() {
-        return this.livreService;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.livreService</code>.
-     *
-     * @param livreService La valeur à utiliser pour la variable d'instance <code>this.livreService</code>
-     */
-    private void setLivreService(ILivreService livreService) {
-        this.livreService = livreService;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.membreService</code>.
-     *
-     * @return La variable d'instance <code>this.membreService</code>
-     */
-    private IMembreService getMembreService() {
-        return this.membreService;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.membreService</code>.
-     *
-     * @param membreService La valeur à utiliser pour la variable d'instance <code>this.membreService</code>
-     */
-    private void setMembreService(IMembreService membreService) {
-        this.membreService = membreService;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.pretService</code>.
-     *
-     * @return La variable d'instance <code>this.pretService</code>
-     */
-    private IPretService getPretService() {
-        return this.pretService;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.pretService</code>.
-     *
-     * @param pretService La valeur à utiliser pour la variable d'instance <code>this.pretService</code>
-     */
-    private void setPretService(IPretService pretService) {
-        this.pretService = pretService;
-    }
-
-    /**
-     * Getter de la variable d'instance <code>this.reservationService</code>.
-     *
-     * @return La variable d'instance <code>this.reservationService</code>
-     */
-    private IReservationService getReservationService() {
-        return this.reservationService;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.reservationService</code>.
-     *
-     * @param reservationService La valeur à utiliser pour la variable d'instance <code>this.reservationService</code>
-     */
-    private void setReservationService(IReservationService reservationService) {
-        this.reservationService = reservationService;
+    private void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 
     /**
