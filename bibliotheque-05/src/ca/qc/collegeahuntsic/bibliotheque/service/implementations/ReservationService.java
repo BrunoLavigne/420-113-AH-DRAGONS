@@ -182,6 +182,8 @@ public class ReservationService extends Service implements IReservationService {
         InvalidCriterionException,
         InvalidSortByPropertyException,
         ServiceException {
+
+        //List<ReservationDTO> listeDesReservations = Collections.EMPTY_LIST;
         try {
             return getReservationDAO().findByMembre(session,
                 idMembre,

@@ -29,7 +29,7 @@
                    </column>
          </property>
          <property name="telephone"
-                   type="long"
+                   type="long">
                    <column name="TELEPHONE">
                    </column>
          </property>
@@ -48,7 +48,7 @@
               order-by="DATEPRET ASC"
               cascade="all">
               <key>
-                <column name="IDLIVRE">
+                <column name="IDMEMBRE">
                 </column>
               </key>
               <one-to-many class="ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO"/>
@@ -57,7 +57,7 @@
               order-by="DATERESERVATION ASC"
               cascade="all">
               <key>
-                <column name="IDLIVRE">
+                <column name="IDMEMBRE">
                 </column>
               </key>
               <one-to-many class="ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO"/>

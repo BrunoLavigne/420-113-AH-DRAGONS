@@ -172,6 +172,8 @@ public class Bibliotheque {
             } else if("acquerir".startsWith(command)) {
                 // TRANSACTION ACQUERIR ( <titre> <auteur> )
 
+                Bibliotheque.bibliothequeCreateur.beginTransaction();
+
                 LivreDTO livreDTO = new LivreDTO();
                 livreDTO.setTitre(readString(tokenizer));
                 livreDTO.setAuteur(readString(tokenizer));
@@ -179,8 +181,11 @@ public class Bibliotheque {
                 Bibliotheque.bibliothequeCreateur.getLivreFacade().acquerirLivre(Bibliotheque.bibliothequeCreateur.getSession(),
                     livreDTO);
 
+                Bibliotheque.bibliothequeCreateur.commitTransaction();
+
             } else if("vendre".startsWith(command)) {
                 // TRANSACTION VENDRE ( <idLivre> )
+                Bibliotheque.bibliothequeCreateur.beginTransaction();
                 String idLivre = readString(tokenizer);
                 LivreDTO livreDTO = Bibliotheque.bibliothequeCreateur.getLivreFacade().getLivre(Bibliotheque.bibliothequeCreateur.getSession(),
                     idLivre);
@@ -192,10 +197,14 @@ public class Bibliotheque {
                 Bibliotheque.bibliothequeCreateur.getLivreFacade().vendreLivre(Bibliotheque.bibliothequeCreateur.getSession(),
                     livreDTO);
 
+                Bibliotheque.bibliothequeCreateur.commitTransaction();
+
             } else if("preter".startsWith(command)) {
 
                 // TRANSACTION PRETER ( <idLivre> <idMembre> )
                 // récupération du livre
+
+                Bibliotheque.bibliothequeCreateur.beginTransaction();
                 String idLivre = readString(tokenizer);
                 LivreDTO livreDTO = Bibliotheque.bibliothequeCreateur.getLivreFacade().getLivre(Bibliotheque.bibliothequeCreateur.getSession(),
                     idLivre);
@@ -220,6 +229,8 @@ public class Bibliotheque {
                 pretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
                 Bibliotheque.bibliothequeCreateur.getPretFacade().commencerPret(Bibliotheque.bibliothequeCreateur.getSession(),
                     pretDTO);
+
+                Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("renouveler".startsWith(command)) {
 
