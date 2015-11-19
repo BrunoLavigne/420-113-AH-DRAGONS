@@ -484,6 +484,12 @@ public class PretService extends Service implements IPretService {
                 throw new InvalidDTOClassException("Le pret  ne peut être null.");
             }
 
+            List<PretDTO> listeDesPrets = new ArrayList<>(pretDTO.getLivreDTO().getPrets());
+
+            if(listeDesPrets.isEmpty()) {
+                throw new ServiceException("Le livre n'a pas encore été prêté.");
+            }
+
             /*
             PretDTO unPretDTO = (PretDTO) getPretDAO().get(session,
                 pretDTO.getIdPret());

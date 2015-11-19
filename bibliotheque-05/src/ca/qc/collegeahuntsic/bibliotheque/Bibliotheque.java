@@ -100,28 +100,11 @@ public class Bibliotheque {
                     transaction = lireTransaction(reader);
                 } catch(BibliothequeException bibliothequeException) {
                     Bibliotheque.LOGGER.error(bibliothequeException.getMessage());
-                    //System.err.println(bibliothequeException.getMessage());
-                    //bibliothequeException.printStackTrace();
-                    /*
-                    try {
-                        Thread.sleep(300); //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-                     */
                     transaction = lireTransaction(reader);
                     continue;
                 }
             }
-            /*
-             * TODO Big time, changer le tokenizer pour un split va prendre du temps;
-             * il faut modifier aussi la methodeexecuterTransaction...
-             *
-            String[] parts = transaction.split(" ");
-            for (int i=0; i<parts.length; i++){
-                executerTransaction(parts[i]);
-            }
-             */
+
         }
     }
 
@@ -219,14 +202,14 @@ public class Bibliotheque {
                     idMembre);
                 if(membreDTO == null) {
                     throw new MissingDTOException("Le membre "
-                        + idLivre
+                        + idMembre
                         + " n'existe pas");
                 }
                 // création du nouveau prêt
                 PretDTO pretDTO = new PretDTO();
                 pretDTO.setLivreDTO(livreDTO);
                 pretDTO.setMembreDTO(membreDTO);
-                pretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
+
                 Bibliotheque.bibliothequeCreateur.getPretFacade().commencerPret(Bibliotheque.bibliothequeCreateur.getSession(),
                     pretDTO);
 
@@ -255,6 +238,8 @@ public class Bibliotheque {
             } else if("retourner".startsWith(command)) {
 
                 // TRANSACTION RETOURNER ( <idPret> )
+
+                // TODO Est-ce que retourner 3 signifie retourner le livre 3 ou le pret 3 ?
 
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
 
@@ -314,11 +299,25 @@ public class Bibliotheque {
 
                 ReservationDTO reservationDTO = new ReservationDTO();
 
-                MembreDTO membreDTO = new MembreDTO();
-                membreDTO.setIdMembre(readString(tokenizer));
+                String idMembre = readString(tokenizer);
+                MembreDTO membreDTO = Bibliotheque.bibliothequeCreateur.getMembreFacade().getMembre(Bibliotheque.bibliothequeCreateur.getSession(),
+                    idMembre);
 
-                LivreDTO livreDTO = new LivreDTO();
-                livreDTO.setIdLivre(readString(tokenizer));
+                if(membreDTO == null) {
+                    throw new MissingDTOException("Le membre "
+                        + idMembre
+                        + " n'existe pas");
+                }
+
+                String idLivre = readString(tokenizer);
+                LivreDTO livreDTO = Bibliotheque.bibliothequeCreateur.getLivreFacade().getLivre(Bibliotheque.bibliothequeCreateur.getSession(),
+                    idLivre);
+
+                if(livreDTO == null) {
+                    throw new MissingDTOException("Le livre "
+                        + idLivre
+                        + " n'existe pas");
+                }
 
                 reservationDTO.setLivreDTO(livreDTO);
                 reservationDTO.setMembreDTO(membreDTO);
@@ -367,42 +366,9 @@ public class Bibliotheque {
 
                 Bibliotheque.bibliothequeCreateur.commitTransaction();
 
-            } else if("listerLivresTitre".startsWith(command)) {
-
-                /*
-                 * getGestionBiblio().getLivreDAO().findByTitre(getGestionBiblio().getConnexion(),
-                 * readString(tokenizer),
-                 * LivreDTO.TITRE_COLUMN_NAME);
-                 */
-
             }
-            /*
-             * else if("listerPretsEnRetard".startsWith(command)) {
-
-                GregorianCalendar calendrier = new GregorianCalendar();
-                calendrier.add(Calendar.WEEK_OF_MONTH,
-                    10); // on prétend que la date actuelle est en avance de 5 semaines
-
-                Date dateJour = calendrier.getTime(); // prendre date (avancée) du jour
-                List<LivreDTO> listeRetards = getGestionBiblio().getLivreService().findPretsEnRetard(dateJour);
-
-                if(listeRetards.isEmpty()) {
-                    System.out.println("Aucun prêt n'est en retard!");
-                } else {
-
-                    for(LivreDTO livre : listeRetards) {
-                        System.out.println("> Id: "
-                            + livre.getIdLivre()
-                            + "\n\tTitre: "
-                            + livre.getTitre());
-                    }
-                }
-
-            }
-             * */
 
             else if("--".startsWith(command)) {
-
                 // TODO empty block
             }// ne rien faire; c'est un commentaire
 
@@ -417,9 +383,6 @@ public class Bibliotheque {
             Bibliotheque.LOGGER.error(" **** "
                 + exception.getMessage());
             Bibliotheque.bibliothequeCreateur.rollbackTransaction();
-            Bibliotheque.LOGGER.error(exception.getMessage());
-            //throw new BibliothequeException(exception.getMessage(),
-            //  exception);
         }
     }
 

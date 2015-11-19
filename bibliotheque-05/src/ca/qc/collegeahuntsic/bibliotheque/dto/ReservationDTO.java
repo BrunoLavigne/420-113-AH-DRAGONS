@@ -37,7 +37,6 @@ public class ReservationDTO extends DTO {
 
     public ReservationDTO() {
         super();
-
     }
 
     // Region Getters and Setters
