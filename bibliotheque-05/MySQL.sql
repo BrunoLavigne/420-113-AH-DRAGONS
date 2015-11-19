@@ -23,10 +23,10 @@ CREATE TABLE livre (
 
 CREATE TABLE pret (
 	idPret 			INTEGER(3) 		AUTO_INCREMENT 			CHECK (idPret > 0),
-	idMembre 		INTEGER(3)  	NOT NULL 				CHECK (idMembre > 0),
-	idLivre 		INTEGER(3) 		NOT NULL 				CHECK (idLivre > 0),
+	idMembre 		INTEGER(3)  							CHECK (idMembre > 0),
+	idLivre 		INTEGER(3) 								CHECK (idLivre > 0),
 	datePret 		TIMESTAMP,
-	dateRetour 		TIMESTAMP 			NULL,
+	dateRetour 		TIMESTAMP 		NULL,
 	CONSTRAINT 		clePrimairePret PRIMARY KEY (idPret),
 	CONSTRAINT 		refPretMembre 	FOREIGN KEY (idMembre) 	REFERENCES membre (idMembre),
 	CONSTRAINT 		refPretLivre 	FOREIGN KEY (idLivre) 	REFERENCES livre (idLivre)
@@ -34,8 +34,8 @@ CREATE TABLE pret (
 
 CREATE TABLE reservation (
 	idReservation   INTEGER(3)		AUTO_INCREMENT 			CHECK (idReservation > 0),
-	idMembre        INTEGER(3)		NOT NULL 				CHECK (idMembre > 0),
-	idLivre         INTEGER(3)		NOT NULL 				CHECK (idLivre > 0),
+	idMembre        INTEGER(3)								CHECK (idMembre > 0),
+	idLivre         INTEGER(3)								CHECK (idLivre > 0),
 	dateReservation TIMESTAMP,
 	CONSTRAINT 		clePrimaireReservation					PRIMARY KEY (idReservation),
 	CONSTRAINT 		cleEtrangereReservation 				UNIQUE (idMembre,idLivre),
