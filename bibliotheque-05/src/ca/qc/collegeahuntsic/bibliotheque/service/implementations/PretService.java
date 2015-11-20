@@ -9,8 +9,6 @@ import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.ILivreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IMembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IPretDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IReservationDAO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
@@ -310,6 +308,8 @@ public class PretService extends Service implements IPretService {
                 throw new InvalidPrimaryKeyException("La clef ne peut être null.");
             }
 
+            //TODO
+            /*
             PretDTO unPretDTO = (PretDTO) getPretDAO().get(session,
                 pretDTO.getIdPret());
             unPretDTO.setLivreDTO((LivreDTO) getLivreDAO().get(session,
@@ -371,11 +371,33 @@ public class PretService extends Service implements IPretService {
             unPretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
             updatePret(session,
                 unPretDTO);
+            // TODO
+             */
 
-        } catch(DAOException daoException) {
+            // Si le livre n'est pas prêté
+            if(pretDTO.getLivreDTO().getPrets().isEmpty()) {
+                throw new ServiceException("Le livre n'a pas été prêté encore.");
+            }
+
+            // Si le livre est réservé
+            if(!pretDTO.getLivreDTO().getReservations().isEmpty()) {
+                throw new ServiceException("Le livre est déjà réservé");
+            }
+
+            pretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
+            updatePret(session,
+                pretDTO);
+            //TODO
+
+        } catch(Exception exception) {
+            throw new ServiceException(exception.getMessage(),
+                exception);
+        }
+        /*
+        catch(DAOException daoException) {
             throw new ServiceException(daoException.getMessage(),
                 daoException);
-        }
+        } */
     }
 
     /**

@@ -82,7 +82,11 @@ public class Bibliotheque {
         } catch(Exception exception) {
             throw new BibliothequeException(exception);
         } finally {
-            getGestionBiblio().getConnexion().close();
+            try {
+                getGestionBiblio().getConnexion().close();
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

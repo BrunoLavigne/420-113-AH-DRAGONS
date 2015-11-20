@@ -8,7 +8,6 @@ import java.util.List;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IMembreDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dao.interfaces.IReservationDAO;
 import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.DAOException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliotheque.exception.dao.InvalidCriterionValueException;
@@ -32,7 +31,7 @@ public class MembreService extends Service implements IMembreService {
 
     private IMembreDAO membreDAO;
 
-    private IReservationDAO reservationDAO;
+    // private IReservationDAO reservationDAO;
 
     /**
      * Crée le service de la table <code>membre</code>
@@ -51,7 +50,7 @@ public class MembreService extends Service implements IMembreService {
             throw new InvalidDAOException("Le DAO de reservation ne peut être null");
         }
         setMembreDAO(membreDAO);
-        setReservationDAO(reservationDAO);
+        // setReservationDAO(reservationDAO);
     }
 
     // Opérations CRUD
@@ -210,6 +209,8 @@ public class MembreService extends Service implements IMembreService {
 
         try {
 
+            // TODO
+            /*
             MembreDTO unMembreDTO = new MembreDTO();
             unMembreDTO = getMembre(session,
                 membreDTO.getIdMembre());
@@ -225,6 +226,7 @@ public class MembreService extends Service implements IMembreService {
             }
 
             // Si le membre a encore des réservations
+
             List<ReservationDTO> listeDesReservations = getReservationDAO().findByMembre(session,
                 unMembreDTO.getIdMembre(),
                 ReservationDTO.ID_MEMBRE_COLUMN_NAME);
@@ -237,10 +239,22 @@ public class MembreService extends Service implements IMembreService {
             deleteMembre(session,
                 unMembreDTO);
 
-        } catch(
-            DAOException
-            | InvalidCriterionValueException daoException) {
-            throw new ServiceException(daoException);
+             */
+            // TODO
+            if(!membreDTO.getPrets().isEmpty()) {
+                throw new ExistingLoanException("Le membre a encore des prêts");
+            }
+
+            if(!membreDTO.getReservations().isEmpty()) {
+                throw new ExistingReservationException("Le membre a encore des réservations");
+            }
+
+            deleteMembre(session,
+                membreDTO);
+            // TODO
+
+        } catch(Exception exception) {
+            throw new ServiceException(exception);
         }
     }
 
@@ -267,22 +281,14 @@ public class MembreService extends Service implements IMembreService {
     }
 
     /**
-     * Getter de la variable d'instance <code>this.reservationDAO</code>.
-     *
-     * @return La variable d'instance <code>this.reservationDAO</code>
-     */
-    private IReservationDAO getReservationDAO() {
-        return this.reservationDAO;
-    }
-
-    /**
      * Setter de la variable d'instance <code>this.reservationDAO</code>.
      *
      * @param reservationDAO
      *            La valeur à utiliser pour la variable d'instance
      *            <code>this.reservationDAO</code>
      */
+    /*
     private void setReservationDAO(IReservationDAO reservationDAO) {
         this.reservationDAO = reservationDAO;
-    }
+    } */
 }

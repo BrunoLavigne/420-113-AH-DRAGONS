@@ -312,8 +312,6 @@ public class ReservationService extends Service implements IReservationService {
 
             // Si le livre est déjà prété
             List<PretDTO> listeDesPret = new ArrayList<>(reservationDTO.getLivreDTO().getPrets());
-
-            // TODO confirm the listeDesPret.get(0).getDateRetour() == null
             if(!listeDesPret.isEmpty()
                 && listeDesPret.get(0).getDateRetour() == null) {
                 PretDTO pretDTO = listeDesPret.get(0);
@@ -332,7 +330,6 @@ public class ReservationService extends Service implements IReservationService {
 
             // Éliminer la réservation.
             reservationDTO.getMembreDTO().setNbPret(reservationDTO.getMembreDTO().getNbPret() + 1);
-
             getMembreDAO().update(session,
                 reservationDTO.getMembreDTO());
 
@@ -343,11 +340,9 @@ public class ReservationService extends Service implements IReservationService {
 
             getPretDAO().add(session,
                 unPretDTO);
-
+            reservationDTO.getLivreDTO().getReservations().remove(reservationDTO);
             annulerReservation(session,
                 reservationDTO);
-
-            // TODO fix this error : deleted object would be re-saved by cascade (remove deleted object from associations): [ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO#1]
 
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
@@ -372,7 +367,7 @@ public class ReservationService extends Service implements IReservationService {
         if(reservationDTO == null) {
             throw new InvalidDTOException("La réservation ne peut être null");
         }
-
+        // TODO: vérifier pour l'erreur deleted object would be re-saved by cascade ????
         deleteReservation(session,
             reservationDTO);
     }

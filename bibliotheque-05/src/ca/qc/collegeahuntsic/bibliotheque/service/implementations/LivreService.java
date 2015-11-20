@@ -202,6 +202,8 @@ public class LivreService extends Service implements ILivreService {
         if(livreDTO == null) {
             throw new InvalidDTOException("Le livre ne peut être null");
         }
+
+        // vérifie si le livre est prêté
         List<PretDTO> prets = new ArrayList<>(livreDTO.getPrets());
         if(!prets.isEmpty()) {
             for(PretDTO pretDTO : prets) {
@@ -218,6 +220,8 @@ public class LivreService extends Service implements ILivreService {
                 }
             }
         }
+
+        // vérifie si le livre est rservé
         List<ReservationDTO> reservations = new ArrayList<>(livreDTO.getReservations());
         if(!reservations.isEmpty()) {
             ReservationDTO reservationDTO = reservations.get(0);
