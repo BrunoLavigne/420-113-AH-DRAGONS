@@ -244,7 +244,7 @@ public class DAO implements IDAO {
                     (Date) value,
                     sortByPropertyName);
             } else {
-                Criteria criteria = session.createCriteria(getDtoClass());
+                final Criteria criteria = session.createCriteria(getDtoClass());
                 criteria.add(Restrictions.eq(propertyName,
                     value));
                 criteria.addOrder(Order.asc(sortByPropertyName));
@@ -294,7 +294,7 @@ public class DAO implements IDAO {
         }
         try {
             List<? extends DTO> results = Collections.EMPTY_LIST;
-            Criteria criteria = session.createCriteria(getDtoClass());
+            final Criteria criteria = session.createCriteria(getDtoClass());
             criteria.add(Restrictions.between(propertyName,
                 BibliothequeDate.getStartDate(date),
                 BibliothequeDate.getEndDate(date)));

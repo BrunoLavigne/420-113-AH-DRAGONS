@@ -232,7 +232,7 @@ public class ReservationService extends Service implements IReservationService {
         }
 
         // Si le livre n'a pas encore été prêté,
-        List<PretDTO> listeDesPrets = new ArrayList<>(reservationDTO.getLivreDTO().getPrets());
+        final List<PretDTO> listeDesPrets = new ArrayList<>(reservationDTO.getLivreDTO().getPrets());
 
         if(listeDesPrets.isEmpty()) {
             throw new MissingLoanException("Le livre : "
@@ -250,7 +250,7 @@ public class ReservationService extends Service implements IReservationService {
         }
 
         // si le membre a déjà réservé ce livre
-        List<ReservationDTO> listeReservation = new ArrayList<>(reservationDTO.getMembreDTO().getReservations());
+        final List<ReservationDTO> listeReservation = new ArrayList<>(reservationDTO.getMembreDTO().getReservations());
 
         for(ReservationDTO reservation : listeReservation) {
             if(reservationDTO.getLivreDTO().equals(reservation.getLivreDTO())) {
@@ -306,7 +306,7 @@ public class ReservationService extends Service implements IReservationService {
             }
 
             // Si le livre est déjà prété
-            List<PretDTO> listeDesPret = new ArrayList<>(reservationDTO.getLivreDTO().getPrets());
+            final List<PretDTO> listeDesPret = new ArrayList<>(reservationDTO.getLivreDTO().getPrets());
             for(PretDTO pretDTO : listeDesPret) {
                 if(pretDTO.getDateRetour() == null) {
                     throw new ExistingLoanException("Livre "

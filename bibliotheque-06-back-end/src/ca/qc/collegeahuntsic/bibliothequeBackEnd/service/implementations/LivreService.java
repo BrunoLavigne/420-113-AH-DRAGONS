@@ -222,7 +222,7 @@ public class LivreService extends Service implements ILivreService {
         }
 
         // vérifie si le livre est rservé
-        List<ReservationDTO> reservations = new ArrayList<>(livreDTO.getReservations());
+        final List<ReservationDTO> reservations = new ArrayList<>(livreDTO.getReservations());
         if(!reservations.isEmpty()) {
             final ReservationDTO reservationDTO = reservations.get(0);
             throw new ExistingReservationException("Le livre "

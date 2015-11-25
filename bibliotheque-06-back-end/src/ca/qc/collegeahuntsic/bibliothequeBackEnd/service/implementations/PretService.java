@@ -429,7 +429,7 @@ public class PretService extends Service implements IPretService {
             }
 
             // Si le livre a été prêté
-            List<PretDTO> listeDesPrets = new ArrayList<>(pretDTO.getLivreDTO().getPrets());
+            final List<PretDTO> listeDesPrets = new ArrayList<>(pretDTO.getLivreDTO().getPrets());
             for(PretDTO unPretDTO : listeDesPrets) {
                 if(unPretDTO.getDateRetour() == null) {
                     throw new ExistingLoanException("Le livre "
@@ -445,7 +445,7 @@ public class PretService extends Service implements IPretService {
             }
 
             // Si le livre a été réservé
-            List<ReservationDTO> listeDesReservations = new ArrayList<>(pretDTO.getLivreDTO().getReservations());
+            final List<ReservationDTO> listeDesReservations = new ArrayList<>(pretDTO.getLivreDTO().getReservations());
             if(!listeDesReservations.isEmpty()) {
                 throw new ExistingLoanException("Le livre "
                     + pretDTO.getLivreDTO().getTitre()
@@ -506,7 +506,7 @@ public class PretService extends Service implements IPretService {
                 throw new InvalidDTOClassException("Le pret  ne peut être null.");
             }
 
-            List<PretDTO> listeDesPrets = new ArrayList<>(pretDTO.getLivreDTO().getPrets());
+            final List<PretDTO> listeDesPrets = new ArrayList<>(pretDTO.getLivreDTO().getPrets());
 
             if(listeDesPrets.isEmpty()) {
                 throw new ServiceException("Le livre n'a pas encore été prêté.");

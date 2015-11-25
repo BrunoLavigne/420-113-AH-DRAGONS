@@ -35,6 +35,11 @@ public class ReservationDTO extends DTO {
 
     private Timestamp dateReservation;
 
+    /**
+     *
+     * TODO Auto-generated constructor javadoc
+     *
+     */
     public ReservationDTO() {
         super();
     }
@@ -124,7 +129,7 @@ public class ReservationDTO extends DTO {
                 && obj instanceof ReservationDTO;
             if(equals) {
                 final ReservationDTO reservationDTO = (ReservationDTO) obj;
-                EqualsBuilder equalsBuilder = new EqualsBuilder();
+                final EqualsBuilder equalsBuilder = new EqualsBuilder();
                 equalsBuilder.appendSuper(super.equals(reservationDTO));
                 equalsBuilder.append(getIdReservation(),
                     reservationDTO.getIdReservation());
@@ -139,7 +144,7 @@ public class ReservationDTO extends DTO {
      */
     @Override
     public int hashCode() {
-        HashCodeBuilder hashCodeBuilder = new HashCodeBuilder(25,
+        final HashCodeBuilder hashCodeBuilder = new HashCodeBuilder(25,
             15);
         hashCodeBuilder.appendSuper(super.hashCode());
         hashCodeBuilder.append(getIdReservation());

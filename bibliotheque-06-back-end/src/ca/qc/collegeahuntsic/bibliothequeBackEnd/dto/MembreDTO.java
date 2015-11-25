@@ -197,7 +197,7 @@ public class MembreDTO extends DTO {
      */
     @Override
     public int hashCode() {
-        HashCodeBuilder hashCodeBuilder = new HashCodeBuilder(461,
+        final HashCodeBuilder hashCodeBuilder = new HashCodeBuilder(461,
             451);
         hashCodeBuilder.appendSuper(super.hashCode());
         hashCodeBuilder.append(getIdMembre());

@@ -95,7 +95,7 @@ public class DTO implements Serializable {
      */
     @Override
     public int hashCode() {
-        HashCodeBuilder hashCodeBuilder = new HashCodeBuilder(15,
+        final HashCodeBuilder hashCodeBuilder = new HashCodeBuilder(15,
             5);
         return hashCodeBuilder.toHashCode();
     }
@@ -126,8 +126,8 @@ public class DTO implements Serializable {
             + Constants.OPENING_BRACE.toString();
         try {
             final BeanInfo beanInfo = Introspector.getBeanInfo(getClass());
-            PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-            List<PropertyDescriptor> properties = Arrays.asList(propertyDescriptors);
+            final PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+            final List<PropertyDescriptor> properties = Arrays.asList(propertyDescriptors);
             String propertyName = null;
             Method getter = null;
             for(PropertyDescriptor property : properties) {
@@ -148,7 +148,7 @@ public class DTO implements Serializable {
                             + Constants.SPACE.toString()
                             + getter.invoke(this,
                                 (Object[]) null)
-                            + Constants.COMMA.toString();
+                                + Constants.COMMA.toString();
                     } catch(NullPointerException nullPointerException) {
                         // Nothing to do.
                     } catch(IllegalAccessException illegalAccessException) {
