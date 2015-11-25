@@ -15,8 +15,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.Constants;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Classe de base pour tous les DTOs.
@@ -148,7 +148,7 @@ public class DTO implements Serializable {
                             + Constants.SPACE.toString()
                             + getter.invoke(this,
                                 (Object[]) null)
-                                + Constants.COMMA.toString();
+                            + Constants.COMMA.toString();
                     } catch(NullPointerException nullPointerException) {
                         // Nothing to do.
                     } catch(IllegalAccessException illegalAccessException) {
