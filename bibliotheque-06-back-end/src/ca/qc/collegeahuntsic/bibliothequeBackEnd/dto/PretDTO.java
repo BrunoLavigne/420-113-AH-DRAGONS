@@ -145,7 +145,7 @@ public class PretDTO extends DTO {
             equals = obj != null
                 && obj instanceof PretDTO;
             if(equals) {
-                PretDTO pretDTO = (PretDTO) obj;
+                final PretDTO pretDTO = (PretDTO) obj;
                 EqualsBuilder equalsBuilder = new EqualsBuilder();
                 equalsBuilder.appendSuper(super.equals(pretDTO));
                 equalsBuilder.append(getIdPret(),

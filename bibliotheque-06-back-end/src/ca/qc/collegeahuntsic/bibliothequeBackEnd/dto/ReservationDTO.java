@@ -123,7 +123,7 @@ public class ReservationDTO extends DTO {
             equals = obj != null
                 && obj instanceof ReservationDTO;
             if(equals) {
-                ReservationDTO reservationDTO = (ReservationDTO) obj;
+                final ReservationDTO reservationDTO = (ReservationDTO) obj;
                 EqualsBuilder equalsBuilder = new EqualsBuilder();
                 equalsBuilder.appendSuper(super.equals(reservationDTO));
                 equalsBuilder.append(getIdReservation(),

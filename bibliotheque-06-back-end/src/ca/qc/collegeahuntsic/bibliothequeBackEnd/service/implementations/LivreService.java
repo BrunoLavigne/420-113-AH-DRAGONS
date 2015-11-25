@@ -6,6 +6,7 @@ package ca.qc.collegeahuntsic.bibliothequeBackEnd.service.implementations;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.Session;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces.ILivreDAO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.PretDTO;
@@ -22,7 +23,6 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingReser
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.InvalidDAOException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ServiceException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.service.interfaces.ILivreService;
-import org.hibernate.Session;
 
 /**
  * Service de la table <code>livre</code>.
@@ -224,7 +224,7 @@ public class LivreService extends Service implements ILivreService {
         // vérifie si le livre est rservé
         List<ReservationDTO> reservations = new ArrayList<>(livreDTO.getReservations());
         if(!reservations.isEmpty()) {
-            ReservationDTO reservationDTO = reservations.get(0);
+            final ReservationDTO reservationDTO = reservations.get(0);
             throw new ExistingReservationException("Le livre "
                 + livreDTO.getTitre()
                 + " (ID de livre : "

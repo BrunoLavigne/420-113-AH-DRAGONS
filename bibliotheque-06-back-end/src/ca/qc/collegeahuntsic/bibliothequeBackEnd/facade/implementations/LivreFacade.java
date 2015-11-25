@@ -5,6 +5,7 @@
 package ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.implementations;
 
 import java.util.List;
+import org.hibernate.Session;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidPrimaryKeyException;
@@ -17,7 +18,6 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingReser
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ServiceException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.interfaces.ILivreFacade;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.service.interfaces.ILivreService;
-import org.hibernate.Session;
 
 /**
  * Facade pour interagir avec le service de livres.

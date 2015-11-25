@@ -7,6 +7,7 @@ package ca.qc.collegeahuntsic.bibliothequeBackEnd.service.implementations;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.Session;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces.IMembreDAO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces.IPretDAO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces.IReservationDAO;
@@ -28,7 +29,6 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.InvalidLoanLi
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.MissingLoanException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ServiceException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.service.interfaces.IReservationService;
-import org.hibernate.Session;
 
 /**
  *
@@ -296,7 +296,7 @@ public class ReservationService extends Service implements IReservationService {
             List<ReservationDTO> listeReservations = new ArrayList<>(reservationDTO.getLivreDTO().getReservations());
 
             if(!listeReservations.isEmpty()) {
-                ReservationDTO firstReservationDTO = listeReservations.get(0);
+                final ReservationDTO firstReservationDTO = listeReservations.get(0);
 
                 if(!reservationDTO.getMembreDTO().equals(firstReservationDTO.getMembreDTO())) {
                     throw new ExistingReservationException("La réservation n'est pas la première de la liste "
@@ -325,7 +325,7 @@ public class ReservationService extends Service implements IReservationService {
 
             // Éliminer la réservation.
 
-            PretDTO unPretDTO = new PretDTO();
+            final PretDTO unPretDTO = new PretDTO();
             unPretDTO.setMembreDTO(reservationDTO.getMembreDTO());
             //unPretDTO.getMembreDTO().setNbPret(Integer.toString(Integer.toString(unPretDTO.getMembreDTO().getNbPret())));
             unPretDTO.getMembreDTO().setNbPret(unPretDTO.getMembreDTO().getNbPret() + 1);

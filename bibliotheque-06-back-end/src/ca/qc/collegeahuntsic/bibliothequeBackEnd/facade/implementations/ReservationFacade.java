@@ -4,6 +4,7 @@
 
 package ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.implementations;
 
+import org.hibernate.Session;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
@@ -21,7 +22,6 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.MissingLoanEx
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ServiceException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.interfaces.IReservationFacade;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.service.interfaces.IReservationService;
-import org.hibernate.Session;
 
 /**
  * Facade pour interagir avec le service de reservation.

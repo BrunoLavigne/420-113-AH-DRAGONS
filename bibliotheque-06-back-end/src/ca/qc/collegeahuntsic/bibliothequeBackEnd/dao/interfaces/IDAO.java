@@ -6,13 +6,13 @@ package ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces;
 
 import java.io.Serializable;
 import java.util.List;
+import org.hibernate.Session;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.DTO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.DAOException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidPrimaryKeyException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidSortByPropertyException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOException;
-import org.hibernate.Session;
 
 /**
  * Interface de base pour les DAOs.<br />

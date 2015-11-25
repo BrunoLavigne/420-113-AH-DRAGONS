@@ -4,6 +4,7 @@
 
 package ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.interfaces;
 
+import org.hibernate.Session;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidPrimaryKeyException;
@@ -13,7 +14,6 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingLoanE
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingReservationException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.InvalidLoanLimitException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.MissingLoanException;
-import org.hibernate.Session;
 
 /**
  * Interface de façade pour manipuler les réservations dans la base de données.

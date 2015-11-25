@@ -8,6 +8,11 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces.IDAO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.DTO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.DAOException;
@@ -19,11 +24,6 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidSortByProp
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOClassException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.util.BibliothequeDate;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 
 /**
  * Classe de base pour tous les DAOs.<br />
@@ -105,7 +105,7 @@ public class DAO implements IDAO {
             throw new InvalidPrimaryKeyException("La clef primaire ne peut être null");
         }
         try {
-            DTO dto = (DTO) session.get(getDtoClass(),
+            final DTO dto = (DTO) session.get(getDtoClass(),
                 primaryKey);
             return dto;
         } catch(HibernateException hibernateException) {
@@ -192,7 +192,7 @@ public class DAO implements IDAO {
         }
         try {
             List<? extends DTO> results = Collections.EMPTY_LIST;
-            Criteria criteria = session.createCriteria(getDtoClass());
+            final Criteria criteria = session.createCriteria(getDtoClass());
             criteria.addOrder(Order.asc(sortByPropertyName));
             results = criteria.list();
             return results;
