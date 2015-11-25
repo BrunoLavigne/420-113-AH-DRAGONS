@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jardesc>
+    <jar path="bibliotheque-06-back-end/bibliotheque-back-end-MySQL.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/bibliotheque-06-back-end/bibliotheque-06-back-end-MySQL.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="true" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.implementations"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.dto{PretDTO.java"/>
+        <file path="/bibliotheque-06-back-end/UML-Bibliotheque.png"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/conf\/log4j"/>
+        <file path="/bibliotheque-06-back-end/conf/spring/applicationContext-dto-MySQL.xml"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.interfaces"/>
+        <folder path="/bibliotheque-06-back-end/javadoc"/>
+        <file path="/bibliotheque-06-back-end/src/ca/qc/collegeahuntsic/bibliothequeBackEnd/dto/MembreDTO-MySQL.hbm.xml"/>
+        <folder path="/bibliotheque-06-back-end/lib"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.facade"/>
+        <file path="/bibliotheque-06-back-end/src/ca/qc/collegeahuntsic/bibliothequeBackEnd/dto/PretDTO-MySQL.hbm.xml"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.dto{MembreDTO.java"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.dto{package-info.java"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.dto{DTO.java"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.service.interfaces"/>
+        <folder path="/bibliotheque-06-back-end/uml"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.util"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao"/>
+        <file path="/bibliotheque-06-back-end/conf/spring/applicationContext-jdbc-MySQL.xml"/>
+        <file path="/bibliotheque-06-back-end/UML-Bibliotheque.ucls"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.implementations"/>
+        <file path="/bibliotheque-06-back-end/javadoc.xml"/>
+        <file path="/bibliotheque-06-back-end/MySQL.sql"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.dto{ReservationDTO.java"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd"/>
+        <file path="/bibliotheque-06-back-end/src/ca/qc/collegeahuntsic/bibliothequeBackEnd/dto/LivreDTO-MySQL.hbm.xml"/>
+        <file path="/bibliotheque-06-back-end/.project"/>
+        <file path="/bibliotheque-06-back-end/conf/spring/applicationContext-service.xml"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/resources"/>
+        <file path="/bibliotheque-06-back-end/.classpath"/>
+        <folder path="/bibliotheque-06-back-end/logs"/>
+        <folder path="/bibliotheque-06-back-end/conf"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.service.implementations"/>
+        <file path="/bibliotheque-06-back-end/conf/spring/applicationContext-dao.xml"/>
+        <javaElement handleIdentifier="=bibliotheque-06-back-end/src&lt;ca.qc.collegeahuntsic.bibliothequeBackEnd.dto{LivreDTO.java"/>
+        <file path="/bibliotheque-06-back-end/src/ca/qc/collegeahuntsic/bibliothequeBackEnd/dto/ReservationDTO-MySQL.hbm.xml"/>
+        <file path="/bibliotheque-06-back-end/.gitignore"/>
+        <file path="/bibliotheque-06-back-end/conf/spring/applicationContext-facade.xml"/>
+    </selectedElements>
+</jardesc>
