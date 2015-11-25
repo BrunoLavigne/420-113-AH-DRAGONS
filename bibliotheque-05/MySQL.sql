@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS membre 		CASCADE;
 CREATE TABLE membre (
 	idMembre        INTEGER(3) 		AUTO_INCREMENT 			CHECK(idMembre > 0),
 	nom             VARCHAR(10) 	NOT NULL,
-	telephone       bigint(32),
+	telephone       bigint(10),
 	limitePret      INTEGER(2) 		CHECK(limitePret > 0 AND limitePret <= 10),
 	nbpret          INTEGER(2) 		DEFAULT 0 				CHECK(nbpret >= 0),
 	CONSTRAINT 		cleMembre 		PRIMARY KEY (idMembre),
