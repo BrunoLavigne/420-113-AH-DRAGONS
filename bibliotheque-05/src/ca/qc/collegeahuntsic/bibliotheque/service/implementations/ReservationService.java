@@ -38,8 +38,7 @@ import org.hibernate.Session;
  */
 public class ReservationService extends Service implements IReservationService {
 
-    private IMembreDAO membreDAO;
-
+    // TODO : remove membreDAO from this class
     private IReservationDAO reservationDAO;
 
     private IPretDAO pretDAO;
@@ -59,9 +58,6 @@ public class ReservationService extends Service implements IReservationService {
 
         super();
 
-        if(membreDAO == null) {
-            throw new InvalidDAOException("Le DAO de membre ne peut être null");
-        }
         if(reservationDAO == null) {
             throw new InvalidDAOException("Le DAO de reservation ne peut être null");
         }
@@ -69,7 +65,6 @@ public class ReservationService extends Service implements IReservationService {
             throw new InvalidDAOException("Le DAO de pret ne peut être null");
         }
 
-        setMembreDAO(membreDAO);
         setReservationDAO(reservationDAO);
         setPretDAO(pretDAO);
     }
@@ -303,7 +298,7 @@ public class ReservationService extends Service implements IReservationService {
             if(!listeReservations.isEmpty()) {
                 ReservationDTO firstReservationDTO = listeReservations.get(0);
 
-                if(!reservationDTO.equals(firstReservationDTO)) {
+                if(!reservationDTO.getMembreDTO().equals(firstReservationDTO.getMembreDTO())) {
                     throw new ExistingReservationException("La réservation n'est pas la première de la liste "
                         + "pour ce livre; la première est "
                         + firstReservationDTO.getIdReservation());
@@ -312,13 +307,13 @@ public class ReservationService extends Service implements IReservationService {
 
             // Si le livre est déjà prété
             List<PretDTO> listeDesPret = new ArrayList<>(reservationDTO.getLivreDTO().getPrets());
-            if(!listeDesPret.isEmpty()
-                && listeDesPret.get(0).getDateRetour() == null) {
-                PretDTO pretDTO = listeDesPret.get(0);
-                throw new ExistingLoanException("Livre "
-                    + reservationDTO.getLivreDTO().getIdLivre()
-                    + " déjà prêté à "
-                    + pretDTO.getMembreDTO().getIdMembre());
+            for(PretDTO pretDTO : listeDesPret) {
+                if(pretDTO.getDateRetour() == null) {
+                    throw new ExistingLoanException("Livre "
+                        + reservationDTO.getLivreDTO().getIdLivre()
+                        + " déjà prêté à "
+                        + pretDTO.getMembreDTO().getIdMembre());
+                }
             }
 
             // Si le membre a atteint sa limite de prêt
@@ -329,14 +324,14 @@ public class ReservationService extends Service implements IReservationService {
             }
 
             // Éliminer la réservation.
-            reservationDTO.getMembreDTO().setNbPret(reservationDTO.getMembreDTO().getNbPret() + 1);
-            getMembreDAO().update(session,
-                reservationDTO.getMembreDTO());
 
             PretDTO unPretDTO = new PretDTO();
             unPretDTO.setMembreDTO(reservationDTO.getMembreDTO());
+            //unPretDTO.getMembreDTO().setNbPret(Integer.toString(Integer.toString(unPretDTO.getMembreDTO().getNbPret())));
+            unPretDTO.getMembreDTO().setNbPret(unPretDTO.getMembreDTO().getNbPret() + 1);
             unPretDTO.setLivreDTO(reservationDTO.getLivreDTO());
             unPretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
+            unPretDTO.setDateRetour(null);
 
             getPretDAO().add(session,
                 unPretDTO);
@@ -375,24 +370,6 @@ public class ReservationService extends Service implements IReservationService {
     // End Méthodes métier
 
     // Region Getter et Setter
-
-    /**
-     * Getter de la variable d'instance <code>this.membreDAO</code>.
-     *
-     * @return La variable d'instance <code>this.membreDAO</code>
-     */
-    private IMembreDAO getMembreDAO() {
-        return this.membreDAO;
-    }
-
-    /**
-     * Setter de la variable d'instance <code>this.membreDAO</code>.
-     *
-     * @param membreDAO La valeur à utiliser pour la variable d'instance <code>this.membreDAO</code>
-     */
-    private void setMembreDAO(IMembreDAO membreDAO) {
-        this.membreDAO = membreDAO;
-    }
 
     /**
      * Getter de la variable d'instance <code>this.reservationDAO</code>.
