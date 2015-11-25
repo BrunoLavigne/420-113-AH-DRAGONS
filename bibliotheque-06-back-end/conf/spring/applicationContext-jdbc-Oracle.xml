@@ -18,7 +18,8 @@
         
         <property name="jndiName">
                   <value>java:comp/env/jdbc/XE</value>
-        </property>
+        </property> 
+        
        
        
   </bean>
