@@ -28,8 +28,8 @@ CREATE TABLE pret (
 	datePret 		TIMESTAMP,
 	dateRetour 		TIMESTAMP 		NULL,
 	CONSTRAINT 		clePrimairePret PRIMARY KEY (idPret),
-	CONSTRAINT 		refPretMembre 	FOREIGN KEY (idMembre) 	REFERENCES membre (idMembre),
-	CONSTRAINT 		refPretLivre 	FOREIGN KEY (idLivre) 	REFERENCES livre (idLivre)
+	CONSTRAINT 		refPretMembre 	FOREIGN KEY (idMembre) 	REFERENCES membre (idMembre) ON DELETE CASCADE,
+	CONSTRAINT 		refPretLivre 	FOREIGN KEY (idLivre) 	REFERENCES livre (idLivre) ON DELETE CASCADE
 );
 
 CREATE TABLE reservation (
