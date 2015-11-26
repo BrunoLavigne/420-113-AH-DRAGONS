@@ -105,5 +105,4 @@ public interface IPretDAO extends IDAO {
         InvalidCriterionValueException,
         InvalidSortByPropertyException,
         DAOException;
-
 }

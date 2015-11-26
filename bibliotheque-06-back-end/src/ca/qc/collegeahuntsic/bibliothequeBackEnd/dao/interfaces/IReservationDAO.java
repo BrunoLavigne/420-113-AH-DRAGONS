@@ -61,5 +61,4 @@ public interface IReservationDAO extends IDAO {
         InvalidCriterionValueException,
         InvalidSortByPropertyException,
         DAOException;
-
 }

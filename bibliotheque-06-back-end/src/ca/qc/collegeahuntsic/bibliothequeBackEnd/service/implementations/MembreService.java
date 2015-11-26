@@ -26,6 +26,8 @@ import org.hibernate.Session;
 
 /**
  * Service de la table <code>membre</code>.
+ *
+ * @author Dragons Vicieux
  */
 public class MembreService extends Service implements IMembreService {
 
