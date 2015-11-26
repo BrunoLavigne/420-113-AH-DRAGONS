@@ -19,7 +19,6 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidPrimaryKey
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidSortByPropertyException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOClassException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOException;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.MissingDTOException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingLoanException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingReservationException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.InvalidDAOException;
@@ -322,7 +321,6 @@ public class ReservationService extends Service implements IReservationService {
         } catch(
             DAOException
             | InvalidPrimaryKeyException
-            | MissingDTOException
             | InvalidDTOClassException exception) {
             throw new ServiceException(exception);
         }
@@ -337,7 +335,6 @@ public class ReservationService extends Service implements IReservationService {
         ReservationDTO reservationDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         InvalidPrimaryKeyException,
-        MissingDTOException,
         InvalidDTOClassException,
         ServiceException {
         if(session == null) {
