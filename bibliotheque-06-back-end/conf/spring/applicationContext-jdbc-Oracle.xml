@@ -63,6 +63,4 @@
   <bean name="performanceMonitorInterceptor"
         class="org.springframework.aop.interceptor.PerformanceMonitorInterceptor">
   </bean>
-
- 
 </beans>
