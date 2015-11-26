@@ -34,7 +34,7 @@ public class MembreService extends Service implements IMembreService {
     // private IReservationDAO reservationDAO;
 
     /**
-     * Crée le service de la table <code>membre</code>
+     * Crée le service de la table <code>membre</code>.
      *
      * @param membreDAO Le DAO de la table <code>membre</code>
      * @param reservationDAO Le DAO de la table <code>reservation</code>

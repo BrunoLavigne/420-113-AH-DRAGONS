@@ -21,13 +21,14 @@ import org.hibernate.Session;
 
 public class PretDAO extends DAO implements IPretDAO {
 
+    // TODO changer la visibilité a package quand nous aurons la version avec Spring
     /**
      * Crée le DAO de la table <code>pret</code>.
      *
      * @param pretDTOClass La classe de pret DTO à utiliser
      * @throws InvalidDTOClassException Si la classe de DTO est <code>null</code>
      */
-    public PretDAO(Class<PretDTO> pretDTOClass) throws InvalidDTOClassException { // TODO changer la visibilité a package quand nous aurons la version avec Spring
+    public PretDAO(Class<PretDTO> pretDTOClass) throws InvalidDTOClassException {
         super(pretDTOClass);
     }
 

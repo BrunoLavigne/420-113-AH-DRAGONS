@@ -32,13 +32,14 @@ public class ReservationFacade extends Facade implements IReservationFacade {
 
     private IReservationService reservationService;
 
+    // TODO changer la visibilité a package quand nous aurons la version avec Spring
     /**
      * Crée la façade de la table <code>reservation</code>.
      *
      * @param reservationService Le service de la table <code>reservation</code>
      * @throws InvalidServiceException Si le service de reservation est <code>null</code>
      */
-    ReservationFacade(IReservationService reservationService) throws InvalidServiceException { // TODO: Change to package when switching to Spring
+    ReservationFacade(IReservationService reservationService) throws InvalidServiceException {
         super();
         if(reservationService == null) {
             throw new InvalidServiceException("Le service de reservation ne peut être null");

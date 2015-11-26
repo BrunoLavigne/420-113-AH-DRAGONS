@@ -14,7 +14,7 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidSortByProp
 import org.hibernate.Session;
 
 /**
- *Interface DAO pour manipuler les membres dans la base de données
+ *Interface DAO pour manipuler les membres dans la base de données.
  *
  * @author Dragons Vicieux
  */

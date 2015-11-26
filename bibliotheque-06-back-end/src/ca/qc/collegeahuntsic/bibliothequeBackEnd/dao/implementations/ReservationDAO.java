@@ -24,13 +24,14 @@ import org.hibernate.Session;
 
 public class ReservationDAO extends DAO implements IReservationDAO {
 
+    // TODO changer la visibilité a package quand nous aurons la version avec Spring
     /**
      * Crée le DAO de la table <code>reservation</code>.
      *
      * @param reservationDTOClass La classe de réservation DTO à utiliser
      * @throws InvalidDTOClassException Si la classe de DTO est <code>null</code>
      */
-    public ReservationDAO(Class<ReservationDTO> reservationDTOClass) throws InvalidDTOClassException { // TODO changer la visibilité a package quand nous aurons la version avec Spring
+    public ReservationDAO(Class<ReservationDTO> reservationDTOClass) throws InvalidDTOClassException {
         super(reservationDTOClass);
     }
 
