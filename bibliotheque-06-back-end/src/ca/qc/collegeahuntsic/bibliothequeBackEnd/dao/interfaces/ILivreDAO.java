@@ -5,24 +5,24 @@
 package ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces;
 
 import java.util.List;
-import org.hibernate.Session;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.DAOException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionValueException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidSortByPropertyException;
+import org.hibernate.Session;
 
 /**
  * Interface DAO pour manipuler les livres dans la base de données.
- * 
+ *
  * @author Gilles Benichou
  */
 public interface ILivreDAO extends IDAO {
     /**
      * Trouve les livres à partir d'un titre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucun livre
      * n'est trouvé, une {@link List} vide est retournée.
-     * 
+     *
      * @param session La session Hibernate à utiliser
      * @param titre Le titre à trouver
      * @param sortByPropertyName The nom de la propriété à utiliser pour classer

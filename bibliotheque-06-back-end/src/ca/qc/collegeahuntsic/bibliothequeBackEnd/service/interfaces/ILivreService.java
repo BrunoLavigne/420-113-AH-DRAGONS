@@ -5,7 +5,6 @@
 package ca.qc.collegeahuntsic.bibliothequeBackEnd.service.interfaces;
 
 import java.util.List;
-import org.hibernate.Session;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.LivreDTO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionValueException;
@@ -16,6 +15,7 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOExcepti
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingLoanException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingReservationException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ServiceException;
+import org.hibernate.Session;
 
 /**
  * Interface de base pour les services.<br />
