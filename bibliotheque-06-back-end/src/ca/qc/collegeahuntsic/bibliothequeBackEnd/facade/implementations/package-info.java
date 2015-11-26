@@ -2,7 +2,7 @@
 // Auteur : Dragon Vicieux
 // Date de création : 2015-10-30
 /**
- * TODO Auto-generated class javadoc
+ * Implémentations de la façade du transactionnel de la bibliothèque.
  *
  * @author Dragon Vicieux
  */

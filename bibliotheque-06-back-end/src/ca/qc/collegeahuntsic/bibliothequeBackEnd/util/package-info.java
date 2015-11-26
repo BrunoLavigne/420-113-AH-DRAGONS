@@ -2,9 +2,10 @@
 // Auteur : Dragon Vicieux
 // Date de création : 2015-11-25
 /**
- * TODO Auto-generated class javadoc
+ * Utilitaires au transactionnel de la bibliothèque.
  *
  * @author Dragon Vicieux
  */
 
 package ca.qc.collegeahuntsic.bibliothequeBackEnd.util;
+
