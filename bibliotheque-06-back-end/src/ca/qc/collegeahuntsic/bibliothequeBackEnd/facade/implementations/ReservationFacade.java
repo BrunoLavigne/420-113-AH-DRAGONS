@@ -5,10 +5,8 @@
 package ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.implementations;
 
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.ReservationDTO;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidPrimaryKeyException;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidSortByPropertyException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOClassException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.MissingDTOException;
@@ -98,14 +96,7 @@ public class ReservationFacade extends Facade implements IReservationFacade {
         try {
             getReservationService().placerReservation(session,
                 reservationDTO);
-        } catch(
-            ServiceException
-            | InvalidPrimaryKeyException
-            | MissingDTOException
-            | InvalidCriterionException
-            | InvalidSortByPropertyException
-            | InvalidDTOClassException serviceException) {
-            // TODO confirmer pourquoi il faut thrower toute ces exceptions ici
+        } catch(ServiceException serviceException) {
             throw new FacadeException(serviceException);
         }
     }
@@ -124,14 +115,7 @@ public class ReservationFacade extends Facade implements IReservationFacade {
         try {
             getReservationService().utiliserReservation(session,
                 reservationDTO);
-        } catch(
-            ServiceException
-            | InvalidPrimaryKeyException
-            | MissingDTOException
-            | InvalidCriterionException
-            | InvalidSortByPropertyException
-            | InvalidDTOClassException serviceException) {
-            // TODO confirmer pourquoi il faut thrower toute ces exceptions ici
+        } catch(ServiceException serviceException) {
             throw new FacadeException(serviceException);
         }
     }

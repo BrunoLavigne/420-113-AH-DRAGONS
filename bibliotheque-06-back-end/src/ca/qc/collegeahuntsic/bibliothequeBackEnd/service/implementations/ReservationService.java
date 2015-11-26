@@ -271,7 +271,7 @@ public class ReservationService extends Service implements IReservationService {
         ExistingReservationException,
         ExistingLoanException,
         InvalidLoanLimitException,
-        DAOException {
+        ServiceException {
 
         if(session == null) {
             throw new InvalidHibernateSessionException("La session Hibernate ne peut être null");
@@ -315,17 +315,24 @@ public class ReservationService extends Service implements IReservationService {
 
         final PretDTO unPretDTO = new PretDTO();
         unPretDTO.setMembreDTO(reservationDTO.getMembreDTO());
-        //unPretDTO.getMembreDTO().setNbPret(Integer.toString(Integer.toString(unPretDTO.getMembreDTO().getNbPret())));
         unPretDTO.getMembreDTO().setNbPret(unPretDTO.getMembreDTO().getNbPret() + 1);
         unPretDTO.setLivreDTO(reservationDTO.getLivreDTO());
         unPretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
         unPretDTO.setDateRetour(null);
 
-        getPretDAO().add(session,
-            unPretDTO);
-        reservationDTO.getLivreDTO().getReservations().remove(reservationDTO);
-        annulerReservation(session,
-            reservationDTO);
+        try {
+            getPretDAO().add(session,
+                unPretDTO);
+            reservationDTO.getLivreDTO().getReservations().remove(reservationDTO);
+            annulerReservation(session,
+                reservationDTO);
+        } catch(
+            DAOException
+            | InvalidPrimaryKeyException
+            | MissingDTOException
+            | InvalidDTOClassException exception) {
+            throw new ServiceException(exception);
+        }
 
     }
 
