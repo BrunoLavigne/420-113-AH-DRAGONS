@@ -23,13 +23,14 @@ import org.hibernate.Session;
 
 public class MembreDAO extends DAO implements IMembreDAO {
 
+    // TODO changer la visibilité a package quand nous aurons la version avec Spring
     /**
      * Crée le DAO de la table <code>membre</code>.
      *
-     * @param livreDTOClass La classe de membre DTO à utiliser
+     * @param membreDTOClass La classe de membre DTO à utiliser
      * @throws InvalidDTOClassException Si la classe de DTO est <code>null</code>
      */
-    public MembreDAO(Class<MembreDTO> membreDTOClass) throws InvalidDTOClassException { // TODO changer la visibilité a package quand nous aurons la version avec Spring
+    public MembreDAO(Class<MembreDTO> membreDTOClass) throws InvalidDTOClassException {
         super(membreDTOClass);
     }
 

@@ -7,7 +7,6 @@ package ca.qc.collegeahuntsic.bibliothequeBackEnd.service.implementations;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.Session;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces.IMembreDAO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces.IPretDAO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces.IReservationDAO;
@@ -29,6 +28,7 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.InvalidLoanLi
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.MissingLoanException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ServiceException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.service.interfaces.IReservationService;
+import org.hibernate.Session;
 
 /**
  *
@@ -46,10 +46,9 @@ public class ReservationService extends Service implements IReservationService {
     /**
      * Crée le service de la table <code>reservation</code>.
      *
-     * @param livreDAO Le DAO de la table <code>livre</code>
      * @param membreDAO Le DAO de la table <code>membre</code>
      * @param reservationDAO Le DAO de la table <code>reservation</code>
-     * @param pretDAO Le DAO de la table <code>pret</code
+     * @param pretDAO Le DAO de la table <code>pret</code>
      * @throws InvalidDAOException Si le DAO de réservation est <code>null</code>, si le DAO de membre est <code>null</code>, si le DAO de livre est <code>null</code> ou si le DAO de prêt est <code>null</code>
      */
     public ReservationService(IMembreDAO membreDAO,
@@ -293,7 +292,7 @@ public class ReservationService extends Service implements IReservationService {
             }
 
             // Si la réservation n'est pas la première de la liste
-            List<ReservationDTO> listeReservations = new ArrayList<>(reservationDTO.getLivreDTO().getReservations());
+            final List<ReservationDTO> listeReservations = new ArrayList<>(reservationDTO.getLivreDTO().getReservations());
 
             if(!listeReservations.isEmpty()) {
                 final ReservationDTO firstReservationDTO = listeReservations.get(0);

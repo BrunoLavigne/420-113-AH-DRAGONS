@@ -5,7 +5,6 @@
 package ca.qc.collegeahuntsic.bibliothequeBackEnd.service.interfaces;
 
 import java.util.List;
-import org.hibernate.Session;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
@@ -19,6 +18,7 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingReser
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.InvalidLoanLimitException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.MissingLoanException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ServiceException;
+import org.hibernate.Session;
 
 /**
  * Interface de service pour manipuler les réservations dans la base de données.
@@ -47,7 +47,7 @@ public interface IReservationService extends IService {
      * Lit une réservation à partir de la base de données.
      *
      * @param session La session Hibernate à utiliser
-     * @param idLivre L'ID de la réservation à lire
+     * @param idReservation L'ID de la réservation à lire
      * @return La réservation
      * @throws InvalidHibernateSessionException Si la session Hibernate est <code>null</code>
      * @throws InvalidPrimaryKeyException Si la clef primaire de la réservation est <code>null</code>

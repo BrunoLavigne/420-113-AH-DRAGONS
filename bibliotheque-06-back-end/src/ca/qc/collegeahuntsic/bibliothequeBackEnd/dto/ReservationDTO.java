@@ -36,9 +36,7 @@ public class ReservationDTO extends DTO {
     private Timestamp dateReservation;
 
     /**
-     *
-     * TODO Auto-generated constructor javadoc
-     *
+     * Crée un DTO de la table <code>reservation</code>.
      */
     public ReservationDTO() {
         super();
