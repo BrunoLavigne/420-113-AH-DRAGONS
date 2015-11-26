@@ -6,13 +6,10 @@ package ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.implementations;
 
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.MembreDTO;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidPrimaryKeyException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidSortByPropertyException;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOClassException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOException;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.MissingDTOException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.facade.FacadeException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.facade.InvalidServiceException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingLoanException;
@@ -141,14 +138,7 @@ public class MembreFacade extends Facade implements IMembreFacade {
         try {
             getMembreService().desinscrireMembre(session,
                 membreDTO);
-        } catch(
-            ServiceException
-            | InvalidDTOClassException
-            | InvalidPrimaryKeyException
-            | MissingDTOException
-            | InvalidCriterionException
-            | InvalidSortByPropertyException serviceException) {
-            // TODO confirmer pourquoi il faut thrower toute ces exceptions ici
+        } catch(ServiceException serviceException) {
             throw new FacadeException(serviceException);
         }
     }

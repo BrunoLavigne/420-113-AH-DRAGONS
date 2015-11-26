@@ -5,14 +5,10 @@
 package ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.implementations;
 
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.PretDTO;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionException;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionValueException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidPrimaryKeyException;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidSortByPropertyException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOClassException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOException;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.MissingDTOException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.facade.FacadeException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.facade.InvalidServiceException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingLoanException;
@@ -100,13 +96,7 @@ public class PretFacade extends Facade implements IPretFacade {
                 pretDTO);
         } catch(
             ServiceException
-            | InvalidPrimaryKeyException
-            | MissingDTOException
-            | InvalidCriterionException
-            | InvalidCriterionValueException
-            | InvalidSortByPropertyException
             | InvalidDTOClassException serviceException) {
-            // TODO confirmer pourquoi il faut thrower toute ces exceptions ici
             throw new FacadeException(serviceException);
         }
     }
@@ -146,14 +136,7 @@ public class PretFacade extends Facade implements IPretFacade {
                 pretDTO);
         } catch(
             ServiceException
-            | InvalidPrimaryKeyException
-            | MissingDTOException
-            | InvalidCriterionException
-            | InvalidCriterionValueException
-            | InvalidSortByPropertyException
-            | ExistingLoanException
-            | InvalidDTOClassException serviceException) {
-            // TODO confirmer pourquoi il faut thrower toute ces exceptions ici
+            | InvalidPrimaryKeyException serviceException) {
             throw new FacadeException(serviceException);
         }
     }
