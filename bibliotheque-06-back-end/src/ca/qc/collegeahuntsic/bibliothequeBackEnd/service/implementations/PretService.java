@@ -31,6 +31,8 @@ import org.hibernate.Session;
 
 /**
  * Service de la table <code>pret</code>.
+ *
+ * @author Dragons Vicieux
  */
 public class PretService extends Service implements IPretService {
 
