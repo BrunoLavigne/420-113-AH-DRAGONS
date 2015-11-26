@@ -44,12 +44,6 @@
                           <ref bean="pretDAO"/>
                         </constructor-arg>
                         <constructor-arg>
-                          <ref bean="membreDAO"/>
-                        </constructor-arg>
-                        <constructor-arg>
-                          <ref bean="livreDAO"/>
-                        </constructor-arg>
-                        <constructor-arg>
                           <ref bean="reservationDAO"/>
                         </constructor-arg>
                   </bean>
