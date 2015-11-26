@@ -24,23 +24,23 @@
          </id>
          
          <many-to-one name="membreDTO"
-         		      class="ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO" 
-         		      not-null="true">
-         			<column name="IDMEMBRE">
-         			</column>
+         class="ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO" 
+         not-null="true">
+         <column name="IDMEMBRE">
+         </column>
          </many-to-one>
          
          <many-to-one name="livreDTO"
-         		      class="ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO" 
-         		      not-null="true">
-         			<column name="IDLIVRE">
-         			</column>
+         class="ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO" 
+         not-null="true">
+         <column name="IDLIVRE">
+         </column>
          </many-to-one>
 
          <property name="dateReservation"
-         		   type="timestamp">
-         			<column name="DATERESERVATION">
-         			</column>
+         type="timestamp">
+         <column name="DATERESERVATION">
+         </column>
          </property>
   </class>
 </hibernate-mapping>
