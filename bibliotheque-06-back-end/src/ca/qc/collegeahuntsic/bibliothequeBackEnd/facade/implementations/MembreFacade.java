@@ -5,7 +5,6 @@
 package ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.implementations;
 
 import java.util.List;
-import org.hibernate.Session;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.MembreDTO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
@@ -21,6 +20,7 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingReser
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ServiceException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.interfaces.IMembreFacade;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.service.interfaces.IMembreService;
+import org.hibernate.Session;
 
 /**
  * Facade pour interagir avec le service de membre.
@@ -31,13 +31,14 @@ public class MembreFacade extends Facade implements IMembreFacade {
 
     private IMembreService membreService;
 
+    // TODO changer la visibilité a package quand nous aurons la version avec Spring
     /**
      * Crée la Facade de la table <code>membre</code>.
      *
      * @param membreService Le service de la table <code>membre</code>
-     *@throws InvalidServiceException Si le service de membres est <code>null</code>
+     * @throws InvalidServiceException Si le service de membres est <code>null</code>
      */
-    MembreFacade(IMembreService membreService) throws InvalidServiceException {// TODO changer la visibilité a package quand nous aurons la version avec Spring
+    MembreFacade(IMembreService membreService) throws InvalidServiceException {
         super();
         if(membreService == null) {
             throw new InvalidServiceException("Le service de membres ne peut être null");

@@ -5,13 +5,13 @@
 package ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces;
 
 import java.util.List;
-import org.hibernate.Session;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.DAOException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionValueException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidSortByPropertyException;
+import org.hibernate.Session;
 
 /**
  * Interface DAO pour manipuler les réservations dans la base de données
@@ -25,7 +25,7 @@ public interface IReservationDAO extends IDAO {
      *
      * @param session - La session Hibernate à utiliser
      * @param idLivre - L'ID du livre à trouver
-     * @param SortByPropertyName - Le nom de la propriété à utiliser pour classer
+     * @param sortByPropertyName - Le nom de la propriété à utiliser pour classer
      * @return La liste des réservations correspondantes ; une liste vide sinon
      * @throws InvalidHibernateSessionException - Si la connexion est <code>null</code>
      * @throws InvalidCriterionException - Si l'ID du livre est <code>null</code>
@@ -45,8 +45,8 @@ public interface IReservationDAO extends IDAO {
      * Trouve les réservations d'un membre. La liste est classée par ordre croissant sur <code>sortByPropertyName</code>. Si aucune réservation n'est trouvée, une {@link List} vide est retournée.
      *
      * @param session - La session Hibernate à utiliser
-     * @param idLivre - L'ID du membre à trouver
-     * @param SortByPropertyName - Le nom de la propriété à utiliser pour classer
+     * @param idMembre - Le membre à utiliser
+     * @param sortByPropertyName - Le nom de la propriété à utiliser pour classer
      * @return La liste des réservations correspondantes ; une liste vide sinon
      * @throws InvalidHibernateSessionException - Si la connexion est <code>null</code>
      * @throws InvalidCriterionException - Si l'ID du livre est <code>null</code>
