@@ -14,9 +14,7 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionV
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidPrimaryKeyException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidSortByPropertyException;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOClassException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOException;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.MissingDTOException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingLoanException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingReservationException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.InvalidDAOException;
@@ -190,14 +188,9 @@ public class MembreService extends Service implements IMembreService {
     public void desinscrireMembre(Session session,
         MembreDTO membreDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
-        InvalidDTOClassException,
-        InvalidPrimaryKeyException,
-        MissingDTOException,
+        ServiceException,
         ExistingLoanException,
-        InvalidCriterionException,
-        InvalidSortByPropertyException,
-        ExistingReservationException,
-        ServiceException {
+        ExistingReservationException {
 
         // Vérifier si la connexion est null
         if(session == null) {
@@ -253,7 +246,6 @@ public class MembreService extends Service implements IMembreService {
 
             deleteMembre(session,
                 membreDTO);
-            // TODO
 
         } catch(Exception exception) {
             throw new ServiceException(exception);
