@@ -125,14 +125,7 @@ public class PretFacade extends Facade implements IPretFacade {
                 pretDTO);
         } catch(
             ServiceException
-            | InvalidPrimaryKeyException
-            | MissingDTOException
-            | InvalidCriterionException
-            | InvalidCriterionValueException
-            | InvalidSortByPropertyException
-            | ExistingLoanException
             | InvalidDTOClassException serviceException) {
-            // TODO confirmer pourquoi il faut thrower toute ces exceptions ici
             throw new FacadeException(serviceException);
         }
 

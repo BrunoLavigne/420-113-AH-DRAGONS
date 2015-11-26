@@ -280,13 +280,6 @@ public interface IPretService extends IService {
     void terminerPret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
-        InvalidPrimaryKeyException,
-        MissingDTOException,
-        InvalidCriterionException,
-        InvalidCriterionValueException,
-        InvalidSortByPropertyException,
-        MissingLoanException,
-        ExistingLoanException,
         InvalidDTOClassException,
         ServiceException;
 }
