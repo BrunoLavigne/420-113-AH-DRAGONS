@@ -17,17 +17,17 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class MembreDTO extends DTO {
 
-    private static final long serialVersionUID = 1L;
+    public static final long serialVersionUID = 1L;
 
-    public static String ID_MEMBRE_COLUMN_NAME = "idMembre";
+    public static final String ID_MEMBRE_COLUMN_NAME = "idMembre";
 
-    public static String NOM_COLUMN_NAME = "nom";
+    public static final String NOM_COLUMN_NAME = "nom";
 
-    public static String TELEPHONE_COLUMN_NAME = "telephone";
+    public static final String TELEPHONE_COLUMN_NAME = "telephone";
 
-    public static String LIMITE_PRET_COLUMN_NAME = "limitePret";
+    public static final String LIMITE_PRET_COLUMN_NAME = "limitePret";
 
-    public static String NB_PRET_COLUMN_NAME = "nbPret";
+    public static final String NB_PRET_COLUMN_NAME = "nbPret";
 
     private String idMembre;
 
@@ -42,6 +42,15 @@ public class MembreDTO extends DTO {
     private Set<PretDTO> prets;
 
     private Set<ReservationDTO> reservations;
+
+    /**
+     *
+     * Crée un DTO de la table <code>membre</code>.
+     *
+     */
+    public MembreDTO() {
+        // super();
+    }
 
     // Region Getters and Setters
     /**

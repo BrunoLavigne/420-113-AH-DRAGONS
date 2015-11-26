@@ -4,7 +4,7 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.util;
 
-import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
+import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.BibliothequeException;
 import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.ILivreFacade;
 import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.IMembreFacade;
 import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.IPretFacade;

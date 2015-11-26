@@ -16,7 +16,7 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOClassEx
 import org.hibernate.Session;
 
 /**
- * DAO pour effectuer des CRUDs avec la table <code>membre</code>
+ * DAO pour effectuer des CRUDs avec la table <code>membre</code>.
  *
  * @author Dragons Vicieux
  */

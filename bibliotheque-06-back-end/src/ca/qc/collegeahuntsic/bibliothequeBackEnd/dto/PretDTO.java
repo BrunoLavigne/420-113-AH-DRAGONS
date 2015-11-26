@@ -38,6 +38,11 @@ public class PretDTO extends DTO {
 
     private Timestamp dateRetour;
 
+    /**
+     *
+     * Crée un DTO de la table <code>pret</code>.
+     *
+     */
     public PretDTO() {
         super();
     }
