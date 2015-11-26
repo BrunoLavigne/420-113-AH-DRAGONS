@@ -7,7 +7,6 @@ package ca.qc.collegeahuntsic.bibliothequeBackEnd.service.implementations;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces.IMembreDAO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces.IPretDAO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces.IReservationDAO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.PretDTO;
@@ -46,13 +45,11 @@ public class ReservationService extends Service implements IReservationService {
     /**
      * Crée le service de la table <code>reservation</code>.
      *
-     * @param membreDAO Le DAO de la table <code>membre</code>
      * @param reservationDAO Le DAO de la table <code>reservation</code>
      * @param pretDAO Le DAO de la table <code>pret</code>
      * @throws InvalidDAOException Si le DAO de réservation est <code>null</code>, si le DAO de membre est <code>null</code>, si le DAO de livre est <code>null</code> ou si le DAO de prêt est <code>null</code>
      */
-    public ReservationService(IMembreDAO membreDAO,
-        IReservationDAO reservationDAO,
+    public ReservationService(IReservationDAO reservationDAO,
         IPretDAO pretDAO) throws InvalidDAOException {
 
         super();
@@ -85,7 +82,6 @@ public class ReservationService extends Service implements IReservationService {
         } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
-
     }
 
     /**
@@ -167,8 +163,6 @@ public class ReservationService extends Service implements IReservationService {
         InvalidCriterionException,
         InvalidSortByPropertyException,
         ServiceException {
-
-        //List<ReservationDTO> listeDesReservations = Collections.EMPTY_LIST;
         try {
             return getReservationDAO().findByMembre(session,
                 idMembre,
@@ -227,7 +221,6 @@ public class ReservationService extends Service implements IReservationService {
 
         // Si le livre n'a pas encore été prêté,
         final List<PretDTO> listeDesPrets = new ArrayList<>(reservationDTO.getLivreDTO().getPrets());
-
         if(listeDesPrets.isEmpty()) {
             throw new MissingLoanException("Le livre : "
                 + reservationDTO.getLivreDTO().getIdLivre()
@@ -353,7 +346,6 @@ public class ReservationService extends Service implements IReservationService {
         if(reservationDTO == null) {
             throw new InvalidDTOException("La réservation ne peut être null");
         }
-        // TODO: vérifier pour l'erreur deleted object would be re-saved by cascade ????
         deleteReservation(session,
             reservationDTO);
     }
