@@ -2,7 +2,7 @@
 // Auteur : Dragon Vicieux
 // Date de création : 2015-11-25
 /**
- * TODO Auto-generated class javadoc
+ * TODO Auto-generated class javadoc.
  *
  * @author Dragon Vicieux
  */
