@@ -139,33 +139,55 @@ public final class Bibliotheque {
     static void executerTransaction(StringTokenizer tokenizer) throws BibliothequeException {
 
         try {
-
             final String command = tokenizer.nextToken();
-
             /* ******************* */
             /*         HELP        */
             /* ******************* */
+            
+            switch(command) {
+                case "aide":
+                    Bibliotheque.afficherAide();
+                    break;
+                case "acquerir":
+                    Bibliotheque.transactionAcquerir(tokenizer);
+                    break;
+                case "vendre":
+                    
+                    break;
+                case "preter":
+                    
+                    break;
+                case "renouveler":
+                    
+                    break;
+                case "retourner":
+                    
+                    break;
+                case "inscrire":
+                    
+                    break;
+                case "desinscrire":
+                    
+                    break;
+                case "reserver":
+                    
+                    break;
+                case "utiliser":
+                    
+                    break;
+                case "annuler":
+                    
+                    break;
+                default:
+                    break;
+            }
 
             if("aide".startsWith(command)) {
-
                 afficherAide();
-
             } else if("acquerir".startsWith(command)) {
-                // TRANSACTION ACQUERIR ( <titre> <auteur> )
 
-                Bibliotheque.bibliothequeCreateur.beginTransaction();
-
-                final LivreDTO livreDTO = new LivreDTO();
-                livreDTO.setTitre(readString(tokenizer));
-                livreDTO.setAuteur(readString(tokenizer));
-                livreDTO.setDateAcquisition(new Timestamp(System.currentTimeMillis()));
-                Bibliotheque.bibliothequeCreateur.getLivreFacade().acquerirLivre(Bibliotheque.bibliothequeCreateur.getSession(),
-                    livreDTO);
-
-                Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("vendre".startsWith(command)) {
-                // TRANSACTION VENDRE ( <idLivre> )
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
                 final String idLivre = readString(tokenizer);
                 final LivreDTO livreDTO = Bibliotheque.bibliothequeCreateur.getLivreFacade().getLivre(Bibliotheque.bibliothequeCreateur.getSession(),
@@ -177,14 +199,9 @@ public final class Bibliotheque {
                 }
                 Bibliotheque.bibliothequeCreateur.getLivreFacade().vendreLivre(Bibliotheque.bibliothequeCreateur.getSession(),
                     livreDTO);
-
                 Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("preter".startsWith(command)) {
-
-                // TRANSACTION PRETER ( <idLivre> <idMembre> )
-                // récupération du livre
-
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
                 final String idLivre = readString(tokenizer);
                 final LivreDTO livreDTO = Bibliotheque.bibliothequeCreateur.getLivreFacade().getLivre(Bibliotheque.bibliothequeCreateur.getSession(),
@@ -194,7 +211,6 @@ public final class Bibliotheque {
                         + idLivre
                         + " n'existe pas");
                 }
-                // récupération du membre
                 final String idMembre = readString(tokenizer);
                 final MembreDTO membreDTO = Bibliotheque.bibliothequeCreateur.getMembreFacade().getMembre(Bibliotheque.bibliothequeCreateur.getSession(),
                     idMembre);
@@ -203,63 +219,43 @@ public final class Bibliotheque {
                         + idMembre
                         + " n'existe pas");
                 }
-                // création du nouveau prêt
                 final PretDTO pretDTO = new PretDTO();
                 pretDTO.setLivreDTO(livreDTO);
                 pretDTO.setMembreDTO(membreDTO);
-
                 Bibliotheque.bibliothequeCreateur.getPretFacade().commencerPret(Bibliotheque.bibliothequeCreateur.getSession(),
                     pretDTO);
-
                 Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("renouveler".startsWith(command)) {
-
-                // TRANSACTION RENOUVELER ( <idPret> )
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
                 final String idPret = readString(tokenizer);
-
                 final PretDTO pretDTO = Bibliotheque.bibliothequeCreateur.getPretFacade().getPret(Bibliotheque.bibliothequeCreateur.getSession(),
                     idPret);
-
                 if(pretDTO == null) {
                     throw new MissingDTOException("Le pret "
                         + idPret
                         + " n'existe pas");
                 }
-
                 Bibliotheque.bibliothequeCreateur.getPretFacade().renouvelerPret(Bibliotheque.bibliothequeCreateur.getSession(),
                     pretDTO);
-
                 Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("retourner".startsWith(command)) {
 
-                // TRANSACTION RETOURNER ( <idPret> )
-
-                // TODO Est-ce que retourner 3 signifie retourner le livre 3 ou le pret 3 ?
-
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
-
                 final String idPret = readString(tokenizer);
                 final PretDTO pretDTO = Bibliotheque.bibliothequeCreateur.getPretFacade().getPret(Bibliotheque.bibliothequeCreateur.getSession(),
                     idPret);
-
                 if(pretDTO == null) {
                     throw new MissingDTOException("Le pret "
                         + idPret
                         + " n'existe pas");
                 }
-
                 Bibliotheque.bibliothequeCreateur.getPretFacade().terminerPret(Bibliotheque.bibliothequeCreateur.getSession(),
                     pretDTO);
-
                 Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("inscrire".startsWith(command)) {
-
-                // TRANSACTION INSCRIRE ( <nom> <telephone> <limitePret> )
-
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
                 final MembreDTO membreDTO = new MembreDTO();
                 membreDTO.setNom(readString(tokenizer));
@@ -269,69 +265,51 @@ public final class Bibliotheque {
 
                 Bibliotheque.bibliothequeCreateur.getMembreFacade().inscrireMembre(Bibliotheque.bibliothequeCreateur.getSession(),
                     membreDTO);
-
                 Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("desinscrire".startsWith(command)) {
-
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
-
                 final String idMembre = readString(tokenizer);
                 final MembreDTO membreDTO = Bibliotheque.bibliothequeCreateur.getMembreFacade().getMembre(Bibliotheque.bibliothequeCreateur.getSession(),
                     idMembre);
-
                 if(membreDTO == null) {
                     throw new MissingDTOException("Le membre "
                         + idMembre
                         + " n'existe pas");
                 }
-
                 Bibliotheque.bibliothequeCreateur.getMembreFacade().desinscrireMembre(Bibliotheque.bibliothequeCreateur.getSession(),
                     membreDTO);
-
                 Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("reserver".startsWith(command)) {
-
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
-
                 final ReservationDTO reservationDTO = new ReservationDTO();
-
                 final String idMembre = readString(tokenizer);
                 final MembreDTO membreDTO = Bibliotheque.bibliothequeCreateur.getMembreFacade().getMembre(Bibliotheque.bibliothequeCreateur.getSession(),
                     idMembre);
-
                 if(membreDTO == null) {
                     throw new MissingDTOException("Le membre "
                         + idMembre
                         + " n'existe pas");
                 }
-
                 final String idLivre = readString(tokenizer);
                 final LivreDTO livreDTO = Bibliotheque.bibliothequeCreateur.getLivreFacade().getLivre(Bibliotheque.bibliothequeCreateur.getSession(),
                     idLivre);
-
                 if(livreDTO == null) {
                     throw new MissingDTOException("Le livre "
                         + idLivre
                         + " n'existe pas");
                 }
-
                 reservationDTO.setLivreDTO(livreDTO);
                 reservationDTO.setMembreDTO(membreDTO);
 
                 Bibliotheque.bibliothequeCreateur.getReservationFacade().placerReservation(Bibliotheque.bibliothequeCreateur.getSession(),
                     reservationDTO);
-
                 Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("utiliser".startsWith(command)) {
-
-                // TRANSACTION UTILISER ( <idReservation> )
-
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
                 final String idReservation = readString(tokenizer);
-
                 final ReservationDTO reservationDTO = Bibliotheque.bibliothequeCreateur.getReservationFacade()
                     .getReservation(Bibliotheque.bibliothequeCreateur.getSession(),
                         idReservation);
@@ -340,17 +318,13 @@ public final class Bibliotheque {
                         + idReservation
                         + " n'existe pas");
                 }
-
                 Bibliotheque.bibliothequeCreateur.getReservationFacade().utiliserReservation(Bibliotheque.bibliothequeCreateur.getSession(),
                     reservationDTO);
-
                 Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("annuler".startsWith(command)) {
-
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
                 final String idReservation = readString(tokenizer);
-
                 final ReservationDTO reservationDTO = Bibliotheque.bibliothequeCreateur.getReservationFacade()
                     .getReservation(Bibliotheque.bibliothequeCreateur.getSession(),
                         idReservation);
@@ -361,14 +335,12 @@ public final class Bibliotheque {
                 }
                 Bibliotheque.bibliothequeCreateur.getReservationFacade().annulerReservation(Bibliotheque.bibliothequeCreateur.getSession(),
                     reservationDTO);
-
                 Bibliotheque.bibliothequeCreateur.commitTransaction();
-
             }
 
             else if("--".startsWith(command)) {
-                // TODO empty block
-            }// ne rien faire; c'est un commentaire
+                // TODO empty block ne rien faire c'est un commentaire
+            }
 
             /* ***********************   */
             /* TRANSACTION NON RECONNUEE */
@@ -386,7 +358,7 @@ public final class Bibliotheque {
 
     /**
      *
-     * Affiche le menu des transactions acceptées par le système
+     * Affiche le menu des transactions acceptées par le système.
      *
      */
     static void afficherAide() {
@@ -410,12 +382,32 @@ public final class Bibliotheque {
         Bibliotheque.logger.info("  annuler <idReservation>");
 
     }
+    
+    /**
+     * 
+     * TODO Auto-generated method javadoc.
+     *
+     * @param tokenizer
+     */
+    static void transactionAcquerir(StringTokenizer tokenizer){
+        
+        Bibliotheque.bibliothequeCreateur.beginTransaction();
+
+        final LivreDTO livreDTO = new LivreDTO();
+        livreDTO.setTitre(readString(tokenizer));
+        livreDTO.setAuteur(readString(tokenizer));
+        livreDTO.setDateAcquisition(new Timestamp(System.currentTimeMillis()));
+        Bibliotheque.bibliothequeCreateur.getLivreFacade().acquerirLivre(Bibliotheque.bibliothequeCreateur.getSession(),
+            livreDTO);
+        Bibliotheque.bibliothequeCreateur.commitTransaction();
+        
+    }
 
     /**
      *
      * Vérifie si la fin du traitement des transactions est atteinte.
      *
-     * @param transaction
+     * @param transaction La transaction
      * @return boolean finTransaction
      */
     static boolean finTransaction(String transaction) {
@@ -441,11 +433,11 @@ public final class Bibliotheque {
 
     /**
      *
-     * Lecture d'une chaîne de caractères de la transaction entrée à l'écran
+     * Lecture d'une chaîne de caractères de la transaction entrée à l'écran.
      *
-     * @param tokenizer
-     * @return String readString
-     * @throws BibliothequeException
+     * @param tokenizer Le tokenizer à utiliser
+     * @return String readString La ligne
+     * @throws BibliothequeException S'il y a une erreur
      */
     static String readString(StringTokenizer tokenizer) throws BibliothequeException {
         if(tokenizer.hasMoreElements()) {
@@ -456,11 +448,11 @@ public final class Bibliotheque {
 
     /**
      *
-     * Lecture d'un int java de la transaction entrée à l'écran
+     * Lecture d'un int java de la transaction entrée à l'écran.
      *
-     * @param tokenizer
-     * @return int readInt
-     * @throws BibliothequeException
+     * @param tokenizer Le tokenizer à utiliser
+     * @return int readInt Le intéger à lire
+     * @throws BibliothequeException S'il y a une erreur
      */
     static int readInt(StringTokenizer tokenizer) throws BibliothequeException {
         if(tokenizer.hasMoreElements()) {
@@ -478,11 +470,11 @@ public final class Bibliotheque {
 
     /**
      *
-     * Lecture d'un long java de la transaction entrée à l'écran
+     * Lecture d'un long java de la transaction entrée à l'écran.
      *
-     * @param tokenizer
-     * @return long readLong
-     * @throws BibliothequeException
+     * @param tokenizer Le tokenizer à utiliser
+     * @return long readLong Le nombre
+     * @throws BibliothequeException S'il y a une erreur
      */
     static long readLong(StringTokenizer tokenizer) throws BibliothequeException {
         if(tokenizer.hasMoreElements()) {
@@ -502,9 +494,9 @@ public final class Bibliotheque {
      *
      * Lecture d'une date en format YYYY-MM-DD
      *
-     * @param tokenizer
-     * @return String readDate
-     * @throws BibliothequeException
+     * @param tokenizer Le tokenizer à utiliser
+     * @return String readDate La date en format YYYY-MM-DD
+     * @throws BibliothequeException S'il y a une erreur
      */
     static String readDate(StringTokenizer tokenizer) throws BibliothequeException {
         if(tokenizer.hasMoreElements()) {
@@ -521,4 +513,4 @@ public final class Bibliotheque {
         throw new BibliothequeException("autre paramètre attendu");
     }
 
-}//class
+}
