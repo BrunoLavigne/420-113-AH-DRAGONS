@@ -54,9 +54,6 @@
         <property name="target">
                   <bean class="ca.qc.collegeahuntsic.bibliotheque.service.implementations.ReservationService">
                         <constructor-arg>
-                          <ref bean="membreDAO"/>
-                        </constructor-arg>
-                        <constructor-arg>
                           <ref bean="reservationDAO"/>
                         </constructor-arg>
                         <constructor-arg>
