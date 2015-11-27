@@ -14,7 +14,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- *
  * Utilitaire de création des outils de la bibliothèque.
  *
  * @author Dragons Vicieux
@@ -50,10 +49,9 @@ public class BibliothequeCreateur {
     private IReservationFacade reservationFacade;
 
     /**
+     * Crée le système transactionnel nécessaire à l'application bibliothèque.
      *
-     * Crée le système transactionnel necessaire a l'application bibliotheque.
-     *
-     * @throws BibliothequeException S'il y a une erreur avec la base de donnée
+     * @throws BibliothequeException S'il y a une erreur avec la base de données
      */
     public BibliothequeCreateur() throws BibliothequeException {
         super();
@@ -70,8 +68,7 @@ public class BibliothequeCreateur {
     }
 
     /**
-     *
-     * Ouvre une session.
+     * Ouvre une session Hibernate.
      *
      * @return La session Hibernate
      * @throws BibliothequeException S'il y a une erreur
@@ -86,8 +83,7 @@ public class BibliothequeCreateur {
     }
 
     /**
-     *
-     * Ferme une session.
+     * Ferme une session Hibernate.
      *
      * @throws BibliothequeException S'il y a une erreur
      */
@@ -100,7 +96,6 @@ public class BibliothequeCreateur {
     }
 
     /**
-     *
      * Démarre une transaction.
      *
      * @throws BibliothequeException S'il y a une erreur
@@ -114,7 +109,6 @@ public class BibliothequeCreateur {
     }
 
     /**
-     *
      * Commit une transaction.
      *
      * @throws BibliothequeException S'il y a une erreur
@@ -129,7 +123,6 @@ public class BibliothequeCreateur {
     }
 
     /**
-     *
      * Rollback une transaction.
      *
      * @throws BibliothequeException S'il y a une erreur
