@@ -583,11 +583,13 @@ public final class Bibliotheque {
      * @param transaction La transaction à vérifier
      * @return boolean <code>true</code> si la fin du traitement des transactions est atteinte ; <code>false</code> sinon
      */
-    static boolean finTransaction(String transaction) {
+    private static boolean finTransaction(String transaction) {
         /* fin de fichier atteinte */
 
+        boolean finTransaction = false;
+
         if(transaction == null) {
-            return true;
+            finTransaction = true;
         }
 
         final StringTokenizer tokenizer = new StringTokenizer(transaction,
@@ -595,13 +597,15 @@ public final class Bibliotheque {
 
         /* ligne ne contenant que des espaces */
         if(!tokenizer.hasMoreTokens()) {
-            return false;
+            finTransaction = false;
         }
 
-        /* commande "exit" */
+        /* commande "exit"
         final String commande = tokenizer.nextToken();
+         */
 
-        return commande.equals("exit");
+        return finTransaction;
+
     }
 
     /**
