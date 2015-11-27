@@ -328,8 +328,12 @@ static void transactionAcquerir(StringTokenizer tokenizer) {
     Bibliotheque.bibliothequeCreateur.commitTransaction();
 
 }
-
-private void vendre(StringTokenizer tokenizer) {
+/**
+ * Vend un livre.
+ *
+ * @param tokenizer
+ */
+private static void vendreLivre(StringTokenizer tokenizer) {
     Bibliotheque.bibliothequeCreateur.beginTransaction();
     final String idLivre = readString(tokenizer);
     final LivreDTO livreDTO = Bibliotheque.bibliothequeCreateur.getLivreFacade().getLivre(Bibliotheque.bibliothequeCreateur.getSession(),
@@ -343,8 +347,12 @@ private void vendre(StringTokenizer tokenizer) {
         livreDTO);
     Bibliotheque.bibliothequeCreateur.commitTransaction();
 }
-
-private void preter(StringTokenizer tokenizer) {
+/**
+ * Commence un pret.
+ *
+ * @param tokenizer
+ */
+private static void commencerPret(StringTokenizer tokenizer) {
     Bibliotheque.bibliothequeCreateur.beginTransaction();
     final String idLivre = readString(tokenizer);
     final LivreDTO livreDTO = Bibliotheque.bibliothequeCreateur.getLivreFacade().getLivre(Bibliotheque.bibliothequeCreateur.getSession(),
@@ -369,8 +377,12 @@ private void preter(StringTokenizer tokenizer) {
         pretDTO);
     Bibliotheque.bibliothequeCreateur.commitTransaction();
 }
-
-private void renouveler(StringTokenizer tokenizer) {
+/**
+ * Renouvelle un pret.
+ *
+ * @param tokenizer
+ */
+private static void renouvelerPret(StringTokenizer tokenizer) {
     Bibliotheque.bibliothequeCreateur.beginTransaction();
     final String idPret = readString(tokenizer);
     final PretDTO pretDTO = Bibliotheque.bibliothequeCreateur.getPretFacade().getPret(Bibliotheque.bibliothequeCreateur.getSession(),
