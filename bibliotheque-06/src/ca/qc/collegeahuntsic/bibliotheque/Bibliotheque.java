@@ -46,6 +46,15 @@ public class Bibliotheque {
 
     /**
      *
+     * Constructeur privé pour empêcher toute instanciation
+     *
+     */
+    private Bibliotheque() {
+        super();
+    }
+
+    /**
+     *
      * Ouverture de la BD, traitement des transactions et fermeture de la BD.
      * @throws Exception
      */
@@ -87,7 +96,7 @@ public class Bibliotheque {
 
         while(!finTransaction(transaction)) {
 
-            StringTokenizer tokenizer = new StringTokenizer(transaction,
+            final StringTokenizer tokenizer = new StringTokenizer(transaction,
                 " ");
             if(tokenizer.hasMoreTokens()) {
                 try {
@@ -114,7 +123,7 @@ public class Bibliotheque {
     static String lireTransaction(BufferedReader reader) throws BibliothequeException {
         try {
             Bibliotheque.LOGGER.info("> ");
-            String transaction = reader.readLine();
+            final String transaction = reader.readLine();
 
             if(transaction != null) {
                 Bibliotheque.LOGGER.info(transaction);
@@ -239,7 +248,7 @@ public class Bibliotheque {
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
 
                 final String idPret = readString(tokenizer);
-                PretDTO pretDTO = Bibliotheque.bibliothequeCreateur.getPretFacade().getPret(Bibliotheque.bibliothequeCreateur.getSession(),
+                final PretDTO pretDTO = Bibliotheque.bibliothequeCreateur.getPretFacade().getPret(Bibliotheque.bibliothequeCreateur.getSession(),
                     idPret);
 
                 if(pretDTO == null) {
@@ -292,7 +301,7 @@ public class Bibliotheque {
 
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
 
-                ReservationDTO reservationDTO = new ReservationDTO();
+                final ReservationDTO reservationDTO = new ReservationDTO();
 
                 final String idMembre = readString(tokenizer);
                 final MembreDTO membreDTO = Bibliotheque.bibliothequeCreateur.getMembreFacade().getMembre(Bibliotheque.bibliothequeCreateur.getSession(),
@@ -348,7 +357,7 @@ public class Bibliotheque {
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
                 final String idReservation = readString(tokenizer);
 
-                ReservationDTO reservationDTO = Bibliotheque.bibliothequeCreateur.getReservationFacade()
+                final ReservationDTO reservationDTO = Bibliotheque.bibliothequeCreateur.getReservationFacade()
                     .getReservation(Bibliotheque.bibliothequeCreateur.getSession(),
                         idReservation);
                 if(reservationDTO == null) {
@@ -422,7 +431,7 @@ public class Bibliotheque {
             return true;
         }
 
-        StringTokenizer tokenizer = new StringTokenizer(transaction,
+        final StringTokenizer tokenizer = new StringTokenizer(transaction,
             " ");
 
         /* ligne ne contenant que des espaces */
@@ -483,7 +492,7 @@ public class Bibliotheque {
      */
     static long readLong(StringTokenizer tokenizer) throws BibliothequeException {
         if(tokenizer.hasMoreElements()) {
-            String token = tokenizer.nextToken();
+            final String token = tokenizer.nextToken();
             try {
                 return Long.valueOf(token).longValue();
             } catch(NumberFormatException e) {
@@ -505,7 +514,7 @@ public class Bibliotheque {
      */
     static String readDate(StringTokenizer tokenizer) throws BibliothequeException {
         if(tokenizer.hasMoreElements()) {
-            String token = tokenizer.nextToken();
+            final String token = tokenizer.nextToken();
             try {
                 FormatteurDate.convertirDate(token);
                 return token;
