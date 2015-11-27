@@ -5,6 +5,10 @@
 package ca.qc.collegeahuntsic.bibliotheque.util;
 
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
+import ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.interfaces.ILivreFacade;
+import ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.interfaces.IMembreFacade;
+import ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.interfaces.IPretFacade;
+import ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.interfaces.IReservationFacade;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,11 +24,17 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class BibliothequeCreateur {
 
-    private static final String SPRING_CONFIGURATION_FILE_NAME = "applicationContext-MySQL.xml";
+    private static final String APPLICATION_CONTEXT_JDBC_FILENAME = "testApplicationContext-jdbc-MySQL.xml";
 
-    private static final String SESSION_FACTORY_NAME = "sessionFactory";
+    private static final String APPLICATION_CONTEXT_DTO_FILENAME = "applicationContext-dto-MySQL.xml";
 
-    private static final String LIVRE_FACADE_NAME = "livreFacade";
+    private static final String APPLICATION_CONTEXT_DAO_FILENAME = "applicationContext-dao.xml";
+
+    private static final String APPLICATION_CONTEXT_SERVICE_FILENAME = "applicationContext-service.xml";
+
+    private static final String APPLICATION_CONTEXT_FACADE_FILENAME = "applicationContext-facade.xml";
+
+    private static final String APPLICATION_CONTEXT_FILENAME = "testApplicationContext.xml";
 
     private static final String MEMBRE_FACADE_NAME = "membreFacade";
 
