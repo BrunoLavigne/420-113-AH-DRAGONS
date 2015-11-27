@@ -4,11 +4,7 @@
 
 package ca.qc.collegeahuntsic.bibliotheque.util;
 
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.BibliothequeException;
-import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.ILivreFacade;
-import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.IMembreFacade;
-import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.IPretFacade;
-import ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.IReservationFacade;
+import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -55,7 +51,7 @@ public class BibliothequeCreateur {
 
     /**
      *
-     * Crée le système transactionnel necessaire a l'application bibliotheque
+     * Crée le système transactionnel necessaire a l'application bibliotheque.
      *
      * @throws BibliothequeException S'il y a une erreur avec la base de donnée
      */
@@ -75,7 +71,7 @@ public class BibliothequeCreateur {
 
     /**
      *
-     * Ouvre une session
+     * Ouvre une session.
      *
      * @return La session Hibernate
      * @throws BibliothequeException S'il y a une erreur
@@ -91,7 +87,7 @@ public class BibliothequeCreateur {
 
     /**
      *
-     * Ferme une session
+     * Ferme une session.
      *
      * @throws BibliothequeException S'il y a une erreur
      */
@@ -105,7 +101,7 @@ public class BibliothequeCreateur {
 
     /**
      *
-     * Démarre une transaction
+     * Démarre une transaction.
      *
      * @throws BibliothequeException S'il y a une erreur
      */
@@ -119,7 +115,7 @@ public class BibliothequeCreateur {
 
     /**
      *
-     * Commit une transaction
+     * Commit une transaction.
      *
      * @throws BibliothequeException S'il y a une erreur
      */
@@ -134,7 +130,7 @@ public class BibliothequeCreateur {
 
     /**
      *
-     * Rollback une transaction
+     * Rollback une transaction.
      *
      * @throws BibliothequeException S'il y a une erreur
      */
