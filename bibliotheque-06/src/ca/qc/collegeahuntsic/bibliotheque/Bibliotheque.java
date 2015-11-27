@@ -192,57 +192,10 @@ public final class Bibliotheque {
             } else if("acquerir".startsWith(command)) {
 
             } else if("vendre".startsWith(command)) {
-                Bibliotheque.bibliothequeCreateur.beginTransaction();
-                final String idLivre = readString(tokenizer);
-                final LivreDTO livreDTO = Bibliotheque.bibliothequeCreateur.getLivreFacade().getLivre(Bibliotheque.bibliothequeCreateur.getSession(),
-                    idLivre);
-                if(livreDTO == null) {
-                    throw new MissingDTOException("Le livre "
-                        + idLivre
-                        + " n'existe pas");
-                }
-                Bibliotheque.bibliothequeCreateur.getLivreFacade().vendreLivre(Bibliotheque.bibliothequeCreateur.getSession(),
-                    livreDTO);
-                Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("preter".startsWith(command)) {
-                Bibliotheque.bibliothequeCreateur.beginTransaction();
-                final String idLivre = readString(tokenizer);
-                final LivreDTO livreDTO = Bibliotheque.bibliothequeCreateur.getLivreFacade().getLivre(Bibliotheque.bibliothequeCreateur.getSession(),
-                    idLivre);
-                if(livreDTO == null) {
-                    throw new MissingDTOException("Le livre "
-                        + idLivre
-                        + " n'existe pas");
-                }
-                final String idMembre = readString(tokenizer);
-                final MembreDTO membreDTO = Bibliotheque.bibliothequeCreateur.getMembreFacade().getMembre(Bibliotheque.bibliothequeCreateur.getSession(),
-                    idMembre);
-                if(membreDTO == null) {
-                    throw new MissingDTOException("Le membre "
-                        + idMembre
-                        + " n'existe pas");
-                }
-                final PretDTO pretDTO = new PretDTO();
-                pretDTO.setLivreDTO(livreDTO);
-                pretDTO.setMembreDTO(membreDTO);
-                Bibliotheque.bibliothequeCreateur.getPretFacade().commencerPret(Bibliotheque.bibliothequeCreateur.getSession(),
-                    pretDTO);
-                Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("renouveler".startsWith(command)) {
-                Bibliotheque.bibliothequeCreateur.beginTransaction();
-                final String idPret = readString(tokenizer);
-                final PretDTO pretDTO = Bibliotheque.bibliothequeCreateur.getPretFacade().getPret(Bibliotheque.bibliothequeCreateur.getSession(),
-                    idPret);
-                if(pretDTO == null) {
-                    throw new MissingDTOException("Le pret "
-                        + idPret
-                        + " n'existe pas");
-                }
-                Bibliotheque.bibliothequeCreateur.getPretFacade().renouvelerPret(Bibliotheque.bibliothequeCreateur.getSession(),
-                    pretDTO);
-                Bibliotheque.bibliothequeCreateur.commitTransaction();
 
             } else if("retourner".startsWith(command)) {
 
