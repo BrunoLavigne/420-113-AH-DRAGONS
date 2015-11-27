@@ -11,11 +11,11 @@ import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.StringTokenizer;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
 import ca.qc.collegeahuntsic.bibliotheque.util.BibliothequeCreateur;
 import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Interface du système de gestion d'une bibliothèque.
@@ -55,7 +55,7 @@ public final class Bibliotheque {
      * @param argv Les paramètres du main
      * @throws Exception
      */
-    public static void main(String[] argv) throws Exception {
+    public static void main(String[] argv) {
         // validation du nombre de paramètres
         if(argv.length < 1) {
             Bibliotheque.logger.info("Usage: java Biblio <fichier-transactions>");
@@ -82,7 +82,7 @@ public final class Bibliotheque {
      * Traitement des transactions de la bibliothèque.
      *
      * @param reader Le reader à utiliser
-     * @throws BibliothequeException
+     *@throws BibliothequeException S'il y a une erreur d'exécution
      */
     static void traiterTransactions(BufferedReader reader) throws BibliothequeException {
         afficherAide();
@@ -101,7 +101,7 @@ public final class Bibliotheque {
                 } catch(BibliothequeException bibliothequeException) {
                     Bibliotheque.logger.error(bibliothequeException.getMessage());
                     transaction = lireTransaction(reader);
-                    continue;
+
                 }
             }
 
@@ -113,7 +113,7 @@ public final class Bibliotheque {
      *
      * @param reader Le reader à utiliser
      * @return lireTransactionString La transaction lue
-     * @throws BibliothequeException
+     * @throws BibliothequeException S'il y a une erreur d'exécution
      */
     static String lireTransaction(BufferedReader reader) throws BibliothequeException {
         try {
