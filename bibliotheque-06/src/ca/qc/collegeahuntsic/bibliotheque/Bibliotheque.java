@@ -18,9 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
- * Interface du système de gestion d'une bibliothèque
- *
+ * Interface du système de gestion d'une bibliothèque.
  *
  * Ce programme permet d'appeler les transactions de base d'une
  * bibliothèque. Il gère des livres, des membres et des
@@ -31,11 +29,9 @@ import org.apache.commons.logging.LogFactory;
  * Paramètres
  * 0 - Fichier de transaction
  *
- * Pré-condition
- *   La base de données de la bibliothèque doit exister
+ * Pré-condition : La base de données de la bibliothèque doit exister
  *
- * Post-condition
- *   Le programme effectue les mises à jour associées à chaque transaction
+ * Post-condition : Le programme effectue les mises à jour associées à chaque transaction
  *
  */
 public class Bibliotheque {
@@ -45,17 +41,16 @@ public class Bibliotheque {
     private static Log LOGGER = LogFactory.getLog(Bibliotheque.class);
 
     /**
-     *
-     * Constructeur privé pour empêcher toute instanciation
-     *
+     * Constructeur privé pour empêcher toute instanciation.
      */
     private Bibliotheque() {
         super();
     }
 
     /**
+     * Utilitaire de test de l'application biliotèque.
      *
-     * Ouverture de la BD, traitement des transactions et fermeture de la BD.
+     * @param argv Les paramètres du main
      * @throws Exception
      */
     public static void main(String[] argv) throws Exception {
@@ -82,10 +77,9 @@ public class Bibliotheque {
     }
 
     /**
+     * Traitement des transactions de la bibliothèque.
      *
-     * Traitement des transactions de la bibliothèque
-     *
-     * @param reader
+     * @param reader Le reader à utiliser
      * @throws BibliothequeException
      */
     static void traiterTransactions(BufferedReader reader) throws BibliothequeException {
@@ -113,11 +107,10 @@ public class Bibliotheque {
     }
 
     /**
+     * Lecture d'une transaction.
      *
-     * Lecture d'une transaction
-     *
-     * @param reader
-     * @return lireTransactionString
+     * @param reader Le reader à utiliser
+     * @return lireTransactionString La transaction lue
      * @throws BibliothequeException
      */
     static String lireTransaction(BufferedReader reader) throws BibliothequeException {
@@ -136,11 +129,10 @@ public class Bibliotheque {
     }
 
     /**
+     * Décodage et traitement d'une transaction.
      *
-     * Décodage et traitement d'une transaction
-     *
-     * @param tokenizer
-     * @throws BibliothequeException
+     * @param tokenizer Le tokenizer à utiliser
+     * @throws BibliothequeException S'il y a une erreur d'exécution
      */
     static void executerTransaction(StringTokenizer tokenizer) throws BibliothequeException {
 
