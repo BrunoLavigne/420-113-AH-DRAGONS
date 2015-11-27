@@ -11,12 +11,7 @@ import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.StringTokenizer;
-import ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO;
-import ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliotheque.exception.BibliothequeException;
-import ca.qc.collegeahuntsic.bibliotheque.exception.dto.MissingDTOException;
 import ca.qc.collegeahuntsic.bibliotheque.util.BibliothequeCreateur;
 import ca.qc.collegeahuntsic.bibliotheque.util.FormatteurDate;
 import org.apache.commons.logging.Log;
@@ -157,7 +152,7 @@ public class Bibliotheque {
 
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
 
-                LivreDTO livreDTO = new LivreDTO();
+                final LivreDTO livreDTO = new LivreDTO();
                 livreDTO.setTitre(readString(tokenizer));
                 livreDTO.setAuteur(readString(tokenizer));
                 livreDTO.setDateAcquisition(new Timestamp(System.currentTimeMillis()));
@@ -197,7 +192,7 @@ public class Bibliotheque {
                         + " n'existe pas");
                 }
                 // récupération du membre
-                String idMembre = readString(tokenizer);
+                final String idMembre = readString(tokenizer);
                 MembreDTO membreDTO = Bibliotheque.bibliothequeCreateur.getMembreFacade().getMembre(Bibliotheque.bibliothequeCreateur.getSession(),
                     idMembre);
                 if(membreDTO == null) {
@@ -278,7 +273,7 @@ public class Bibliotheque {
 
                 Bibliotheque.bibliothequeCreateur.beginTransaction();
 
-                String idMembre = readString(tokenizer);
+                final String idMembre = readString(tokenizer);
                 MembreDTO membreDTO = Bibliotheque.bibliothequeCreateur.getMembreFacade().getMembre(Bibliotheque.bibliothequeCreateur.getSession(),
                     idMembre);
 
