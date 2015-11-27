@@ -36,13 +36,24 @@ public class BibliothequeCreateur {
 
     private static final String APPLICATION_CONTEXT_FILENAME = "testApplicationContext.xml";
 
+    private static final String SESSION_FACTORY_NAME = "sessionFactory";
+
+    private static final String LIVRE_FACADE_NAME = "livreFacade";
+
     private static final String MEMBRE_FACADE_NAME = "membreFacade";
 
     private static final String RESERVATION_FACADE_NAME = "reservationFacade";
 
     private static final String PRET_FACADE_NAME = "pretFacade";
 
-    private static final ApplicationContext APPLICATION_CONTEXT = new ClassPathXmlApplicationContext(BibliothequeCreateur.SPRING_CONFIGURATION_FILE_NAME);
+    private static final String[] APPLICATION_CONTEXT_FILENAMES = new String[] {BibliothequeCreateur.APPLICATION_CONTEXT_JDBC_FILENAME,
+        BibliothequeCreateur.APPLICATION_CONTEXT_DAO_FILENAME,
+        BibliothequeCreateur.APPLICATION_CONTEXT_DTO_FILENAME,
+        BibliothequeCreateur.APPLICATION_CONTEXT_SERVICE_FILENAME,
+        BibliothequeCreateur.APPLICATION_CONTEXT_FACADE_FILENAME,
+        BibliothequeCreateur.APPLICATION_CONTEXT_FILENAME};
+
+    private static final ApplicationContext APPLICATION_CONTEXT = new ClassPathXmlApplicationContext(BibliothequeCreateur.APPLICATION_CONTEXT_FILENAMES);
 
     private SessionFactory sessionFactory;
 
