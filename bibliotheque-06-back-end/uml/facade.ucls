@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <interface id="1" language="java" name="ca.qc.collegeahuntsic.bibliotheque.facade.interfaces.IFacade" 
     project="bibliotheque-04-MySQL" 
-    file="/bibliotheque-04-MySQL/src/ca/qc/collegeahuntsic/bibliotheque/facade/interfaces/IFacade.java" binary="false" 
+    file="/bibliotheque-06-back-end/src/ca/qc/collegeahuntsic/bibliotheque/facade/interfaces/IFacade.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="70" width="297" x="366" y="-126"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
