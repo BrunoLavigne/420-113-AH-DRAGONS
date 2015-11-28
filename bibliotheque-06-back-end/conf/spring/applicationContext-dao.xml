@@ -15,9 +15,9 @@
   <bean name="livreDAO"
         parent="transactionProxy">
         <property name="target">
-                  <bean class="ca.qc.collegeahuntsic.bibliotheque.dao.implementations.LivreDAO">
+                  <bean class="ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.implementations.LivreDAO">
                         <constructor-arg>
-                          <value>ca.qc.collegeahuntsic.bibliotheque.dto.LivreDTO</value>
+                          <value>ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.LivreDTO</value>
                         </constructor-arg>
                   </bean>
         </property>
@@ -25,9 +25,9 @@
   <bean name="membreDAO"
         parent="transactionProxy">
         <property name="target">
-                  <bean class="ca.qc.collegeahuntsic.bibliotheque.dao.implementations.MembreDAO">
+                  <bean class="ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.implementations.MembreDAO">
                         <constructor-arg>
-                          <value>ca.qc.collegeahuntsic.bibliotheque.dto.MembreDTO</value>
+                          <value>ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.MembreDTO</value>
                         </constructor-arg>
                   </bean>
         </property>
@@ -35,9 +35,9 @@
   <bean name="pretDAO"
         parent="transactionProxy">
         <property name="target">
-                  <bean class="ca.qc.collegeahuntsic.bibliotheque.dao.implementations.PretDAO">
+                  <bean class="ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.implementations.PretDAO">
                         <constructor-arg>
-                          <value>ca.qc.collegeahuntsic.bibliotheque.dto.PretDTO</value>
+                          <value>ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.PretDTO</value>
                         </constructor-arg>
                   </bean>
         </property>
@@ -45,9 +45,9 @@
   <bean name="reservationDAO"
         parent="transactionProxy">
         <property name="target">
-                  <bean class="ca.qc.collegeahuntsic.bibliotheque.dao.implementations.ReservationDAO">
+                  <bean class="ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.implementations.ReservationDAO">
                         <constructor-arg>
-                          <value>ca.qc.collegeahuntsic.bibliotheque.dto.ReservationDTO</value>
+                          <value>ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.ReservationDTO</value>
                         </constructor-arg>
                   </bean>
         </property>

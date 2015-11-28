@@ -17,7 +17,7 @@
   <bean name="livreFacade"
         parent="transactionProxy">
         <property name="target">
-                  <bean class="ca.qc.collegeahuntsic.bibliotheque.facade.implementations.LivreFacade">
+                  <bean class="ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.implementations.LivreFacade">
                         <constructor-arg>
                           <ref bean="livreService"/>
                         </constructor-arg>
@@ -27,7 +27,7 @@
   <bean name="membreFacade"
         parent="transactionProxy">
         <property name="target">
-                  <bean class="ca.qc.collegeahuntsic.bibliotheque.facade.implementations.MembreFacade">
+                  <bean class="ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.implementations.MembreFacade">
                         <constructor-arg>
                           <ref bean="membreService"/>
                         </constructor-arg>
@@ -37,7 +37,7 @@
   <bean name="pretFacade"
         parent="transactionProxy">
         <property name="target">
-                  <bean class="ca.qc.collegeahuntsic.bibliotheque.facade.implementations.PretFacade">
+                  <bean class="ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.implementations.PretFacade">
                         <constructor-arg>
                           <ref bean="pretService"/>
                         </constructor-arg>
@@ -47,7 +47,7 @@
   <bean name="reservationFacade"
         parent="transactionProxy">
         <property name="target">
-                  <bean class="ca.qc.collegeahuntsic.bibliotheque.facade.implementations.ReservationFacade">
+                  <bean class="ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.implementations.ReservationFacade">
                         <constructor-arg>
                           <ref bean="reservationService"/>
                         </constructor-arg>

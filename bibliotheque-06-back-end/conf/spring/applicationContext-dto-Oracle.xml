@@ -16,10 +16,10 @@
         class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
         <property name="mappingResources">
                   <list>
-                    <value>ca/qc/collegeahuntsic/bibliotheque/dto/LivreDTO-Oracle.hbm.xml</value>
-                    <value>ca/qc/collegeahuntsic/bibliotheque/dto/MembreDTO-Oracle.hbm.xml</value>
-                    <value>ca/qc/collegeahuntsic/bibliotheque/dto/PretDTO-Oracle.hbm.xml</value>
-                    <value>ca/qc/collegeahuntsic/bibliotheque/dto/ReservationDTO-Oracle.hbm.xml</value>
+                    <value>ca/qc/collegeahuntsic/bibliothequeBackEnd/dto/LivreDTO-Oracle.hbm.xml</value>
+                    <value>ca/qc/collegeahuntsic/bibliothequeBackEnd/dto/MembreDTO-Oracle.hbm.xml</value>
+                    <value>ca/qc/collegeahuntsic/bibliothequeBackEnd/dto/PretDTO-Oracle.hbm.xml</value>
+                    <value>ca/qc/collegeahuntsic/bibliothequeBackEnd/dto/ReservationDTO-Oracle.hbm.xml</value>
                   </list>
         </property>
         <property name="hibernateProperties">
