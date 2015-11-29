@@ -173,6 +173,9 @@ public class MembreService extends Service implements IMembreService {
             membreDTO);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void desinscrireMembre(Session session,
         MembreDTO membreDTO) throws InvalidHibernateSessionException,

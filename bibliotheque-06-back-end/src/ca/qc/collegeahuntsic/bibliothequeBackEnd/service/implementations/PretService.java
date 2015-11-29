@@ -148,7 +148,6 @@ public class PretService extends Service implements IPretService {
 
     /**
      * {@inheritDoc}
-     * @throws InvalidCriterionValueException
      */
     @Override
     public List<PretDTO> findPretByMembre(Session session,
