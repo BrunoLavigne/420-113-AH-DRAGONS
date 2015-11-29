@@ -65,6 +65,7 @@ public interface IPretFacade extends IFacade {
      * @throws InvalidDTOException Si le prêt est <code>null</code>
      * @throws MissingLoanException Si le livre n'a pas encore été prêté
      * @throws ExistingReservationException Si le livre a été réservé
+     * @throws ExistingLoanException Si le livre a été prêté
      * @throws FacadeException S'il y a une erreur avec la base de données
      */
     void renouvelerPret(Session session,

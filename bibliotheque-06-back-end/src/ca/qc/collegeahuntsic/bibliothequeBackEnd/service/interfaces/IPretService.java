@@ -12,10 +12,11 @@ import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionV
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidPrimaryKeyException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidSortByPropertyException;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOClassException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingLoanException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ExistingReservationException;
+import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.InvalidLoanLimitException;
+import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.MissingLoanException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.service.ServiceException;
 import org.hibernate.Session;
 
@@ -33,7 +34,6 @@ public interface IPretService extends IService {
      * @param pretDTO Le prêt à ajouter
      * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
      * @throws InvalidDTOException Si le prêt est <code>null</code>
-     * @throws InvalidDTOClassException Si la classe du prêt n'est pas celle que prend en charge le DAO
      * @throws ServiceException S'il y a une erreur avec la base de données
      *
      */
@@ -64,13 +64,11 @@ public interface IPretService extends IService {
      * @param pretDTO Le prêt à mettre à jour
      * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
      * @throws InvalidDTOException Si le prêt est <code>null</code>
-     * @throws InvalidDTOClassException Si la classe du prêt n'est pas celle que prend en charge le DAO
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
     void updatePret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
-        InvalidDTOClassException,
         ServiceException;
 
     /**
@@ -80,13 +78,11 @@ public interface IPretService extends IService {
      * @param pretDTO Le prêt à supprimer
      * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
      * @throws InvalidDTOException Si le prêt est <code>null</code>
-     * @throws InvalidDTOClassException Si la classe du prêt n'est pas celle que prend en charge le DAO
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
     void deletePret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
-        InvalidDTOClassException,
         ServiceException;
 
     /**
@@ -198,19 +194,19 @@ public interface IPretService extends IService {
      *
      * @param session La session Hibernate à utiliser
      * @param pretDTO Le prêt à commencer
-     * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
+     * @throws InvalidHibernateSessionException Si la session Hibernate est <code>null</code>
      * @throws InvalidDTOException Si le prêt est <code>null</code>
      * @throws ExistingLoanException Si le livre a été prêté
+     * @throws InvalidLoanLimitException Si le membre a atteint sa limite de prêt
      * @throws ExistingReservationException Si le livre a été réservé
-     * @throws InvalidDTOClassException Si la classe du membre n'est pas celle que prend en charge le DAO
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
     void commencerPret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         ExistingLoanException,
+        InvalidLoanLimitException,
         ExistingReservationException,
-        InvalidDTOClassException,
         ServiceException;
 
     /**
@@ -218,15 +214,17 @@ public interface IPretService extends IService {
      *
      * @param session La session Hibernate à utiliser
      * @param pretDTO Le prêt à renouveler
-     * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
+     * @throws InvalidHibernateSessionException Si la session Hibernate est <code>null</code>
      * @throws InvalidDTOException Si le prêt est <code>null</code>
-     * @throws InvalidPrimaryKeyException Si la clef primaire du prêt est <code>null</code>, si la clef primaire du membre est <code>null</code> ou si la clef primaire du livre est <code>null</code>
-     * @throws ServiceException S'il y a une erreur avec la base de données.
+     * @throws MissingLoanException Si le livre n'a pas encore été prêté
+     * @throws ExistingReservationException Si le livre a été réservé
+     * @throws ServiceException S'il y a une erreur avec la base de données
      */
     void renouvelerPret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
-        InvalidPrimaryKeyException,
+        MissingLoanException,
+        ExistingReservationException,
         ServiceException;
 
     /**
@@ -234,14 +232,14 @@ public interface IPretService extends IService {
      *
      * @param session La session Hibernate à utiliser
      * @param pretDTO Le prêt à terminer
-     * @throws  InvalidHibernateSessionException Si la connexion est <code>null</code>
+     * @throws InvalidHibernateSessionException Si la session Hibernate est <code>null</code>
      * @throws InvalidDTOException Si le prêt est <code>null</code>
-     * @throws InvalidDTOClassException Si la classe du membre n'est pas celle que prend en charge le DAO ou si la classe du prêt n'est pas celle que prend en charge le DAO
+     * @throws MissingLoanException Si le livre n'a pas encore été prêté
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
     void terminerPret(Session session,
         PretDTO pretDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
-        InvalidDTOClassException,
+        MissingLoanException,
         ServiceException;
 }

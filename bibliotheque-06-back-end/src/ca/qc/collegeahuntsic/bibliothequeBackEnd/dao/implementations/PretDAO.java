@@ -21,14 +21,13 @@ import org.hibernate.Session;
 
 public class PretDAO extends DAO implements IPretDAO {
 
-    // TODO changer la visibilité a package quand nous aurons la version avec Spring
     /**
      * Crée le DAO de la table <code>pret</code>.
      *
      * @param pretDTOClass La classe de pret DTO à utiliser
      * @throws InvalidDTOClassException Si la classe de DTO est <code>null</code>
      */
-    public PretDAO(Class<PretDTO> pretDTOClass) throws InvalidDTOClassException {
+    PretDAO(Class<PretDTO> pretDTOClass) throws InvalidDTOClassException {
         super(pretDTOClass);
     }
 
@@ -44,16 +43,6 @@ public class PretDAO extends DAO implements IPretDAO {
         InvalidCriterionException,
         InvalidCriterionValueException,
         InvalidSortByPropertyException {
-        if(session == null) {
-            throw new InvalidHibernateSessionException("La session ne peut être null");
-        }
-        if(idMembre == null) {
-            throw new InvalidCriterionException("Le membre ne peut être null");
-        }
-        if(sortByPropertyName == null) {
-            throw new InvalidSortByPropertyException("La propriété ne peut être null");
-        }
-
         return (List<PretDTO>) find(session,
             PretDTO.ID_MEMBRE_COLUMN_NAME,
             idMembre,
@@ -72,15 +61,6 @@ public class PretDAO extends DAO implements IPretDAO {
         InvalidCriterionException,
         InvalidCriterionValueException,
         InvalidSortByPropertyException {
-        if(session == null) {
-            throw new InvalidHibernateSessionException("La session ne peut être null");
-        }
-        if(idLivre == null) {
-            throw new InvalidCriterionException("Le livre ne peut être null");
-        }
-        if(sortByPropertyName == null) {
-            throw new InvalidSortByPropertyException("La propriété ne peut être null");
-        }
         return (List<PretDTO>) find(session,
             PretDTO.ID_LIVRE_COLUMN_NAME,
             idLivre,
@@ -99,15 +79,6 @@ public class PretDAO extends DAO implements IPretDAO {
         InvalidCriterionException,
         InvalidCriterionValueException,
         InvalidSortByPropertyException {
-        if(session == null) {
-            throw new InvalidHibernateSessionException("La session ne peut être null");
-        }
-        if(datePret == null) {
-            throw new InvalidCriterionException("La date de pret ne peut être null");
-        }
-        if(sortByPropertyName == null) {
-            throw new InvalidSortByPropertyException("La propriété ne peut être null");
-        }
         return (List<PretDTO>) find(session,
             PretDTO.DATE_PRET_COLUMN_NAME,
             datePret,
@@ -126,15 +97,6 @@ public class PretDAO extends DAO implements IPretDAO {
         InvalidCriterionException,
         InvalidCriterionValueException,
         InvalidSortByPropertyException {
-        if(session == null) {
-            throw new InvalidHibernateSessionException("La session ne peut être null");
-        }
-        if(dateRetour == null) {
-            throw new InvalidCriterionException("La date de retour ne peut être null");
-        }
-        if(sortByPropertyName == null) {
-            throw new InvalidSortByPropertyException("La propriété ne peut être null");
-        }
         return (List<PretDTO>) find(session,
             PretDTO.DATE_RETOUR_COLUMN_NAME,
             dateRetour,

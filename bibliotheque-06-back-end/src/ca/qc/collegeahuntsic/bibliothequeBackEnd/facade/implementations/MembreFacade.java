@@ -28,7 +28,6 @@ public class MembreFacade extends Facade implements IMembreFacade {
 
     private IMembreService membreService;
 
-    // TODO changer la visibilité a package quand nous aurons la version avec Spring
     /**
      * Crée la Facade de la table <code>membre</code>.
      *

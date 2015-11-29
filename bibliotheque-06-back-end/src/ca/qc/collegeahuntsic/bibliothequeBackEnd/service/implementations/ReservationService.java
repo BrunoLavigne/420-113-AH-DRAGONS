@@ -36,7 +36,6 @@ import org.hibernate.Session;
  */
 public class ReservationService extends Service implements IReservationService {
 
-    // TODO : remove membreDAO from this class
     private IReservationDAO reservationDAO;
 
     private IPretDAO pretDAO;
@@ -50,9 +49,7 @@ public class ReservationService extends Service implements IReservationService {
      */
     public ReservationService(IReservationDAO reservationDAO,
         IPretDAO pretDAO) throws InvalidDAOException {
-
         super();
-
         if(reservationDAO == null) {
             throw new InvalidDAOException("Le DAO de reservation ne peut être null");
         }
@@ -74,7 +71,6 @@ public class ReservationService extends Service implements IReservationService {
         ReservationDTO reservationDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         ServiceException {
-
         try {
             getReservationDAO().add(session,
                 reservationDTO);
@@ -160,36 +156,35 @@ public class ReservationService extends Service implements IReservationService {
         String idMembre,
         String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidCriterionException,
+        InvalidCriterionValueException,
         InvalidSortByPropertyException,
         ServiceException {
         try {
             return getReservationDAO().findByMembre(session,
                 idMembre,
                 sortByPropertyName);
-        } catch(
-            DAOException
-            | InvalidCriterionValueException daoException) {
+        } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
     }
 
     /**
      * {@inheritDoc}
+     * @throws
      */
     @Override
     public List<ReservationDTO> findReservationByLivre(Session session,
         String idLivre,
         String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidCriterionException,
+        InvalidCriterionValueException,
         InvalidSortByPropertyException,
         ServiceException {
         try {
             return getReservationDAO().findByLivre(session,
                 idLivre,
                 sortByPropertyName);
-        } catch(
-            DAOException
-            | InvalidCriterionValueException daoException) {
+        } catch(DAOException daoException) {
             throw new ServiceException(daoException);
         }
     }
@@ -209,41 +204,53 @@ public class ReservationService extends Service implements IReservationService {
         ExistingLoanException,
         ExistingReservationException,
         ServiceException {
-
         if(session == null) {
             throw new InvalidHibernateSessionException("La session Hibernate ne peut être null");
         }
-
         if(reservationDTO == null) {
             throw new InvalidDTOException("Le DTO de la réservation ne peut pas être null");
         }
 
         // Si le livre n'a pas encore été prêté,
-        final List<PretDTO> listeDesPrets = new ArrayList<>(reservationDTO.getLivreDTO().getPrets());
-        if(listeDesPrets.isEmpty()) {
-            throw new MissingLoanException("Le livre : "
-                + reservationDTO.getLivreDTO().getIdLivre()
-                + " n'a pas été prêté encore. Faire un emprunt au lieu d'un réservation");
-        }
-
-        // Si le livre est déjà prêté au membre
-        for(PretDTO unPretDTO : listeDesPrets) {
-            if(reservationDTO.getMembreDTO().equals(unPretDTO.getMembreDTO())) {
-                throw new ExistingLoanException("Le livre "
-                    + reservationDTO.getLivreDTO().getIdLivre()
-                    + " est déjà prêté à ce membre");
+        final List<PretDTO> prets = new ArrayList<>(reservationDTO.getLivreDTO().getPrets());
+        if(!prets.isEmpty()) {
+            for(PretDTO pretDTO : prets) {
+                if(pretDTO.getDateRetour() != null) {
+                    throw new MissingLoanException("Le livre : "
+                        + reservationDTO.getLivreDTO().getTitre()
+                        + "(ID du livre : "
+                        + reservationDTO.getLivreDTO().getIdLivre()
+                        + ") n'a pas été prêté encore. Faire un emprunt au lieu d'un réservation");
+                }
             }
-        }
 
-        // si le membre a déjà réservé ce livre
-        final List<ReservationDTO> listeReservation = new ArrayList<>(reservationDTO.getMembreDTO().getReservations());
+            // Si le livre est déjà prêté au membre
+            for(PretDTO unPretDTO : prets) {
+                if(reservationDTO.getMembreDTO().equals(unPretDTO.getMembreDTO())) {
+                    throw new ExistingLoanException("Le livre : "
+                        + reservationDTO.getLivreDTO().getTitre()
+                        + "(ID du livre : "
+                        + reservationDTO.getLivreDTO().getIdLivre()
+                        + " est déjà prêté ce membre ("
+                        + unPretDTO.getMembreDTO().getNom()
+                        + ")");
+                }
+            }
 
-        for(ReservationDTO reservation : listeReservation) {
-            if(reservationDTO.getLivreDTO().equals(reservation.getLivreDTO())) {
-                throw new ExistingReservationException("Le livre : "
-                    + reservationDTO.getLivreDTO().getIdLivre()
-                    + " a déjà été réservé par le membre : "
-                    + reservation.getMembreDTO().getIdMembre());
+            // Si le membre a déjà réservé ce livre
+            final List<ReservationDTO> listeReservation = new ArrayList<>(reservationDTO.getMembreDTO().getReservations());
+            for(ReservationDTO reservation : listeReservation) {
+                if(reservationDTO.getLivreDTO().equals(reservation.getLivreDTO())) {
+                    throw new ExistingReservationException("Le livre : "
+                        + reservationDTO.getLivreDTO().getTitre()
+                        + "(ID du livre : "
+                        + reservationDTO.getLivreDTO().getIdLivre()
+                        + ") a déjà été réservé par le membre : "
+                        + reservation.getMembreDTO().getNom()
+                        + "(ID du membre : "
+                        + reservation.getMembreDTO().getIdMembre()
+                        + ")");
+                }
             }
         }
 
@@ -277,7 +284,6 @@ public class ReservationService extends Service implements IReservationService {
 
         if(!listeReservations.isEmpty()) {
             final ReservationDTO firstReservationDTO = listeReservations.get(0);
-
             if(!reservationDTO.getMembreDTO().equals(firstReservationDTO.getMembreDTO())) {
                 throw new ExistingReservationException("La réservation n'est pas la première de la liste "
                     + "pour ce livre; la première est "
@@ -287,20 +293,29 @@ public class ReservationService extends Service implements IReservationService {
 
         // Si le livre est déjà prété
         final List<PretDTO> listeDesPret = new ArrayList<>(reservationDTO.getLivreDTO().getPrets());
-        for(PretDTO pretDTO : listeDesPret) {
-            if(pretDTO.getDateRetour() == null) {
-                throw new ExistingLoanException("Livre "
-                    + reservationDTO.getLivreDTO().getIdLivre()
-                    + " déjà prêté à "
-                    + pretDTO.getMembreDTO().getIdMembre());
+        if(!listeDesPret.isEmpty()) {
+            for(PretDTO pretDTO : listeDesPret) {
+                if(pretDTO.getDateRetour() == null) {
+                    throw new ExistingLoanException("Le livre "
+                        + reservationDTO.getLivreDTO().getTitre()
+                        + " (ID de livre : "
+                        + reservationDTO.getLivreDTO().getIdLivre()
+                        + ") a été prêté à "
+                        + pretDTO.getMembreDTO().getNom()
+                        + " (ID de membre : "
+                        + pretDTO.getMembreDTO().getIdMembre()
+                        + ")");
+                }
             }
         }
 
         // Si le membre a atteint sa limite de prêt
         if(reservationDTO.getMembreDTO().getNbPret() >= reservationDTO.getMembreDTO().getLimitePret()) {
-            throw new InvalidLoanLimitException("Limite de prêt du membre "
+            throw new InvalidLoanLimitException("Le membre "
+                + reservationDTO.getMembreDTO().getNom()
+                + "(ID du membre : "
                 + reservationDTO.getMembreDTO().getIdMembre()
-                + " atteinte");
+                + ") a atteint sa limite de prêt");
         }
 
         // Éliminer la réservation.
@@ -312,19 +327,15 @@ public class ReservationService extends Service implements IReservationService {
         unPretDTO.setDatePret(new Timestamp(System.currentTimeMillis()));
         unPretDTO.setDateRetour(null);
 
+        reservationDTO.getLivreDTO().getReservations().remove(reservationDTO);
         try {
             getPretDAO().add(session,
                 unPretDTO);
-            reservationDTO.getLivreDTO().getReservations().remove(reservationDTO);
-            annulerReservation(session,
-                reservationDTO);
-        } catch(
-            DAOException
-            | InvalidPrimaryKeyException
-            | InvalidDTOClassException exception) {
-            throw new ServiceException(exception);
+        } catch(DAOException daoException) {
+            throw new ServiceException(daoException);
         }
-
+        deleteReservation(session,
+            reservationDTO);
     }
 
     /**

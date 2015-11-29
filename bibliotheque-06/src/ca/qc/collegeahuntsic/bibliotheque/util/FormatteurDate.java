@@ -51,7 +51,6 @@ public final class FormatteurDate {
      *
      * @param timestamp Le {@link java.sql.Timestamp}
      * @return La chaîne de caractères issue de la conversion
-     * @throws ParseException Si le {@link java.sql.Timestamp} n'est pas formaté correctement
      */
     public static String stringValue(Timestamp timestamp) {
         final Date date = new Date(timestamp.getTime());

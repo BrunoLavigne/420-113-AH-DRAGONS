@@ -23,14 +23,13 @@ import org.hibernate.Session;
 
 public class MembreDAO extends DAO implements IMembreDAO {
 
-    // TODO changer la visibilité a package quand nous aurons la version avec Spring
     /**
      * Crée le DAO de la table <code>membre</code>.
      *
      * @param membreDTOClass La classe de membre DTO à utiliser
      * @throws InvalidDTOClassException Si la classe de DTO est <code>null</code>
      */
-    public MembreDAO(Class<MembreDTO> membreDTOClass) throws InvalidDTOClassException {
+    MembreDAO(Class<MembreDTO> membreDTOClass) throws InvalidDTOClassException {
         super(membreDTOClass);
     }
 
@@ -46,15 +45,6 @@ public class MembreDAO extends DAO implements IMembreDAO {
         InvalidCriterionValueException,
         InvalidSortByPropertyException,
         DAOException {
-        if(session == null) {
-            throw new InvalidHibernateSessionException("La session ne peut être null");
-        }
-        if(nom == null) {
-            throw new InvalidCriterionException("Le nom ne peut être null");
-        }
-        if(sortByPropertyName == null) {
-            throw new InvalidSortByPropertyException("La propriété ne peut être null");
-        }
         return (List<MembreDTO>) find(session,
             MembreDTO.NOM_COLUMN_NAME,
             nom,

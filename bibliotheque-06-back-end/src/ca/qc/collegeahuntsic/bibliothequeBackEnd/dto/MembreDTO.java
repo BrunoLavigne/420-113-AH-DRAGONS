@@ -4,6 +4,7 @@
 
 package ca.qc.collegeahuntsic.bibliothequeBackEnd.dto;
 
+import java.util.Collections;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -49,7 +50,9 @@ public class MembreDTO extends DTO {
      *
      */
     public MembreDTO() {
-        // super();
+        super();
+        setPrets(Collections.EMPTY_SET);
+        setReservations(Collections.EMPTY_SET);
     }
 
     // Region Getters and Setters

@@ -7,7 +7,6 @@ package ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.implementations;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.PretDTO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidPrimaryKeyException;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOClassException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dto.InvalidDTOException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.facade.FacadeException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.facade.InvalidServiceException;
@@ -29,7 +28,6 @@ public class PretFacade extends Facade implements IPretFacade {
 
     private IPretService pretService;
 
-    // TODO: Change to package when switching to Spring
     /**
      * Crée la façade de la table <code>pret</code>.
      *
@@ -94,9 +92,7 @@ public class PretFacade extends Facade implements IPretFacade {
         try {
             getPretService().commencerPret(session,
                 pretDTO);
-        } catch(
-            ServiceException
-            | InvalidDTOClassException serviceException) {
+        } catch(ServiceException serviceException) {
             throw new FacadeException(serviceException);
         }
     }
@@ -113,9 +109,7 @@ public class PretFacade extends Facade implements IPretFacade {
         try {
             getPretService().terminerPret(session,
                 pretDTO);
-        } catch(
-            ServiceException
-            | InvalidDTOClassException serviceException) {
+        } catch(ServiceException serviceException) {
             throw new FacadeException(serviceException);
         }
 
@@ -134,9 +128,7 @@ public class PretFacade extends Facade implements IPretFacade {
         try {
             getPretService().renouvelerPret(session,
                 pretDTO);
-        } catch(
-            ServiceException
-            | InvalidPrimaryKeyException serviceException) {
+        } catch(ServiceException serviceException) {
             throw new FacadeException(serviceException);
         }
     }

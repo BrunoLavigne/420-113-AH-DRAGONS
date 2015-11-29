@@ -7,6 +7,7 @@ package ca.qc.collegeahuntsic.bibliothequeBackEnd.service.interfaces;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionException;
+import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionValueException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidHibernateSessionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidPrimaryKeyException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidSortByPropertyException;
@@ -112,6 +113,7 @@ public interface IReservationService extends IService {
      * @return La liste des réservations correspondantes ; une liste vide sinon
      * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
      * @throws InvalidCriterionException Si l'ID du membre est <code>null</code>
+     * @throws InvalidCriterionValueException Si la valeur à trouver est <code>null</code>
      * @throws InvalidSortByPropertyException Si la propriété à utiliser pour classer est <code>null</code>
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
@@ -119,6 +121,7 @@ public interface IReservationService extends IService {
         String idMembre,
         String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidCriterionException,
+        InvalidCriterionValueException,
         InvalidSortByPropertyException,
         ServiceException;
 
@@ -132,6 +135,7 @@ public interface IReservationService extends IService {
      * @return La liste des réservations correspondantes ; une liste vide sinon
      * @throws InvalidHibernateSessionException Si la connexion est <code>null</code>
      * @throws InvalidCriterionException Si l'ID du livre est <code>null</code>
+     * @throws InvalidCriterionValueException Si la valeur à trouver est <code>null</code>
      * @throws InvalidSortByPropertyException Si la propriété à utiliser pour classer est <code>null</code>
      * @throws ServiceException S'il y a une erreur avec la base de données
      */
@@ -139,6 +143,7 @@ public interface IReservationService extends IService {
         String idLivre,
         String sortByPropertyName) throws InvalidHibernateSessionException,
         InvalidCriterionException,
+        InvalidCriterionValueException,
         InvalidSortByPropertyException,
         ServiceException;
 

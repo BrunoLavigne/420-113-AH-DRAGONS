@@ -221,7 +221,7 @@ public class LivreService extends Service implements ILivreService {
             }
         }
 
-        // vérifie si le livre est rservé
+        // vérifie si le livre est réservé
         final List<ReservationDTO> reservations = new ArrayList<>(livreDTO.getReservations());
         if(!reservations.isEmpty()) {
             final ReservationDTO reservationDTO = reservations.get(0);

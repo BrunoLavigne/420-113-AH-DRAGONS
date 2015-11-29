@@ -4,10 +4,12 @@
 
 package ca.qc.collegeahuntsic.bibliothequeBackEnd.service.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces.IMembreDAO;
-import ca.qc.collegeahuntsic.bibliothequeBackEnd.dao.interfaces.IReservationDAO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.MembreDTO;
+import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.PretDTO;
+import ca.qc.collegeahuntsic.bibliothequeBackEnd.dto.ReservationDTO;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.DAOException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionException;
 import ca.qc.collegeahuntsic.bibliothequeBackEnd.exception.dao.InvalidCriterionValueException;
@@ -31,26 +33,18 @@ public class MembreService extends Service implements IMembreService {
 
     private IMembreDAO membreDAO;
 
-    // private IReservationDAO reservationDAO;
-
     /**
      * Crée le service de la table <code>membre</code>.
      *
      * @param membreDAO Le DAO de la table <code>membre</code>
-     * @param reservationDAO Le DAO de la table <code>reservation</code>
      * @throws InvalidDAOException Si le DAO de membre est <code>null</code> ou si le DAO de réservation est <code>null</code>
      */
-    public MembreService(IMembreDAO membreDAO,
-        IReservationDAO reservationDAO) throws InvalidDAOException {
+    public MembreService(IMembreDAO membreDAO) throws InvalidDAOException {
         super();
         if(membreDAO == null) {
             throw new InvalidDAOException("Le DAO de membre ne peut être null");
         }
-        if(reservationDAO == null) {
-            throw new InvalidDAOException("Le DAO de reservation ne peut être null");
-        }
         setMembreDAO(membreDAO);
-        // setReservationDAO(reservationDAO);
     }
 
     // Opérations CRUD
@@ -168,18 +162,13 @@ public class MembreService extends Service implements IMembreService {
         MembreDTO membreDTO) throws InvalidHibernateSessionException,
         InvalidDTOException,
         ServiceException {
-
-        // Vérifier si la connexion est null
         if(session == null) {
             throw new InvalidHibernateSessionException("La session Hibernate ne peut être null");
         }
-
-        // Vérifier si le membre est null
         if(membreDTO == null) {
             throw new InvalidDTOException("Le membre ne peut être null");
         }
 
-        // On peut ajouter le membre
         addMembre(session,
             membreDTO);
     }
@@ -191,57 +180,39 @@ public class MembreService extends Service implements IMembreService {
         ServiceException,
         ExistingLoanException,
         ExistingReservationException {
-
-        // Vérifier si la connexion est null
         if(session == null) {
             throw new InvalidHibernateSessionException("La session Hibernate ne peut être null");
         }
-
-        // Vérifier si le membre est null
         if(membreDTO == null) {
             throw new InvalidDTOException("Le membre ne peut être null");
         }
 
         try {
 
-            // TODO
-            /*
-            MembreDTO unMembreDTO = new MembreDTO();
-            unMembreDTO = getMembre(session,
-                membreDTO.getIdMembre());
-
-            // Si le membre n'existe pas
-            if(unMembreDTO == null) {
-                throw new MissingDTOException("Le membre n'existe pas");
+            final List<PretDTO> prets = new ArrayList<>(membreDTO.getPrets());
+            if(!prets.isEmpty()) {
+                for(PretDTO pretDTO : prets) {
+                    if(pretDTO.getDateRetour() == null) {
+                        throw new ExistingLoanException("Le membre "
+                            + membreDTO.getNom()
+                            + " (ID du membre : "
+                            + membreDTO.getIdMembre()
+                            + ") a encore le livre "
+                            + pretDTO.getLivreDTO().getTitre()
+                            + " (ID du livre : "
+                            + pretDTO.getLivreDTO().getIdLivre()
+                            + ") en sa possesion");
+                    }
+                }
             }
 
-            // Si le membre a encore des prêts
-            if(unMembreDTO.getNbPret() > 0) {
-                throw new ExistingLoanException("Le membre a encore des prêts");
-            }
-
-            // Si le membre a encore des réservations
-
-            List<ReservationDTO> listeDesReservations = getReservationDAO().findByMembre(session,
-                unMembreDTO.getIdMembre(),
-                ReservationDTO.ID_MEMBRE_COLUMN_NAME);
-
-            if(!listeDesReservations.isEmpty()) {
-                throw new ExistingReservationException("Le membre a encore des réservations");
-            }
-
-            // On peut supprimer le membre
-            deleteMembre(session,
-                unMembreDTO);
-
-             */
-            // TODO
-            if(!membreDTO.getPrets().isEmpty()) {
-                throw new ExistingLoanException("Le membre a encore des prêts");
-            }
-
-            if(!membreDTO.getReservations().isEmpty()) {
-                throw new ExistingReservationException("Le membre a encore des réservations");
+            final List<ReservationDTO> reservations = new ArrayList<>(membreDTO.getReservations());
+            if(!reservations.isEmpty()) {
+                throw new ExistingReservationException("Le membre "
+                    + membreDTO.getNom()
+                    + " (ID du membre : "
+                    + membreDTO.getIdMembre()
+                    + ") a encore des réservations");
             }
 
             deleteMembre(session,
@@ -274,15 +245,4 @@ public class MembreService extends Service implements IMembreService {
         this.membreDAO = membreDAO;
     }
 
-    /**
-     * Setter de la variable d'instance <code>this.reservationDAO</code>.
-     *
-     * @param reservationDAO
-     *            La valeur à utiliser pour la variable d'instance
-     *            <code>this.reservationDAO</code>
-     */
-    /*
-    private void setReservationDAO(IReservationDAO reservationDAO) {
-        this.reservationDAO = reservationDAO;
-    } */
 }

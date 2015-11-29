@@ -2,9 +2,10 @@
 // Auteur : Dragon Vicieux
 // Date de création : 2015-11-25
 /**
- * TODO Auto-generated class javadoc.
+ * Provides the exception classes used with the bibliothèque.
  *
  * @author Dragon Vicieux
  */
 
 package ca.qc.collegeahuntsic.bibliotheque.exception;
+
