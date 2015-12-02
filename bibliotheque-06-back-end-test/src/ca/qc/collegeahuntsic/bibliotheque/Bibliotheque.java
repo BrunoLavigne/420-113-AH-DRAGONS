@@ -98,7 +98,7 @@ public final class Bibliotheque {
      * @throws IOException S'il y a une erreur de lecture
      */
     static void traiterTransactions(BufferedReader reader) throws BibliothequeException,
-    IOException {
+        IOException {
         afficherAide();
         String transaction;
 
@@ -128,18 +128,14 @@ public final class Bibliotheque {
      * @throws IOException S'il y a une erreur de lecture
      */
     private static String lireTransaction(BufferedReader reader) throws IOException {
-        try {
-            Bibliotheque.logger.info("> ");
-            final String transaction = reader.readLine();
+        Bibliotheque.logger.info("> ");
+        final String transaction = reader.readLine();
 
-            if(transaction != null) {
-                Bibliotheque.logger.info(transaction);
-            }
-
-            return transaction;
-        } catch(IOException ioException) {
-            throw new IOException(ioException);
+        if(transaction != null) {
+            Bibliotheque.logger.info(transaction);
         }
+
+        return transaction;
     }
 
     /**
