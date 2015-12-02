@@ -128,18 +128,15 @@ public final class Bibliotheque {
      * @throws IOException S'il y a une erreur de lecture
      */
     private static String lireTransaction(BufferedReader reader) throws IOException {
-        try {
-            Bibliotheque.logger.info("> ");
-            final String transaction = reader.readLine();
 
-            if(transaction != null) {
-                Bibliotheque.logger.info(transaction);
-            }
+        Bibliotheque.logger.info("> ");
+        final String transaction = reader.readLine();
 
-            return transaction;
-        } catch(IOException ioException) {
-            throw new IOException(ioException);
+        if(transaction != null) {
+            Bibliotheque.logger.info(transaction);
         }
+
+        return transaction;
     }
 
     /**
@@ -266,6 +263,7 @@ public final class Bibliotheque {
             | ExistingReservationException exception) {
             Bibliotheque.logger.error(" **** "
                 + exception.getMessage());
+            Bibliotheque.bibliothequeCreateur.rollbackTransaction();
         }
     }
 
@@ -302,6 +300,7 @@ public final class Bibliotheque {
             | InvalidLoanLimitException exceptions) {
             Bibliotheque.logger.error(" **** "
                 + exceptions.getMessage());
+            Bibliotheque.bibliothequeCreateur.rollbackTransaction();
         }
     }
 
@@ -335,6 +334,7 @@ public final class Bibliotheque {
             | InvalidDTOException exceptions) {
             Bibliotheque.logger.error(" **** "
                 + exceptions.getMessage());
+            Bibliotheque.bibliothequeCreateur.rollbackTransaction();
         }
     }
 
@@ -362,6 +362,7 @@ public final class Bibliotheque {
             | FacadeException exceptions) {
             Bibliotheque.logger.error(" **** "
                 + exceptions.getMessage());
+            Bibliotheque.bibliothequeCreateur.rollbackTransaction();
         }
 
     }
@@ -396,6 +397,7 @@ public final class Bibliotheque {
             | ExistingReservationException exceptions) {
             Bibliotheque.logger.error(" **** "
                 + exceptions.getMessage());
+            Bibliotheque.bibliothequeCreateur.rollbackTransaction();
         }
     }
 
@@ -444,6 +446,7 @@ public final class Bibliotheque {
             | ExistingReservationException exceptions) {
             Bibliotheque.logger.error(" **** "
                 + exceptions.getMessage());
+            Bibliotheque.bibliothequeCreateur.rollbackTransaction();
         }
     }
 
@@ -477,6 +480,7 @@ public final class Bibliotheque {
             | ExistingReservationException exceptions) {
             Bibliotheque.logger.error(" **** "
                 + exceptions.getMessage());
+            Bibliotheque.bibliothequeCreateur.rollbackTransaction();
         }
     }
 
@@ -509,6 +513,7 @@ public final class Bibliotheque {
             | MissingLoanException exceptions) {
             Bibliotheque.logger.error(" **** "
                 + exceptions.getMessage());
+            Bibliotheque.bibliothequeCreateur.rollbackTransaction();
         }
 
     }
@@ -537,6 +542,7 @@ public final class Bibliotheque {
             | FacadeException exceptions) {
             Bibliotheque.logger.error(" **** "
                 + exceptions.getMessage());
+            Bibliotheque.bibliothequeCreateur.rollbackTransaction();
         }
     }
 
@@ -571,6 +577,7 @@ public final class Bibliotheque {
             | ExistingReservationException exceptions) {
             Bibliotheque.logger.error(" **** "
                 + exceptions.getMessage());
+            Bibliotheque.bibliothequeCreateur.rollbackTransaction();
         }
     }
 
