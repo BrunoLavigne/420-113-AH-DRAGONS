@@ -1,13 +1,13 @@
 // Fichier TestAll.java
 // Auteur : Dragons Vicieux
-// Date de création : 2015-12-04
+// Date de création : 2015-09-18
 
 package test.collegeahuntsic.bibliothequeBackEnd;
 
 /**
- * TODO Auto-generated class javadoc
+ * TODO
  *
- * @author Bruno Lavigne
+ * @author Dragons Vicieux
  */
 public class TestAll {
 
