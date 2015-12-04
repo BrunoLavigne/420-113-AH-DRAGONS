@@ -90,6 +90,41 @@ public class TestCase extends junit.framework.TestCase {
     }
 
     /**
+     * TODO jhavadoc.
+     *
+     * @throws Exception
+     */
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+    }
+
+    /**
+     *
+     * TODO Auto-generated method javadoc.
+     *
+     * @throws Exception
+     */
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+    }
+
+    /**
+     *
+     * TODO Auto-generated method javadoc
+     *
+     */
+    public void testSpring() {
+        assertNotNull(TestCase.APPLICATION_CONTEXT);
+        assertNotNull(getSessionFactory());
+        assertNotNull(getLivreFacade());
+        assertNotNull(getMembreFacade());
+        assertNotNull(getPretFacade());
+        assertNotNull(getReservationFacade());
+    }
+
+    /**
      * Ouvre une session Hibernate.
      *
      * @return La session Hibernate
