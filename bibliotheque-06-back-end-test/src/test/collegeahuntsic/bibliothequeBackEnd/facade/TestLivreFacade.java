@@ -24,45 +24,45 @@ import test.collegeahuntsic.bibliothequeBackEnd.exception.TestCaseFailedExceptio
 public class TestLivreFacade extends TestCase {
 
     private static final Log LOGGER = LogFactory.getLog(TestLivreFacade.class);
-    
+
     private static final String TEST_CASE_TITLE = "Livre facade test case"; //$NON-NLS-1$
-    
+
     private static final String TITRE = "Titre "; //$NON-NLS-1$
-    
+
     private static final String AUTEUR = "Auteur "; //$NON-NLS-1$
-    
+
     private static int sequence;
-    
+
     /**
      * Default constructor.
      *
      * @param name The name of the test case
      * @throws TestCaseFailedException If an error occurs
      */
-    public TestLivreFacade(String name) throws TestCaseFailedException{
+    public TestLivreFacade(String name) throws TestCaseFailedException {
         super(name);
     }
-    
-    static{
+
+    static {
         TestLivreFacade.sequence = 1;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void setUp() throws Exception{
+    protected void setUp() throws Exception {
         super.setUp();
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void tearDown() throws Exception{
+    protected void tearDown() throws Exception {
         super.tearDown();
     }
-    
+
     /**
      * Test unitaire AcquerirLivre
      *
@@ -87,19 +87,20 @@ public class TestLivreFacade extends TestCase {
             TestLivreFacade.LOGGER.error(exception);
         }
     }
-    
+
     /**
      * Test if {@link ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.implementations.LivreFacade}
      *
      * @throws TestCaseFailedException S'il y a une erreur
      */
-    public void testGetAllLivres() throws TestCaseFailedException{
+    public void testGetAllLivres() throws TestCaseFailedException {
         try {
             testAcquerirLivre();
             beginTransaction();
-            final List<LivreDTO> livres = getLivreFacade().getAllLivres(getSession(), LivreDTO.TITRE_COLUMN_NAME);
+            final List<LivreDTO> livres = getLivreFacade().getAllLivres(getSession(),
+                LivreDTO.TITRE_COLUMN_NAME);
             assertFalse(livres.isEmpty());
-            for(LivreDTO livreDTO : livres){
+            for(LivreDTO livreDTO : livres) {
                 assertNotNull(livreDTO);
                 assertNotNull(livreDTO.getIdLivre());
                 assertNotNull(livreDTO.getTitre());
@@ -109,14 +110,23 @@ public class TestLivreFacade extends TestCase {
                 final String titre = livreDTO.getTitre();
                 final String auteur = livreDTO.getAuteur();
                 final Timestamp dateAcquisition = livreDTO.getDateAcquisition();
-                final LivreDTO unLivreDTO = getLivreFacade().getLivre(getSession(), idLivre);
-                assertEquals(idLivre, unLivreDTO.getIdLivre());
-                assertEquals(titre, unLivreDTO.getTitre());
-                assertEquals(auteur, unLivreDTO.getAuteur());
-                assertEquals(dateAcquisition, unLivreDTO.getDateAcquisition());
-            }           
+                final LivreDTO unLivreDTO = getLivreFacade().getLivre(getSession(),
+                    idLivre);
+                assertEquals(idLivre,
+                    unLivreDTO.getIdLivre());
+                assertEquals(titre,
+                    unLivreDTO.getTitre());
+                assertEquals(auteur,
+                    unLivreDTO.getAuteur());
+                assertEquals(dateAcquisition,
+                    unLivreDTO.getDateAcquisition());
+            }
             commitTransaction();
-        } catch(InvalidHibernateSessionException | FacadeException | InvalidPrimaryKeyException | InvalidSortByPropertyException exception) {
+        } catch(
+            InvalidHibernateSessionException
+            | FacadeException
+            | InvalidPrimaryKeyException
+            | InvalidSortByPropertyException exception) {
             try {
                 rollbackTransaction();
             } catch(TestCaseFailedException testCaseFailedException) {
@@ -125,7 +135,56 @@ public class TestLivreFacade extends TestCase {
             TestLivreFacade.LOGGER.error(exception);
         }
     }
-    
-    
+
+    /**
+     * Test if {@link ca.qc.collegeahuntsic.bibliothequeBackEnd.facade.implementations.LivreFacade}
+     *
+     * @throws TestCaseFailedException S'il y a une erreur
+     */
+    public void testGetLivre() throws TestCaseFailedException {
+        try {
+            testAcquerirLivre();
+            beginTransaction();
+            final List<LivreDTO> livres = getLivreFacade().getAllLivres(getSession(),
+                LivreDTO.TITRE_COLUMN_NAME);
+            assertFalse(livres.isEmpty());
+
+            LivreDTO livreDTO = livres.get(livres.size() - 1);
+            assertNotNull(livreDTO);
+            assertNotNull(livreDTO.getIdLivre());
+            assertNotNull(livreDTO.getTitre());
+            assertNotNull(livreDTO.getAuteur());
+            assertNotNull(livreDTO.getDateAcquisition());
+            final String idLivre = livreDTO.getIdLivre();
+            final String titre = livreDTO.getTitre();
+            final String auteur = livreDTO.getAuteur();
+            final Timestamp dateAcquisition = livreDTO.getDateAcquisition();
+            commitTransaction();
+
+            beginTransaction();
+            final LivreDTO unLivreDTO = getLivreFacade().getLivre(getSession(),
+                idLivre);
+            assertEquals(idLivre,
+                unLivreDTO.getIdLivre());
+            assertEquals(titre,
+                unLivreDTO.getTitre());
+            assertEquals(auteur,
+                unLivreDTO.getAuteur());
+            assertEquals(dateAcquisition,
+                unLivreDTO.getDateAcquisition());
+            commitTransaction();
+        } catch(
+            InvalidHibernateSessionException
+            | FacadeException
+            | InvalidPrimaryKeyException
+            | InvalidSortByPropertyException exception) {
+            try {
+                rollbackTransaction();
+            } catch(TestCaseFailedException testCaseFailedException) {
+                TestLivreFacade.LOGGER.error(testCaseFailedException);
+            }
+            TestLivreFacade.LOGGER.error(exception);
+        }
+    }
 
 }
