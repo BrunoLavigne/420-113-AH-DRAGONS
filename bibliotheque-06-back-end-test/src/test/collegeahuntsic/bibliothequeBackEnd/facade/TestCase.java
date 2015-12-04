@@ -112,7 +112,7 @@ public class TestCase extends junit.framework.TestCase {
 
     /**
      *
-     * TODO Auto-generated method javadoc
+     * Tests if the Spring configuration files have been loaded correctly.
      *
      */
     public void testSpring() {
